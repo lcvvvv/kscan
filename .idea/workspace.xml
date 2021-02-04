@@ -1,27 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="初次发布，已实现大部分功能">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/config/configs.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/finger/finger.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/params/check.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/params/params.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/params/serialization.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/run/run.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gkscan.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/IP/IP.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/IP/IPlib.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/iconhash/iconhash.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/port/banner.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/port/port.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/queue/queue.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/urlparse/urlparse.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package.json" />
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.14.2_1/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <hideBySeverity>
+      <option value="15" />
+    </hideBySeverity>
+  </component>
   <component name="ProjectId" id="1nXeC0dl1bAibWUOiC76pj1CVCC" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="新增" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="GO_FMT" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="js.buildTools.grunt.grunt-cli.package" value="" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="http.proxy" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/app/params" />
+      <recent name="$PROJECT_DIR$/lib/sflag" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$USER_HOME$/Desktop" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="js.build_tools.grunt">
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="初次发布，已实现大部分功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="初次发布，已实现大部分功能" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="520" y="287" key="#Go_模块/0.0.1440.900@0.0.1440.900" timestamp="1611847718830" />
+    <state x="1864" y="198" width="1071" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1611546256510">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1864" y="198" width="1071" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611546256510" />
+    <state x="2306" y="268" key="EnvironmentVariablesDialog" timestamp="1611546203330">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2306" y="268" key="EnvironmentVariablesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611546203330" />
+    <state x="2275" y="441" key="Github.ShareDialog" timestamp="1611540935971">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2275" y="441" key="Github.ShareDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611540935971" />
+    <state x="2230" y="249" key="Github.UntrackedFilesDialog" timestamp="1611540947279">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2230" y="249" key="Github.UntrackedFilesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611540947279" />
+    <state x="1988" y="279" key="IDE.errors.dialog" timestamp="1611541114750">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1988" y="279" key="IDE.errors.dialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541114750" />
+    <state x="135" y="172" key="SettingsEditor" timestamp="1612454439982">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1612454439982" />
+    <state x="1620" y="274" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541095706" />
+    <state x="518" y="242" width="405" height="437" key="StructurePopup" timestamp="1611759650965">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
+    <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1612454330963">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1612454330963" />
+    <state x="513" y="143" width="511" height="613" key="find.popup" timestamp="1612449465940">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="513" y="143" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1612449465940" />
+    <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1612429206470" />
+    <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1612235873652" />
+    <state width="600" height="428" key="javadoc.popup" timestamp="1611644355435">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state width="600" height="428" key="javadoc.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611644355435" />
   </component>
 </project>
