@@ -4,12 +4,15 @@ import (
 	"./app/finger"
 	"./app/params"
 	"./app/run"
+	"./app/update"
 	"fmt"
 )
 
 func main() {
 	//加载程序运行参数
 	params.LoadParams()
+	//校验升级情况
+	update.CheckUpdate()
 	//加载指纹数据
 	//var KeywordFingers,HashFingers = finger.LoadFinger()
 	finger.LoadFinger()

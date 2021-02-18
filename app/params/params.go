@@ -16,22 +16,21 @@ type Params struct {
 
 var params Params
 
-//usage信息
-const usage = `
- _  __  _____   _____     *      _   _
-|#|/#/ /#####| /#####|   /#\    |#\ |#|
-|#.#/ |#|___  |#|       /###\   |##\|#|
-|##|   \#####\|#|      /#/ \#\  |#.#.#|
-|#.#\  ____|#||#|____ /#######\ |#|\##|
-|#|\#\|#####/ \######/#/ v2.0\#\|#| \#|
+//logo信息
+const logo = `
+ _  __ _____  _____     *     _   _
+|#|/#//####/ /#####|   /#\   |#\ |#|
+|#.#/|#|___  |#|      /###\  |##\|#|
+|##|  \#####\|#|     /#/_\#\ |#.#.#|
+|#.#\_____|#||#|____/#/###\#\|#|\##|
+|#|\#\#####/ \#####/#/ v0.1\#\#| \#|
 轻量资产测绘工具                by：kv2
 `
 
 //帮助信息
 const help = `
-usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host]
 optional arguments:
-  -h, --help      show this help message and exit
+  -h , --help     show this help message and exit
   -t , --target   直接扫描指定对象,支持IP、URL、IP/[16-32]、file:/tmp/target.txt
   -p , --port     扫描指定端口，默认会扫描
   -o , --output   将扫描结果保存到文件
@@ -43,11 +42,13 @@ optional arguments:
   --host          指定所有请求的头部HOST值，慎用！
 `
 
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host]\n"
+
 //初始化参数
 func initParams() {
 	//自定义Usage
 	flag.Usage = func() {
-		_, _ = fmt.Fprintf(os.Stderr, usage)
+		_, _ = fmt.Fprintf(os.Stderr, logo)
 	}
 	flag.BoolVar(&params.help, "h", false, "")
 	flag.BoolVar(&params.help, "help", false, "")
@@ -70,15 +71,17 @@ func LoadParams() {
 	flag.Parse()
 	//不带参数则对应usage
 	if len(os.Args) == 1 {
+		_, _ = fmt.Fprintf(os.Stderr, logo)
 		_, _ = fmt.Fprintf(os.Stderr, usage)
 		os.Exit(0)
 	}
 	if params.help {
+		_, _ = fmt.Fprintf(os.Stderr, logo)
 		_, _ = fmt.Fprintf(os.Stderr, usage)
 		_, _ = fmt.Fprintf(os.Stderr, help)
 		os.Exit(0)
 	} else {
-		_, _ = fmt.Fprintf(os.Stderr, usage)
+		_, _ = fmt.Fprintf(os.Stderr, logo)
 		checkParams()
 		//加载配置文件
 		config.LoadConfig()
