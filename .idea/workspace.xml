@@ -11,12 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="新增output导出功能">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/params/serialization.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/serialization.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/port/banner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/port/banner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/params.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,11 +144,11 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2" timestamp="1613721549879">
+    <state x="1867" y="224" key="Vcs.Push.Dialog.v2" timestamp="1613723366936">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1612454843160" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613721549879" />
+    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613723366936" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
