@@ -20,6 +20,7 @@ func InitPortQueue() {
 	for _, host := range params.SerParams.HostTarget {
 		for _, Port := range params.SerParams.Port {
 			IP := port.GetIP(host)
+			//fmt.Print(fmt.Sprintf("%s:%d", IP, Port),"\n")
 			//PortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 			OpenPortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 		}

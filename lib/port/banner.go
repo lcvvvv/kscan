@@ -15,6 +15,7 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -93,6 +94,14 @@ func getUrlBanner(s string) portInfo {
 			//不作处理
 			return res
 		}
+		if strings.Contains(err.Error(), "refused") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "close") {
+			//不作处理
+			return res
+		}
 		if strings.Contains(err.Error(), "Timeout") {
 			//不作处理
 			return res
@@ -112,6 +121,14 @@ func getUrlBanner(s string) portInfo {
 		if strings.Contains(err.Error(), "malformed HTTP response") {
 			//TCP协议重新获取banner
 			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
+		}
+		if strings.Contains(err.Error(), "too many open files") {
+			//发现存在线程过高错误
+			fmt.Printf("\r%s\n", strings.Repeat(" ", 70))
+			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
+			fmt.Printf("\r[X]或者请执行\"ulimit -n 10240\"命令放开操作系统限制!!!\n")
+			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 10240 10240\"!!!\n")
+			os.Exit(0)
 		}
 		fmt.Print("\r", strings.Repeat(" ", 70))
 		fmt.Printf("\r[-]%s：%T\n", err, err)

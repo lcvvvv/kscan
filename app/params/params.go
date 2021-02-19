@@ -25,6 +25,7 @@ const logo = `
 |#.#\_____|#||#|____/#/###\#\|#|\##|
 |#|\#\#####/ \#####/#/ v1.2\#\#| \#|
 轻量资产测绘工具             by：kv2
+
 `
 
 //帮助信息
@@ -41,9 +42,10 @@ optional arguments:
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOST值，慎用！
   --timeout       设置超时时间，默认3秒钟，单位为秒！
+
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host] [--timeout]\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host] [--timeout]\n\n"
 
 //初始化参数
 func initParams() {
