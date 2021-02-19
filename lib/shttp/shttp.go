@@ -62,7 +62,7 @@ var headerKeys = map[string]string{
 	"Entry1":                           "不知道",
 	"Accept-Encoding":                  "不知道",
 	"X-Amz-Request-Id":                 "不知道",
-	"Cfl_asynch":                       "浙江大华dh650平台设备",
+	"Cfl_asynch":                       "keyword:浙江大华dh650平台设备",
 }
 
 var newHeaderKeys *os.File

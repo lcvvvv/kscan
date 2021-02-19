@@ -1,10 +1,31 @@
 package params
 
 import (
+	"../../lib/misc"
 	"fmt"
 	"os"
 	"regexp"
 )
+
+var OutPutFile *os.File
+
+func initOutPutFile(path string) *os.File {
+	if misc.FileIsExist(path) {
+		f, err := os.Open(path)
+		if err != nil {
+			fmt.Printf("[-]%s", err.Error())
+			os.Exit(0)
+		}
+		return f
+	} else {
+		f, err := os.Create(path)
+		if err != nil {
+			fmt.Printf("[-]%s", err.Error())
+			os.Exit(0)
+		}
+		return f
+	}
+}
 
 func checkParams() {
 	//判断冲突参数
@@ -28,6 +49,8 @@ func checkParams() {
 		}
 		if params.output != "" {
 			//验证output参数
+			f := initOutPutFile(params.output)
+			OutPutFile = f
 		}
 		if params.proxy != "" {
 			if !checkProxyParam(params.proxy) {

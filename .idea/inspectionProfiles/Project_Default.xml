@@ -17,5 +17,6 @@
         <method importPath="net" receiver="Conn" name="Close" />
       </methods>
     </inspection_tool>
+    <inspection_tool class="LossyEncoding" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>

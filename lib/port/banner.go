@@ -159,6 +159,9 @@ func makeResultInfo(res portInfo) string {
 		Banner = res.Banner[i : i+30]
 	}
 	res.Info = fmt.Sprintf("\r[+]%s\t%s\t%s\t%s\n", res.Url, res.Title, Banner, strings.Join(infoArr, ","))
+	if params.OutPutFile != nil {
+		_, _ = params.OutPutFile.WriteString(fmt.Sprintf("\r[+]%s\t%s\t%s\t%s", res.Url, res.Title, Banner, strings.Join(infoArr, ",")))
+	}
 	return res.Info
 }
 
