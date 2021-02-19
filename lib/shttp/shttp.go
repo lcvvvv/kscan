@@ -16,24 +16,61 @@ import (
 )
 
 var headerKeys = map[string]string{
-	"Server":          "中间件名称",
-	"X-Powered-By":    "中间件或开发语言名称",
-	"Content-Length":  "返回包长度",
-	"Last-Modified":   "最后一次验证日期",
-	"Etag":            "连接标签",
-	"Accept-Ranges":   "不知道",
-	"Date":            "日期",
-	"Content-Type":    "正文类型",
-	"Set-Cookie":      "设置cookie值",
-	"Connection":      "连接类型",
-	"Vary":            "不知道",
-	"Keep-Alive":      "长链接保存时间",
-	"X-Frame-Options": "框架选项",
+	"Server":                           "中间件名称",
+	"X-Powered-By":                     "中间件或开发语言名称",
+	"Content-Length":                   "返回包长度",
+	"Last-Modified":                    "最后一次验证日期",
+	"Etag":                             "连接标签",
+	"Accept-Ranges":                    "不知道",
+	"Sdn-Via":                          "不知道",
+	"Use_new_portal":                   "不知道",
+	"X-Robots-Tag":                     "不知道",
+	"X-Application-Context":            "不知道",
+	"X-Content-Type-Options":           "不知道",
+	"X-Xss-Protection":                 "不知道",
+	"Date":                             "日期",
+	"Expires":                          "失效日期",
+	"Content-Type":                     "正文类型",
+	"Set-Cookie":                       "设置cookie值",
+	"Connection":                       "连接类型",
+	"Vary":                             "不知道",
+	"Keep-Alive":                       "长链接保存时间",
+	"X-Frame-Options":                  "框架选项",
+	"X-Aspnet-Version":                 "keyword:ASP.NET",
+	"X-Aspnetmvc-Version":              "keyword:ASP.NET MVC",
+	"Content-Language":                 "正文语言",
+	"Cache-Control":                    "缓存控制",
+	"Pragma":                           "程序类型",
+	"Progma":                           "不知道",
+	"Access-Control-Allow-Origin":      "同源策略",
+	"Access-Control-Allow-Methods":     "同源策略",
+	"Access-Control-Allow-Headers":     "同源策略",
+	"Access-Control-Expose-Headers":    "同源策略",
+	"Access-Control-Allow-Credentials": "同源策略",
+	"X-Enterprise":                     "不知道",
+	"X-Lang":                           "不知道",
+	"X-Timezone":                       "时区",
+	"X-Arch":                           "系统架构",
+	"X-Support-Wifi":                   "不知道",
+	"X-Timestamp":                      "时间戳",
+	"X-Sysbit":                         "不知道",
+	"X-Support-I18n":                   "不知道",
+	"P3p":                              "不知道",
+	"Content-Security-Policy":          "不知道",
+	"Www-Authenticate":                 "认证参数",
+	"X-Ua-Compatible":                  "不知道",
+	"Entry1":                           "不知道",
+	"Accept-Encoding":                  "不知道",
+	"X-Amz-Request-Id":                 "不知道",
+	"Cfl_asynch":                       "浙江大华dh650平台设备",
 }
 
-var newHeaderKeys = initNewHeaderKeys()
+var newHeaderKeys *os.File
 
 func initNewHeaderKeys() *os.File {
+	if newHeaderKeys != nil {
+		return newHeaderKeys
+	}
 	if misc.FileIsExist("newHeaderKeys.txt") {
 		f, _ := os.Open("newHeaderKeys.txt")
 		return f
@@ -47,6 +84,7 @@ func Get(Url string) (*http.Response, error) {
 	request, _ := http.NewRequest("GET", Url, nil)
 	request.Header.Add("User-Agent", getUserAgent())
 	request.Header.Add("Cookie", "rememberMe=b69375edcb2b3c5084c02bd9690b6625")
+	request.Close = true
 	//修改Host头部参数
 	if params.SerParams.Host != "" {
 		request.Header.Add("Host", params.SerParams.Host)
@@ -60,10 +98,11 @@ func Get(Url string) (*http.Response, error) {
 	(*tr).DisableKeepAlives = false
 	client := &http.Client{}
 	client.Transport = tr
-	client.Timeout = time.Second * 2
+	client.Timeout = time.Second * time.Duration(params.SerParams.Timeout)
 	resp, err := client.Do(request)
 	if err == nil {
 		//校验http头部
+		newHeaderKeys = initNewHeaderKeys()
 		for key := range resp.Header {
 			if headerKeys[key] == "" {
 				headerKeys[key] = "New"

@@ -53,17 +53,26 @@ func GetBanner(s string) []portInfo {
 			s = fmt.Sprintf("https://%s", s)
 			portInfoArr = append(portInfoArr, getUrlBanner(s))
 		} else {
-			if strings.Contains(result.Banner, "HTTP") {
+			_, isExist := config.Config.UnWebPorts[Url.Port]
+			if !isExist {
 				s = fmt.Sprintf("http://%s", s)
 				portInfoArr = append(portInfoArr, getUrlBanner(s))
+			} else {
+				portInfoArr = append(portInfoArr, result)
 			}
+			//if strings.Contains(result.Banner, "HTTP") {
+			//	s = fmt.Sprintf("http://%s", s)
+			//	portInfoArr = append(portInfoArr, getUrlBanner(s))
+			//} else {
+			//	portInfoArr = append(portInfoArr, result)
+			//}
 		}
 	}
 	for _, PortInfo := range portInfoArr {
 		fmt.Print("\r", strings.Repeat(" ", 70))
 		fmt.Print(PortInfo.Info)
 	}
-	return append(portInfoArr, result)
+	return portInfoArr
 }
 
 func getUrlBanner(s string) portInfo {
@@ -75,8 +84,37 @@ func getUrlBanner(s string) portInfo {
 	res.Protocol = getProtocol(s)
 	resp, err := shttp.Get(s)
 	if err != nil {
-		fmt.Print("\r[-]", err, "\n")
 		res.Alive = false
+		if strings.Contains(err.Error(), "EOF") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "connection reset by peer") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "Timeout") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "Timeout") {
+			//不作处理
+			return res
+		}
+		if err.Error() == "HttpStatusCode不在范围内" {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "server gave HTTP response") {
+			//HTTP协议重新获取指纹
+			return getUrlBanner(fmt.Sprintf("http://%s:%s", url.Host, url.Port))
+		}
+		if strings.Contains(err.Error(), "malformed HTTP response") {
+			//TCP协议重新获取banner
+			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
+		}
+		fmt.Print("\r", strings.Repeat(" ", 70))
+		fmt.Printf("\r[-]%s：%T\n", err, err)
 		return res
 	}
 	res.Alive = true
@@ -131,18 +169,20 @@ func getTcpBanner(s string) portInfo {
 	res.Netloc = url.Host
 	res.Portid = misc.Str2Int(url.Port)
 	res.Protocol = getProtocol(s)
-	conn, err := net.DialTimeout("tcp", s, time.Second*2)
+	conn, err := net.DialTimeout("tcp", s, time.Second*time.Duration(params.SerParams.Timeout))
 	if err != nil {
 		res.Alive = false
 		res.Banner = ""
 	} else {
-		_ = conn.SetReadDeadline(time.Now().Add(time.Second * 2))
+		_ = conn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(params.SerParams.Timeout)))
 		res.Alive = true
+		res.KeywordFinger.errorMsg = errors.New("非Web端口")
+		res.HashFinger.errorMsg = errors.New("非Web端口")
 		_, _ = conn.Write([]byte("test\r\n"))
 		Bytes := make([]byte, 1024)
 		i, _ := conn.Read(Bytes)
 		res.Banner = string(Bytes[:i])
-		res.Banner = strings.Replace(res.Banner, "\n", "", -1)
+		res.Banner = misc.FixLine(res.Banner)
 		conn.Close()
 	}
 	res.Info = makeResultInfo(res)

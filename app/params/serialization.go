@@ -16,7 +16,7 @@ type serParams struct {
 	Port, HttpCode        []int
 	Path                  []string
 	Output, Proxy, Host   string
-	Threads               int
+	Threads, Timeout      int
 }
 
 var SerParams = serParams{
@@ -29,6 +29,7 @@ var SerParams = serParams{
 	Proxy:      "",
 	Host:       "",
 	Threads:    0,
+	Timeout:    3,
 }
 
 func serializationParams() {
@@ -40,6 +41,7 @@ func serializationParams() {
 	serializationParamsProxy()
 	serializationParamsHosts()
 	serializationParamsThreads()
+	serializationParamsTimeout()
 	//fmt.Print(SerParams)
 }
 
@@ -138,4 +140,8 @@ func serializationParamsHosts() {
 
 func serializationParamsThreads() {
 	SerParams.Threads = params.threads
+}
+
+func serializationParamsTimeout() {
+	SerParams.Timeout = params.timeout
 }

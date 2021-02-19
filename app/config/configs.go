@@ -14,7 +14,7 @@ type config struct {
 	Path                     []string
 	UserAgents               []string
 	UnWebPorts               map[string]string
-	Top, Threads             int
+	Top, Threads, timeout    int
 	Host, FofaEmail, FofaKey string
 }
 
@@ -57,6 +57,24 @@ var defaultConfig = `
   ],
   "host": "",
   "ports": [
+	22,
+	23,
+	21,
+	2100,
+	25,
+	445,
+	135,
+	139,
+	389,
+	636,
+	2049,
+	1433,
+	1434,
+	1521,
+	3306,
+	3389,
+	5432,
+	50000,
     8080,
     80,
     81,

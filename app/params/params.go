@@ -11,7 +11,7 @@ import (
 type Params struct {
 	help                                              bool
 	target, port, output, proxy, path, host, httpCode string
-	top, threads                                      int
+	top, threads, timeout                             int
 }
 
 var params Params
@@ -40,9 +40,10 @@ optional arguments:
   --http-code     指定会记录的HTTP状态码，逗号分割,默认会记录200,301,302,403,404
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOST值，慎用！
+  --timeout       设置超时时间，默认3秒钟，单位为秒！
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host]\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host] [--timeout]\n"
 
 //初始化参数
 func initParams() {
@@ -64,6 +65,7 @@ func initParams() {
 	flag.StringVar(&params.httpCode, "http-code", "", "")
 	flag.IntVar(&params.top, "top", 0, "")
 	flag.IntVar(&params.threads, "threads", 0, "")
+	flag.IntVar(&params.timeout, "timeout", 3, "")
 }
 
 func LoadParams() {

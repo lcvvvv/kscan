@@ -20,7 +20,6 @@ func main() {
 	fmt.Print("[*]正在初始化端口扫描队列...\n")
 	run.InitPortQueue()
 	//初始化可访问URL地址队列
-	//fmt.Print("[*]正在初始化可访问URL地址队列...\n")
 	run.InitUrlQueue()
 	//开始扫描所有开放端口
 	fmt.Print("[*]开始扫描所有开放端口...\n")
