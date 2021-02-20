@@ -30,20 +30,20 @@ func initOutPutFile(path string) *os.File {
 func checkParams() {
 	//判断冲突参数
 	if params.port != "" && params.top != 0 {
-		fmt.Print("port、top只允许同时出现一个")
+		fmt.Print("[X]PORT、TOP只允许同时出现一个")
 		os.Exit(0)
 	}
 	//判断内容
 	if params.target != "" {
 		if params.port != "" {
 			if !checkIntsParam(params.port) {
-				fmt.Print("port参数输入错误")
+				fmt.Print("[X]PORT参数输入错误,其格式应为80，8080，8081-8090")
 				os.Exit(0)
 			}
 		}
 		if params.top != 0 {
 			if params.top > 1000 || params.top < 1 {
-				fmt.Print("top参数输入错误")
+				fmt.Print("[X]TOP参数输入错误,TOP参数应为1-1000之间的整数。")
 				os.Exit(0)
 			}
 		}
@@ -54,13 +54,13 @@ func checkParams() {
 		}
 		if params.proxy != "" {
 			if !checkProxyParam(params.proxy) {
-				fmt.Print("proxy参数输入错误")
+				fmt.Print("[X]PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
 				os.Exit(0)
 			}
 		}
 		if params.path != "" {
 			if !checkStringsParam(params.path) {
-				fmt.Print("path参数输入错误")
+				fmt.Print("[X]PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
 				os.Exit(0)
 			}
 		}
@@ -75,18 +75,18 @@ func checkParams() {
 		}
 		if params.httpCode != "" {
 			if !checkIntsParam(params.httpCode) {
-				fmt.Print("port参数输入错误")
+				fmt.Print("[X]HTTPCODE参数输入错误，其格式应为200可用逗号输入多个状态码")
 				os.Exit(0)
 			}
 		}
 	} else {
-		fmt.Print("必须输入target参数")
+		fmt.Print("[X]必须输入TARGET参数")
 		os.Exit(0)
 	}
 }
 
 func checkIntsParam(v string) bool {
-	matched, err := regexp.MatchString("^([0-9]+,*)+[0-9]$", v)
+	matched, err := regexp.MatchString("^((?:[0-9])+(?:-[0-9]+)?)(?:,(?:[0-9])+-(?:[0-9])+)*$", v)
 	if err != nil {
 		return false
 	}

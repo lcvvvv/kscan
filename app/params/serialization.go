@@ -81,9 +81,7 @@ func serializationParamsTarget(t string) {
 
 func serializationParamsPort() {
 	if params.port != "" {
-		strPorts := strings.Split(params.port, ",")
-		serStrPorts, _ := misc.StrArr2IntArr(strPorts)
-		SerParams.Port = serStrPorts
+		SerParams.Port = intParam2IntArr(params.port)
 		return
 	}
 	if params.top != 0 {
@@ -99,9 +97,7 @@ func serializationParamsPort() {
 }
 
 func serializationParamsHttpCode() {
-	strHttpCodes := strings.Split(params.httpCode, ",")
-	serStrHttpCodes, _ := misc.StrArr2IntArr(strHttpCodes)
-	SerParams.HttpCode = serStrHttpCodes
+	SerParams.HttpCode = intParam2IntArr(params.httpCode)
 }
 
 func serializationParamsPath() {
@@ -144,4 +140,39 @@ func serializationParamsThreads() {
 
 func serializationParamsTimeout() {
 	SerParams.Timeout = params.timeout
+}
+
+func intParam2IntArr(v string) []int {
+	var res []int
+	vArr := strings.Split(v, ",")
+	for _, v := range vArr {
+		var vvArr []int
+		if strings.Contains(v, "-") {
+			iArr := strings.Split(v, "-")
+			if len(iArr) != 2 {
+				fmt.Print("[X]参数输入错误！！！")
+				os.Exit(0)
+			} else {
+				smallNum := misc.Str2Int(iArr[0])
+				bigNum := misc.Str2Int(iArr[1])
+				if smallNum >= bigNum {
+					fmt.Print("[X]参数输入错误！！！")
+					os.Exit(0)
+				}
+				vvArr = append(vvArr, makeIntList(smallNum, bigNum)...)
+			}
+		} else {
+			vvArr = append(vvArr, misc.Str2Int(v))
+		}
+		res = append(res, vvArr...)
+	}
+	return res
+}
+
+func makeIntList(s int, b int) []int {
+	var iArr []int
+	for i := 0; i <= b-s; i++ {
+		iArr = append(iArr, i+s)
+	}
+	return iArr
 }

@@ -86,6 +86,14 @@ func getUrlBanner(s string) portInfo {
 	resp, err := shttp.Get(s)
 	if err != nil {
 		res.Alive = false
+		if strings.Contains(err.Error(), "too many") {
+			//发现存在线程过高错误
+			fmt.Printf("\r%s\n", strings.Repeat(" ", 70))
+			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
+			fmt.Printf("\r[X]或者请执行\"ulimit -n 50000\"命令放开操作系统限制!!!\n")
+			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 50000 50000\"!!!\n")
+			os.Exit(0)
+		}
 		if strings.Contains(err.Error(), "EOF") {
 			//不作处理
 			return res
@@ -106,10 +114,6 @@ func getUrlBanner(s string) portInfo {
 			//不作处理
 			return res
 		}
-		if strings.Contains(err.Error(), "Timeout") {
-			//不作处理
-			return res
-		}
 		if err.Error() == "HttpStatusCode不在范围内" {
 			//不作处理
 			return res
@@ -121,14 +125,6 @@ func getUrlBanner(s string) portInfo {
 		if strings.Contains(err.Error(), "malformed HTTP response") {
 			//TCP协议重新获取banner
 			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
-		}
-		if strings.Contains(err.Error(), "too many open files") {
-			//发现存在线程过高错误
-			fmt.Printf("\r%s\n", strings.Repeat(" ", 70))
-			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
-			fmt.Printf("\r[X]或者请执行\"ulimit -n 10240\"命令放开操作系统限制!!!\n")
-			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 10240 10240\"!!!\n")
-			os.Exit(0)
 		}
 		fmt.Print("\r", strings.Repeat(" ", 70))
 		fmt.Printf("\r[-]%s：%T\n", err, err)
@@ -193,6 +189,44 @@ func getTcpBanner(s string) portInfo {
 	if err != nil {
 		res.Alive = false
 		res.Banner = ""
+		if strings.Contains(err.Error(), "too many") {
+			//发现存在线程过高错误
+			fmt.Printf("\r%s\n", strings.Repeat(" ", 70))
+			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
+			fmt.Printf("\r[X]或者请执行\"ulimit -n 50000\"命令放开操作系统限制!!!\n")
+			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 50000 50000\"!!!\n")
+			os.Exit(0)
+		}
+		if strings.Contains(err.Error(), "EOF") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "connection reset by peer") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "timeout") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "denied") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "down") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "refused") {
+			//不作处理
+			return res
+		}
+		if strings.Contains(err.Error(), "route") {
+			//不作处理
+			return res
+		}
+		fmt.Print("\r", strings.Repeat(" ", 70))
+		fmt.Printf("\r[-]%s：%T\n", err, err)
 	} else {
 		_ = conn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(params.SerParams.Timeout)))
 		res.Alive = true

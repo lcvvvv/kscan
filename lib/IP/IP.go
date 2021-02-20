@@ -58,5 +58,8 @@ func IPMask2IPArr(v string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	if result[0][len(result[0])-2:] == ".0" {
+		result = result[1:]
+	}
 	return result, nil
 }
