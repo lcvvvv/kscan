@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Gkscan.iml" filepath="$PROJECT_DIR$/.idea/Gkscan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/kscan.iml" filepath="$PROJECT_DIR$/.idea/kscan.iml" />
     </modules>
   </component>
 </project>

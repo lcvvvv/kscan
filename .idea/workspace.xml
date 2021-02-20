@@ -10,11 +10,17 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="优化报错信息">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="优化帮助信息">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220151343083.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220154321503.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220161944989.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220162851992.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220164036693.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220164117920.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Gkscan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kscan.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/configs.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/configs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/params.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,24 +69,49 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="http.proxy" />
+    <property name="settings.editor.selected.configurable" value="go" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$USER_HOME$/Desktop" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/app/params" />
       <recent name="$PROJECT_DIR$/lib/sflag" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$USER_HOME$/Desktop" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/" />
-    </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="GoAppEngineRunConfiguration" factoryName="Go App Engine">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <framework value="gotest" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="js.build_tools.grunt">
       <node-interpreter value="project" />
       <envs />
@@ -112,7 +143,8 @@
     <MESSAGE value="kscan v1.2来啦~~~~" />
     <MESSAGE value="kscan v1.1来啦~~~~" />
     <MESSAGE value="优化报错信息" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化报错信息" />
+    <MESSAGE value="优化帮助信息" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化帮助信息" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
@@ -141,21 +173,21 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1988" y="279" key="IDE.errors.dialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541114750" />
-    <state x="135" y="172" key="SettingsEditor" timestamp="1612454439982">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="1756" y="191" key="SettingsEditor" timestamp="1613809461891">
+      <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1612454439982" />
-    <state x="1620" y="274" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541095706" />
+    <state x="1756" y="191" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613809461891" />
     <state x="518" y="242" width="405" height="437" key="StructurePopup" timestamp="1611759650965">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2" timestamp="1613793743614">
+    <state x="1867" y="224" key="Vcs.Push.Dialog.v2" timestamp="1613809484160">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1613747068521" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613793743614" />
+    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613809484160" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
