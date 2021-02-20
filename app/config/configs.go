@@ -44,7 +44,7 @@ var defaultConfig = `
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52"
   ],
   "top": 400,
-  "threads": 200,
+  "threads": 400,
   "httpCode": [
     200,
     301,

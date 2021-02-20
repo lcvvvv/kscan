@@ -23,8 +23,8 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.2\#\#| \#|
-轻量资产测绘工具             by：kv2
+|#|\#\#####/ \#####/#/ v1.12#\#| \#|
+           轻量级资产测绘工具 by：kv2
 
 `
 
@@ -33,14 +33,14 @@ const help = `
 optional arguments:
   -h , --help     show this help message and exit
   -t , --target   直接扫描指定对象,支持IP、URL、IP/[16-32]、file:/tmp/target.txt
-  -p , --port     扫描指定端口，默认会扫描
+  -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
-  --proxy         设置代理{socks5/socks4/https/http}://IP:port
-  --threads       线程参数
+  --proxy         设置代理(socks5|socks4|https|http)://IP:Port
+  --threads       线程参数,默认线程4000
   --http-code     指定会记录的HTTP状态码，逗号分割,默认会记录200,301,302,403,404
   --path          指定请求访问的目录，逗号分割，慎用！
-  --host          指定所有请求的头部HOST值，慎用！
+  --host          指定所有请求的头部HOSTS值，慎用！
   --timeout       设置超时时间，默认3秒钟，单位为秒！
 
 `

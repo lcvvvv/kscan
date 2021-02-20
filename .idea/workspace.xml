@@ -10,13 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="kscan v1.1来啦~~~~">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="优化报错信息">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config/configs.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/configs.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/params/serialization.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/serialization.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/update/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/update/update.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/IP/IP.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/IP/IP.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/port/banner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/port/banner.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/params/params.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +111,8 @@
     <MESSAGE value="新增output导出功能" />
     <MESSAGE value="kscan v1.2来啦~~~~" />
     <MESSAGE value="kscan v1.1来啦~~~~" />
-    <option name="LAST_COMMIT_MESSAGE" value="kscan v1.1来啦~~~~" />
+    <MESSAGE value="优化报错信息" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化报错信息" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
@@ -152,20 +151,20 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1613747068521">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="1867" y="224" key="Vcs.Push.Dialog.v2" timestamp="1613793743614">
+      <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1613747068521" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613724031863" />
+    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613793743614" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1612454742397" />
-    <state x="1926" y="195" width="706" height="735" key="find.popup" timestamp="1613791217921">
+    <state x="1926" y="195" width="706" height="735" key="find.popup" timestamp="1613808481117">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="513" y="143" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1612449465940" />
-    <state x="1926" y="195" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613791217921" />
+    <state x="1926" y="195" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613808481117" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1612235873652" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1611644355435">

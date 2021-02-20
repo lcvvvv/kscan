@@ -70,8 +70,8 @@ func checkParams() {
 		if params.threads != 0 {
 			//验证threads参数
 		}
-		if params.threads != 3 {
-			//验证threads参数
+		if params.timeout != 3 {
+			//验证timeout参数
 		}
 		if params.httpCode != "" {
 			if !checkIntsParam(params.httpCode) {
