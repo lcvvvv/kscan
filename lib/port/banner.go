@@ -70,7 +70,7 @@ func GetBanner(s string) []portInfo {
 		}
 	}
 	for _, PortInfo := range portInfoArr {
-		fmt.Print("\r", strings.Repeat(" ", 70))
+		fmt.Print("\r", strings.Repeat(" ", 80))
 		fmt.Print(PortInfo.Info)
 	}
 	return portInfoArr
@@ -88,7 +88,7 @@ func getUrlBanner(s string) portInfo {
 		res.Alive = false
 		if strings.Contains(err.Error(), "too many") {
 			//发现存在线程过高错误
-			fmt.Printf("\r%s\n", strings.Repeat(" ", 70))
+			fmt.Printf("\r%s\n", strings.Repeat(" ", 80))
 			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
 			fmt.Printf("\r[X]或者请执行\"ulimit -n 50000\"命令放开操作系统限制!!!\n")
 			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 50000 50000\"!!!\n")
@@ -126,7 +126,7 @@ func getUrlBanner(s string) portInfo {
 			//TCP协议重新获取banner
 			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
 		}
-		fmt.Print("\r", strings.Repeat(" ", 70))
+		fmt.Print("\r", strings.Repeat(" ", 80))
 		fmt.Printf("\r[-]%s：%T\n", err, err)
 		return res
 	}
@@ -191,7 +191,7 @@ func getTcpBanner(s string) portInfo {
 		res.Banner = ""
 		if strings.Contains(err.Error(), "too many") {
 			//发现存在线程过高错误
-			fmt.Printf("\r%s\n", strings.Repeat(" ", 70))
+			fmt.Printf("\r%s\n", strings.Repeat(" ", 80))
 			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
 			fmt.Printf("\r[X]或者请执行\"ulimit -n 50000\"命令放开操作系统限制!!!\n")
 			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 50000 50000\"!!!\n")
@@ -225,7 +225,7 @@ func getTcpBanner(s string) portInfo {
 			//不作处理
 			return res
 		}
-		fmt.Print("\r", strings.Repeat(" ", 70))
+		fmt.Print("\r", strings.Repeat(" ", 80))
 		fmt.Printf("\r[-]%s：%T\n", err, err)
 	} else {
 		_ = conn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(params.SerParams.Timeout)))

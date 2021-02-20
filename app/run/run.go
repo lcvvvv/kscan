@@ -7,6 +7,7 @@ import (
 	"../../lib/queue"
 	"fmt"
 	"sync"
+	"time"
 )
 
 var OpenPortQueue = queue.New()
@@ -15,8 +16,13 @@ var OpenPortQueue = queue.New()
 
 //var threadPortSync int
 var threadOpenPortGroup sync.WaitGroup
+var threadOpenPortGroupNum int
 
 func InitPortQueue() {
+	go InitPortQueueSub()
+}
+
+func InitPortQueueSub() {
 	for _, host := range params.SerParams.HostTarget {
 		for _, Port := range params.SerParams.Port {
 			IP := port.GetIP(host)
@@ -65,15 +71,11 @@ func InitUrlQueue() {
 
 func GetBanner() {
 	var thread int
-	lenth := OpenPortQueue.Len()
-	if lenth > 200 {
-		thread = params.SerParams.Threads
-	} else {
-		thread = 20
-	}
+	thread = params.SerParams.Threads
 	for i := 0; i <= thread; i++ {
 		threadOpenPortGroup.Add(1)
-		go GetBannerSub(&OpenPortQueue, &threadOpenPortGroup, lenth)
+		threadOpenPortGroupNum++
+		go GetBannerSub(&OpenPortQueue, &threadOpenPortGroup)
 	}
 	threadOpenPortGroup.Wait()
 }
@@ -101,17 +103,21 @@ func GetBanner() {
 //	}
 //}
 
-func GetBannerSub(OpenPortQueue **queue.Queue, wait *sync.WaitGroup, lenth int) {
+func GetBannerSub(OpenPortQueue **queue.Queue, wait *sync.WaitGroup) {
 	if (*OpenPortQueue).Len() > 0 {
 		t := misc.Interface2Str((*OpenPortQueue).Pop())
-		fmt.Printf("\r[*][%d/%d]正在测试端口开放情况：%s", (*OpenPortQueue).Len(), lenth, t)
+		fmt.Printf("\r[*][%d][当前存活线程：%d]正在测试端口开放情况：%s", (*OpenPortQueue).Len(), threadOpenPortGroupNum, t)
 		port.GetBanner(t)
 	}
 	//fmt.Print((*OpenPortQueue).Len())
+	if (*OpenPortQueue).Len() == 0 {
+		time.Sleep(time.Second * 1)
+	}
 	if (*OpenPortQueue).Len() > 0 {
-		GetBannerSub(OpenPortQueue, wait, lenth)
+		GetBannerSub(OpenPortQueue, wait)
 		return
 	} else {
+		threadOpenPortGroupNum--
 		wait.Done()
 		return
 	}
