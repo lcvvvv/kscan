@@ -10,11 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]新增README.md">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修复大资产扫描载入时间过长的问题">
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220164117921.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image-20210220164117923.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/port/banner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/port/banner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,17 +68,17 @@
     <property name="settings.editor.selected.configurable" value="go" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/assets" />
-      <recent name="$USER_HOME$/Desktop" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/app/params" />
       <recent name="$PROJECT_DIR$/lib/sflag" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$USER_HOME$/Desktop" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/" />
     </key>
   </component>
   <component name="RunManager">
@@ -115,7 +115,8 @@
     <MESSAGE value="优化报错信息" />
     <MESSAGE value="优化帮助信息" />
     <MESSAGE value="[+]新增README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+]新增README.md" />
+    <MESSAGE value="[*]修复大资产扫描载入时间过长的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]修复大资产扫描载入时间过长的问题" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
@@ -154,10 +155,10 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2" timestamp="1613810683384">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1613824903079">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1613747068521" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1613824903079" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613810683384" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
