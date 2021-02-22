@@ -1,11 +1,11 @@
 package run
 
 import (
-	"../../app/params"
-	"../../lib/misc"
-	"../../lib/port"
-	"../../lib/queue"
+	"app/params"
 	"fmt"
+	"lib/misc"
+	"lib/port"
+	"lib/queue"
 	"sync"
 	"time"
 )

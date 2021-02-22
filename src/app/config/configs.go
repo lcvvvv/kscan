@@ -1,9 +1,9 @@
 package config
 
 import (
-	"../../lib/misc"
 	"encoding/json"
 	"fmt"
+	"lib/misc"
 	"os"
 )
 

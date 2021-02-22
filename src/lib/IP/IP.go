@@ -1,8 +1,8 @@
 package IP
 
 import (
-	"../misc"
 	"errors"
+	"lib/misc"
 	"regexp"
 	"strings"
 )

@@ -1,11 +1,11 @@
 package params
 
 import (
-	"../../app/config"
-	"../../lib/IP"
-	"../../lib/misc"
-	"../../lib/urlparse"
+	"app/config"
 	"fmt"
+	"lib/IP"
+	"lib/misc"
+	"lib/urlparse"
 	"os"
 	"regexp"
 	"strings"

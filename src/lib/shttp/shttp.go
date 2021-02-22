@@ -1,12 +1,12 @@
 package shttp
 
 import (
-	"../../app/config"
-	"../../app/params"
-	"../misc"
+	"app/config"
+	"app/params"
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"lib/misc"
 	"math/rand"
 	"net/http"
 	"net/url"

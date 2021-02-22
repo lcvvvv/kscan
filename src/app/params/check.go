@@ -1,8 +1,8 @@
 package params
 
 import (
-	"../../lib/misc"
 	"fmt"
+	"lib/misc"
 	"os"
 	"regexp"
 )

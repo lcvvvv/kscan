@@ -10,11 +10,26 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修复大资产扫描载入时间过长的问题">
-      <change afterPath="$PROJECT_DIR$/assets/image-20210220164117921.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/image-20210220164117923.png" afterDir="false" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]调整目录结构和包导入方式，现在更赏心悦目了">
+      <change afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config/configs.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/config/configs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/finger/finger.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/finger/finger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/check.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/params/serialization.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/serialization.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/run/run.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/update/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/update/update.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/IP/IP.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/IP/IP.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/IP/IPlib.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/IP/IPlib.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/iconhash/iconhash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/iconhash/iconhash.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/misc/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/port/banner.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/port/banner.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/port/port.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/port/port.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/queue/queue.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/queue/queue.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/urlparse/urlparse.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/urlparse/urlparse.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +55,13 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GoLibraries">
+    <option name="urls">
+      <list>
+        <option value="file://$PROJECT_DIR$" />
+      </list>
+    </option>
+  </component>
   <component name="ProblemsViewState">
     <hideBySeverity>
       <option value="15" />
@@ -60,25 +82,29 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable.全局.GOPATH.is.expanded" value="true" />
+    <property name="configurable.模块.GOPATH.is.expanded" value="true" />
+    <property name="configurable.项目.GOPATH.is.expanded" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="go" />
+    <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoLibrariesConfigurableProvider" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/lib" />
-      <recent name="$PROJECT_DIR$/app/params" />
-      <recent name="$PROJECT_DIR$/lib/sflag" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets" />
       <recent name="$USER_HOME$/Desktop" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/app/params" />
+      <recent name="$PROJECT_DIR$/lib/sflag" />
     </key>
   </component>
   <component name="RunManager">
@@ -116,7 +142,8 @@
     <MESSAGE value="优化帮助信息" />
     <MESSAGE value="[+]新增README.md" />
     <MESSAGE value="[*]修复大资产扫描载入时间过长的问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]修复大资产扫描载入时间过长的问题" />
+    <MESSAGE value="[*]调整目录结构和包导入方式，现在更赏心悦目了" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]调整目录结构和包导入方式，现在更赏心悦目了" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
@@ -145,30 +172,30 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1988" y="279" key="IDE.errors.dialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541114750" />
-    <state x="1756" y="191" key="SettingsEditor" timestamp="1613809461891">
+    <state x="1807" y="184" key="SettingsEditor" timestamp="1613985637300">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1612454439982" />
-    <state x="1756" y="191" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613809461891" />
+    <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613985637300" />
     <state x="518" y="242" width="405" height="437" key="StructurePopup" timestamp="1611759650965">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1613824903079">
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1613830898472">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1613824903079" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1613830898472" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613810683384" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1612454742397" />
-    <state x="513" y="143" width="511" height="613" key="find.popup" timestamp="1613824780704">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="1926" y="195" width="706" height="735" key="find.popup" timestamp="1613985507381">
+      <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="513" y="143" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1613824780704" />
-    <state x="1926" y="195" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613808481117" />
+    <state x="1926" y="195" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1613985507381" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1612235873652" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1611644355435">

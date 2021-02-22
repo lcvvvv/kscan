@@ -1,10 +1,10 @@
 package main
 
 import (
-	"./app/finger"
-	"./app/params"
-	"./app/run"
-	"./app/update"
+	"app/finger"
+	"app/params"
+	"app/run"
+	"app/update"
 	"fmt"
 )
 

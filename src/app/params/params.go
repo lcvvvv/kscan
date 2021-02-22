@@ -1,7 +1,7 @@
 package params
 
 import (
-	"../config"
+	"app/config"
 	"flag"
 	"fmt"
 	"os"

@@ -1,9 +1,9 @@
 package update
 
 import (
-	"../../lib/misc"
 	"bufio"
 	"fmt"
+	"lib/misc"
 	"os"
 	"strings"
 )
