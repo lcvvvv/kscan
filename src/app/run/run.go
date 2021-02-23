@@ -11,6 +11,9 @@ import (
 )
 
 var OpenPortQueue = queue.New()
+var HostQueue = queue.New()
+
+var HostNum int
 
 //var PortQueue = queue.New()
 
@@ -19,7 +22,13 @@ var threadOpenPortGroup sync.WaitGroup
 var threadOpenPortGroupNum int
 
 func InitPortQueue() {
+	for _, host := range params.SerParams.HostTarget {
+		HostQueue.Push(host)
+	}
+	HostNum = HostQueue.Len()
+	fmt.Printf("[*]总共扫描主机对象%d个...\n", HostNum)
 	go InitPortQueueSub()
+	time.Sleep(time.Second * 1)
 }
 
 func InitPortQueueSub() {
@@ -30,6 +39,13 @@ func InitPortQueueSub() {
 			//PortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 			OpenPortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 		}
+		for {
+			if OpenPortQueue.Len() < 65535 {
+				break
+			}
+			time.Sleep(time.Second * 1)
+		}
+		_ = HostQueue.Pop()
 	}
 }
 
@@ -106,12 +122,12 @@ func GetBanner() {
 func GetBannerSub(OpenPortQueue **queue.Queue, wait *sync.WaitGroup) {
 	if (*OpenPortQueue).Len() > 0 {
 		t := misc.Interface2Str((*OpenPortQueue).Pop())
-		fmt.Printf("\r[*][%d][当前存活线程：%d]正在测试端口开放情况：%s", (*OpenPortQueue).Len(), threadOpenPortGroupNum, t)
+		fmt.Printf("\r[*][%d][%d/%d][协程数：%d][/]正在测试端口开放情况：%s", (*OpenPortQueue).Len(), HostQueue.Len(), HostNum, threadOpenPortGroupNum, t)
 		port.GetBanner(t)
 	}
 	//fmt.Print((*OpenPortQueue).Len())
 	if (*OpenPortQueue).Len() == 0 {
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second * 2)
 	}
 	if (*OpenPortQueue).Len() > 0 {
 		GetBannerSub(OpenPortQueue, wait)

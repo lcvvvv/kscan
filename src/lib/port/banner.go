@@ -51,14 +51,24 @@ func GetBanner(s string) []portInfo {
 	result := getTcpBanner(s)
 	if result.Alive {
 		if misc.IsInIntArr(config.Config.SslPorts, misc.Str2Int(Url.Port)) {
+			//如果在常见https端口清单里面则尝试进行HTTPS协议
 			s = fmt.Sprintf("https://%s", s)
 			portInfoArr = append(portInfoArr, getUrlBanner(s))
 		} else {
 			_, isExist := config.Config.UnWebPorts[Url.Port]
 			if !isExist {
+				//如果不在其他常见协议的常见端口里面则尝试http协议
 				s = fmt.Sprintf("http://%s", s)
-				portInfoArr = append(portInfoArr, getUrlBanner(s))
+				rResult := getUrlBanner(s)
+				if rResult.Alive {
+					//如果扫描结果正确，则是http协议端口
+					portInfoArr = append(portInfoArr, rResult)
+				} else {
+					//如果不正确则保持原有TCP扫描结果
+					portInfoArr = append(portInfoArr, result)
+				}
 			} else {
+				//如果在其他常见协议端口里面保持原有TCP扫描结果
 				portInfoArr = append(portInfoArr, result)
 			}
 			//if strings.Contains(result.Banner, "HTTP") {
@@ -71,6 +81,7 @@ func GetBanner(s string) []portInfo {
 	}
 	for _, PortInfo := range portInfoArr {
 		fmt.Print("\r", strings.Repeat(" ", 80))
+		PortInfo.Info = makeResultInfo(PortInfo)
 		fmt.Print(PortInfo.Info)
 	}
 	return portInfoArr
@@ -142,7 +153,7 @@ func getUrlBanner(s string) portInfo {
 	res.HeaderInfo = getHeaderinfo(resp.Header.Clone())
 	res.HashFinger = getFingerByHash(s)
 	res.KeywordFinger = getFingerByKeyword(resp)
-	res.Info = makeResultInfo(res)
+	//res.Info = makeResultInfo(res)
 	return res
 }
 
@@ -239,7 +250,7 @@ func getTcpBanner(s string) portInfo {
 		res.Banner = misc.FixLine(res.Banner)
 		conn.Close()
 	}
-	res.Info = makeResultInfo(res)
+	//res.Info = makeResultInfo(res)
 	//fmt.Printf("[+]%s\t%d\t%s\t%s\t%s\t%s\t%s\n", s, res.portid, res.protocol, res.title, res.banner, res.hashfinger, res.keywordfinger)
 	return res
 }
