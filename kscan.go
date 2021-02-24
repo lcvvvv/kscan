@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	//初始化
+	//环境初始化
 	initEnv()
 	//加载程序运行参数
 	params.LoadParams()
@@ -32,7 +32,10 @@ func main() {
 }
 
 func initEnv() {
-	slog.Init()
+	//参数初始化
+	params.Init()
+	//日志初始化
+	slog.Init(params.Params.Debug)
 	//sysType := runtime.GOOS
 	//if sysType == "linux" {
 	//	// LINUX系统

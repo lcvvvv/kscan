@@ -13,6 +13,9 @@
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化日志输出">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/check.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/params/serialization.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/serialization.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/slog/slog.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
     </list>
@@ -171,20 +174,20 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1614170380871">
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1614170655744">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1614170380871" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1614170655744" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1612454742397" />
-    <state x="834" y="143" width="511" height="613" key="find.popup" timestamp="1614170396771">
+    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1614172064570">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="834" y="143" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1614170396771" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1614172064570" />
     <state x="1922" y="196" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072775017" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1612235873652" />

@@ -3,6 +3,7 @@ package slog
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"lib/misc"
 	"log"
 	"os"
@@ -21,11 +22,15 @@ type logger struct {
 	//fooline *log.Logger
 }
 
-func Init() {
+func Init(Debug bool) {
 	this.info = log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime)
 	this.warning = log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime)
-	this.debug = log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime)
 	this.error = log.New(io.MultiWriter(os.Stderr), "\r[×]", log.Ldate|log.Ltime)
+	if Debug {
+		this.debug = log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime)
+	} else {
+		this.debug = log.New(ioutil.Discard, "\r[-]", log.Ldate|log.Ltime)
+	}
 	//this.fooline = log.New(os.Stdout, "[*]", 0)
 	//infoFile,err:=os.OpenFile("/data/service_logs/info.log",os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
 	//warnFile,err:=os.OpenFile("/data/service_logs/warn.log",os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)

@@ -8,13 +8,13 @@ import (
 	"strings"
 )
 
-type Params struct {
-	help                                              bool
+type ParamsType struct {
+	help, Debug                                       bool
 	target, port, output, proxy, path, host, httpCode string
 	top, threads, timeout                             int
 }
 
-var params Params
+var Params ParamsType
 
 //logo信息
 const logo = `
@@ -53,24 +53,26 @@ func initParams() {
 	flag.Usage = func() {
 		fmt.Print(logo)
 	}
-	flag.BoolVar(&params.help, "h", false, "")
-	flag.BoolVar(&params.help, "help", false, "")
-	flag.StringVar(&params.target, "t", "", "")
-	flag.StringVar(&params.target, "target", "", "")
-	flag.StringVar(&params.port, "p", "", "")
-	flag.StringVar(&params.port, "port", "", "")
-	flag.StringVar(&params.output, "o", "", "")
-	flag.StringVar(&params.output, "output", "", "")
-	flag.StringVar(&params.proxy, "proxy", "", "")
-	flag.StringVar(&params.path, "path", "", "")
-	flag.StringVar(&params.host, "host", "", "")
-	flag.StringVar(&params.httpCode, "http-code", "", "")
-	flag.IntVar(&params.top, "top", 0, "")
-	flag.IntVar(&params.threads, "threads", 0, "")
-	flag.IntVar(&params.timeout, "timeout", 3, "")
+	flag.BoolVar(&Params.help, "h", false, "")
+	flag.BoolVar(&Params.help, "help", false, "")
+	flag.BoolVar(&Params.Debug, "debug", false, "")
+	flag.BoolVar(&Params.Debug, "d", false, "")
+	flag.StringVar(&Params.target, "t", "", "")
+	flag.StringVar(&Params.target, "target", "", "")
+	flag.StringVar(&Params.port, "p", "", "")
+	flag.StringVar(&Params.port, "port", "", "")
+	flag.StringVar(&Params.output, "o", "", "")
+	flag.StringVar(&Params.output, "output", "", "")
+	flag.StringVar(&Params.proxy, "proxy", "", "")
+	flag.StringVar(&Params.path, "path", "", "")
+	flag.StringVar(&Params.host, "host", "", "")
+	flag.StringVar(&Params.httpCode, "http-code", "", "")
+	flag.IntVar(&Params.top, "top", 0, "")
+	flag.IntVar(&Params.threads, "threads", 0, "")
+	flag.IntVar(&Params.timeout, "timeout", 3, "")
 }
 
-func LoadParams() {
+func Init() {
 	initParams()
 	flag.Parse()
 	//不带参数则对应usage
@@ -79,25 +81,26 @@ func LoadParams() {
 		fmt.Print(usage)
 		os.Exit(0)
 	}
-	if params.help {
+	if Params.help {
 		fmt.Print(logo)
 		fmt.Print(usage)
 		fmt.Print(help)
 		os.Exit(0)
-	} else {
-		fmt.Print(logo)
-		checkParams()
-		//加载配置文件
-		config.LoadConfig()
-		if params.top == 0 {
-			params.top = config.Config.Top
-		}
-		if params.threads == 0 {
-			params.threads = config.Config.Threads
-		}
-		if params.path == "" {
-			params.path = strings.Join(config.Config.Path, ",")
-		}
-		serializationParams()
 	}
+}
+func LoadParams() {
+	fmt.Print(logo)
+	checkParams()
+	//加载配置文件
+	config.LoadConfig()
+	if Params.top == 0 {
+		Params.top = config.Config.Top
+	}
+	if Params.threads == 0 {
+		Params.threads = config.Config.Threads
+	}
+	if Params.path == "" {
+		Params.path = strings.Join(config.Config.Path, ",")
+	}
+	serializationParams()
 }

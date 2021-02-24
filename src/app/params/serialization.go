@@ -33,7 +33,7 @@ var SerParams = serParams{
 }
 
 func serializationParams() {
-	serializationParamsTarget(params.target)
+	serializationParamsTarget(Params.target)
 	serializationParamsPort()
 	serializationParamsHttpCode()
 	serializationParamsPath()
@@ -79,16 +79,16 @@ func serializationParamsTarget(t string) {
 }
 
 func serializationParamsPort() {
-	if params.port != "" {
-		SerParams.Port = intParam2IntArr(params.port)
+	if Params.port != "" {
+		SerParams.Port = intParam2IntArr(Params.port)
 		return
 	}
-	if params.top != 0 {
-		strPorts := config.Config.Ports[0:params.top]
+	if Params.top != 0 {
+		strPorts := config.Config.Ports[0:Params.top]
 		SerParams.Port = strPorts
 		return
 	}
-	if params.port == "" && params.top == 0 {
+	if Params.port == "" && Params.top == 0 {
 		strPorts := config.Config.Ports[0:config.Config.Top]
 		SerParams.Port = strPorts
 		return
@@ -96,12 +96,12 @@ func serializationParamsPort() {
 }
 
 func serializationParamsHttpCode() {
-	SerParams.HttpCode = intParam2IntArr(params.httpCode)
+	SerParams.HttpCode = intParam2IntArr(Params.httpCode)
 }
 
 func serializationParamsPath() {
 	var fixStrPaths []string
-	strPaths := strings.Split(params.path, ",")
+	strPaths := strings.Split(Params.path, ",")
 	for _, path := range strPaths {
 		path = fixPath(path)
 		fixStrPaths = append(fixStrPaths, path)
@@ -121,24 +121,24 @@ func fixPath(path string) string {
 }
 
 func serializationParamsOutput() {
-	SerParams.Output = params.output
+	SerParams.Output = Params.output
 }
 
 func serializationParamsProxy() {
-	SerParams.Proxy = params.proxy
+	SerParams.Proxy = Params.proxy
 
 }
 
 func serializationParamsHosts() {
-	SerParams.Host = params.host
+	SerParams.Host = Params.host
 }
 
 func serializationParamsThreads() {
-	SerParams.Threads = params.threads
+	SerParams.Threads = Params.threads
 }
 
 func serializationParamsTimeout() {
-	SerParams.Timeout = params.timeout
+	SerParams.Timeout = Params.timeout
 }
 
 func intParam2IntArr(v string) []int {
