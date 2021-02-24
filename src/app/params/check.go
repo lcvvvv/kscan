@@ -1,8 +1,8 @@
 package params
 
 import (
-	"fmt"
 	"lib/misc"
+	"lib/slog"
 	"os"
 	"regexp"
 )
@@ -13,15 +13,13 @@ func initOutPutFile(path string) *os.File {
 	if misc.FileIsExist(path) {
 		f, err := os.Open(path)
 		if err != nil {
-			fmt.Printf("[-]%s", err.Error())
-			os.Exit(0)
+			slog.Error(err.Error())
 		}
 		return f
 	} else {
 		f, err := os.Create(path)
 		if err != nil {
-			fmt.Printf("[-]%s", err.Error())
-			os.Exit(0)
+			slog.Error(err.Error())
 		}
 		return f
 	}
@@ -30,20 +28,19 @@ func initOutPutFile(path string) *os.File {
 func checkParams() {
 	//判断冲突参数
 	if params.port != "" && params.top != 0 {
-		fmt.Print("[X]PORT、TOP只允许同时出现一个")
-		os.Exit(0)
+		slog.Error("PORT、TOP只允许同时出现一个")
 	}
 	//判断内容
 	if params.target != "" {
 		if params.port != "" {
 			if !checkIntsParam(params.port) {
-				fmt.Print("[X]PORT参数输入错误,其格式应为80，8080，8081-8090")
+				slog.Error("PORT参数输入错误,其格式应为80，8080，8081-8090")
 				os.Exit(0)
 			}
 		}
 		if params.top != 0 {
 			if params.top > 1000 || params.top < 1 {
-				fmt.Print("[X]TOP参数输入错误,TOP参数应为1-1000之间的整数。")
+				slog.Error("TOP参数输入错误,TOP参数应为1-1000之间的整数。")
 				os.Exit(0)
 			}
 		}
@@ -54,13 +51,13 @@ func checkParams() {
 		}
 		if params.proxy != "" {
 			if !checkProxyParam(params.proxy) {
-				fmt.Print("[X]PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
+				slog.Error("PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
 				os.Exit(0)
 			}
 		}
 		if params.path != "" {
 			if !checkStringsParam(params.path) {
-				fmt.Print("[X]PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
+				slog.Error("PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
 				os.Exit(0)
 			}
 		}
@@ -75,12 +72,12 @@ func checkParams() {
 		}
 		if params.httpCode != "" {
 			if !checkIntsParam(params.httpCode) {
-				fmt.Print("[X]HTTPCODE参数输入错误，其格式应为200可用逗号输入多个状态码")
+				slog.Error("HTTPCODE参数输入错误，其格式应为200可用逗号输入多个状态码")
 				os.Exit(0)
 			}
 		}
 	} else {
-		fmt.Print("[X]必须输入TARGET参数")
+		slog.Error("必须输入TARGET参数")
 		os.Exit(0)
 	}
 }

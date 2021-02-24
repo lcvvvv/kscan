@@ -2,8 +2,8 @@ package finger
 
 import (
 	"encoding/json"
-	"fmt"
 	"lib/misc"
+	"lib/slog"
 	"os"
 )
 
@@ -39,14 +39,14 @@ func loadKeywordFingers() keywordFingers {
 		out := keywordFingers{}
 		err := decoder.Decode(&out)
 		if err != nil {
-			fmt.Println("Error:", err)
+			slog.Debugln(err.Error())
 		}
-		fmt.Printf("[*]成功读取关键字指纹数据%d条!!!\n", len(out.KeywordFingers))
+		slog.Warningf("成功读取关键字指纹数据%d条!!!\n", len(out.KeywordFingers))
 		return out
 	} else {
-		fmt.Print("[-]未检测到存在fingers.json关键字指纹库，正在创建...\n")
+		slog.Debugln("未检测到存在fingers.json关键字指纹库，正在创建...")
 		file, _ := os.Create("fingers.json")
-		fmt.Print("[+]成功创建关键字指纹库：fingers.json\n")
+		slog.Infoln("成功创建关键字指纹库：fingers.json")
 		_, _ = file.WriteString(keywordfingerConfig)
 		file.Close()
 		return loadKeywordFingers()
@@ -61,14 +61,14 @@ func loadHashFingers() hashFingers {
 		out := hashFingers{}
 		err := decoder.Decode(&out)
 		if err != nil {
-			fmt.Println("Error:", err)
+			slog.Debugln(err.Error())
 		}
-		fmt.Printf("[*]成功读取图标指纹数据%d条!!!\n", len(out.HashFingers))
+		slog.Warningf("成功读取图标指纹数据%d条!!!\n", len(out.HashFingers))
 		return out
 	} else {
-		fmt.Print("[-]未检测到存在faviconhashs.json关键字指纹库，正在创建...\n")
+		slog.Debug("未检测到存在faviconhashs.json关键字指纹库，正在创建...\n")
 		file, _ := os.Create("faviconhashs.json")
-		fmt.Print("[+]成功创建关键字指纹库：faviconhashs.json\n")
+		slog.Info("成功创建关键字指纹库：faviconhashs.json\n")
 		_, _ = file.WriteString(faviconhashsConfig)
 		file.Close()
 		return loadHashFingers()

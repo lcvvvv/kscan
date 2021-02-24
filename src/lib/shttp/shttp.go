@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"lib/misc"
+	"lib/slog"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -107,8 +108,7 @@ func Get(Url string) (*http.Response, error) {
 			if headerKeys[key] == "" {
 				headerKeys[key] = "New"
 				_, _ = newHeaderKeys.WriteString(fmt.Sprintf("%s: %s\n", key, resp.Header.Get(key)))
-				fmt.Print("\r", strings.Repeat(" ", 80))
-				fmt.Printf("\r[*]发现生僻Http头部：%s: %s\n", key, resp.Header.Get(key))
+				slog.Warningf("\r[*]发现生僻Http头部：%s: %s\n", key, resp.Header.Get(key))
 			}
 		}
 		//校验http状态码
@@ -138,7 +138,7 @@ func getUserAgent() string {
 func Header2String(header http.Header) string {
 	var result string
 	for i := range header {
-		result += fmt.Sprintf("%s: %s\n", i, header.Get(i))
+		result = strings.Join([]string{result, fmt.Sprintf("%s: %s\n", i, header.Get(i))}, "")
 	}
 	return result
 }

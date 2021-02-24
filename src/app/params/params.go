@@ -51,7 +51,7 @@ const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--ou
 func initParams() {
 	//自定义Usage
 	flag.Usage = func() {
-		_, _ = fmt.Fprintf(os.Stderr, logo)
+		fmt.Print(logo)
 	}
 	flag.BoolVar(&params.help, "h", false, "")
 	flag.BoolVar(&params.help, "help", false, "")
@@ -75,17 +75,17 @@ func LoadParams() {
 	flag.Parse()
 	//不带参数则对应usage
 	if len(os.Args) == 1 {
-		_, _ = fmt.Fprintf(os.Stderr, logo)
-		_, _ = fmt.Fprintf(os.Stderr, usage)
+		fmt.Print(logo)
+		fmt.Print(usage)
 		os.Exit(0)
 	}
 	if params.help {
-		_, _ = fmt.Fprintf(os.Stderr, logo)
-		_, _ = fmt.Fprintf(os.Stderr, usage)
-		_, _ = fmt.Fprintf(os.Stderr, help)
+		fmt.Print(logo)
+		fmt.Print(usage)
+		fmt.Print(help)
 		os.Exit(0)
 	} else {
-		_, _ = fmt.Fprintf(os.Stderr, logo)
+		fmt.Print(logo)
 		checkParams()
 		//加载配置文件
 		config.LoadConfig()

@@ -2,8 +2,8 @@ package update
 
 import (
 	"bufio"
-	"fmt"
 	"lib/misc"
+	"lib/slog"
 	"os"
 	"strings"
 )
@@ -18,18 +18,18 @@ func checkHeaderkeys() {
 		yesArr := []string{"", "\r", "yes", "y"}
 		noArr := []string{"no", "n"}
 		for {
-			fmt.Print("[*]检测到存在newHeaderkeys.txt文件，这里面存储了一些我们所不知道的HttpResponse头部参数和值，是否愿意发送给我们以便于我们更新更强大的规则库?[Yes/no]")
+			slog.Warning("检测到存在newHeaderkeys.txt文件，这里面存储了一些我们所不知道的HttpResponse头部参数和值，是否愿意发送给我们以便于我们更新更强大的规则库?[Yes/no]")
 			text, _ := reader.ReadString('\n')
 			text = misc.FixLine(text)
 			text = strings.ToLower(text)
 			if misc.IsInStrArr(yesArr, text) {
-				fmt.Print("[+]正在上传规则库，感谢您的支持...\n")
-				fmt.Print("[*]成功上传规则库，正在删除newHeaderkeys.txt文件...\n")
+				slog.Infoln("正在上传规则库，感谢您的支持...")
+				slog.Warningln("成功上传规则库，正在删除newHeaderkeys.txt文件...")
 				_ = os.Remove("newHeaderkeys.txt")
 				break
 			}
 			if misc.IsInStrArr(noArr, text) {
-				fmt.Print("[-]收到，已为您删除newHeaderkeys.txt，将不会进行上传...\n")
+				slog.Debugln("收到，已为您删除newHeaderkeys.txt，将不会进行上传...")
 				_ = os.Remove("newHeaderkeys.txt")
 				break
 			}

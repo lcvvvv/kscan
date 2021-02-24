@@ -25,6 +25,11 @@ func StrArr2IntArr(strArr []string) ([]int, error) {
 	return intArr, nil
 }
 
+func StrConcat(s1 string, v ...string) string {
+	s2 := strings.Join(v, "")
+	return strings.Join([]string{s1, s2}, "")
+}
+
 func Str2Int(str string) int {
 	intValue, err := strconv.Atoi(str)
 	if err != nil {

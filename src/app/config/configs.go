@@ -2,8 +2,8 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"lib/misc"
+	"lib/slog"
 	"os"
 )
 
@@ -1212,21 +1212,21 @@ var defaultConfig = `
 //读取配置文件
 func LoadConfig() {
 	if misc.FileIsExist("config.json") {
-		fmt.Print("[*]成功读取配置文件config.json\n")
+		slog.Warningln("成功读取配置文件config.json")
 		file, _ := os.Open("config.json")
 		decoder := json.NewDecoder(file)
 		conf := config{}
 		err := decoder.Decode(&conf)
 		if err != nil {
-			fmt.Println("Error:", err)
+			slog.Debugln(err.Error())
 		}
 		file.Close()
 		Config = conf
 		//return conf
 	} else {
-		fmt.Print("[-]未检测到存在config.json配置文件，正在创建...\n")
+		slog.Debugln("未检测到存在config.json配置文件，正在创建...")
 		file, _ := os.Create("config.json")
-		fmt.Print("[+]成功创建配置文件：config.json\n")
+		slog.Infoln("成功创建配置文件：config.json")
 		_, _ = file.WriteString(defaultConfig)
 		file.Close()
 		LoadConfig()

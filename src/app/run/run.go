@@ -6,6 +6,7 @@ import (
 	"lib/misc"
 	"lib/port"
 	"lib/queue"
+	"lib/slog"
 	"sync"
 	"time"
 )
@@ -26,7 +27,7 @@ func InitPortQueue() {
 		HostQueue.Push(host)
 	}
 	HostNum = HostQueue.Len()
-	fmt.Printf("[*]总共扫描主机对象%d个...\n", HostNum)
+	slog.Warningf("总共扫描主机对象%d个...\n", HostNum)
 	go InitPortQueueSub()
 	time.Sleep(time.Second * 1)
 }
@@ -35,8 +36,6 @@ func InitPortQueueSub() {
 	for _, host := range params.SerParams.HostTarget {
 		for _, Port := range params.SerParams.Port {
 			IP := port.GetIP(host)
-			//fmt.Print(fmt.Sprintf("%s:%d", IP, Port),"\n")
-			//PortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 			OpenPortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 		}
 		for {
@@ -55,36 +54,6 @@ func InitUrlQueue() {
 	}
 }
 
-//func ScanOpenPort() {
-//	var thread int
-//	if PortQueue.Len() > 200 {
-//		thread = params.SerParams.Threads
-//	} else {
-//		thread = 20
-//	}
-//	fmt.Print("[*]总共线程数：", thread, "\n")
-//	for i := 0; i <= thread; i++ {
-//		threadPortSync++
-//		go ScanOpenPortSub(&PortQueue, &OpenPortQueue, &threadPortSync)
-//	}
-//	fmt.Printf("[*]成功建立%d个线程探测端口开放情况\n", thread)
-//}
-//
-//func ScanOpenPortSub(PortQueue **queue.Queue, OpenPortQueue **queue.Queue, wait *int) {
-//	t := misc.Interface2Str((*PortQueue).Pop())
-//	//fmt.Printf("\r[*]正在测试端口是否开放：%s",t)
-//	//fmt.Print(t,"\n"
-//	if port.IsOpen(t) {
-//		(*OpenPortQueue).Push(t)
-//	}
-//	//fmt.Print((*PortQueue).Empty(),"\n")
-//	if (*PortQueue).Len()>0 {
-//		ScanOpenPortSub(PortQueue, OpenPortQueue, wait)
-//	} else {
-//		*wait--
-//	}
-//}
-
 func GetBanner() {
 	var thread int
 	thread = params.SerParams.Threads
@@ -93,39 +62,16 @@ func GetBanner() {
 		threadOpenPortGroupNum++
 		go GetBannerSub(&OpenPortQueue, &threadOpenPortGroup)
 	}
+	go WatchDogSub(&OpenPortQueue)
 	threadOpenPortGroup.Wait()
 }
-
-//func GetBannerSub(OpenPortQueue **queue.Queue, scanWait *int, wait *sync.WaitGroup) {
-//	if (*OpenPortQueue).Len() > 0 {
-//		t := misc.Interface2Str((*OpenPortQueue).Pop())
-//		port.GetBanner(t)
-//	}
-//	if (*OpenPortQueue).Len() > 0 {
-//		GetBannerSub(OpenPortQueue, scanWait, wait)
-//		return
-//	} else {
-//		//如果开放端口队列为空，判断端口扫描程序是否结束
-//		if *scanWait != 0 {
-//			//未结束则等待，之后重新判断开放端口队列是否为空
-//			time.Sleep(time.Millisecond * time.Duration(2000))
-//			GetBannerSub(OpenPortQueue, scanWait, wait)
-//			return
-//		} else {
-//			//如果结束了，则扫描完毕
-//			wait.Done()
-//			return
-//		}
-//	}
-//}
 
 func GetBannerSub(OpenPortQueue **queue.Queue, wait *sync.WaitGroup) {
 	if (*OpenPortQueue).Len() > 0 {
 		t := misc.Interface2Str((*OpenPortQueue).Pop())
-		fmt.Printf("\r[*][%d][%d/%d][协程数：%d][/]正在测试端口开放情况：%s", (*OpenPortQueue).Len(), HostQueue.Len(), HostNum, threadOpenPortGroupNum, t)
+		//fmt.Printf("\r[*][%d][%d/%d][协程数：%d]正在测试端口开放情况：%s", (*OpenPortQueue).Len(), HostQueue.Len(), HostNum, threadOpenPortGroupNum, t)
 		port.GetBanner(t)
 	}
-	//fmt.Print((*OpenPortQueue).Len())
 	if (*OpenPortQueue).Len() == 0 {
 		time.Sleep(time.Second * 2)
 	}
@@ -136,5 +82,20 @@ func GetBannerSub(OpenPortQueue **queue.Queue, wait *sync.WaitGroup) {
 		threadOpenPortGroupNum--
 		wait.Done()
 		return
+	}
+}
+
+func WatchDogSub(OpenPortQueue **queue.Queue) {
+	for {
+		length := (*OpenPortQueue).Len()
+		if length > 0 {
+			t := (*OpenPortQueue).Peek()
+			line := fmt.Sprintf("[%d][%d/%d][协程数：%d]正在测试端口开放情况：%s", length, HostQueue.Len(), HostNum, threadOpenPortGroupNum, t)
+			slog.FooLine(line)
+		}
+		if length == 0 {
+			break
+		}
+		time.Sleep(time.Millisecond * 200)
 	}
 }

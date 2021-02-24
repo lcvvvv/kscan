@@ -11,11 +11,11 @@ import (
 	"lib/iconhash"
 	"lib/misc"
 	"lib/shttp"
+	"lib/slog"
 	"lib/urlparse"
 	"math/rand"
 	"net"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -80,9 +80,8 @@ func GetBanner(s string) []portInfo {
 		}
 	}
 	for _, PortInfo := range portInfoArr {
-		fmt.Print("\r", strings.Repeat(" ", 80))
 		PortInfo.Info = makeResultInfo(PortInfo)
-		fmt.Print(PortInfo.Info)
+		slog.Infoln(PortInfo.Info)
 	}
 	return portInfoArr
 }
@@ -99,35 +98,7 @@ func getUrlBanner(s string) portInfo {
 		res.Alive = false
 		if strings.Contains(err.Error(), "too many") {
 			//发现存在线程过高错误
-			fmt.Printf("\r%s\n", strings.Repeat(" ", 80))
-			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
-			fmt.Printf("\r[X]或者请执行\"ulimit -n 50000\"命令放开操作系统限制!!!\n")
-			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 50000 50000\"!!!\n")
-			os.Exit(0)
-		}
-		if strings.Contains(err.Error(), "EOF") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "connection reset by peer") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "refused") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "close") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "Timeout") {
-			//不作处理
-			return res
-		}
-		if err.Error() == "HttpStatusCode不在范围内" {
-			//不作处理
-			return res
+			slog.Errorf("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
 		}
 		if strings.Contains(err.Error(), "server gave HTTP response") {
 			//HTTP协议重新获取指纹
@@ -137,14 +108,13 @@ func getUrlBanner(s string) portInfo {
 			//TCP协议重新获取banner
 			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
 		}
-		fmt.Print("\r", strings.Repeat(" ", 80))
-		fmt.Printf("\r[-]%s：%T\n", err, err)
+		slog.Debugln(err.Error())
 		return res
 	}
 	res.Alive = true
 	query, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		//fmt.Print(err, "\n")
+		slog.Debugln(err.Error())
 		res.Alive = false
 		return res
 	}
@@ -202,42 +172,9 @@ func getTcpBanner(s string) portInfo {
 		res.Banner = ""
 		if strings.Contains(err.Error(), "too many") {
 			//发现存在线程过高错误
-			fmt.Printf("\r%s\n", strings.Repeat(" ", 80))
-			fmt.Printf("\r[X]当前线程过高，请降低线程!!!\n")
-			fmt.Printf("\r[X]或者请执行\"ulimit -n 50000\"命令放开操作系统限制!!!\n")
-			fmt.Printf("\r[X]MAC系统可能还需要执行：\"sudo launchctl limit maxfiles 50000 50000\"!!!\n")
-			os.Exit(0)
+			slog.Errorf("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
 		}
-		if strings.Contains(err.Error(), "EOF") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "connection reset by peer") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "timeout") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "denied") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "down") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "refused") {
-			//不作处理
-			return res
-		}
-		if strings.Contains(err.Error(), "route") {
-			//不作处理
-			return res
-		}
-		fmt.Print("\r", strings.Repeat(" ", 80))
-		fmt.Printf("\r[-]%s：%T\n", err, err)
+		slog.Debugln(err.Error())
 	} else {
 		_ = conn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(params.SerParams.Timeout)))
 		res.Alive = true
@@ -250,8 +187,6 @@ func getTcpBanner(s string) portInfo {
 		res.Banner = misc.FixLine(res.Banner)
 		conn.Close()
 	}
-	//res.Info = makeResultInfo(res)
-	//fmt.Printf("[+]%s\t%d\t%s\t%s\t%s\t%s\t%s\n", s, res.portid, res.protocol, res.title, res.banner, res.hashfinger, res.keywordfinger)
 	return res
 }
 

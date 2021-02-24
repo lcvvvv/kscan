@@ -5,7 +5,7 @@ import (
 	"app/params"
 	"app/run"
 	"app/update"
-	"fmt"
+	"lib/slog"
 )
 
 func main() {
@@ -19,19 +19,20 @@ func main() {
 	//var KeywordFingers,HashFingers = finger.LoadFinger()
 	finger.LoadFinger()
 	//初始化可访问URL地址队列
-	fmt.Print("[*]正在压入URL地址队列...\n")
+	slog.Warning("正在压入URL地址队列...\n")
 	run.InitUrlQueue()
 	//初始化端口扫描队列
-	fmt.Print("[*]正在压入端口扫描队列...\n")
+	slog.Warning("正在压入端口扫描队列...\n")
 	run.InitPortQueue()
 	//开始扫描所有开放端口
-	fmt.Print("[*]开始扫描所有开放端口...\n")
+	slog.Warning("开始扫描所有开放端口...\n")
 	//run.ScanOpenPort()
 	//开始获取所有开放端口的Banner
 	run.GetBanner()
 }
 
 func initEnv() {
+	slog.Init()
 	//sysType := runtime.GOOS
 	//if sysType == "linux" {
 	//	// LINUX系统

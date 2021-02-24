@@ -2,9 +2,9 @@ package params
 
 import (
 	"app/config"
-	"fmt"
 	"lib/IP"
 	"lib/misc"
+	"lib/slog"
 	"lib/urlparse"
 	"os"
 	"regexp"
@@ -53,8 +53,7 @@ func serializationParamsTarget(t string) {
 		t = strings.Replace(t, "file:", "", 1)
 		err := misc.ReadLine(t, serializationParamsTarget)
 		if err != nil {
-			fmt.Print(err)
-			os.Exit(0)
+			slog.Error(err.Error())
 		}
 		return
 	}
@@ -150,13 +149,13 @@ func intParam2IntArr(v string) []int {
 		if strings.Contains(v, "-") {
 			iArr := strings.Split(v, "-")
 			if len(iArr) != 2 {
-				fmt.Print("[X]参数输入错误！！！")
+				slog.Error("参数输入错误！！！")
 				os.Exit(0)
 			} else {
 				smallNum := misc.Str2Int(iArr[0])
 				bigNum := misc.Str2Int(iArr[1])
 				if smallNum >= bigNum {
-					fmt.Print("[X]参数输入错误！！！")
+					slog.Error("参数输入错误！！！")
 					os.Exit(0)
 				}
 				vvArr = append(vvArr, makeIntList(smallNum, bigNum)...)
