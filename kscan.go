@@ -19,13 +19,13 @@ func main() {
 	//var KeywordFingers,HashFingers = finger.LoadFinger()
 	finger.LoadFinger()
 	//初始化可访问URL地址队列
-	slog.Warning("正在压入URL地址队列...\n")
+	slog.Warning("正在压入URL地址队列...")
 	run.InitUrlQueue()
 	//初始化端口扫描队列
-	slog.Warning("正在压入端口扫描队列...\n")
+	slog.Warning("正在压入端口扫描队列...")
 	run.InitPortQueue()
 	//开始扫描所有开放端口
-	slog.Warning("开始扫描所有开放端口...\n")
+	slog.Warning("开始扫描所有开放端口...")
 	//run.ScanOpenPort()
 	//开始获取所有开放端口的Banner
 	run.GetBanner()

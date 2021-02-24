@@ -54,20 +54,12 @@ func (t *logger) Info(s string) {
 	t.info.Print(misc.StrConcat(splitStr, s))
 }
 
-func (t *logger) Infoln(s string) {
-	t.info.Println(misc.StrConcat(splitStr, s))
-}
-
 func (t *logger) Infof(format string, v ...interface{}) {
 	t.info.Printf(misc.StrConcat(splitStr, format), v...)
 }
 
 func (t *logger) Warning(s string) {
 	t.warning.Print(misc.StrConcat(splitStr, s))
-}
-
-func (t *logger) Warningln(s string) {
-	t.warning.Println(misc.StrConcat(splitStr, s))
 }
 
 func (t *logger) Warningf(format string, v ...interface{}) {
@@ -78,12 +70,6 @@ func (t *logger) Debug(s string) {
 	_, file, line, _ := runtime.Caller(2)
 	file = file[strings.LastIndex(file, "/")+1:]
 	t.debug.Printf("%s%s(%d) %s", splitStr, file, line, s)
-}
-
-func (t *logger) Debugln(s string) {
-	_, file, line, _ := runtime.Caller(2)
-	file = file[strings.LastIndex(file, "/")+1:]
-	t.debug.Printf("%s%s(%d) %s\n", splitStr, file, line, s)
 }
 
 func (t *logger) Debugf(format string, v ...interface{}) {
@@ -100,13 +86,6 @@ func (t *logger) Error(s string) {
 	os.Exit(0)
 }
 
-func (t *logger) Errorln(s string) {
-	_, file, line, _ := runtime.Caller(2)
-	file = file[strings.LastIndex(file, "/")+1:]
-	t.error.Printf("%s%s(%d) %s\n", splitStr, file, line, s)
-	os.Exit(0)
-}
-
 func (t *logger) Errorf(format string, v ...interface{}) {
 	_, file, line, _ := runtime.Caller(2)
 	file = file[strings.LastIndex(file, "/")+1:]
@@ -118,20 +97,12 @@ func Info(s string) {
 	this.Info(s)
 }
 
-func Infoln(s string) {
-	this.Infoln(s)
-}
-
 func Infof(format string, v ...interface{}) {
 	this.Infof(format, v...)
 }
 
 func Warning(s string) {
 	this.Warning(s)
-}
-
-func Warningln(s string) {
-	this.Warningln(s)
 }
 
 func Warningf(format string, v ...interface{}) {
@@ -142,20 +113,12 @@ func Debug(s string) {
 	this.Debug(s)
 }
 
-func Debugln(s string) {
-	this.Debugln(s)
-}
-
 func Debugf(format string, v ...interface{}) {
 	this.Debugf(format, v...)
 }
 
 func Error(s string) {
 	this.Error(s)
-}
-
-func Errorln(s string) {
-	this.Errorln(s)
 }
 
 func Errorf(format string, v ...interface{}) {

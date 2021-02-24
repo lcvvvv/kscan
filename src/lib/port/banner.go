@@ -81,7 +81,7 @@ func GetBanner(s string) []portInfo {
 	}
 	for _, PortInfo := range portInfoArr {
 		PortInfo.Info = makeResultInfo(PortInfo)
-		slog.Infoln(PortInfo.Info)
+		slog.Info(PortInfo.Info)
 	}
 	return portInfoArr
 }
@@ -108,13 +108,13 @@ func getUrlBanner(s string) portInfo {
 			//TCP协议重新获取banner
 			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
 		}
-		slog.Debugln(err.Error())
+		slog.Debug(err.Error())
 		return res
 	}
 	res.Alive = true
 	query, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		slog.Debugln(err.Error())
+		slog.Debug(err.Error())
 		res.Alive = false
 		return res
 	}
@@ -174,7 +174,7 @@ func getTcpBanner(s string) portInfo {
 			//发现存在线程过高错误
 			slog.Errorf("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
 		}
-		slog.Debugln(err.Error())
+		slog.Debug(err.Error())
 	} else {
 		_ = conn.SetReadDeadline(time.Now().Add(time.Second * time.Duration(params.SerParams.Timeout)))
 		res.Alive = true

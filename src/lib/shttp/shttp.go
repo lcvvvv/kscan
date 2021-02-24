@@ -108,7 +108,7 @@ func Get(Url string) (*http.Response, error) {
 			if headerKeys[key] == "" {
 				headerKeys[key] = "New"
 				_, _ = newHeaderKeys.WriteString(fmt.Sprintf("%s: %s\n", key, resp.Header.Get(key)))
-				slog.Warningf("\r[*]发现生僻Http头部：%s: %s\n", key, resp.Header.Get(key))
+				slog.Warningf("\r[*]发现生僻Http头部：%s: %s", key, resp.Header.Get(key))
 			}
 		}
 		//校验http状态码

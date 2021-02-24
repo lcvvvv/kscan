@@ -1212,21 +1212,21 @@ var defaultConfig = `
 //读取配置文件
 func LoadConfig() {
 	if misc.FileIsExist("config.json") {
-		slog.Warningln("成功读取配置文件config.json")
+		slog.Warning("成功读取配置文件config.json")
 		file, _ := os.Open("config.json")
 		decoder := json.NewDecoder(file)
 		conf := config{}
 		err := decoder.Decode(&conf)
 		if err != nil {
-			slog.Debugln(err.Error())
+			slog.Debug(err.Error())
 		}
 		file.Close()
 		Config = conf
 		//return conf
 	} else {
-		slog.Debugln("未检测到存在config.json配置文件，正在创建...")
+		slog.Debug("未检测到存在config.json配置文件，正在创建...")
 		file, _ := os.Create("config.json")
-		slog.Infoln("成功创建配置文件：config.json")
+		slog.Info("成功创建配置文件：config.json")
 		_, _ = file.WriteString(defaultConfig)
 		file.Close()
 		LoadConfig()

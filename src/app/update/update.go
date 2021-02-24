@@ -23,13 +23,13 @@ func checkHeaderkeys() {
 			text = misc.FixLine(text)
 			text = strings.ToLower(text)
 			if misc.IsInStrArr(yesArr, text) {
-				slog.Infoln("正在上传规则库，感谢您的支持...")
-				slog.Warningln("成功上传规则库，正在删除newHeaderkeys.txt文件...")
+				slog.Info("正在上传规则库，感谢您的支持...")
+				slog.Warning("成功上传规则库，正在删除newHeaderkeys.txt文件...")
 				_ = os.Remove("newHeaderkeys.txt")
 				break
 			}
 			if misc.IsInStrArr(noArr, text) {
-				slog.Debugln("收到，已为您删除newHeaderkeys.txt，将不会进行上传...")
+				slog.Debug("收到，已为您删除newHeaderkeys.txt，将不会进行上传...")
 				_ = os.Remove("newHeaderkeys.txt")
 				break
 			}

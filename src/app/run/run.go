@@ -27,7 +27,7 @@ func InitPortQueue() {
 		HostQueue.Push(host)
 	}
 	HostNum = HostQueue.Len()
-	slog.Warningf("总共扫描主机对象%d个...\n", HostNum)
+	slog.Warningf("总共扫描主机对象%d个...", HostNum)
 	go InitPortQueueSub()
 	time.Sleep(time.Second * 1)
 }
