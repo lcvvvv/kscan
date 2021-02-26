@@ -3,15 +3,20 @@ package shttp
 import (
 	"app/config"
 	"app/params"
+	"bytes"
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"io"
+	"io/ioutil"
 	"lib/misc"
 	"lib/slog"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -72,17 +77,15 @@ func initNewHeaderKeys() *os.File {
 	if newHeaderKeys != nil {
 		return newHeaderKeys
 	}
-	if misc.FileIsExist("newHeaderKeys.txt") {
-		f, _ := os.Open("newHeaderKeys.txt")
-		return f
-	} else {
-		f, _ := os.Create("newHeaderKeys.txt")
-		return f
-	}
+	return misc.SafeOpen("newHeaderkeys.txt")
 }
 
 func Get(Url string) (*http.Response, error) {
-	request, _ := http.NewRequest("GET", Url, nil)
+	request, err := http.NewRequest("GET", Url, nil)
+	if err != nil {
+		slog.Debug(err.Error())
+		return nil, err
+	}
 	request.Header.Add("User-Agent", getUserAgent())
 	request.Header.Add("Cookie", "rememberMe=b69375edcb2b3c5084c02bd9690b6625")
 	request.Close = true
@@ -112,11 +115,16 @@ func Get(Url string) (*http.Response, error) {
 			}
 		}
 		//校验http状态码
-		if !misc.IsInIntArr(config.Config.HttpCode, resp.StatusCode) {
-			resp = nil
-			err = errors.New("HttpStatusCode不在范围内")
-			return resp, err
+		if len(config.Config.HttpCode) > 0 {
+			if !misc.IsInIntArr(config.Config.HttpCode, resp.StatusCode) {
+				resp = nil
+				err = errors.New("HttpStatusCode不在范围内")
+				return resp, err
+			}
 		}
+		//修复乱码问题
+		body2UTF8(resp)
+
 		//检测内容是否压缩
 		//if resp.Header.Get("Content-Encoding") == "gzip" {
 		//	var reader io.ReadCloser
@@ -135,10 +143,98 @@ func getUserAgent() string {
 	return config.Config.UserAgents[i]
 }
 
+func getCharset(contentType string) string {
+	if len(contentType) > 0 {
+		charsetRegexp, _ := regexp.Compile("charset=(.+)[;$]?")
+		charset := charsetRegexp.FindStringSubmatch(contentType)
+		if len(charset) == 2 {
+			return strings.ToLower(charset[1])
+		} else {
+			return "unknown"
+		}
+	} else {
+		return "unknown"
+	}
+}
+
 func Header2String(header http.Header) string {
 	var result string
 	for i := range header {
 		result = strings.Join([]string{result, fmt.Sprintf("%s: %s\n", i, header.Get(i))}, "")
 	}
 	return result
+}
+
+func body2UTF8(resp *http.Response) {
+	charset := getCharset(resp.Header.Get("Content-Type"))
+	bodyBuf, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		slog.Debug(err.Error())
+	}
+	if strings.Contains(charset, "gb") {
+		utf8Data, _ := simplifiedchinese.GBK.NewDecoder().Bytes(bodyBuf)
+		resp.Body = ioutil.NopCloser(bytes.NewReader(utf8Data))
+		return
+	}
+	if charset == "unknown" {
+		if isUtf8(bodyBuf) {
+			resp.Body = ioutil.NopCloser(bytes.NewReader(bodyBuf))
+		} else {
+			utf8Data, _ := simplifiedchinese.GBK.NewDecoder().Bytes(bodyBuf)
+			resp.Body = ioutil.NopCloser(bytes.NewReader(utf8Data))
+		}
+		return
+	}
+	resp.Body = ioutil.NopCloser(bytes.NewReader(bodyBuf))
+	return
+}
+
+func GetBody(resp *http.Response) io.Reader {
+	bodyBuf, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		slog.Debug(err.Error())
+	}
+	resp.Body = ioutil.NopCloser(bytes.NewReader(bodyBuf))
+	return bytes.NewReader(bodyBuf)
+}
+
+func isUtf8(data []byte) bool {
+	for i := 0; i < len(data); {
+		if data[i]&0x80 == 0x00 {
+			// 0XXX_XXXX
+			i++
+			continue
+		} else if num := preNUm(data[i]); num > 2 {
+			// 110X_XXXX 10XX_XXXX
+			// 1110_XXXX 10XX_XXXX 10XX_XXXX
+			// 1111_0XXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
+			// 1111_10XX 10XX_XXXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
+			// 1111_110X 10XX_XXXX 10XX_XXXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
+			// preNUm() 返回首个字节的8个bits中首个0bit前面1bit的个数，该数量也是该字符所使用的字节数
+			i++
+			for j := 0; j < num-1; j++ {
+				//判断后面的 num - 1 个字节是不是都是10开头
+				if data[i]&0xc0 != 0x80 {
+					return false
+				}
+				i++
+			}
+		} else {
+			//其他情况说明不是utf-8
+			return false
+		}
+	}
+	return true
+}
+
+func preNUm(data byte) int {
+	str := fmt.Sprintf("%b", data)
+	var i int = 0
+	for i < len(str) {
+		if str[i] != '1' {
+			break
+		}
+		i++
+	}
+	return i
 }

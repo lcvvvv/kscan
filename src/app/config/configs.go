@@ -45,13 +45,7 @@ var defaultConfig = `
   ],
   "top": 400,
   "threads": 400,
-  "httpCode": [
-    200,
-    301,
-    302,
-    403,
-    404
-  ],
+  "httpCode": [],
   "path": [
     "/"
   ],

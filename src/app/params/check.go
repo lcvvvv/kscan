@@ -10,19 +10,7 @@ import (
 var OutPutFile *os.File
 
 func initOutPutFile(path string) *os.File {
-	if misc.FileIsExist(path) {
-		f, err := os.Open(path)
-		if err != nil {
-			slog.Error(err.Error())
-		}
-		return f
-	} else {
-		f, err := os.Create(path)
-		if err != nil {
-			slog.Error(err.Error())
-		}
-		return f
-	}
+	return misc.SafeOpen(path)
 }
 
 func checkParams() {
@@ -35,13 +23,11 @@ func checkParams() {
 		if Params.port != "" {
 			if !checkIntsParam(Params.port) {
 				slog.Error("PORT参数输入错误,其格式应为80，8080，8081-8090")
-				os.Exit(0)
 			}
 		}
 		if Params.top != 0 {
 			if Params.top > 1000 || Params.top < 1 {
 				slog.Error("TOP参数输入错误,TOP参数应为1-1000之间的整数。")
-				os.Exit(0)
 			}
 		}
 		if Params.output != "" {
@@ -52,13 +38,11 @@ func checkParams() {
 		if Params.proxy != "" {
 			if !checkProxyParam(Params.proxy) {
 				slog.Error("PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
-				os.Exit(0)
 			}
 		}
 		if Params.path != "" {
 			if !checkStringsParam(Params.path) {
 				slog.Error("PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
-				os.Exit(0)
 			}
 		}
 		if Params.host != "" {
@@ -73,12 +57,10 @@ func checkParams() {
 		if Params.httpCode != "" {
 			if !checkIntsParam(Params.httpCode) {
 				slog.Error("HTTPCODE参数输入错误，其格式应为200可用逗号输入多个状态码")
-				os.Exit(0)
 			}
 		}
 	} else {
 		slog.Error("必须输入TARGET参数")
-		os.Exit(0)
 	}
 }
 

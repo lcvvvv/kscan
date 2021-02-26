@@ -6,7 +6,6 @@ import (
 	"lib/misc"
 	"lib/slog"
 	"lib/urlparse"
-	"os"
 	"regexp"
 	"strings"
 )
@@ -150,13 +149,11 @@ func intParam2IntArr(v string) []int {
 			iArr := strings.Split(v, "-")
 			if len(iArr) != 2 {
 				slog.Error("参数输入错误！！！")
-				os.Exit(0)
 			} else {
 				smallNum := misc.Str2Int(iArr[0])
 				bigNum := misc.Str2Int(iArr[1])
 				if smallNum >= bigNum {
 					slog.Error("参数输入错误！！！")
-					os.Exit(0)
 				}
 				vvArr = append(vvArr, makeIntList(smallNum, bigNum)...)
 			}

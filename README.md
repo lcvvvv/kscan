@@ -102,7 +102,18 @@ example：	kscan -t file:/tmp/target.txt
 
 - [EHole(棱洞)](https://github.com/EdgeSecurityTeam/EHole)
 
-## 六、文末
+## 六、更新日志
+
+- 2021年02月26日11:27:20 
+  
+  修复GBK乱码的问题
+  
+  变更httpStatusCode的检测逻辑，现在默认会记录所有状态码
+  
+  
+
+
+## 七、文末
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
 

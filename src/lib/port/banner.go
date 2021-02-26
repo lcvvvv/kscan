@@ -59,14 +59,7 @@ func GetBanner(s string) []portInfo {
 			if !isExist {
 				//如果不在其他常见协议的常见端口里面则尝试http协议
 				s = fmt.Sprintf("http://%s", s)
-				rResult := getUrlBanner(s)
-				if rResult.Alive {
-					//如果扫描结果正确，则是http协议端口
-					portInfoArr = append(portInfoArr, rResult)
-				} else {
-					//如果不正确则保持原有TCP扫描结果
-					portInfoArr = append(portInfoArr, result)
-				}
+				portInfoArr = append(portInfoArr, getUrlBanner(s))
 			} else {
 				//如果在其他常见协议端口里面保持原有TCP扫描结果
 				portInfoArr = append(portInfoArr, result)
@@ -81,7 +74,7 @@ func GetBanner(s string) []portInfo {
 	}
 	for _, PortInfo := range portInfoArr {
 		PortInfo.Info = makeResultInfo(PortInfo)
-		slog.Info(PortInfo.Info)
+		slog.Data(PortInfo.Info)
 	}
 	return portInfoArr
 }
@@ -95,7 +88,6 @@ func getUrlBanner(s string) portInfo {
 	res.Protocol = getProtocol(s)
 	resp, err := shttp.Get(s)
 	if err != nil {
-		res.Alive = false
 		if strings.Contains(err.Error(), "too many") {
 			//发现存在线程过高错误
 			slog.Errorf("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
@@ -109,28 +101,37 @@ func getUrlBanner(s string) portInfo {
 			return getTcpBanner(fmt.Sprintf("%s:%s", url.Host, url.Port))
 		}
 		slog.Debug(err.Error())
+		res.Alive = false
+		res.KeywordFinger.errorMsg = errors.New("未获取到返回包")
+		res.HashFinger.errorMsg = errors.New("未获取到返回包")
 		return res
 	}
 	res.Alive = true
-	query, err := goquery.NewDocumentFromReader(resp.Body)
+	query, err := goquery.NewDocumentFromReader(shttp.GetBody(resp))
 	if err != nil {
 		slog.Debug(err.Error())
-		res.Alive = false
-		return res
+	} else {
+		res.Title = getTitle(query)
+		httpBanner := getHttpBanner(query)
+		if len(httpBanner) > 10 {
+			res.Banner = httpBanner
+		} else {
+			bodyBuf, _ := ioutil.ReadAll(shttp.GetBody(resp))
+			res.Banner = misc.FixLine(string(bodyBuf))
+		}
 	}
-	res.Title = getTitle(query)
-	res.Banner = getHttpBanner(query)
 	res.HeaderInfo = getHeaderinfo(resp.Header.Clone())
 	res.HashFinger = getFingerByHash(s)
 	res.KeywordFinger = getFingerByKeyword(resp)
+	_ = resp.Body.Close()
 	//res.Info = makeResultInfo(res)
 	return res
 }
 
 func makeResultInfo(res portInfo) string {
-	if !res.Alive {
-		return ""
-	}
+	//if !res.Alive {
+	//	return ""
+	//}
 	var infoArr []string
 	if res.HashFinger.errorMsg == nil {
 		infoArr = append(infoArr, "icon:"+res.HashFinger.result)
@@ -152,9 +153,10 @@ func makeResultInfo(res portInfo) string {
 		i := rand.Intn(len(res.Banner) - 30)
 		Banner = res.Banner[i : i+30]
 	}
-	res.Info = fmt.Sprintf("\r[+]%s\t%s\t%s\t%s\n", res.Url, res.Title, Banner, strings.Join(infoArr, ","))
+	res.Info = fmt.Sprintf("%s %s %s %s", res.Url, res.Title, Banner, strings.Join(infoArr, ","))
+	res.Info = misc.FillLine(res.Info)
 	if params.OutPutFile != nil {
-		_, _ = params.OutPutFile.WriteString(fmt.Sprintf("\r[+]%s\t%s\t%s\t%s", res.Url, res.Title, Banner, strings.Join(infoArr, ",")))
+		_, _ = params.OutPutFile.WriteString(res.Info)
 	}
 	return res.Info
 }
@@ -220,6 +222,7 @@ func getHeaderinfo(header http.Header) string {
 }
 
 func getHttpBanner(query *goquery.Document) string {
+	var result string
 	query.Find("script").Each(func(_ int, tag *goquery.Selection) {
 		tag.Remove() // 把无用的 tag 去掉
 	})
@@ -229,7 +232,6 @@ func getHttpBanner(query *goquery.Document) string {
 	query.Find("textarea").Each(func(_ int, tag *goquery.Selection) {
 		tag.Remove() // 把无用的 tag 去掉
 	})
-	var result string
 	query.Each(func(_ int, tag *goquery.Selection) {
 		result = result + tag.Text()
 	})

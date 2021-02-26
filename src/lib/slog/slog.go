@@ -19,13 +19,15 @@ type logger struct {
 	warning *log.Logger
 	error   *log.Logger
 	debug   *log.Logger
-	//fooline *log.Logger
+	data    *log.Logger
+	fooLine *log.Logger
 }
 
 func Init(Debug bool) {
 	this.info = log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime)
 	this.warning = log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime)
 	this.error = log.New(io.MultiWriter(os.Stderr), "\r[×]", log.Ldate|log.Ltime)
+	this.data = log.New(os.Stdout, "\r[√]", 0)
 	if Debug {
 		this.debug = log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime)
 	} else {
@@ -45,6 +47,14 @@ func Init(Debug bool) {
 	//Info = log.New(io.MultiWriter(os.Stderr,infoFile),"Info:",log.Ldate | log.Ltime | log.Lshortfile)
 	//Warning = log.New(io.MultiWriter(os.Stderr,warnFile),"Warning:",log.Ldate | log.Ltime | log.Lshortfile)
 	//Error = log.New(io.MultiWriter(os.Stderr,errFile),"Error:",log.Ldate | log.Ltime | log.Lshortfile)
+}
+
+func (t *logger) Data(s string) {
+	t.data.Print(s)
+}
+
+func Data(s string) {
+	this.Data(s)
 }
 
 func (t *logger) FooLine(s string) {
@@ -96,6 +106,7 @@ func (t *logger) Errorf(format string, v ...interface{}) {
 	file = file[strings.LastIndex(file, "/")+1:]
 	format = fmt.Sprintf("%s%s(%d) %s", splitStr, file, line, format)
 	t.error.Printf(format, v...)
+	os.Exit(0)
 }
 
 func Info(s string) {
@@ -115,10 +126,16 @@ func Warningf(format string, v ...interface{}) {
 }
 
 func Debug(s string) {
+	if debugFilter(s) {
+		return
+	}
 	this.Debug(s)
 }
 
 func Debugf(format string, v ...interface{}) {
+	if debugFilter(format) {
+		return
+	}
 	this.Debugf(format, v...)
 }
 
@@ -128,4 +145,27 @@ func Error(s string) {
 
 func Errorf(format string, v ...interface{}) {
 	this.Errorf(format, v...)
+}
+
+func debugFilter(s string) bool {
+	//Debug 过滤器
+	if strings.Contains(s, "timeout") {
+		return true
+	}
+	if strings.Contains(s, "Timeout") {
+		return true
+	}
+	if strings.Contains(s, "refused") {
+		return true
+	}
+	if strings.Contains(s, "EOF") {
+		return true
+	}
+	if strings.Contains(s, "connection reset") {
+		return true
+	}
+	if strings.Contains(s, "HttpStatusCode") {
+		return true
+	}
+	return false
 }

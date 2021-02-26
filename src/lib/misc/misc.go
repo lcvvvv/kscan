@@ -3,6 +3,7 @@ package misc
 import (
 	"bufio"
 	"encoding/json"
+	"golang.org/x/crypto/ssh/terminal"
 	"io"
 	"os"
 	"strconv"
@@ -100,6 +101,18 @@ func FixLine(line string) string {
 	return line
 }
 
+func FillLine(line string) string {
+	var length int
+	width, _, _ := terminal.GetSize(0)
+	width = width - 3
+	if len(line) < width {
+		length = width - len(line)
+	} else {
+		length = 0
+	}
+	return StrConcat(line, strings.Repeat(" ", length))
+}
+
 func UniStrAppend(slice []string, elems ...string) []string {
 	for _, elem := range elems {
 		if IsInStrArr(slice, elem) {
@@ -168,4 +181,14 @@ func Interface2Str(value interface{}) string {
 func FileIsExist(path string) bool {
 	_, err := os.Lstat(path)
 	return !os.IsNotExist(err)
+}
+
+func SafeOpen(path string) *os.File {
+	if FileIsExist(path) {
+		f, _ := os.Open(path)
+		return f
+	} else {
+		f, _ := os.Create(path)
+		return f
+	}
 }
