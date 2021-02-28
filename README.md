@@ -117,6 +117,6 @@ example：	kscan -t file:/tmp/target.txt
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
 
-![image-20210220164117920](assets/image-20210220164117920.png)
+![image-20210220164117920](assets/Kscan意见反馈群.png)
 
 ![image-20210220164117923](assets/image-20210220164117923.png)

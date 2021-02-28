@@ -98,7 +98,10 @@ func Get(Url string) (*http.Response, error) {
 		uri, _ := url.Parse(params.SerParams.Proxy)
 		(*tr).Proxy = http.ProxyURL(uri)
 	}
-	(*tr).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	(*tr).TLSClientConfig = &tls.Config{
+		InsecureSkipVerify: true,
+		MinVersion:         tls.VersionTLS10,
+	}
 	(*tr).DisableKeepAlives = false
 	client := &http.Client{}
 	client.Transport = tr

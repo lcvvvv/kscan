@@ -11,15 +11,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]解决GBK乱码问题">
+      <change afterPath="$PROJECT_DIR$/assets/Kscan意见反馈群.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/net/stcp/stcp.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/net/stls/stls.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/image-20210220164117920.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/config/configs.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/config/configs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/params/serialization.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/params/serialization.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/port/banner.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/port/banner.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/shttp/shttp.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/slog/slog.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,7 +83,7 @@
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoLibrariesConfigurableProvider" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -94,11 +93,11 @@
       <recent name="$PROJECT_DIR$/" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lib/net/stls" />
+      <recent name="$PROJECT_DIR$/src/lib/net" />
+      <recent name="$PROJECT_DIR$/src/lib/net/stcp" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/lib" />
-      <recent name="$PROJECT_DIR$/app/params" />
-      <recent name="$PROJECT_DIR$/lib/sflag" />
     </key>
   </component>
   <component name="RunManager">
@@ -175,10 +174,10 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1988" y="279" key="IDE.errors.dialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541114750" />
-    <state x="1807" y="184" key="SettingsEditor" timestamp="1614048689737">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state x="135" y="172" key="SettingsEditor" timestamp="1614353456714">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1612454439982" />
+    <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1614353456714" />
     <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614048641533" />
     <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614048689737" />
     <state x="518" y="242" width="405" height="437" key="StructurePopup" timestamp="1611759650965">
@@ -186,20 +185,20 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1614170655744">
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1614517828346">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1614170655744" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1614517828346" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1612454742397" />
-    <state x="1922" y="196" width="706" height="735" key="find.popup" timestamp="1614316346287">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1614348397244">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1614172064570" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1614348397244" />
     <state x="1922" y="196" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614316346287" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1612235873652" />
@@ -207,5 +206,9 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state width="600" height="428" key="javadoc.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611644355435" />
+    <state x="0" y="0" key="scopes" timestamp="1614347659436">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="0" y="0" key="scopes/0.0.1440.900@0.0.1440.900" timestamp="1614347659436" />
   </component>
 </project>
