@@ -3,11 +3,13 @@ package stcp
 import (
 	"io"
 	"net"
+	"strings"
 	"time"
 )
 
-func Send(netloc string, data string, duration time.Duration) (string, error) {
-	conn, err := net.DialTimeout("tcp", netloc, duration)
+func Send(protocol string, netloc string, data string, duration time.Duration) (string, error) {
+	protocol = strings.ToLower(protocol)
+	conn, err := net.DialTimeout(protocol, netloc, duration)
 	if err != nil {
 		return "", err
 	}

@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 	"io"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -90,13 +91,29 @@ func ReadLine(fileName string, handler func(string)) error {
 	}
 }
 
+func ReadLineFile(file *os.File, handler func(string)) {
+	buf := bufio.NewReader(file)
+	for {
+		line, err := buf.ReadString('\n')
+		line = strings.TrimSpace(line)
+		handler(line)
+		if err != nil {
+			if err == io.EOF {
+				return
+			}
+			//slog.Error(err.Error())
+			return
+		}
+	}
+}
+
 func FixLine(line string) string {
 	line = strings.Replace(line, "\r", "", -1)
 	line = strings.Replace(line, " ", "", -1)
 	line = strings.Replace(line, "\t", "", -1)
 	line = strings.Replace(line, "\r", "", -1)
 	line = strings.Replace(line, "\n", "", -1)
-	line = strings.Replace(line, "\xc2", "", -1)
+	//line = strings.Replace(line, "\xc2", "", -1)
 	line = strings.Replace(line, "\xa0", "", -1)
 	return line
 }
@@ -191,4 +208,43 @@ func SafeOpen(path string) *os.File {
 		f, _ := os.Create(path)
 		return f
 	}
+}
+
+func Xrange(args ...int) []int {
+	var start, stop int
+	var step = 1
+	var r []int
+	switch len(args) {
+	case 1:
+		stop = args[0]
+		start = 0
+	case 2:
+		start, stop = args[0], args[1]
+	case 3:
+		start, step, step = args[0], args[1], args[2]
+	default:
+		return nil
+	}
+	if start > stop {
+		return nil
+	}
+	if step < 0 {
+		return nil
+	}
+
+	for i := start; i <= stop; i += step {
+		r = append(r, i)
+	}
+	return r
+}
+
+func Unquote(s string) string {
+	s = StrConcat("\"", s, "\"")
+	r, _ := strconv.Unquote(s)
+	return r
+}
+
+func MakeRegexpCompile(expr string) *regexp.Regexp {
+	res, _ := regexp.Compile(expr)
+	return res
 }

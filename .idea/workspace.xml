@@ -10,15 +10,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]解决GBK乱码问题">
-      <change afterPath="$PROJECT_DIR$/assets/Kscan意见反馈群.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/net/stcp/stcp.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/net/stls/stls.go" afterDir="false" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]尝试修改config格式">
+      <change afterPath="$PROJECT_DIR$/src/app/config/type.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/net/port/port.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/scan/match.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/scan/probe.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/scan/probes.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/scan/scan.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/image-20210220164117920.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/config/configs.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/config/configs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/misc/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/net/stcp/stcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/net/stcp/stcp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/net/stls/stls.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/net/stls/stls.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,6 +85,12 @@
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
@@ -101,11 +110,24 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration name="go build test.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/test.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="js.build_tools.grunt">
       <node-interpreter value="project" />
       <envs />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go 构建.go build test.go" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,24 +162,25 @@
     <MESSAGE value="[*]优化日志输出" />
     <MESSAGE value="[+]新增Debug参数" />
     <MESSAGE value="[+]解决GBK乱码问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+]解决GBK乱码问题" />
+    <MESSAGE value="[*]尝试修改config格式" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]尝试修改config格式" />
   </component>
   <component name="WindowStateProjectService">
     <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="520" y="287" key="#Go_模块/0.0.1440.900@0.0.1440.900" timestamp="1611847718830" />
-    <state x="1864" y="198" width="1071" height="730" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614242162179">
-      <screen x="1440" y="0" width="1920" height="1080" />
+    <state x="318" y="165" width="1071" height="730" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614602273290">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="318" y="165" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1614091687531" />
+    <state x="318" y="165" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1614602273290" />
     <state x="1864" y="198" width="1071" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614242162179" />
     <state x="1864" y="198" width="1071" height="730" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613793397647" />
     <state x="1864" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1613792659354" />
-    <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1614239908538">
+    <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1614839216818">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
-    <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614239908538" />
+    <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839216818" />
     <state x="2306" y="268" key="EnvironmentVariablesDialog" timestamp="1611546203330">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
@@ -170,10 +193,34 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="2230" y="249" key="Github.UntrackedFilesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611540947279" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1614562141038">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1614523707574" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141038" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1614562141037">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1614523707572" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1614562141035">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1614523707571" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141035" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1614562141037">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1614523707573" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
     <state x="1988" y="279" key="IDE.errors.dialog" timestamp="1611541114750">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1988" y="279" key="IDE.errors.dialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541114750" />
+    <state x="2226" y="246" key="RollbackChangesDialog" timestamp="1614839221998">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2226" y="246" key="RollbackChangesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839221998" />
     <state x="135" y="172" key="SettingsEditor" timestamp="1614353456714">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -185,23 +232,28 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1614517828346">
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2" timestamp="1614518205515">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1614517828346" />
+    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1614518205515" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
-    <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612454742397">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="2157" y="442" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1614839199625">
+      <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1612454742397" />
-    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1614348397244">
+    <state x="2157" y="442" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839199625" />
+    <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1614844211621">
+      <screen x="1440" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
+    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1616467506629">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1614348397244" />
-    <state x="1922" y="196" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614316346287" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1616467506629" />
+    <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
-    <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1612235873652" />
+    <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1611644355435">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>

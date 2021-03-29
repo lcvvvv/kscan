@@ -4,10 +4,12 @@ import (
 	"crypto/tls"
 	"io"
 	"net"
+	"strings"
 	"time"
 )
 
-func Send(netloc string, data string, duration time.Duration) (string, error) {
+func Send(protocol string, netloc string, data string, duration time.Duration) (string, error) {
+	protocol = strings.ToLower(protocol)
 	config := &tls.Config{
 		InsecureSkipVerify: true,
 		MinVersion:         tls.VersionTLS10,
@@ -16,7 +18,7 @@ func Send(netloc string, data string, duration time.Duration) (string, error) {
 		Timeout:  duration,
 		Deadline: time.Now().Add(duration * 2),
 	}
-	conn, err := tls.DialWithDialer(dial, "tcp", netloc, config)
+	conn, err := tls.DialWithDialer(dial, protocol, netloc, config)
 	if err != nil {
 		return "", err
 	}
