@@ -1,8 +1,6 @@
 package shttp
 
 import (
-	"app/config"
-	"app/params"
 	"bytes"
 	"crypto/tls"
 	"errors"
@@ -10,8 +8,10 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"io"
 	"io/ioutil"
-	"lib/misc"
-	"lib/slog"
+	"kscan/src/app/config"
+	"kscan/src/app/params"
+	"kscan/src/lib/misc"
+	"kscan/src/lib/slog"
 	"math/rand"
 	"net/http"
 	"net/url"

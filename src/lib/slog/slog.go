@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"lib/misc"
+	"kscan/src/lib/misc"
 	"log"
 	"os"
 	"runtime"

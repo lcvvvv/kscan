@@ -1,11 +1,11 @@
 package main
 
 import (
-	"app/finger"
-	"app/params"
-	"app/run"
-	"app/update"
-	"lib/slog"
+	"kscan/src/app/finger"
+	"kscan/src/app/params"
+	"kscan/src/app/run"
+	"kscan/src/app/update"
+	"kscan/src/lib/slog"
 )
 
 func main() {

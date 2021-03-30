@@ -1,11 +1,11 @@
 package params
 
 import (
-	"app/config"
-	"lib/IP"
-	"lib/misc"
-	"lib/slog"
-	"lib/urlparse"
+	"kscan/src/app/config"
+	"kscan/src/lib/IP"
+	"kscan/src/lib/misc"
+	"kscan/src/lib/slog"
+	"kscan/src/lib/urlparse"
 	"regexp"
 	"strings"
 )

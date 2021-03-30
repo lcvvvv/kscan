@@ -1,12 +1,12 @@
 package run
 
 import (
-	"app/params"
 	"fmt"
-	"lib/misc"
-	"lib/port"
-	"lib/queue"
-	"lib/slog"
+	"kscan/src/app/params"
+	"kscan/src/lib/misc"
+	"kscan/src/lib/port"
+	"kscan/src/lib/queue"
+	"kscan/src/lib/slog"
 	"sync"
 	"time"
 )

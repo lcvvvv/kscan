@@ -1,9 +1,9 @@
 package params
 
 import (
-	"app/config"
 	"flag"
 	"fmt"
+	"kscan/src/app/config"
 	"os"
 	"strings"
 )

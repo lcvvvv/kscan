@@ -2,8 +2,8 @@ package finger
 
 import (
 	"encoding/json"
-	"lib/misc"
-	"lib/slog"
+	"kscan/src/lib/misc"
+	"kscan/src/lib/slog"
 	"os"
 )
 

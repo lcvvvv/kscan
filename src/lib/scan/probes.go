@@ -3,9 +3,9 @@ package scan
 import (
 	"errors"
 	"fmt"
-	"lib/misc"
-	"lib/net/port"
-	"lib/slog"
+	"kscan/src/lib/misc"
+	"kscan/src/lib/net/port"
+	"kscan/src/lib/slog"
 	"os"
 	"regexp"
 	"strings"

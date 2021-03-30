@@ -2,10 +2,10 @@ package scan
 
 import (
 	"errors"
-	"lib/net/port"
-	"lib/net/stcp"
-	"lib/net/stls"
-	"lib/slog"
+	"kscan/src/lib/net/port"
+	"kscan/src/lib/net/stcp"
+	"kscan/src/lib/net/stls"
+	"kscan/src/lib/slog"
 	"regexp"
 	"time"
 )

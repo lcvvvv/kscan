@@ -2,7 +2,7 @@ package IP
 
 import (
 	"errors"
-	"lib/misc"
+	"kscan/src/lib/misc"
 	"regexp"
 	"strings"
 )

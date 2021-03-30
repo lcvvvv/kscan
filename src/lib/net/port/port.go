@@ -1,7 +1,7 @@
 package port
 
 import (
-	"lib/misc"
+	"kscan/src/lib/misc"
 )
 
 type (

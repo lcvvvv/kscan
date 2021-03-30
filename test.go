@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"lib/misc"
-	"lib/scan"
-	"lib/slog"
+	"kscan/src/lib/misc"
+	"kscan/src/lib/scan"
+	"kscan/src/lib/slog"
 )
 
 //func main() {
