@@ -65,7 +65,7 @@ func checkParams() {
 }
 
 func checkIntsParam(v string) bool {
-	matched, err := regexp.MatchString("^((?:[0-9])+(?:-[0-9]+)?)(?:,(?:[0-9])+-(?:[0-9])+)*$", v)
+	matched, err := regexp.MatchString("^((?:[0-9])+(?:-[0-9]+)?)(?:,((?:[0-9])+(?:-[0-9]+)?))*$", v)
 	if err != nil {
 		return false
 	}
