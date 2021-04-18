@@ -3,7 +3,6 @@ package misc
 import (
 	"bufio"
 	"encoding/json"
-	"golang.org/x/crypto/ssh/terminal"
 	"io"
 	"os"
 	"regexp"
@@ -113,21 +112,7 @@ func FixLine(line string) string {
 	line = strings.Replace(line, "\t", "", -1)
 	line = strings.Replace(line, "\r", "", -1)
 	line = strings.Replace(line, "\n", "", -1)
-	//line = strings.Replace(line, "\xc2", "", -1)
-	line = strings.Replace(line, "\xa0", "", -1)
 	return line
-}
-
-func FillLine(line string) string {
-	var length int
-	width, _, _ := terminal.GetSize(0)
-	width = width - 3
-	if len(line) < width {
-		length = width - len(line)
-	} else {
-		length = 0
-	}
-	return StrConcat(line, strings.Repeat(" ", length))
 }
 
 func UniStrAppend(slice []string, elems ...string) []string {
@@ -273,4 +258,12 @@ func MustLength(s string, i int) string {
 		return s[:i]
 	}
 	return s
+}
+
+func Percent(int1 int, int2 int) string {
+	float1 := float64(int1)
+	float2 := float64(int2)
+	f := 1 - float1/float2
+	f = f * 100
+	return strconv.FormatFloat(f, 'f', 2, 64)
 }

@@ -2,13 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/PuerkitoBio/goquery" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/andybalholm/cascadia" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/twmb/murmur3" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/golang.org/x/crypto" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/golang.org/x/net" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/golang.org/x/sys" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/golang.org/x/term" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/golang.org/x/text" vcs="Git" />
   </component>
 </project>

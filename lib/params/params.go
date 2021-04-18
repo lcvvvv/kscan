@@ -3,14 +3,13 @@ package params
 import (
 	"flag"
 	"fmt"
-	"kscan/src/app/config"
 	"os"
 )
 
 type OsArgs struct {
-	help, Debug                                       bool
-	target, port, output, proxy, path, host, httpCode string
-	top, threads, timeout                             int
+	help, Debug                             bool
+	target, port, output, proxy, path, host string
+	top, threads, timeout                   int
 }
 
 var Params OsArgs
@@ -36,15 +35,14 @@ optional arguments:
   -o , --output   将扫描结果保存到文件
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
-  --threads       线程参数,默认线程4000
-  --http-code     指定会记录的HTTP状态码，逗号分割,默认会记录200,301,302,403,404
+  --threads       线程参数,默认线程400,最大值为2048
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOSTS值，慎用！
-  --timeout       设置超时时间，默认3秒钟，单位为秒！
+  --timeout       设置超时时间，默认为预设的探针超时时间！
 
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--http-code] [--path] [--host] [--timeout]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout]\n\n"
 
 //初始化函数
 func Init() {
@@ -64,7 +62,6 @@ func Init() {
 	}
 	//打印logo
 	fmt.Print(logo)
-	checkParams()
 }
 
 //初始化参数
@@ -86,10 +83,9 @@ func initParams() {
 	flag.StringVar(&Params.proxy, "proxy", "", "")
 	flag.StringVar(&Params.path, "path", "", "")
 	flag.StringVar(&Params.host, "host", "", "")
-	flag.StringVar(&Params.httpCode, "http-code", "", "")
 	flag.IntVar(&Params.top, "top", 400, "")
 	flag.IntVar(&Params.threads, "threads", 400, "")
-	flag.IntVar(&Params.timeout, "timeout", 3, "")
+	flag.IntVar(&Params.timeout, "timeout", 0, "")
 }
 
 func (o OsArgs) Target() string {
@@ -109,9 +105,6 @@ func (o OsArgs) Path() string {
 }
 func (o OsArgs) Host() string {
 	return o.host
-}
-func (o OsArgs) HttpCode() string {
-	return o.httpCode
 }
 func (o OsArgs) Top() int {
 	return o.top

@@ -2,6 +2,7 @@ package slog
 
 import (
 	"fmt"
+	"golang.org/x/crypto/ssh/terminal"
 	"io"
 	"io/ioutil"
 	"kscan/lib/misc"
@@ -50,7 +51,7 @@ func Init(Debug bool) {
 }
 
 func (t *logger) Data(s string) {
-	t.data.Print(s)
+	t.data.Print(FillLine(s))
 }
 
 func Data(s string) {
@@ -58,7 +59,7 @@ func Data(s string) {
 }
 
 func (t *logger) FooLine(s string) {
-	fmt.Print("\r[*]", s)
+	fmt.Print("\r[*]", FillLine(s))
 }
 
 func FooLine(s string) {
@@ -149,23 +150,20 @@ func Errorf(format string, v ...interface{}) {
 
 func debugFilter(s string) bool {
 	//Debug 过滤器
-	if strings.Contains(s, "timeout") {
-		return true
-	}
-	if strings.Contains(s, "Timeout") {
-		return true
-	}
-	if strings.Contains(s, "refused") {
-		return true
-	}
-	if strings.Contains(s, "EOF") {
-		return true
-	}
-	if strings.Contains(s, "connection reset") {
-		return true
-	}
-	if strings.Contains(s, "HttpStatusCode") {
+	if strings.Contains(s, "STEP1:CONNECT") {
 		return true
 	}
 	return false
+}
+
+func FillLine(line string) string {
+	var length int
+	width, _, _ := terminal.GetSize(0)
+	width = width - 3
+	if len(line) < width {
+		length = width - len(line)
+	} else {
+		length = 0
+	}
+	return line + strings.Repeat(" ", length)
 }

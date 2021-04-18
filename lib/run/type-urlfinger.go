@@ -1,7 +1,6 @@
-package scan
+package run
 
 import (
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/lcvvvv/urlparse"
 	"io"
@@ -21,7 +20,7 @@ type HttpFinger struct {
 	ResponseDigest string
 	Title          string
 	Header         string
-	HeaderInfo     string
+	HeaderDigest   string
 	HashFinger     string
 	KeywordFinger  string
 	Info           string
@@ -42,8 +41,9 @@ func NewHttpFinger() *HttpFinger {
 
 func (h *HttpFinger) LoadHttpResponse(url *urlparse.URL, resp *http.Response) {
 	h.Title = getTitle(shttp.GetBody(resp))
+	h.StatusCode = resp.StatusCode
 	h.Header = getHeader(resp.Header.Clone())
-	h.HeaderInfo = getHeaderinfo(resp.Header.Clone())
+	h.HeaderDigest = getHeaderDigest(resp.Header.Clone())
 	h.Response = getResponse(shttp.GetBody(resp))
 	h.ResponseDigest = getResponseDigest(shttp.GetBody(resp))
 	h.HashFinger = getFingerByHash(*url)
@@ -56,6 +56,7 @@ func getTitle(resp io.Reader) string {
 	query, err := goquery.NewDocumentFromReader(resp)
 	if err != nil {
 		slog.Debug(err.Error())
+		return ""
 	}
 	result := query.Find("title").Text()
 	result = misc.FixLine(result)
@@ -82,6 +83,7 @@ func getResponseDigest(resp io.Reader) string {
 	query, err := goquery.NewDocumentFromReader(resp)
 	if err != nil {
 		slog.Debug(err.Error())
+		return ""
 	}
 	query.Find("script").Each(func(_ int, tag *goquery.Selection) {
 		tag.Remove() // 把无用的 tag 去掉
@@ -96,20 +98,22 @@ func getResponseDigest(resp io.Reader) string {
 		result = result + tag.Text()
 	})
 	result = misc.FixLine(result)
-	if len(result) > 10 {
+	result = misc.FilterPrintStr(result)
+	if len(result) > 20 {
 		return result
 	} else {
 		bodyBuf, _ := ioutil.ReadAll(resp)
-		return misc.FixLine(string(bodyBuf))
+		return misc.FilterPrintStr(misc.FixLine(string(bodyBuf)))
 	}
 }
 
-func getHeaderinfo(header http.Header) string {
+func getHeaderDigest(header http.Header) string {
 	if header.Get("SERVER") != "" {
 		return "server:" + header.Get("SERVER")
 	}
 	return ""
 }
+
 func getFingerByKeyword(header string, body string) string {
 	return httpfinger.KeywordFinger.Match(body, header)
 }
@@ -142,13 +146,12 @@ func (h *HttpFinger) makeInfo() {
 	if h.KeywordFinger != "" {
 		info += ",keyword:" + h.KeywordFinger
 	}
-	if h.HeaderInfo != "" {
-		info += "," + h.HeaderInfo
+	if h.HeaderDigest != "" {
+		info += "," + h.HeaderDigest
 	}
 	if h.ResponseDigest != "" {
 		if len(h.ResponseDigest) > 30 {
 			i := rand.Intn(len(h.ResponseDigest) - 30)
-			fmt.Println(i)
 			info += "," + h.ResponseDigest[i:i+30]
 		} else {
 			info += "," + h.ResponseDigest

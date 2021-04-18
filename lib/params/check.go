@@ -1,23 +1,19 @@
 package params
 
 import (
-	"kscan/lib/misc"
 	"kscan/lib/slog"
-	"os"
 	"regexp"
 )
 
-var OutPutFile *os.File
-
-func initOutPutFile(path string) *os.File {
-	return misc.SafeOpen(path)
-}
-
-func checkParams() {
+func CheckParams() {
 	//判断冲突参数
-	if Params.port != "" && Params.top != 0 {
+	if Params.port != "" && Params.top != 400 {
 		slog.Error("PORT、TOP只允许同时出现一个")
 	}
+	if Params.port != "" && Params.top == 400 {
+		Params.top = 0
+	}
+
 	//判断内容
 	if Params.target != "" {
 		if Params.port != "" {
@@ -32,8 +28,6 @@ func checkParams() {
 		}
 		if Params.output != "" {
 			//验证output参数
-			f := initOutPutFile(Params.output)
-			OutPutFile = f
 		}
 		if Params.proxy != "" {
 			if !checkProxyParam(Params.proxy) {
@@ -49,15 +43,13 @@ func checkParams() {
 			//验证host参数
 		}
 		if Params.threads != 0 {
+			if Params.threads > 2048 {
+				slog.Error("Threads参数最大值为2048")
+			}
 			//验证threads参数
 		}
 		if Params.timeout != 3 {
 			//验证timeout参数
-		}
-		if Params.httpCode != "" {
-			if !checkIntsParam(Params.httpCode) {
-				slog.Error("HTTPCODE参数输入错误，其格式应为数字，可用逗号分割多个状态码")
-			}
 		}
 	} else {
 		slog.Error("必须输入TARGET参数")

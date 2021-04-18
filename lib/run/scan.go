@@ -1,4 +1,4 @@
-package scan
+package run
 
 import (
 	"fmt"
@@ -8,23 +8,37 @@ import (
 	"kscan/lib/shttp"
 	"kscan/lib/slog"
 	"strings"
+	"time"
 )
 
 func GetPortBanner(expr string, nmap *gonmap.Nmap) *PortInformation {
 	u, _ := urlparse.Load(expr)
 	r := NewPortInformation(u)
-	r.LoadGonmapPortInformation(nmap.Scan(u.Netloc, u.Port))
-
+	r.LoadGonmapPortInformation(nmap.SafeScan(u.Netloc, u.Port, time.Second*120))
+	if r.ErrorMsg != nil {
+		if strings.Contains(r.ErrorMsg.Error(), "too many") {
+			//发现存在线程过高错误
+			slog.Error("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
+		}
+		for i := 0; i < 3; i++ {
+			if strings.Contains(r.ErrorMsg.Error(), "STEP3:READ") {
+				r.LoadGonmapPortInformation(nmap.SafeScan(u.Netloc, u.Port, time.Second*120))
+			}
+			if r.ErrorMsg == nil {
+				break
+			}
+		}
+	}
+	slog.Debug(fmt.Sprintln(u.UnParse(), r.ErrorMsg, r.Target.Scheme, r.Finger.Service))
 	if r.Status == "CLOSED" {
 		return r
 	}
-	fmt.Println(r.Finger.Service)
 	if r.Finger.Service == "http" {
 		r.Target.Scheme = "http"
 		r.Target.Path = app.Config.Path
 		r.LoadHttpFinger(getUrlBanner(r.Target))
 	}
-	if r.Finger.Service == "ssl" {
+	if r.Finger.Service == "ssl" || r.Finger.Service == "https" {
 		r.Target.Scheme = "https"
 		r.Target.Path = app.Config.Path
 		r.LoadHttpFinger(getUrlBanner(r.Target))
@@ -34,7 +48,6 @@ func GetPortBanner(expr string, nmap *gonmap.Nmap) *PortInformation {
 
 func getUrlBanner(url *urlparse.URL) *HttpFinger {
 	r := NewHttpFinger()
-	fmt.Println(url.UnParse())
 	resp, err := shttp.Get(url.UnParse())
 	if err != nil {
 		if strings.Contains(err.Error(), "too many") {
@@ -43,7 +56,12 @@ func getUrlBanner(url *urlparse.URL) *HttpFinger {
 		}
 		if strings.Contains(err.Error(), "server gave HTTP response") {
 			//HTTP协议重新获取指纹
-			url.Netloc = "http"
+			url.Scheme = "http"
+			return getUrlBanner(url)
+		}
+		if strings.Contains(err.Error(), "malformed HTTP response") {
+			//HTTP协议重新获取指纹
+			url.Scheme = "https"
 			return getUrlBanner(url)
 		}
 		slog.Debug(err.Error())

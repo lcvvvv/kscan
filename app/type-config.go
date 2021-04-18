@@ -9,16 +9,15 @@ import (
 	"os"
 	"regexp"
 	"strings"
-	"time"
 )
 
 type config struct {
 	HostTarget, UrlTarget []string
-	Port, HttpCode        []int
+	Port                  []int
 	Output                *os.File
 	Proxy, Host, Path     string
 	Threads               int
-	Timeout               time.Duration
+	Timeout               int
 	//FofaEmail, FofaKey    string
 }
 
@@ -26,13 +25,12 @@ func (c *config) Load(p params.OsArgs) {
 	c.loadTarget(p.Target())
 	c.loadPort(p.Port())
 	c.loadPort(p.Top())
-	c.loadHttpCode(p.HttpCode())
 	c.loadOutput(p.Output())
 	c.Path = p.Path()
 	c.Proxy = p.Proxy()
 	c.Host = p.Host()
 	c.Threads = p.Threads()
-	c.Timeout = time.Duration(p.Timeout())
+	c.Timeout = p.Timeout()
 }
 
 func (c *config) loadTarget(expr string) {
@@ -84,18 +82,16 @@ func (c *config) loadPort(v interface{}) {
 	}
 }
 
-func (c *config) loadHttpCode(expr string) {
-	if expr == "" {
-		return
-	}
-	c.HttpCode = intParam2IntArr(expr)
-}
-
 func (c *config) loadOutput(expr string) {
 	if expr == "" {
 		return
 	}
-	c.Output = misc.SafeOpen(expr)
+	f, err := os.OpenFile(expr, os.O_CREATE+os.O_RDWR, 0764)
+	if err != nil {
+		slog.Error(err.Error())
+	} else {
+		c.Output = f
+	}
 }
 
 func intParam2IntArr(v string) []int {
@@ -121,17 +117,6 @@ func intParam2IntArr(v string) []int {
 		res = append(res, vvArr...)
 	}
 	return res
-}
-
-func fixPath(path string) string {
-	if path == "" {
-		return path
-	}
-	if path[0:1] == "/" {
-		return fixPath(path[1:])
-	} else {
-		return path
-	}
 }
 
 var WOOYUN_PORT_TOP_1000 = []int{22, 23, 21, 2100, 25, 445, 135, 139, 389, 636, 2049, 1433, 1434, 1521, 3306, 3389,

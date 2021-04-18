@@ -1,4 +1,4 @@
-package scan
+package run
 
 import (
 	"fmt"
@@ -15,6 +15,7 @@ type PortInformation struct {
 	Finger         *gonmap.Finger
 	HttpFinger     *HttpFinger
 	Info           string
+	ErrorMsg       error
 }
 
 func NewPortInformation(u *urlparse.URL) *PortInformation {
@@ -25,15 +26,19 @@ func NewPortInformation(u *urlparse.URL) *PortInformation {
 		Finger:     nil,
 		HttpFinger: nil,
 		Info:       "",
+		ErrorMsg:   nil,
 	}
 }
 
 func (p *PortInformation) LoadGonmapPortInformation(g *gonmap.PortInfomation) {
-	p.Response = g.Response()
-	p.ResponseDigest = misc.MustLength(misc.FilterPrintStr(p.Response), 0)
 	p.Status = g.Status()
 	p.Finger = g.Finger()
 	p.Target.Scheme = p.Finger.Service
+	p.ErrorMsg = g.ErrorMsg
+	if g.Service() != "CLOSED" {
+		p.Response = g.Response()
+		p.ResponseDigest = misc.MustLength(misc.FilterPrintStr(p.Response), 10)
+	}
 }
 
 func (p *PortInformation) LoadHttpFinger(h *HttpFinger) {
@@ -42,20 +47,21 @@ func (p *PortInformation) LoadHttpFinger(h *HttpFinger) {
 
 func (p *PortInformation) MakeInfo() {
 	p.Info = "%s %d %s %s"
+	if p.Target.Scheme == "" {
+		p.Target.Scheme = "unknown"
+	}
 	target := p.Target.UnParse()
 	code := len(p.Response)
 	digest := p.ResponseDigest
-	fingerprint := p.Finger.Info
+	fingerprint := p.Finger.Information()
 	if p.HttpFinger != nil {
 		if p.HttpFinger.StatusCode != 0 {
-			fmt.Println()
-			fmt.Println(p.HttpFinger.StatusCode)
-			fmt.Println()
+			fingerprint := ""
 			code = p.HttpFinger.StatusCode
 			if p.HttpFinger.Title != "" {
 				digest = p.HttpFinger.Title
 			}
-			fingerprint += p.HttpFinger.Info
+			fingerprint += "," + p.HttpFinger.Info
 		}
 	}
 	p.Info = fmt.Sprintf(p.Info, target, code, digest, fingerprint)

@@ -6,7 +6,6 @@ import (
 	"kscan/app"
 	"kscan/lib/misc"
 	"kscan/lib/queue"
-	"kscan/lib/scan"
 	"kscan/lib/slog"
 	"net"
 	"sync"
@@ -21,8 +20,8 @@ var HostNum int
 //var PortQueue = queue.New()
 
 //var threadPortSync int
-var threadOpenPortGroup sync.WaitGroup
-var threadOpenPortGroupNum int
+var threadHostPortGroup sync.WaitGroup
+var threadHostPortGroupNum int
 
 func InitPortQueue() {
 	for _, host := range app.Config.HostTarget {
@@ -35,8 +34,8 @@ func InitPortQueue() {
 }
 
 func initPortQueueSub() {
-	for _, host := range app.Config.HostTarget {
-		for _, Port := range app.Config.Port {
+	for _, Port := range app.Config.Port {
+		for _, host := range app.Config.HostTarget {
 			IP := GetIP(host)
 			HostPortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 		}
@@ -60,13 +59,16 @@ func InitHostPortQueue() int {
 func Start() {
 	var thread int
 	thread = app.Config.Threads
+	if HostPortQueue.Len() < thread {
+		thread = HostPortQueue.Len()
+	}
 	for i := 0; i <= thread; i++ {
-		threadOpenPortGroup.Add(1)
-		threadOpenPortGroupNum++
-		go startSub(&HostPortQueue, &threadOpenPortGroup, nil)
+		threadHostPortGroup.Add(1)
+		threadHostPortGroupNum++
+		go startSub(&HostPortQueue, &threadHostPortGroup, nil)
 	}
 	go WatchDogSub(&HostPortQueue)
-	threadOpenPortGroup.Wait()
+	threadHostPortGroup.Wait()
 }
 
 func startSub(HostPortQueue **queue.Queue, wait *sync.WaitGroup, nmap *gonmap.Nmap) {
@@ -74,39 +76,51 @@ func startSub(HostPortQueue **queue.Queue, wait *sync.WaitGroup, nmap *gonmap.Nm
 		nmap = gonmap.New()
 	}
 	if (*HostPortQueue).Len() > 0 {
-		t := misc.Interface2Str((*HostPortQueue).Pop())
-		//fmt.Printf("\r[*][%d][%d/%d][协程数：%d]正在测试端口开放情况：%s", (*HostPortQueue).Len(), HostQueue.Len(), HostNum, threadOpenPortGroupNum, t)
-		r := scan.GetPortBanner(t, nmap)
-		if r.Status != "CLOSED" && r.Status != "KNOWN" {
-			r.MakeInfo()
-			slog.Data(r.Info)
+		t := (*HostPortQueue).Pop().(string)
+		r := GetPortBanner(t, nmap)
+		if r.Status == "OPEN" || r.Status == "MATCHED" {
+			if r.Finger.Service != "" {
+				r.MakeInfo()
+				slog.Data(r.Info)
+				if app.Config.Output != nil {
+					_, _ = app.Config.Output.WriteString(r.Info + "\n")
+				}
+			}
 		}
 	}
 	if (*HostPortQueue).Len() == 0 {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Millisecond * 500)
 	}
-	if (*HostPortQueue).Len() > 0 {
-		startSub(HostPortQueue, wait, nmap)
-		return
-	} else {
-		threadOpenPortGroupNum--
+	if (*HostPortQueue).Len() == 0 {
+		threadHostPortGroupNum--
 		wait.Done()
-		return
+	} else {
+		startSub(HostPortQueue, wait, nmap)
 	}
 }
 
 func WatchDogSub(HostPortQueue **queue.Queue) {
 	for {
-		length := (*HostPortQueue).Len()
-		if length > 0 {
-			t := (*HostPortQueue).Peek()
-			line := fmt.Sprintf("[%d][%d/%d][协程数：%d]正在测试端口开放情况：%s", length, HostQueue.Len(), HostNum, threadOpenPortGroupNum, t)
+		if (*HostPortQueue).Len() > 0 {
+			//t := (*HostPortQueue).Peek()
+			var percent string
+			if HostQueue.Len() > 0 {
+				percent = misc.Percent(HostQueue.Len()*len(app.Config.Port)+65535, HostNum*len(app.Config.Port))
+			} else {
+				percent = misc.Percent((*HostPortQueue).Len(), HostNum*len(app.Config.Port))
+			}
+			line := fmt.Sprintf("[%s%%][%d/%d][协程数：%d]正在测试端口开放情况情况....", percent, HostQueue.Len(), HostNum, threadHostPortGroupNum)
 			slog.FooLine(line)
 		}
-		if length == 0 {
-			break
+		time.Sleep(time.Second * 2)
+		if (*HostPortQueue).Len() == 0 {
+			line := fmt.Sprintf("所有探针已下发完毕，目前[存活协程数：%d]...", threadHostPortGroupNum)
+			slog.FooLine(line)
+			if threadHostPortGroupNum == 0 {
+				slog.FooLine("扫描结束，现在退出程序...")
+				break
+			}
 		}
-		time.Sleep(time.Millisecond * 200)
 	}
 }
 

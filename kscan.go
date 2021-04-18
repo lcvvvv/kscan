@@ -14,6 +14,8 @@ func main() {
 	params.Init()
 	//日志初始化
 	slog.Init(params.Params.Debug)
+	//参数合法性校验
+	params.CheckParams()
 	//配置文件初始化
 	app.Config.Load(params.Params)
 	slog.Warning("开始读取扫描对象...")
@@ -23,7 +25,7 @@ func main() {
 	r := httpfinger.Init()
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条\n", r["FaviconHash"], r["KeywordFinger"])
 	//加载gonmap探针/指纹库
-	r = gonmap.Init(5)
+	r = gonmap.Init(5, app.Config.Timeout)
 	slog.Infof("成功加载探针:[%d]个,指纹[%d]条\n", r["PROBE"], r["MATCH"])
 	slog.Warningf("本次扫描将使用探针:[%d]个,指纹[%d]条\n", r["USED_PROBE"], r["USED_MATCH"])
 
