@@ -7,7 +7,7 @@ import (
 )
 
 type OsArgs struct {
-	help, Debug                             bool
+	help, Debug, scanPing                   bool
 	target, port, output, proxy, path, host string
 	top, threads, timeout                   int
 }
@@ -21,7 +21,7 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.12#\#| \#|
+|#|\#\#####/ \#####/#/ v1.13#\#| \#|
            轻量级资产测绘工具 by：kv2
 
 `
@@ -33,6 +33,7 @@ optional arguments:
   -t , --target   直接扫描指定对象,支持IP、URL、IP/[16-32]、file:/tmp/target.txt
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
+  -sP             在扫描端口之前会先进行Ping探测，若不存活，则不会进行端口扫描
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
@@ -42,7 +43,7 @@ optional arguments:
 
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-sP]\n\n"
 
 //初始化函数
 func Init() {
@@ -74,6 +75,7 @@ func initParams() {
 	flag.BoolVar(&Params.help, "help", false, "")
 	flag.BoolVar(&Params.Debug, "debug", false, "")
 	flag.BoolVar(&Params.Debug, "d", false, "")
+	flag.BoolVar(&Params.scanPing, "sP", false, "")
 	flag.StringVar(&Params.target, "t", "", "")
 	flag.StringVar(&Params.target, "target", "", "")
 	flag.StringVar(&Params.port, "p", "", "")
@@ -114,4 +116,7 @@ func (o OsArgs) Threads() int {
 }
 func (o OsArgs) Timeout() int {
 	return o.timeout
+}
+func (o OsArgs) ScanPing() bool {
+	return o.scanPing
 }

@@ -1,6 +1,7 @@
 package run
 
 import (
+	"crypto/x509"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/lcvvvv/urlparse"
 	"io"
@@ -15,27 +16,29 @@ import (
 )
 
 type HttpFinger struct {
-	StatusCode     int
-	Response       string
-	ResponseDigest string
-	Title          string
-	Header         string
-	HeaderDigest   string
-	HashFinger     string
-	KeywordFinger  string
-	Info           string
+	StatusCode       int
+	Response         string
+	ResponseDigest   string
+	Title            string
+	Header           string
+	HeaderDigest     string
+	HashFinger       string
+	KeywordFinger    string
+	PeerCertificates *x509.Certificate
+	Info             string
 }
 
 func NewHttpFinger() *HttpFinger {
 	return &HttpFinger{
-		StatusCode:     0,
-		Response:       "",
-		ResponseDigest: "",
-		Title:          "",
-		Header:         "",
-		HashFinger:     "",
-		KeywordFinger:  "",
-		Info:           "",
+		StatusCode:       0,
+		Response:         "",
+		ResponseDigest:   "",
+		Title:            "",
+		Header:           "",
+		HashFinger:       "",
+		KeywordFinger:    "",
+		Info:             "",
+		PeerCertificates: nil,
 	}
 }
 
@@ -48,7 +51,6 @@ func (h *HttpFinger) LoadHttpResponse(url *urlparse.URL, resp *http.Response) {
 	h.ResponseDigest = getResponseDigest(shttp.GetBody(resp))
 	h.HashFinger = getFingerByHash(*url)
 	h.KeywordFinger = getFingerByKeyword(h.Header, h.Response)
-	h.makeInfo()
 	_ = resp.Body.Close()
 }
 
@@ -138,7 +140,7 @@ func getFingerByHash(url urlparse.URL) string {
 	return httpfinger.FaviconHash.Match(hash)
 }
 
-func (h *HttpFinger) makeInfo() {
+func (h *HttpFinger) MakeInfo() {
 	var info string
 	if h.HashFinger != "" {
 		info += ",favicon:" + h.HashFinger
@@ -157,7 +159,14 @@ func (h *HttpFinger) makeInfo() {
 			info += "," + h.ResponseDigest
 		}
 	}
+	if h.PeerCertificates != nil {
+		info += "," + h.PeerCertificates.Subject.String()
+	}
 	if info != "" {
 		h.Info = info[1:]
 	}
+}
+
+func (h *HttpFinger) LoadHttpsResponse(resp *http.Response) {
+	h.PeerCertificates = resp.TLS.PeerCertificates[0]
 }

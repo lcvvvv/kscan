@@ -46,7 +46,6 @@ func (p *PortInformation) LoadHttpFinger(h *HttpFinger) {
 }
 
 func (p *PortInformation) MakeInfo() {
-	p.Info = "%s %d %s %s"
 	if p.Target.Scheme == "" {
 		p.Target.Scheme = "unknown"
 	}
@@ -56,7 +55,6 @@ func (p *PortInformation) MakeInfo() {
 	fingerprint := p.Finger.Information()
 	if p.HttpFinger != nil {
 		if p.HttpFinger.StatusCode != 0 {
-			fingerprint := ""
 			code = p.HttpFinger.StatusCode
 			if p.HttpFinger.Title != "" {
 				digest = p.HttpFinger.Title
@@ -64,5 +62,13 @@ func (p *PortInformation) MakeInfo() {
 			fingerprint += "," + p.HttpFinger.Info
 		}
 	}
-	p.Info = fmt.Sprintf(p.Info, target, code, digest, fingerprint)
+	if fingerprint != "" {
+		fingerprint = fingerprint[1:]
+	}
+	p.Info = fmt.Sprintf("%s\t%d\t%s\t%s", target, code, digest, fingerprint)
+}
+
+func (p *PortInformation) CLOSED() *PortInformation {
+	p.Status = "CLOSED"
+	return p
 }

@@ -11,24 +11,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]犹如重置般的改动">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/misc/safemap.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/net/port/port.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/net/stcp/stcp.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/net/stls/stls.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/check.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/params.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/scan/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/scan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/scan/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/type-portinfomation.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/scan/type-urlfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/type-urlfinger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/run/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/scan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/type-portinfomation.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/run/type-urlfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/run/type-urlfinger.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -205,11 +200,11 @@
     <state x="1864" y="198" width="1071" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614242162179" />
     <state x="1864" y="198" width="1071" height="730" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613793397647" />
     <state x="1864" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1613792659354" />
-    <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1618491558124">
+    <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1618712651343">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="797" y="358" key="#com.intellij.fileTypes.FileTypeChooser/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955515368" />
-    <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1618491558124" />
+    <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1618712651343" />
     <state x="797" y="341" key="#com.intellij.fileTypes.FileTypeChooser/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618069067829" />
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1614839216818">
       <screen x="1440" y="0" width="1920" height="1080" />
@@ -227,32 +222,36 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="2230" y="249" key="Github.UntrackedFilesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611540947279" />
-    <state width="1878" height="376" key="GridCell.Tab.0.bottom" timestamp="1617973543477">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="699" height="453" key="GridCell.Tab.0.bottom" timestamp="1618791659860">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.bottom/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838260" />
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1614523707574" />
+    <state width="699" height="453" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1618791659860" />
+    <state width="699" height="244" key="GridCell.Tab.0.bottom/0.25.1440.816@0.25.1440.816" timestamp="1618730716345" />
     <state width="1398" height="245" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141038" />
     <state width="1878" height="376" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543477" />
-    <state width="1878" height="376" key="GridCell.Tab.0.center" timestamp="1617973543475">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="699" height="453" key="GridCell.Tab.0.center" timestamp="1618791659859">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.center/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838257" />
-    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1614523707572" />
+    <state width="699" height="453" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
+    <state width="699" height="244" key="GridCell.Tab.0.center/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1398" height="245" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
     <state width="1878" height="376" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543475" />
-    <state width="1878" height="376" key="GridCell.Tab.0.left" timestamp="1617973543474">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="699" height="453" key="GridCell.Tab.0.left" timestamp="1618791659858">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.left/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838256" />
-    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1614523707571" />
+    <state width="699" height="453" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1618791659858" />
+    <state width="699" height="244" key="GridCell.Tab.0.left/0.25.1440.816@0.25.1440.816" timestamp="1618730716343" />
     <state width="1398" height="245" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141035" />
     <state width="1878" height="376" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543474" />
-    <state width="1878" height="376" key="GridCell.Tab.0.right" timestamp="1617973543476">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="699" height="453" key="GridCell.Tab.0.right" timestamp="1618791659859">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.right/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838259" />
-    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1614523707573" />
+    <state width="699" height="453" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
+    <state width="699" height="244" key="GridCell.Tab.0.right/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1398" height="245" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
     <state width="1878" height="376" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543476" />
     <state width="1878" height="376" key="GridCell.Tab.1.bottom" timestamp="1617973543483">
@@ -296,10 +295,10 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1618069005253">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="328" y="183" key="Vcs.Push.Dialog.v2" timestamp="1618712279859">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="187" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1617023023293" />
+    <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1618712279859" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618069005253" />
@@ -312,12 +311,12 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1618712115163">
+    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1618737087817">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
     <state x="1081" y="175" width="682" height="719" key="find.popup/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955792930" />
-    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1618712115163" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1618737087817" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />

@@ -7,9 +7,11 @@ import (
 	"kscan/lib/params"
 	"kscan/lib/run"
 	"kscan/lib/slog"
+	"time"
 )
 
 func main() {
+	startTime := time.Now()
 	//参数初始化
 	params.Init()
 	//日志初始化
@@ -43,4 +45,7 @@ func main() {
 	//run.ScanOpenPort()
 	//开始获取所有开放端口的Banner
 	run.Start()
+	//计算程序运行时间
+	elapsed := time.Since(startTime)
+	slog.Infof("程序执行总时长为：[%s]", elapsed.String())
 }

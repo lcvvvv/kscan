@@ -37,6 +37,13 @@ func initPortQueueSub() {
 	for _, Port := range app.Config.Port {
 		for _, host := range app.Config.HostTarget {
 			IP := GetIP(host)
+			////等待PING检测结果
+			//if app.Config.PingAliveMap != nil {
+			//	if app.Config.PingAliveMap[IP] != true {
+			//		continue
+			//	}
+			//}
+			//开始压入端口扫描数据
 			HostPortQueue.Push(fmt.Sprintf("%s:%d", IP, Port))
 		}
 		for {
@@ -89,7 +96,7 @@ func startSub(HostPortQueue **queue.Queue, wait *sync.WaitGroup, nmap *gonmap.Nm
 		}
 	}
 	if (*HostPortQueue).Len() == 0 {
-		time.Sleep(time.Millisecond * 500)
+		time.Sleep(time.Second * 5)
 	}
 	if (*HostPortQueue).Len() == 0 {
 		threadHostPortGroupNum--

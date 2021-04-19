@@ -25,6 +25,7 @@ type logger struct {
 }
 
 func Init(Debug bool) {
+
 	this.info = log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime)
 	this.warning = log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime)
 	this.error = log.New(io.MultiWriter(os.Stderr), "\r[×]", log.Ldate|log.Ltime)
@@ -150,6 +151,10 @@ func Errorf(format string, v ...interface{}) {
 
 func debugFilter(s string) bool {
 	//Debug 过滤器
+	if strings.Contains(s, "too many") {
+		//发现存在线程过高错误
+		Error("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
+	}
 	if strings.Contains(s, "STEP1:CONNECT") {
 		return true
 	}
@@ -158,8 +163,9 @@ func debugFilter(s string) bool {
 
 func FillLine(line string) string {
 	var length int
+	line = strings.ReplaceAll(line, "\n", "")
 	width, _, _ := terminal.GetSize(0)
-	width = width - 3
+	width = width - 4
 	if len(line) < width {
 		length = width - len(line)
 	} else {

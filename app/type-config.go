@@ -14,6 +14,7 @@ import (
 type config struct {
 	HostTarget, UrlTarget []string
 	Port                  []int
+	PingAliveMap          map[string]bool
 	Output                *os.File
 	Proxy, Host, Path     string
 	Threads               int
@@ -26,6 +27,7 @@ func (c *config) Load(p params.OsArgs) {
 	c.loadPort(p.Port())
 	c.loadPort(p.Top())
 	c.loadOutput(p.Output())
+	c.loadPingAliveMap(p.ScanPing())
 	c.Path = p.Path()
 	c.Proxy = p.Proxy()
 	c.Host = p.Host()
@@ -92,6 +94,13 @@ func (c *config) loadOutput(expr string) {
 	} else {
 		c.Output = f
 	}
+}
+
+func (c *config) loadPingAliveMap(p bool) {
+	if p != true {
+		return
+	}
+	c.PingAliveMap = make(map[string]bool)
 }
 
 func intParam2IntArr(v string) []int {
