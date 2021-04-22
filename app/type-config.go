@@ -19,11 +19,14 @@ type config struct {
 	Proxy, Host, Path     string
 	Threads               int
 	Timeout               int
+	HostTargetNum         int
+	UrlTargetNum          int
 	//FofaEmail, FofaKey    string
 }
 
 func (c *config) Load(p params.OsArgs) {
 	c.loadTarget(p.Target())
+	c.loadTargetNum()
 	c.loadPort(p.Port())
 	c.loadPort(p.Top())
 	c.loadOutput(p.Output())
@@ -101,6 +104,11 @@ func (c *config) loadPingAliveMap(p bool) {
 		return
 	}
 	c.PingAliveMap = make(map[string]bool)
+}
+
+func (c *config) loadTargetNum() {
+	c.HostTargetNum = len(c.HostTarget)
+	c.UrlTargetNum = len(c.UrlTarget)
 }
 
 func intParam2IntArr(v string) []int {

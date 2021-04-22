@@ -5,8 +5,8 @@ import (
 	"kscan/app"
 	"kscan/lib/httpfinger"
 	"kscan/lib/params"
-	"kscan/lib/run"
 	"kscan/lib/slog"
+	"kscan/run"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func main() {
 	slog.Warning("开始读取扫描对象...")
 	slog.Infof("成功读取URL地址:[%d]个\n", len(app.Config.UrlTarget))
 	slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.Config.HostTarget), len(app.Config.HostTarget)*len(app.Config.Port))
-	//指纹库初始化
+	//HTTP指纹库初始化
 	r := httpfinger.Init()
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条\n", r["FaviconHash"], r["KeywordFinger"])
 	//加载gonmap探针/指纹库
@@ -34,16 +34,7 @@ func main() {
 	//校验升级情况
 	//app.CheckUpdate()
 
-	//初始化可访问URL地址队列
-	slog.Warning("正在压入URL地址队列...")
-	run.InitHostPortQueue()
-	//初始化端口扫描队列
-	slog.Warning("正在压入端口扫描队列...")
-	run.InitPortQueue()
-	//开始扫描所有开放端口
-	slog.Warning("开始扫描所有开放端口...")
-	//run.ScanOpenPort()
-	//开始获取所有开放端口的Banner
+	//开始扫描
 	run.Start()
 	//计算程序运行时间
 	elapsed := time.Since(startTime)
