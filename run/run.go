@@ -13,15 +13,13 @@ import (
 )
 
 var HostPortQueue = queue.New()
-var HostQueue int
+var RealPortNum int
 
-//var PortQueue = queue.New()
-
-//var threadPortSync int
 var threadHostPortGroup sync.WaitGroup
 var threadHostPortGroupNum int
 
 func Start() {
+	RealPortNum = app.Config.PortNum
 	//STEP0:初始化进度检测器
 	go WatchDogSub()
 	//STEP1:初始化可访问URL地址队列
@@ -109,21 +107,23 @@ func pushHostTarget() {
 			}
 			time.Sleep(time.Second * 1)
 		}
-		HostQueue--
+		RealPortNum--
 	}
 }
 
 func WatchDogSub() {
+	HostTargetNum := app.Config.HostTargetNum
+	PortNum := app.Config.PortNum
 	for {
-		time.Sleep(time.Second * 30)
+		time.Sleep(time.Second * 5)
 		if HostPortQueue.Len() > 0 {
 			var percent string
-			if HostQueue > 0 {
-				percent = misc.Percent(HostQueue*len(app.Config.Port)+65535, app.Config.HostTargetNum*len(app.Config.Port))
+			if RealPortNum > 0 {
+				percent = misc.Percent(RealPortNum*HostTargetNum+4000, HostTargetNum*PortNum)
 			} else {
-				percent = misc.Percent(HostPortQueue.Len(), app.Config.HostTargetNum*len(app.Config.Port))
+				percent = misc.Percent(HostPortQueue.Len(), app.Config.HostTargetNum*PortNum)
 			}
-			line := fmt.Sprintf("[%s%%][%d/%d][协程数：%d]正在测试端口开放情况情况....", percent, HostQueue, app.Config.HostTargetNum, threadHostPortGroupNum)
+			line := fmt.Sprintf("[%s%%][%d/%d][协程数：%d]正在测试端口开放情况情况....", percent, RealPortNum, PortNum, threadHostPortGroupNum)
 			slog.Info(line)
 		}
 		if HostPortQueue.Len() == 0 {

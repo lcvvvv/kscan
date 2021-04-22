@@ -8,6 +8,7 @@ var Config = config{
 	PingAliveMap:  nil,
 	Path:          "/",
 	Port:          WOOYUN_PORT_TOP_1000[:400],
+	PortNum:       0,
 	Output:        nil,
 	Proxy:         "",
 	Host:          "",
