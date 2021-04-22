@@ -70,7 +70,8 @@ func scanMainSub(HostPortQueue **queue.Queue, wait *sync.WaitGroup, nmap *gonmap
 				}
 			}
 		}
-	} else {
+	}
+	if (*HostPortQueue).Len() == 0 {
 		time.Sleep(time.Second * 5)
 	}
 	if (*HostPortQueue).Len() == 0 {
@@ -105,17 +106,18 @@ func pushHostTarget() {
 			if HostPortQueue.Len() < 4000 {
 				break
 			}
-			time.Sleep(time.Second * 1)
+			time.Sleep(time.Millisecond * 300)
 		}
 		RealPortNum--
 	}
+	slog.Warningf("所有待扫描的端口已全部压入队列...")
 }
 
 func WatchDogSub() {
 	HostTargetNum := app.Config.HostTargetNum
 	PortNum := app.Config.PortNum
 	for {
-		time.Sleep(time.Second * 20)
+		time.Sleep(time.Second * 10)
 		if HostPortQueue.Len() > 0 {
 			var percent string
 			if RealPortNum > 0 {
@@ -126,6 +128,7 @@ func WatchDogSub() {
 			line := fmt.Sprintf("[%s%%][%d/%d][协程数：%d]正在测试端口开放情况情况....", percent, RealPortNum, PortNum, threadHostPortGroupNum)
 			slog.Info(line)
 		}
+		time.Sleep(time.Second * 10)
 		if HostPortQueue.Len() == 0 {
 			line := fmt.Sprintf("所有探针已下发完毕，目前[存活协程数：%d]...", threadHostPortGroupNum)
 			slog.Info(line)

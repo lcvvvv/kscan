@@ -12,16 +12,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]犹如重置般的改动,解决中文乱码问题，以及部分显示异常问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/IP/IP.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/IP/IP.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/safemap.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/params.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/scan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-portinfomation.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-urlfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-urlfinger.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
