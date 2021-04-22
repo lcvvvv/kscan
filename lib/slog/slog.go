@@ -2,7 +2,6 @@ package slog
 
 import (
 	"fmt"
-	"golang.org/x/crypto/ssh/terminal"
 	"io"
 	"io/ioutil"
 	"kscan/lib/misc"
@@ -52,7 +51,7 @@ func Init(Debug bool) {
 }
 
 func (t *logger) Data(s string) {
-	t.data.Print(FillLine(s))
+	t.data.Print(s)
 }
 
 func Data(s string) {
@@ -60,11 +59,7 @@ func Data(s string) {
 }
 
 func (t *logger) FooLine(s string) {
-	fmt.Print("\r[*]", FillLine(s))
-}
-
-func FooLine(s string) {
-	this.FooLine(s)
+	fmt.Print("\r[*]", s)
 }
 
 func (t *logger) Info(s string) {
@@ -159,17 +154,4 @@ func debugFilter(s string) bool {
 		return true
 	}
 	return false
-}
-
-func FillLine(line string) string {
-	var length int
-	line = strings.ReplaceAll(line, "\n", "")
-	width, _, _ := terminal.GetSize(0)
-	width = width - 4
-	if len(line) < width {
-		length = width - len(line)
-	} else {
-		length = 0
-	}
-	return line + strings.Repeat(" ", length)
 }

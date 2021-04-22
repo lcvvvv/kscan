@@ -115,7 +115,7 @@ func WatchDogSub() {
 	HostTargetNum := app.Config.HostTargetNum
 	PortNum := app.Config.PortNum
 	for {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 20)
 		if HostPortQueue.Len() > 0 {
 			var percent string
 			if RealPortNum > 0 {

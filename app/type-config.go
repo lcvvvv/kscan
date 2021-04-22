@@ -9,12 +9,13 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 type config struct {
 	HostTarget, UrlTarget []string
 	Port                  []int
-	PingAliveMap          map[string]bool
+	PingAliveMap          *sync.Map
 	Output                *os.File
 	Proxy, Host, Path     string
 	Threads               int
@@ -26,7 +27,7 @@ type config struct {
 }
 
 func (c *config) Load(p params.OsArgs) {
-	c.loadTarget(p.Target())
+	c.loadTarget(p.Target(), false)
 	c.loadTargetNum()
 	c.loadPort(p.Port())
 	c.loadPort(p.Top())
@@ -40,20 +41,28 @@ func (c *config) Load(p params.OsArgs) {
 	c.Timeout = p.Timeout()
 }
 
-func (c *config) loadTarget(expr string) {
+func (c *config) loadTarget(expr string, recursion bool) {
 	//判断target字符串是否为文件
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
 		err := misc.ReadLine(expr, c.loadTarget)
 		if err != nil {
-			slog.Error(err.Error())
+			if recursion == true {
+				slog.Debug(expr + err.Error())
+			} else {
+				slog.Error(expr + err.Error())
+			}
 		}
 		return
 	}
 	//判断target字符串是否为类IP/MASK
-	if _, b := IP.Check(expr); b {
+	if _, ok := IP.Check(expr); ok {
 		if Hosts, err := IP.IPMask2IPArr(expr); err != nil {
-			slog.Error(err.Error())
+			if recursion == true {
+				slog.Debug(expr + err.Error())
+			} else {
+				slog.Error(expr + err.Error())
+			}
 		} else {
 			c.HostTarget = append(c.HostTarget, Hosts...)
 			return
@@ -61,7 +70,11 @@ func (c *config) loadTarget(expr string) {
 	}
 	//判断target字符串是否为类URL
 	if url, err := urlparse.Load(expr); err != nil {
-		slog.Error(err.Error())
+		if recursion == true {
+			slog.Debug(expr + err.Error())
+		} else {
+			slog.Error(expr + err.Error())
+		}
 	} else {
 		if url.Scheme != "" {
 			c.UrlTarget = misc.UniStrAppend(c.UrlTarget, expr)
@@ -105,7 +118,10 @@ func (c *config) loadPingAliveMap(p bool) {
 	if p != true {
 		return
 	}
-	c.PingAliveMap = make(map[string]bool)
+	c.PingAliveMap = &sync.Map{}
+	for _, host := range c.HostTarget {
+		c.PingAliveMap.Store(host, 0)
+	}
 }
 
 func (c *config) loadTargetNum() {

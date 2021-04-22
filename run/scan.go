@@ -15,15 +15,14 @@ import (
 func GetPortBanner(expr string, nmap *gonmap.Nmap) *PortInformation {
 	u, _ := urlparse.Load(expr)
 	r := NewPortInformation(u)
-	//if app.Config.PingAliveMap != nil {
-	//	if _, ok := app.Config.PingAliveMap[u.Netloc]; ok != true {
-	//		app.Config.PingAliveMap[u.Netloc] = PingAlive(u.Netloc)
-	//	}
-	//	slog.Debug(u.Netloc + "ping探测结果为：" + strconv.FormatBool(app.Config.PingAliveMap[u.Netloc]))
-	//	if app.Config.PingAliveMap[u.Netloc] != true {
-	//		return r.CLOSED()
-	//	}
-	//}
+	if app.Config.PingAliveMap != nil {
+		if value, _ := app.Config.PingAliveMap.Load(u.Netloc); value.(int) == 0 {
+			app.Config.PingAliveMap.Store(u.Netloc, PingAlive(u.Netloc))
+		}
+		if value, _ := app.Config.PingAliveMap.Load(u.Netloc); value.(int) == -1 {
+			return r.CLOSED()
+		}
+	}
 	r.LoadGonmapPortInformation(nmap.SafeScan(u.Netloc, u.Port, time.Second*120))
 	if r.ErrorMsg != nil {
 		slog.Debug(r.ErrorMsg.Error())
@@ -79,11 +78,11 @@ func getUrlBanner(url *urlparse.URL) *HttpFinger {
 	return r
 }
 
-func PingAlive(ip string) bool {
+func PingAlive(ip string) int {
 	p, err := ping.NewPinger(ip)
 	if err != nil {
 		slog.Debug(err.Error())
-		return false
+		return -1
 	}
 	p.Count = 2
 	p.Timeout = time.Second * 3
@@ -93,7 +92,7 @@ func PingAlive(ip string) bool {
 	}
 	s := p.Statistics()
 	if s.PacketsRecv > 0 {
-		return true
+		return 1
 	}
-	return false
+	return -1
 }

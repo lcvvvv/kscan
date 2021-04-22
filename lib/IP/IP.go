@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type ip struct {
+type Ip struct {
 	Addr string
 	Mask int
 }
@@ -15,37 +15,37 @@ type ip struct {
 var regIsIP, _ = regexp.Compile("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$")
 var regIsIPs, _ = regexp.Compile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})/(\\d{1,2})$")
 
-func Check(v string) (ip, bool) {
+func Check(v string) (Ip, bool) {
 	if regIsIP.MatchString(v) {
 		vArr := strings.Split(v, ".")
 		if len(vArr) != 4 {
-			return ip{}, false
+			return Ip{}, false
 		}
 		vIntArr, err := misc.StrArr2IntArr(vArr)
 		if err != nil {
-			return ip{}, false
+			return Ip{}, false
 		}
 		for _, vInt := range vIntArr {
 			if vInt < 0 || vInt > 255 {
-				return ip{}, false
+				return Ip{}, false
 			}
 		}
-		return ip{v, 32}, true
+		return Ip{v, 32}, true
 	}
 	if regIsIPs.MatchString(v) {
 		addr := regIsIPs.FindStringSubmatch(v)[1]
 		mask := regIsIPs.FindStringSubmatch(v)[2]
 		_, isip := Check(addr)
 		if !isip {
-			return ip{}, false
+			return Ip{}, false
 		}
 		maskInt := misc.Str2Int(mask)
-		if maskInt < 16 || maskInt > 32 {
-			return ip{}, false
+		if maskInt < 0 || maskInt > 32 {
+			return Ip{}, false
 		}
-		return ip{addr, maskInt}, true
+		return Ip{addr, maskInt}, true
 	}
-	return ip{}, false
+	return Ip{}, false
 }
 
 func IPMask2IPArr(v string) ([]string, error) {

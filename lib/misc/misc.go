@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"encoding/json"
 	"io"
+	"math/rand"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -70,7 +70,7 @@ func IsInIntArr(slice []int, val int) bool {
 	return false
 }
 
-func ReadLine(fileName string, handler func(string)) error {
+func ReadLine(fileName string, handler func(string, bool)) error {
 	f, err := os.Open(fileName)
 	if err != nil {
 		return err
@@ -80,28 +80,12 @@ func ReadLine(fileName string, handler func(string)) error {
 		line, err := buf.ReadString('\n')
 		line = strings.TrimSpace(line)
 		line = FixLine(line)
-		handler(line)
+		handler(line, true)
 		if err != nil {
 			if err == io.EOF {
 				return nil
 			}
 			return err
-		}
-	}
-}
-
-func ReadLineFile(file *os.File, handler func(string)) {
-	buf := bufio.NewReader(file)
-	for {
-		line, err := buf.ReadString('\n')
-		line = strings.TrimSpace(line)
-		handler(line)
-		if err != nil {
-			if err == io.EOF {
-				return
-			}
-			//slog.Error(err.Error())
-			return
 		}
 	}
 }
@@ -185,16 +169,6 @@ func FileIsExist(path string) bool {
 	return !os.IsNotExist(err)
 }
 
-func SafeOpen(path string) *os.File {
-	if FileIsExist(path) {
-		f, _ := os.Open(path)
-		return f
-	} else {
-		f, _ := os.Create(path)
-		return f
-	}
-}
-
 func Xrange(args ...int) []int {
 	var start, stop int
 	var step = 1
@@ -221,17 +195,6 @@ func Xrange(args ...int) []int {
 		r = append(r, i)
 	}
 	return r
-}
-
-func Unquote(s string) string {
-	s = StrConcat("\"", s, "\"")
-	r, _ := strconv.Unquote(s)
-	return r
-}
-
-func MakeRegexpCompile(expr string) *regexp.Regexp {
-	res, _ := regexp.Compile(expr)
-	return res
 }
 
 func FilterPrintStr(s string) string {
@@ -266,4 +229,14 @@ func Percent(int1 int, int2 int) string {
 	f := 1 - float1/float2
 	f = f * 100
 	return strconv.FormatFloat(f, 'f', 2, 64)
+}
+
+func StrRandomCut(s string, length int) string {
+	sRune := []rune(s)
+	if len(sRune) > length {
+		i := rand.Intn(len(sRune) - length)
+		return string(sRune[i : i+30])
+	} else {
+		return s
+	}
 }

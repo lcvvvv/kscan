@@ -21,7 +21,7 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.13#\#| \#|
+|#|\#\#####/ \#####/#/ v1.14#\#| \#|
            轻量级资产测绘工具 by：kv2
 
 `
@@ -30,20 +30,23 @@ const logo = `
 const help = `
 optional arguments:
   -h , --help     show this help message and exit
-  -t , --target   直接扫描指定对象,支持IP、URL、IP/[16-32]、file:/tmp/target.txt
+  --ping          在扫描端口之前会先进行Ping探测，若不存活，则不会进行端口扫描
+  -t , --target   指定探测对象：
+                  IP地址：114.114.114.114
+                  IP地址段：114.114.114.114/24,不建议子网掩码小于12
+                  URL地址：https://www.baidu.com
+                  文件地址：file:/tmp/target.txt
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
-  -sP [暂时无法使用]在扫描端口之前会先进行Ping探测，若不存活，则不会进行端口扫描
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOSTS值，慎用！
   --timeout       设置超时时间，默认为预设的探针超时时间！
-
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-sP]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping]\n\n"
 
 //初始化函数
 func Init() {
@@ -75,7 +78,7 @@ func initParams() {
 	flag.BoolVar(&Params.help, "help", false, "")
 	flag.BoolVar(&Params.Debug, "debug", false, "")
 	flag.BoolVar(&Params.Debug, "d", false, "")
-	//flag.BoolVar(&Params.scanPing, "sP", false, "")
+	flag.BoolVar(&Params.scanPing, "ping", false, "")
 	flag.StringVar(&Params.target, "t", "", "")
 	flag.StringVar(&Params.target, "target", "", "")
 	flag.StringVar(&Params.port, "p", "", "")

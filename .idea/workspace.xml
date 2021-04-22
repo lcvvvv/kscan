@@ -10,11 +10,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]犹如重置般的改动,优化目录结构">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]犹如重置般的改动,解决中文乱码问题，以及部分显示异常问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/IP/IP.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/IP/IP.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/misc/safemap.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/scan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-portinfomation.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-urlfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-urlfinger.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +181,9 @@
     <MESSAGE value="[*]尝试改善端口验证逻辑" />
     <MESSAGE value="[*]犹如重置般的改动" />
     <MESSAGE value="[*]犹如重置般的改动,优化目录结构" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]犹如重置般的改动,优化目录结构" />
+    <MESSAGE value="[*]犹如重置般的改动,优化进度输出" />
+    <MESSAGE value="[*]犹如重置般的改动,解决中文乱码问题，以及部分显示异常问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]犹如重置般的改动,解决中文乱码问题，以及部分显示异常问题" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -286,10 +295,10 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="328" y="183" key="Vcs.Push.Dialog.v2" timestamp="1618794207187">
+    <state x="328" y="183" key="Vcs.Push.Dialog.v2" timestamp="1619081973551">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1618794207187" />
+    <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618069005253" />
@@ -302,16 +311,16 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1619079476224">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="1081" y="154" width="682" height="737" key="find.popup" timestamp="1619101042238">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
     <state x="1081" y="175" width="682" height="719" key="find.popup/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955792930" />
-    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1619079476224" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1619083516631" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
-    <state x="1081" y="154" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618068272670" />
+    <state x="1081" y="154" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619101042238" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1611644355435">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>

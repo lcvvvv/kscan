@@ -11,7 +11,6 @@ import (
 	"kscan/lib/misc"
 	"kscan/lib/shttp"
 	"kscan/lib/slog"
-	"math/rand"
 	"net/http"
 )
 
@@ -153,8 +152,7 @@ func (h *HttpFinger) MakeInfo() {
 	}
 	if h.ResponseDigest != "" {
 		if len(h.ResponseDigest) > 30 {
-			i := rand.Intn(len(h.ResponseDigest) - 30)
-			info += "," + h.ResponseDigest[i:i+30]
+			info += "," + misc.StrRandomCut(h.ResponseDigest, 30)
 		} else {
 			info += "," + h.ResponseDigest
 		}

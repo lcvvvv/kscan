@@ -63,8 +63,11 @@ func (p *PortInformation) MakeInfo() {
 		}
 	}
 	if fingerprint != "" {
-		fingerprint = fingerprint[1:]
+		if fingerprint[:1] == "," {
+			fingerprint = fingerprint[1:]
+		}
 	}
+	p.Info = misc.FixLine(fingerprint)
 	p.Info = fmt.Sprintf("%s\t%d\t%s\t%s", target, code, digest, fingerprint)
 }
 
