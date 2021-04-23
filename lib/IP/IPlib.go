@@ -44,21 +44,21 @@ func (this *IpRangeLib) IpRangeToIpList(Ipaddr string) ([]string, error) {
 		return nil, errors.New("Mask Error: out range")
 	}
 
-	maskhead := 0xFFFFFFFF
+	maskhead := uint32(0xFFFFFFFF)
 	for i := 1; i <= 32-mask; i++ {
 		maskhead = maskhead << 1
 	}
 
-	masktail := 0xFFFFFFFF
+	masktail := uint32(0xFFFFFFFF)
 	for i := 1; i <= mask; i++ {
 		masktail = masktail >> 1
 	}
 	ipint := this.IpStringToInt(ip)
-	IPintstart := ipint & maskhead
-	IPintend := ipint | masktail
+	IPintstart := uint32(ipint) & maskhead
+	IPintend := uint32(ipint) | masktail
 
 	for i := IPintstart; i <= IPintend; i++ {
-		result = append(result, this.IpIntToString(i))
+		result = append(result, this.IpIntToString(int(i)))
 	}
 	return result, nil
 }
