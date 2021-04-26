@@ -10,14 +10,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]犹如重置般的改动,优化协程存活检测逻辑，现在协程不会突然死掉了">
-      <change afterPath="$PROJECT_DIR$/assets/演示截图-v1.14.png" afterDir="false" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]更新了版本发布说明">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/Kscan意见反馈群.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/Kscan意见反馈群.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/IP/IPlib.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/IP/IPlib.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/httpfinger/type-keywordFinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/httpfinger/type-keywordFinger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +76,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="ReadonlyStatusHandler">
     <option name="SHOW_DIALOG" value="false" />
@@ -180,7 +178,8 @@
     <MESSAGE value="[*]犹如重置般的改动,优化进度输出" />
     <MESSAGE value="[*]犹如重置般的改动,解决中文乱码问题，以及部分显示异常问题" />
     <MESSAGE value="[*]犹如重置般的改动,优化协程存活检测逻辑，现在协程不会突然死掉了" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]犹如重置般的改动,优化协程存活检测逻辑，现在协程不会突然死掉了" />
+    <MESSAGE value="[*]更新了版本发布说明" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]更新了版本发布说明" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -279,9 +278,10 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="2226" y="246" key="RollbackChangesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839221998" />
-    <state x="180" y="207" key="SettingsEditor" timestamp="1618235570756">
+    <state x="180" y="207" key="SettingsEditor" timestamp="1619334598291">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1614353456714" />
     <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614048641533" />
@@ -292,9 +292,10 @@
     </state>
     <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
     <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1619103508461">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1619142009085">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619142009085" />
     <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
@@ -308,9 +309,10 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="1081" y="154" width="682" height="737" key="find.popup" timestamp="1619101042238">
+    <state x="1081" y="154" width="682" height="737" key="find.popup" timestamp="1619398488756">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619398488756" />
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
     <state x="1081" y="175" width="682" height="719" key="find.popup/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955792930" />
     <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1619083516631" />

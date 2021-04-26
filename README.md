@@ -53,7 +53,8 @@
 鄙人是一个懒人，所以在写工具的时候也往易用性上进行了更多的考量
 
 ```
-usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping]
+usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output]
+ [--proxy] [--threads] [--path] [--host] [--timeout] [--ping]
 
 
 optional arguments:

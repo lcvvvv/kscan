@@ -28,8 +28,8 @@ func main() {
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条\n", r["FaviconHash"], r["KeywordFinger"])
 	//加载gonmap探针/指纹库
 	r = gonmap.Init(5, app.Config.Timeout)
-	slog.Infof("成功加载探针:[%d]个,指纹[%d]条\n", r["PROBE"], r["MATCH"])
-	slog.Warningf("本次扫描将使用探针:[%d]个,指纹[%d]条\n", r["USED_PROBE"], r["USED_MATCH"])
+	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条\n", r["PROBE"], r["MATCH"])
+	slog.Warningf("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条\n", r["USED_PROBE"], r["USED_MATCH"])
 
 	//校验升级情况
 	//app.CheckUpdate()
