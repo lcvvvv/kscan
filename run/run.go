@@ -34,7 +34,6 @@ func Start() {
 	time.Sleep(time.Second * 1) //预留一秒钟加载时间
 
 	//STEP3:开始扫描所有开放端口
-	slog.Warningf("开始扫描所有开放端口,总协程数为：[%d]...", app.Config.Threads)
 	go scanMain()               //启动扫描主程序
 	time.Sleep(time.Second * 1) //预留一秒钟加载时间
 
@@ -47,6 +46,7 @@ func scanMain() {
 	if HostPortQueue.Len() < thread {
 		thread = HostPortQueue.Len()
 	}
+	slog.Warningf("开始扫描所有开放端口,总协程数为：[%d]...", thread)
 	for i := 0; i <= thread; i++ {
 		threadHostPortGroup.Add(1)
 		threadHostPortGroupNum++
