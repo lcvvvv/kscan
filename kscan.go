@@ -7,17 +7,29 @@ import (
 	"kscan/lib/params"
 	"kscan/lib/slog"
 	"kscan/run"
+	"os"
 	"time"
 )
 
 func main() {
+	switch os.Args[1] {
+	case "fofa":
+		fofa()
+	case "ctl":
+		ctl()
+	default:
+		kscan()
+	}
+}
+
+func kscan() {
 	startTime := time.Now()
 	//参数初始化
-	params.Init()
+	params.InitKscan()
 	//日志初始化
 	slog.Init(params.Params.Debug)
 	//参数合法性校验
-	params.CheckParams()
+	params.KscanCheckParams()
 	//配置文件初始化
 	app.Config.Load(params.Params)
 	slog.Warning("开始读取扫描对象...")
@@ -39,4 +51,10 @@ func main() {
 	//计算程序运行时间
 	elapsed := time.Since(startTime)
 	slog.Infof("程序执行总时长为：[%s]", elapsed.String())
+}
+
+func ctl() {
+}
+
+func fofa() {
 }

@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-func CheckParams() {
+func KscanCheckParams() {
 	//判断冲突参数
 	if Params.port != "" && Params.top != 400 {
 		slog.Error("PORT、TOP只允许同时出现一个")

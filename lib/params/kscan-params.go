@@ -49,9 +49,11 @@ optional arguments:
 const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping]\n\n"
 
 //初始化函数
-func Init() {
-	initParams()
+func InitKscan() {
+	initKscanParams()
 	flag.Parse()
+	fmt.Print(flag.Args())
+	fmt.Print(Params)
 	//不带参数则对应usage
 	if len(os.Args) == 1 {
 		fmt.Print(logo)
@@ -69,7 +71,7 @@ func Init() {
 }
 
 //初始化参数
-func initParams() {
+func initKscanParams() {
 	//自定义Usage
 	flag.Usage = func() {
 		fmt.Print(logo)

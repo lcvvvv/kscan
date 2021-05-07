@@ -49,7 +49,7 @@ func (h *HttpFinger) LoadHttpResponse(url *urlparse.URL, resp *http.Response) {
 	h.Response = getResponse(shttp.GetBody(resp))
 	h.ResponseDigest = getResponseDigest(shttp.GetBody(resp))
 	h.HashFinger = getFingerByHash(*url)
-	h.KeywordFinger = getFingerByKeyword(h.Header, h.Response)
+	h.KeywordFinger = getFingerByKeyword(h.Header, h.Title, h.Response)
 	_ = resp.Body.Close()
 }
 
@@ -115,8 +115,8 @@ func getHeaderDigest(header http.Header) string {
 	return ""
 }
 
-func getFingerByKeyword(header string, body string) string {
-	return httpfinger.KeywordFinger.Match(body, header)
+func getFingerByKeyword(header string, title string, body string) string {
+	return httpfinger.KeywordFinger.Match(header, title, body)
 }
 
 func getFingerByHash(url urlparse.URL) string {
