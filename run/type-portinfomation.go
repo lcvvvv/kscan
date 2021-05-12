@@ -43,6 +43,9 @@ func (p *PortInformation) LoadGonmapPortInformation(g *gonmap.PortInfomation) {
 
 func (p *PortInformation) LoadHttpFinger(h *HttpFinger) {
 	p.HttpFinger = h
+	if p.HttpFinger.StatusCode != 0 {
+		p.Status = "MATCHED"
+	}
 }
 
 func (p *PortInformation) MakeInfo() {
@@ -52,7 +55,10 @@ func (p *PortInformation) MakeInfo() {
 	target := p.Target.UnParse()
 	code := len(p.Response)
 	digest := p.ResponseDigest
-	fingerprint := p.Finger.Information()
+	fingerprint := ""
+	if p.Finger != nil {
+		fingerprint = p.Finger.Information()
+	}
 	if p.HttpFinger != nil {
 		if p.HttpFinger.StatusCode != 0 {
 			code = p.HttpFinger.StatusCode

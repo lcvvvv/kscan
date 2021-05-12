@@ -62,7 +62,7 @@ func scanMainSub(HostPortQueue **queue.Queue, wait *sync.WaitGroup, nmap *gonmap
 		t := (*HostPortQueue).Pop().(string)
 		r := GetPortBanner(t, nmap)
 		if r.Status == "OPEN" || r.Status == "MATCHED" {
-			if r.Finger.Service != "" {
+			if r.Target.Scheme != "" || r.HttpFinger.StatusCode != 0 {
 				r.MakeInfo()
 				slog.Data(r.Info)
 				if app.Config.Output != nil {

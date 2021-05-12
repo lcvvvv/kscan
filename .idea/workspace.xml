@@ -10,14 +10,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]增加关键字指纹库，现在一共有786条了，优化载入说明">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/httpfinger/httpfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/httpfinger/httpfinger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/httpfinger/type-keywordFinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/httpfinger/type-keywordFinger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/check.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-params.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-urlfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-urlfinger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/kscan-params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/scan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-portinfomation.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,8 +157,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="初次发布，已实现大部分功能" />
-    <MESSAGE value="实现生僻Http头部参数更新问题" />
     <MESSAGE value="配置文件" />
     <MESSAGE value="新增TCP协议识别功能" />
     <MESSAGE value="新增output导出功能" />
@@ -182,16 +180,14 @@
     <MESSAGE value="[*]犹如重置般的改动,优化协程存活检测逻辑，现在协程不会突然死掉了" />
     <MESSAGE value="[*]更新了版本发布说明" />
     <MESSAGE value="[*]增加关键字指纹库，现在一共有786条了，优化载入说明" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]增加关键字指纹库，现在一共有786条了，优化载入说明" />
+    <MESSAGE value="[*]解决指纹库不能正常识别问题，现在一共有1323条了" />
+    <MESSAGE value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state x="520" y="287" key="#Go_模块" timestamp="1611847718830">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="520" y="287" key="#Go_模块/0.0.1440.900@0.0.1440.900" timestamp="1611847718830" />
     <state x="318" y="165" width="1071" height="730" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614602273290">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -209,18 +205,6 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839216818" />
-    <state x="2306" y="268" key="EnvironmentVariablesDialog" timestamp="1611546203330">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="2306" y="268" key="EnvironmentVariablesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611546203330" />
-    <state x="2275" y="441" key="Github.ShareDialog" timestamp="1611540935971">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="2275" y="441" key="Github.ShareDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611540935971" />
-    <state x="2230" y="249" key="Github.UntrackedFilesDialog" timestamp="1611540947279">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="2230" y="249" key="Github.UntrackedFilesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611540947279" />
     <state width="699" height="453" key="GridCell.Tab.0.bottom" timestamp="1618791659860">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -269,10 +253,6 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="376" key="GridCell.Tab.1.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543482" />
-    <state x="1988" y="279" key="IDE.errors.dialog" timestamp="1611541114750">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="1988" y="279" key="IDE.errors.dialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611541114750" />
     <state x="591" y="319" width="865" height="469" key="MultipleFileMergeDialog" timestamp="1618069041646">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -290,16 +270,12 @@
     <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614048641533" />
     <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614048689737" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="518" y="242" width="405" height="437" key="StructurePopup" timestamp="1611759650965">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="518" y="242" width="405" height="437" key="StructurePopup/0.0.1440.900@0.0.1440.900" timestamp="1611759650965" />
-    <state x="2130" y="290" width="540" height="524" key="StructurePopup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611633896253" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1619399042656">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="320" y="194" key="Vcs.Push.Dialog.v2" timestamp="1620359386740">
+      <screen x="0" y="25" width="1440" height="816" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
+    <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
     <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619103508461" />
@@ -319,25 +295,22 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="1083" y="160" width="682" height="737" key="find.popup" timestamp="1619514837091">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1620786867422">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619514837091" />
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
     <state x="1081" y="175" width="682" height="719" key="find.popup/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955792930" />
-    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1619083516631" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1620786867422" />
+    <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
     <state x="1081" y="154" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619101042238" />
-    <state width="600" height="428" key="javadoc.popup" timestamp="1611644355435">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="300" height="62" key="javadoc.popup.new/0.0.1440.900@0.0.1440.900" timestamp="1618643899041" />
-    <state width="600" height="428" key="javadoc.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1611644355435" />
     <state x="0" y="0" key="scopes" timestamp="1614347659436">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

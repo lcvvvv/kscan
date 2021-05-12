@@ -52,8 +52,8 @@ const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--ou
 func InitKscan() {
 	initKscanParams()
 	flag.Parse()
-	fmt.Print(flag.Args())
-	fmt.Print(Params)
+	//fmt.Print(flag.Args())
+	//fmt.Print(Params)
 	//不带参数则对应usage
 	if len(os.Args) == 1 {
 		fmt.Print(logo)
