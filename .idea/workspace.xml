@@ -10,16 +10,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]删除掉无用的slog.Error输出">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/kscan-check.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/kscan-params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-params.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-portinfomation.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +152,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="配置文件" />
     <MESSAGE value="新增TCP协议识别功能" />
     <MESSAGE value="新增output导出功能" />
     <MESSAGE value="kscan v1.2来啦~~~~" />
@@ -184,7 +176,8 @@
     <MESSAGE value="[*]增加关键字指纹库，现在一共有786条了，优化载入说明" />
     <MESSAGE value="[*]解决指纹库不能正常识别问题，现在一共有1323条了" />
     <MESSAGE value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
+    <MESSAGE value="[*]删除掉无用的slog.Error输出" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]删除掉无用的slog.Error输出" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

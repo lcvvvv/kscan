@@ -3,7 +3,6 @@ package slog
 import (
 	"fmt"
 	"io/ioutil"
-	"kscan/lib/misc"
 	"log"
 	"os"
 	"runtime"
@@ -27,7 +26,7 @@ func Init(Debug bool) {
 	this.info = log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime)
 	this.warning = log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime)
 	//this.error = log.New(io.MultiWriter(os.Stderr), "\r[×]", log.Ldate|log.Ltime)
-	this.data = log.New(os.Stdout, "\r[√]", 0)
+	this.data = log.New(os.Stdout, "\r", 0)
 	if Debug {
 		this.debug = log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime)
 	} else {
@@ -57,37 +56,21 @@ func Data(s string) {
 	this.Data(s)
 }
 
-func (t *logger) FooLine(s string) {
-	fmt.Print("\r[*]", s)
-}
-
 func (t *logger) Info(s string) {
-	t.info.Print(misc.StrConcat(splitStr, s))
-}
-
-func (t *logger) Infof(format string, v ...interface{}) {
-	t.info.Printf(misc.StrConcat(splitStr, format), v...)
+	t.info.Print(splitStr, s)
 }
 
 func (t *logger) Warning(s string) {
-	t.warning.Print(misc.StrConcat(splitStr, s))
-}
-
-func (t *logger) Warningf(format string, v ...interface{}) {
-	t.warning.Printf(misc.StrConcat(splitStr, format), v...)
+	t.warning.Print(splitStr, s)
 }
 
 func (t *logger) Debug(s string) {
+	if debugFilter(s) {
+		return
+	}
 	_, file, line, _ := runtime.Caller(2)
 	file = file[strings.LastIndex(file, "/")+1:]
 	t.debug.Printf("%s%s(%d) %s", splitStr, file, line, s)
-}
-
-func (t *logger) Debugf(format string, v ...interface{}) {
-	_, file, line, _ := runtime.Caller(2)
-	file = file[strings.LastIndex(file, "/")+1:]
-	format = fmt.Sprintf("%s%s(%d) %s", splitStr, file, line, format)
-	t.debug.Printf(format, v...)
 }
 
 //func (t *logger) Error(s string) {
@@ -105,34 +88,28 @@ func (t *logger) Debugf(format string, v ...interface{}) {
 //	os.Exit(0)
 //}
 
-func Info(s string) {
-	this.Info(s)
+func Info(s ...interface{}) {
+	this.Info(fmt.Sprint(s...))
 }
 
 func Infof(format string, v ...interface{}) {
-	this.Infof(format, v...)
+	this.Info(fmt.Sprintf(format, v...))
 }
 
-func Warning(s string) {
-	this.Warning(s)
+func Warning(s ...interface{}) {
+	this.Warning(fmt.Sprint(s...))
 }
 
 func Warningf(format string, v ...interface{}) {
-	this.Warningf(format, v...)
+	this.Warning(fmt.Sprintf(format, v...))
 }
 
-func Debug(s string) {
-	if debugFilter(s) {
-		return
-	}
-	this.Debug(s)
+func Debug(s ...interface{}) {
+	this.Debug(fmt.Sprint(s...))
 }
 
 func Debugf(format string, v ...interface{}) {
-	if debugFilter(format) {
-		return
-	}
-	this.Debugf(format, v...)
+	this.Debug(fmt.Sprintf(format, v...))
 }
 
 //func Error(s string) {
