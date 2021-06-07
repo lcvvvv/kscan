@@ -13,16 +13,16 @@ import (
 )
 
 type config struct {
-	HostTarget, UrlTarget []string
-	Port                  []int
-	PingAliveMap          *sync.Map
-	Output                *os.File
-	Proxy, Host, Path     string
-	Threads               int
-	Timeout               int
-	HostTargetNum         int
-	UrlTargetNum          int
-	PortNum               int
+	HostTarget, UrlTarget       []string
+	Port                        []int
+	PingAliveMap                *sync.Map
+	Output                      *os.File
+	Proxy, Host, Path, Encoding string
+	Threads                     int
+	Timeout                     int
+	HostTargetNum               int
+	UrlTargetNum                int
+	PortNum                     int
 	//FofaEmail, FofaKey    string
 }
 
@@ -39,6 +39,7 @@ func (c *config) Load(p params.OsArgs) {
 	c.Host = p.Host()
 	c.Threads = p.Threads()
 	c.Timeout = p.Timeout()
+	c.Encoding = p.Encoding()
 }
 
 func (c *config) loadTarget(expr string, recursion bool) {
@@ -50,7 +51,7 @@ func (c *config) loadTarget(expr string, recursion bool) {
 			if recursion == true {
 				slog.Debug(expr + err.Error())
 			} else {
-				panic(expr + err.Error())
+				slog.Error(expr + err.Error())
 			}
 		}
 		return
@@ -61,7 +62,7 @@ func (c *config) loadTarget(expr string, recursion bool) {
 			if recursion == true {
 				slog.Debug(expr + err.Error())
 			} else {
-				panic(expr + err.Error())
+				slog.Error(expr + err.Error())
 			}
 		} else {
 			c.HostTarget = append(c.HostTarget, Hosts...)
@@ -73,7 +74,7 @@ func (c *config) loadTarget(expr string, recursion bool) {
 		if recursion == true {
 			slog.Debug(expr + err.Error())
 		} else {
-			panic(expr + err.Error())
+			slog.Error(expr + err.Error())
 		}
 	} else {
 		if url.Scheme != "" {
@@ -108,7 +109,7 @@ func (c *config) loadOutput(expr string) {
 	}
 	f, err := os.OpenFile(expr, os.O_CREATE+os.O_RDWR, 0764)
 	if err != nil {
-		panic(err.Error())
+		slog.Error(err.Error())
 	} else {
 		c.Output = f
 	}
@@ -141,12 +142,12 @@ func intParam2IntArr(v string) []int {
 		if strings.Contains(v, "-") {
 			iArr := strings.Split(v, "-")
 			if len(iArr) != 2 {
-				panic("参数输入错误！！！")
+				slog.Error("参数输入错误！！！")
 			} else {
 				smallNum := misc.Str2Int(iArr[0])
 				bigNum := misc.Str2Int(iArr[1])
 				if smallNum >= bigNum {
-					panic("参数输入错误！！！")
+					slog.Error("参数输入错误！！！")
 				}
 				vvArr = append(vvArr, misc.Xrange(smallNum, bigNum)...)
 			}

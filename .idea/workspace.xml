@@ -10,8 +10,17 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]删除掉无用的slog.Error输出">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化slog输出模式，现在更容易使用了">
+      <change afterPath="$PROJECT_DIR$/lib/chinese/chinese.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/kscan-check.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-check.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/kscan-params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,7 +161,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="新增TCP协议识别功能" />
     <MESSAGE value="新增output导出功能" />
     <MESSAGE value="kscan v1.2来啦~~~~" />
     <MESSAGE value="kscan v1.1来啦~~~~" />
@@ -177,7 +185,8 @@
     <MESSAGE value="[*]解决指纹库不能正常识别问题，现在一共有1323条了" />
     <MESSAGE value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
     <MESSAGE value="[*]删除掉无用的slog.Error输出" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]删除掉无用的slog.Error输出" />
+    <MESSAGE value="[*]优化slog输出模式，现在更容易使用了" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]优化slog输出模式，现在更容易使用了" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -201,38 +210,38 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="799" y="445" key="Github.CreateGistDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623065762017" />
-    <state width="699" height="453" key="GridCell.Tab.0.bottom" timestamp="1618791659860">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="240" key="GridCell.Tab.0.bottom" timestamp="1623070421850">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.bottom/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838260" />
     <state width="699" height="453" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1618791659860" />
     <state width="699" height="244" key="GridCell.Tab.0.bottom/0.25.1440.816@0.25.1440.816" timestamp="1618730716345" />
     <state width="1398" height="245" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141038" />
-    <state width="1878" height="376" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543477" />
-    <state width="699" height="453" key="GridCell.Tab.0.center" timestamp="1618791659859">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="240" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421850" />
+    <state width="1878" height="240" key="GridCell.Tab.0.center" timestamp="1623070421848">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.center/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838257" />
     <state width="699" height="453" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
     <state width="699" height="244" key="GridCell.Tab.0.center/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1398" height="245" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
-    <state width="1878" height="376" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543475" />
-    <state width="699" height="453" key="GridCell.Tab.0.left" timestamp="1618791659858">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="240" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421848" />
+    <state width="1878" height="240" key="GridCell.Tab.0.left" timestamp="1623070421847">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.left/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838256" />
     <state width="699" height="453" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1618791659858" />
     <state width="699" height="244" key="GridCell.Tab.0.left/0.25.1440.816@0.25.1440.816" timestamp="1618730716343" />
     <state width="1398" height="245" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141035" />
-    <state width="1878" height="376" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543474" />
-    <state width="699" height="453" key="GridCell.Tab.0.right" timestamp="1618791659859">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="240" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421847" />
+    <state width="1878" height="240" key="GridCell.Tab.0.right" timestamp="1623070421849">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.right/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838259" />
     <state width="699" height="453" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
     <state width="699" height="244" key="GridCell.Tab.0.right/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1398" height="245" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
-    <state width="1878" height="376" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617973543476" />
+    <state width="1878" height="240" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421849" />
     <state width="1878" height="376" key="GridCell.Tab.1.bottom" timestamp="1617973543483">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -285,7 +294,7 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623066671920">
+    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623074161578">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619514837091" />
@@ -295,7 +304,7 @@
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
-    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623066671920" />
+    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623074161578" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

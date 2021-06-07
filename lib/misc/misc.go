@@ -2,17 +2,12 @@ package misc
 
 import (
 	"bufio"
-	"encoding/json"
 	"io"
 	"math/rand"
 	"os"
 	"strconv"
 	"strings"
 )
-
-//func TypeOf(v interface{}) string {
-//	return fmt.Sprintf("%T", v)
-//}
 
 func StrArr2IntArr(strArr []string) ([]int, error) {
 	var intArr []int
@@ -24,11 +19,6 @@ func StrArr2IntArr(strArr []string) ([]int, error) {
 		intArr = append(intArr, intValue)
 	}
 	return intArr, nil
-}
-
-func StrConcat(s1 string, v ...string) string {
-	s2 := strings.Join(v, "")
-	return strings.Join([]string{s1, s2}, "")
 }
 
 func Str2Int(str string) int {
@@ -108,60 +98,6 @@ func UniStrAppend(slice []string, elems ...string) []string {
 		}
 	}
 	return slice
-}
-
-func Interface2Str(value interface{}) string {
-	var key string
-	if value == nil {
-		return key
-	}
-
-	switch value.(type) {
-	case float64:
-		ft := value.(float64)
-		key = strconv.FormatFloat(ft, 'f', -1, 64)
-	case float32:
-		ft := value.(float32)
-		key = strconv.FormatFloat(float64(ft), 'f', -1, 64)
-	case int:
-		it := value.(int)
-		key = strconv.Itoa(it)
-	case uint:
-		it := value.(uint)
-		key = strconv.Itoa(int(it))
-	case int8:
-		it := value.(int8)
-		key = strconv.Itoa(int(it))
-	case uint8:
-		it := value.(uint8)
-		key = strconv.Itoa(int(it))
-	case int16:
-		it := value.(int16)
-		key = strconv.Itoa(int(it))
-	case uint16:
-		it := value.(uint16)
-		key = strconv.Itoa(int(it))
-	case int32:
-		it := value.(int32)
-		key = strconv.Itoa(int(it))
-	case uint32:
-		it := value.(uint32)
-		key = strconv.Itoa(int(it))
-	case int64:
-		it := value.(int64)
-		key = strconv.FormatInt(it, 10)
-	case uint64:
-		it := value.(uint64)
-		key = strconv.FormatUint(it, 10)
-	case string:
-		key = value.(string)
-	case []byte:
-		key = string(value.([]byte))
-	default:
-		newValue, _ := json.Marshal(value)
-		key = string(newValue)
-	}
-	return key
 }
 
 func FileIsExist(path string) bool {

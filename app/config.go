@@ -14,4 +14,5 @@ var Config = config{
 	Host:          "",
 	Threads:       500,
 	Timeout:       0,
+	Encoding:      "utf-8",
 }

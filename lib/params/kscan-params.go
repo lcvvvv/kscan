@@ -2,14 +2,14 @@ package params
 
 import (
 	"flag"
-	"fmt"
+	"kscan/lib/slog"
 	"os"
 )
 
 type OsArgs struct {
-	help, Debug, scanPing, check            bool
-	target, port, output, proxy, path, host string
-	top, threads, timeout                   int
+	help, debug, scanPing, check                      bool
+	target, port, output, proxy, path, host, encoding string
+	top, threads, timeout                             int
 }
 
 var Params OsArgs
@@ -45,42 +45,45 @@ optional arguments:
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOSTS值，慎用！
   --timeout       设置超时时间，默认为预设的探针超时时间！
+  --encoding      设置终端输出编码，可指定为：gb2312或者utf-8
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping] [--check]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping] [--check] [--encoding]\n\n"
+
+//初始化参数
+func InitParam() {
+	initKscanParams()
+	flag.Parse()
+}
 
 //初始化函数
 func InitKscan() {
-	initKscanParams()
-	flag.Parse()
-	//fmt.Print(flag.Args())
-	//fmt.Print(Params)
 	//不带参数则对应usage
 	if len(os.Args) == 1 {
-		fmt.Print(logo)
-		fmt.Print(usage)
+		slog.Data(logo)
+		slog.Data(usage)
 		os.Exit(0)
 	}
 	if Params.help {
-		fmt.Print(logo)
-		fmt.Print(usage)
-		fmt.Print(help)
+		slog.Data(logo)
+		slog.Data(usage)
+		slog.Data(help)
 		os.Exit(0)
 	}
 	//打印logo
-	fmt.Print(logo)
+	slog.Data(logo)
 }
 
 //初始化参数
 func initKscanParams() {
 	//自定义Usage
 	flag.Usage = func() {
-		fmt.Print(logo)
+		slog.Data(logo)
 	}
 	flag.BoolVar(&Params.help, "h", false, "")
 	flag.BoolVar(&Params.help, "help", false, "")
-	flag.BoolVar(&Params.Debug, "debug", false, "")
-	flag.BoolVar(&Params.Debug, "d", false, "")
+	flag.BoolVar(&Params.debug, "debug", false, "")
+	flag.BoolVar(&Params.debug, "d", false, "")
 	flag.BoolVar(&Params.scanPing, "ping", false, "")
 	flag.BoolVar(&Params.check, "check", false, "")
 	flag.StringVar(&Params.target, "t", "", "")
@@ -92,6 +95,7 @@ func initKscanParams() {
 	flag.StringVar(&Params.proxy, "proxy", "", "")
 	flag.StringVar(&Params.path, "path", "", "")
 	flag.StringVar(&Params.host, "host", "", "")
+	flag.StringVar(&Params.encoding, "encoding", "utf-8", "")
 	flag.IntVar(&Params.top, "top", 400, "")
 	flag.IntVar(&Params.threads, "threads", 400, "")
 	flag.IntVar(&Params.timeout, "timeout", 0, "")
@@ -129,4 +133,10 @@ func (o OsArgs) ScanPing() bool {
 }
 func (o OsArgs) Check() bool {
 	return o.check
+}
+func (o OsArgs) Debug() bool {
+	return o.debug
+}
+func (o OsArgs) Encoding() string {
+	return o.encoding
 }

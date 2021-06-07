@@ -8,6 +8,7 @@ import (
 	"kscan/lib/slog"
 	"kscan/run"
 	"os"
+	"runtime"
 	"time"
 )
 
@@ -29,13 +30,16 @@ func main() {
 func kscan() {
 	startTime := time.Now()
 	//参数初始化
-	params.InitKscan()
+	params.InitParam()
 	//日志初始化
-	slog.Init(params.Params.Debug)
+	slog.Init(params.Params.Debug(), params.Params.Encoding())
+	//参数序列化
+	params.InitKscan()
 	//参数合法性校验
 	params.KscanCheckParams()
 	//配置文件初始化
 	app.Config.Load(params.Params)
+	slog.Warning("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Config.Encoding)
 	slog.Warning("开始读取扫描对象...")
 	slog.Infof("成功读取URL地址:[%d]个\n", len(app.Config.UrlTarget))
 	slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.Config.HostTarget), len(app.Config.HostTarget)*len(app.Config.Port))
