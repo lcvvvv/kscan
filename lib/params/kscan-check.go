@@ -1,14 +1,13 @@
 package params
 
 import (
-	"kscan/lib/slog"
 	"regexp"
 )
 
 func KscanCheckParams() {
 	//判断冲突参数
 	if Params.port != "" && Params.top != 400 {
-		slog.Error("PORT、TOP只允许同时出现一个")
+		panic("PORT、TOP只允许同时出现一个")
 	}
 	if Params.port != "" && Params.top == 400 {
 		Params.top = 0
@@ -18,12 +17,12 @@ func KscanCheckParams() {
 	if Params.target != "" {
 		if Params.port != "" {
 			if !checkIntsParam(Params.port) {
-				slog.Error("PORT参数输入错误,其格式应为80，8080，8081-8090")
+				panic("PORT参数输入错误,其格式应为80，8080，8081-8090")
 			}
 		}
 		if Params.top != 0 {
 			if Params.top > 1000 || Params.top < 1 {
-				slog.Error("TOP参数输入错误,TOP参数应为1-1000之间的整数。")
+				panic("TOP参数输入错误,TOP参数应为1-1000之间的整数。")
 			}
 		}
 		if Params.output != "" {
@@ -31,12 +30,12 @@ func KscanCheckParams() {
 		}
 		if Params.proxy != "" {
 			if !checkProxyParam(Params.proxy) {
-				slog.Error("PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
+				panic("PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
 			}
 		}
 		if Params.path != "" {
 			if !checkStringsParam(Params.path) {
-				slog.Error("PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
+				panic("PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
 			}
 		}
 		if Params.host != "" {
@@ -44,7 +43,7 @@ func KscanCheckParams() {
 		}
 		if Params.threads != 0 {
 			if Params.threads > 2048 {
-				slog.Error("Threads参数最大值为2048")
+				panic("Threads参数最大值为2048")
 			}
 			//验证threads参数
 		}
@@ -52,7 +51,7 @@ func KscanCheckParams() {
 			//验证timeout参数
 		}
 	} else {
-		slog.Error("必须输入TARGET参数")
+		panic("必须输入TARGET参数")
 	}
 }
 

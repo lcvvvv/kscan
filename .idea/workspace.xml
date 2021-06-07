@@ -12,11 +12,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/kscan-check.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-check.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/params/kscan-params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/scan.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-portinfomation.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -192,9 +194,6 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="318" y="165" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1614602273290" />
-    <state x="1864" y="198" width="1071" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614242162179" />
-    <state x="1864" y="198" width="1071" height="730" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613793397647" />
-    <state x="1864" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1613792659354" />
     <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1618712651343">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -205,6 +204,10 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839216818" />
+    <state x="799" y="445" key="Github.CreateGistDialog" timestamp="1623065762017">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="799" y="445" key="Github.CreateGistDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623065762017" />
     <state width="699" height="453" key="GridCell.Tab.0.bottom" timestamp="1618791659860">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -266,9 +269,6 @@
     </state>
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
-    <state x="135" y="172" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1614353456714" />
-    <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614048641533" />
-    <state x="1807" y="184" key="SettingsEditor/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614048689737" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2" timestamp="1620359386740">
       <screen x="0" y="25" width="1440" height="816" />
@@ -276,8 +276,6 @@
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614072016065" />
-    <state x="1867" y="224" key="Vcs.Push.Dialog.v2/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614066090295" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619103508461" />
     <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1619581724636">
       <screen x="0" y="0" width="1440" height="900" />
@@ -289,14 +287,13 @@
     <state x="2157" y="442" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1614839199625">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
-    <state x="538" y="368" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1612454742397" />
     <state x="2157" y="442" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839199625" />
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1614844211621">
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1620786867422">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623066671920">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619514837091" />
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
@@ -304,17 +301,12 @@
     <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1620786867422" />
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
-    <state x="2015" y="179" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.816@1440.0.1920.1080" timestamp="1613611446137" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
-    <state x="1081" y="154" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619101042238" />
+    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623066671920" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="300" height="62" key="javadoc.popup.new/0.0.1440.900@0.0.1440.900" timestamp="1618643899041" />
-    <state x="0" y="0" key="scopes" timestamp="1614347659436">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="0" y="0" key="scopes/0.0.1440.900@0.0.1440.900" timestamp="1614347659436" />
     <state x="450" y="305" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1618102834265">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

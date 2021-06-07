@@ -24,7 +24,7 @@ func NewPortInformation(u *urlparse.URL) *PortInformation {
 		Response:   "",
 		Status:     "UNKNOWN",
 		Finger:     nil,
-		HttpFinger: nil,
+		HttpFinger: NewHttpFinger(),
 		Info:       "",
 		ErrorMsg:   nil,
 	}

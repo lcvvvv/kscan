@@ -7,7 +7,7 @@ import (
 )
 
 type OsArgs struct {
-	help, Debug, scanPing                   bool
+	help, Debug, scanPing, check            bool
 	target, port, output, proxy, path, host string
 	top, threads, timeout                   int
 }
@@ -38,6 +38,7 @@ optional arguments:
                   文件地址：file:/tmp/target.txt
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
+  --check         针对目标地址做指纹识别，仅不会进行端口探测
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
@@ -46,7 +47,7 @@ optional arguments:
   --timeout       设置超时时间，默认为预设的探针超时时间！
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping] [--check]\n\n"
 
 //初始化函数
 func InitKscan() {
@@ -81,6 +82,7 @@ func initKscanParams() {
 	flag.BoolVar(&Params.Debug, "debug", false, "")
 	flag.BoolVar(&Params.Debug, "d", false, "")
 	flag.BoolVar(&Params.scanPing, "ping", false, "")
+	flag.BoolVar(&Params.check, "check", false, "")
 	flag.StringVar(&Params.target, "t", "", "")
 	flag.StringVar(&Params.target, "target", "", "")
 	flag.StringVar(&Params.port, "p", "", "")
@@ -124,4 +126,7 @@ func (o OsArgs) Timeout() int {
 }
 func (o OsArgs) ScanPing() bool {
 	return o.scanPing
+}
+func (o OsArgs) Check() bool {
+	return o.check
 }

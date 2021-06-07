@@ -12,12 +12,16 @@ import (
 )
 
 func main() {
-	switch os.Args[1] {
-	case "fofa":
-		fofa()
-	case "ctl":
-		ctl()
-	default:
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "fofa":
+			fofa()
+		case "ctl":
+			ctl()
+		default:
+			kscan()
+		}
+	} else {
 		kscan()
 	}
 }
