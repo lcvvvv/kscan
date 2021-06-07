@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/lcvvvv/urlparse"
 	"kscan/lib/IP"
+	"kscan/lib/chinese"
 	"kscan/lib/misc"
 	"kscan/lib/params"
 	"kscan/lib/slog"
@@ -18,12 +19,23 @@ type config struct {
 	PingAliveMap                *sync.Map
 	Output                      *os.File
 	Proxy, Host, Path, Encoding string
+	OSEncoding, NewLine         string
 	Threads                     int
 	Timeout                     int
 	HostTargetNum               int
 	UrlTargetNum                int
 	PortNum                     int
 	//FofaEmail, FofaKey    string
+}
+
+func (c *config) WriteLine(s string) {
+	if c.OSEncoding == "utf-8" {
+		s = chinese.ToUTF8(s)
+	} else {
+		s = chinese.ToGBK(s)
+	}
+	s = s + c.NewLine
+	_, _ = c.Output.WriteString(s)
 }
 
 func (c *config) Load(p params.OsArgs) {

@@ -69,7 +69,7 @@ func scanMainSub(HostPortQueue **queue.Queue, wait *sync.WaitGroup, nmap *gonmap
 				r.MakeInfo()
 				slog.Data(r.Info)
 				if app.Config.Output != nil {
-					_, _ = app.Config.Output.WriteString(r.Info + "\n")
+					app.Config.WriteLine(r.Info)
 				}
 			}
 		}

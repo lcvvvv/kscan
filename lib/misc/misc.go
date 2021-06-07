@@ -68,7 +68,6 @@ func ReadLine(fileName string, handler func(string, bool)) error {
 	buf := bufio.NewReader(f)
 	for {
 		line, err := buf.ReadString('\n')
-		line = strings.TrimSpace(line)
 		line = FixLine(line)
 		handler(line, true)
 		if err != nil {

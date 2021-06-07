@@ -10,18 +10,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化slog输出模式，现在更容易使用了">
-      <change afterPath="$PROJECT_DIR$/lib/chinese/chinese.go" afterDir="false" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/kscan-check.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-check.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/kscan-params.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/kscan-params.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +155,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="新增output导出功能" />
     <MESSAGE value="kscan v1.2来啦~~~~" />
     <MESSAGE value="kscan v1.1来啦~~~~" />
     <MESSAGE value="优化报错信息" />
@@ -186,7 +179,8 @@
     <MESSAGE value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
     <MESSAGE value="[*]删除掉无用的slog.Error输出" />
     <MESSAGE value="[*]优化slog输出模式，现在更容易使用了" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]优化slog输出模式，现在更容易使用了" />
+    <MESSAGE value="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -294,7 +288,7 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623074161578">
+    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623076266714">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619514837091" />
@@ -304,7 +298,7 @@
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
-    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623074161578" />
+    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623076266714" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
