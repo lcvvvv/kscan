@@ -10,11 +10,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化代码结构，现在更加容易读懂了。">
+      <change afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/kscan-check.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/kscan-params.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -155,8 +157,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="kscan v1.2来啦~~~~" />
-    <MESSAGE value="kscan v1.1来啦~~~~" />
     <MESSAGE value="优化报错信息" />
     <MESSAGE value="优化帮助信息" />
     <MESSAGE value="[+]新增README.md" />
@@ -180,7 +180,9 @@
     <MESSAGE value="[*]删除掉无用的slog.Error输出" />
     <MESSAGE value="[*]优化slog输出模式，现在更容易使用了" />
     <MESSAGE value="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。" />
+    <MESSAGE value="[*]优化output输出方式，现在绝大部分情况下，都不会出现乱码的情况了，并会根据操作系统使用合适的换行符。" />
+    <MESSAGE value="[*]优化代码结构，现在更加容易读懂了。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]优化代码结构，现在更加容易读懂了。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -204,38 +206,38 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="799" y="445" key="Github.CreateGistDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623065762017" />
-    <state width="1878" height="240" key="GridCell.Tab.0.bottom" timestamp="1623070421850">
+    <state width="1878" height="240" key="GridCell.Tab.0.bottom" timestamp="1623077195996">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.bottom/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838260" />
     <state width="699" height="453" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1618791659860" />
     <state width="699" height="244" key="GridCell.Tab.0.bottom/0.25.1440.816@0.25.1440.816" timestamp="1618730716345" />
     <state width="1398" height="245" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141038" />
-    <state width="1878" height="240" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421850" />
-    <state width="1878" height="240" key="GridCell.Tab.0.center" timestamp="1623070421848">
+    <state width="1878" height="240" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195996" />
+    <state width="1878" height="240" key="GridCell.Tab.0.center" timestamp="1623077195994">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.center/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838257" />
     <state width="699" height="453" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
     <state width="699" height="244" key="GridCell.Tab.0.center/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1398" height="245" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
-    <state width="1878" height="240" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421848" />
-    <state width="1878" height="240" key="GridCell.Tab.0.left" timestamp="1623070421847">
+    <state width="1878" height="240" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195994" />
+    <state width="1878" height="240" key="GridCell.Tab.0.left" timestamp="1623077195993">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.left/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838256" />
     <state width="699" height="453" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1618791659858" />
     <state width="699" height="244" key="GridCell.Tab.0.left/0.25.1440.816@0.25.1440.816" timestamp="1618730716343" />
     <state width="1398" height="245" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141035" />
-    <state width="1878" height="240" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421847" />
-    <state width="1878" height="240" key="GridCell.Tab.0.right" timestamp="1623070421849">
+    <state width="1878" height="240" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195993" />
+    <state width="1878" height="240" key="GridCell.Tab.0.right" timestamp="1623077195995">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="304" key="GridCell.Tab.0.right/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838259" />
     <state width="699" height="453" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
     <state width="699" height="244" key="GridCell.Tab.0.right/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1398" height="245" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1614562141037" />
-    <state width="1878" height="240" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623070421849" />
+    <state width="1878" height="240" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195995" />
     <state width="1878" height="376" key="GridCell.Tab.1.bottom" timestamp="1617973543483">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -266,13 +268,13 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="320" y="194" key="Vcs.Push.Dialog.v2" timestamp="1620359386740">
-      <screen x="0" y="25" width="1440" height="816" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1623077183717">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619103508461" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077183717" />
     <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1619581724636">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -288,7 +290,7 @@
       <screen x="1440" y="0" width="1920" height="1080" />
     </state>
     <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623076266714">
+    <state x="1036" y="159" width="682" height="737" key="find.popup" timestamp="1623160611415">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619514837091" />
@@ -298,7 +300,7 @@
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614923588293" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
-    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623076266714" />
+    <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623160611415" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

@@ -5,7 +5,6 @@ import (
 	"github.com/lcvvvv/gonmap"
 	"kscan/app"
 	"kscan/lib/misc"
-	"kscan/lib/params"
 	"kscan/lib/queue"
 	"kscan/lib/slog"
 	"net"
@@ -29,7 +28,8 @@ func Start() {
 	slog.Warningf("本次需要直接扫描的URL地址共:[%d]个。...", app.Config.UrlTargetNum)
 
 	//STEP2:初始化主机端口扫描队列;非验证模式才会进行端口扫描
-	if params.Params.Check() == false {
+	//if params.Params.Check() == false {
+	if true {
 		slog.Warningf("本次需扫描主机IP地址共:[%d]个...", app.Config.HostTargetNum)
 		go pushHostTarget()
 		slog.Warning("开始压入端口扫描队列...")

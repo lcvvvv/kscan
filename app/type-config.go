@@ -38,7 +38,7 @@ func (c *config) WriteLine(s string) {
 	_, _ = c.Output.WriteString(s)
 }
 
-func (c *config) Load(p params.OsArgs) {
+func (c *config) Load(p *params.OsArgs) {
 	c.loadTarget(p.Target(), false)
 	c.loadTargetNum()
 	c.loadPort(p.Port())
