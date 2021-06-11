@@ -2,8 +2,8 @@ package run
 
 import (
 	"fmt"
-	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/urlparse"
+	"kscan/lib/gonmap"
 	"kscan/lib/misc"
 )
 

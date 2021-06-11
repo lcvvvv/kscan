@@ -9,11 +9,12 @@ import (
 	"kscan/lib/slog"
 	"os"
 	"regexp"
+	"runtime"
 	"strings"
 	"sync"
 )
 
-type config struct {
+type Config struct {
 	HostTarget, UrlTarget       []string
 	Port                        []int
 	PingAliveMap                *sync.Map
@@ -28,7 +29,9 @@ type config struct {
 	//FofaEmail, FofaKey    string
 }
 
-func (c *config) WriteLine(s string) {
+var CConfig = New()
+
+func (c *Config) WriteLine(s string) {
 	if c.OSEncoding == "utf-8" {
 		s = chinese.ToUTF8(s)
 	} else {
@@ -38,7 +41,7 @@ func (c *config) WriteLine(s string) {
 	_, _ = c.Output.WriteString(s)
 }
 
-func (c *config) Load(p *params.OsArgs) {
+func (c *Config) Load(p *params.OsArgs) {
 	c.loadTarget(p.Target(), false)
 	c.loadTargetNum()
 	c.loadPort(p.Port())
@@ -54,7 +57,7 @@ func (c *config) Load(p *params.OsArgs) {
 	c.Encoding = p.Encoding()
 }
 
-func (c *config) loadTarget(expr string, recursion bool) {
+func (c *Config) loadTarget(expr string, recursion bool) {
 	//判断target字符串是否为文件
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
@@ -100,7 +103,7 @@ func (c *config) loadTarget(expr string, recursion bool) {
 	}
 }
 
-func (c *config) loadPort(v interface{}) {
+func (c *Config) loadPort(v interface{}) {
 	switch v.(type) {
 	case int:
 		if v.(int) == 0 {
@@ -115,7 +118,7 @@ func (c *config) loadPort(v interface{}) {
 	}
 }
 
-func (c *config) loadOutput(expr string) {
+func (c *Config) loadOutput(expr string) {
 	if expr == "" {
 		return
 	}
@@ -127,7 +130,7 @@ func (c *config) loadOutput(expr string) {
 	}
 }
 
-func (c *config) loadPingAliveMap(p bool) {
+func (c *Config) loadPingAliveMap(p bool) {
 	if p != true {
 		return
 	}
@@ -137,13 +140,50 @@ func (c *config) loadPingAliveMap(p bool) {
 	}
 }
 
-func (c *config) loadTargetNum() {
+func (c *Config) loadTargetNum() {
 	c.HostTargetNum = len(c.HostTarget)
 	c.UrlTargetNum = len(c.UrlTarget)
 }
 
-func (c *config) loadPortNum() {
+func (c *Config) loadPortNum() {
 	c.PortNum = len(c.Port)
+}
+
+func New() *Config {
+	return &Config{
+		HostTarget:    []string{},
+		HostTargetNum: 0,
+		UrlTarget:     []string{},
+		UrlTargetNum:  0,
+		PingAliveMap:  nil,
+		Path:          "/",
+		Port:          WOOYUN_PORT_TOP_1000[:400],
+		PortNum:       0,
+		Output:        nil,
+		Proxy:         "",
+		Host:          "",
+		Threads:       500,
+		Timeout:       0,
+		Encoding:      "utf-8",
+		OSEncoding:    getOSEncoding(),
+		NewLine:       getNewline(),
+	}
+}
+
+func getNewline() string {
+	if runtime.GOOS == "windows" {
+		return "\r\n"
+	} else {
+		return "\n"
+	}
+}
+
+func getOSEncoding() string {
+	if runtime.GOOS == "windows" {
+		return "gb2312"
+	} else {
+		return "utf-8"
+	}
 }
 
 func intParam2IntArr(v string) []int {

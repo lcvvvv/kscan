@@ -2,10 +2,9 @@ package run
 
 import (
 	"fmt"
-	"github.com/go-ping/ping"
-	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/urlparse"
 	"kscan/app"
+	"kscan/lib/gonmap"
 	"kscan/lib/shttp"
 	"kscan/lib/slog"
 	"strings"
@@ -15,15 +14,6 @@ import (
 func GetPortBanner(expr string, nmap *gonmap.Nmap) *PortInformation {
 	u, _ := urlparse.Load(expr)
 	r := NewPortInformation(u)
-	//检测PING'存活
-	if app.Config.PingAliveMap != nil {
-		if value, _ := app.Config.PingAliveMap.Load(u.Netloc); value.(int) == 0 {
-			app.Config.PingAliveMap.Store(u.Netloc, PingAlive(u.Netloc))
-		}
-		if value, _ := app.Config.PingAliveMap.Load(u.Netloc); value.(int) == -1 {
-			return r.CLOSED()
-		}
-	}
 
 	//如果未指定协议类型则进行协议检测
 	if r.Target.Scheme != "http" && r.Target.Scheme != "https" {
@@ -49,12 +39,12 @@ func GetPortBanner(expr string, nmap *gonmap.Nmap) *PortInformation {
 	//如果协议类型为HTTP协议，则进行HTTPbanner识别
 	if r.Target.Scheme == "http" {
 		r.Target.Scheme = "http"
-		r.Target.Path = app.Config.Path
+		r.Target.Path = app.CConfig.Path
 		r.LoadHttpFinger(getUrlBanner(r.Target))
 	}
 	if r.Target.Scheme == "ssl" || r.Target.Scheme == "https" {
 		r.Target.Scheme = "https"
-		r.Target.Path = app.Config.Path
+		r.Target.Path = app.CConfig.Path
 		r.LoadHttpFinger(getUrlBanner(r.Target))
 	}
 	return r
@@ -84,23 +74,4 @@ func getUrlBanner(url *urlparse.URL) *HttpFinger {
 	r.MakeInfo()
 	//res.Info = makeResultInfo(res)
 	return r
-}
-
-func PingAlive(ip string) int {
-	p, err := ping.NewPinger(ip)
-	if err != nil {
-		slog.Debug(err.Error())
-		return -1
-	}
-	p.Count = 2
-	p.Timeout = time.Second * 3
-	err = p.Run() // Blocks until finished.
-	if err != nil {
-		slog.Debug(err.Error())
-	}
-	s := p.Statistics()
-	if s.PacketsRecv > 0 {
-		return 1
-	}
-	return -1
 }

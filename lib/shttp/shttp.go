@@ -105,12 +105,12 @@ func Get(Url string) (*http.Response, error) {
 	request.Header.Add("Cookie", "rememberMe=b69375edcb2b3c5084c02bd9690b6625")
 	request.Close = true
 	//修改Hot头部参数
-	if app.Config.Host != "" {
-		request.Header.Add("Host", app.Config.Host)
+	if app.CConfig.Host != "" {
+		request.Header.Add("Host", app.CConfig.Host)
 	}
 	tr := &http.Transport{}
-	if app.Config.Proxy != "" {
-		uri, _ := url.Parse(app.Config.Proxy)
+	if app.CConfig.Proxy != "" {
+		uri, _ := url.Parse(app.CConfig.Proxy)
 		(*tr).Proxy = http.ProxyURL(uri)
 	}
 	(*tr).TLSClientConfig = &tls.Config{
@@ -120,7 +120,7 @@ func Get(Url string) (*http.Response, error) {
 	(*tr).DisableKeepAlives = false
 	client := &http.Client{}
 	client.Transport = tr
-	client.Timeout = time.Second * time.Duration(app.Config.Timeout)
+	client.Timeout = time.Second * time.Duration(app.CConfig.Timeout)
 	resp, err := client.Do(request)
 	if err != nil {
 		return resp, err
@@ -138,8 +138,8 @@ func Get(Url string) (*http.Response, error) {
 	//	}
 	//}
 	////校验http状态码
-	//if len(app.Config.HttpCode) > 0 {
-	//	if !misc.IsInIntArr(app.Config.HttpCode, resp.StatusCode) {
+	//if len(app.CConfig.HttpCode) > 0 {
+	//	if !misc.IsInIntArr(app.CConfig.HttpCode, resp.StatusCode) {
 	//		resp = nil
 	//		err = errors.New("HttpStatusCode不在范围内")
 	//		return resp, err
