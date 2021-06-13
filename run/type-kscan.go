@@ -2,10 +2,12 @@ package run
 
 import (
 	"fmt"
+	"github.com/lcvvvv/urlparse"
 	"kscan/app"
 	"kscan/lib/gonmap"
 	"kscan/lib/pool"
 	"kscan/lib/queue"
+	"kscan/lib/slog"
 	"time"
 )
 
@@ -14,9 +16,10 @@ type kscan struct {
 	result *queue.Queue
 	config app.Config
 	pool   struct {
-		host   *pool.Pool
-		port   *pool.Pool
-		banner *pool.Pool
+		host      *pool.Pool
+		port      *pool.Pool
+		tcpBanner *pool.Pool
+		appBanner *pool.Pool
 	}
 }
 
@@ -33,7 +36,8 @@ func New(config app.Config) *kscan {
 		hostThreads = 400
 	}
 
-	k.pool.banner = pool.NewPool(config.Threads)
+	k.pool.appBanner = pool.NewPool(config.Threads)
+	k.pool.tcpBanner = pool.NewPool(config.Threads)
 	k.pool.port = pool.NewPool(config.Threads)
 	k.pool.host = pool.NewPool(hostThreads)
 	return k
@@ -102,18 +106,40 @@ func (k *kscan) PortDiscovery() {
 	k.pool.port.Run()
 }
 
-func (k *kscan) GetPortBanner() {
-	k.pool.banner.Function = func(i interface{}) interface{} {
+func (k *kscan) GetTcpBanner() {
+	k.pool.tcpBanner.Function = func(i interface{}) interface{} {
 		netloc := i.(string)
-		r := GetPortBanner(netloc, gonmap.New())
-		if r.Status == "OPEN" || r.Status == "MATCHED" {
-			return r
-		} else {
-			return nil
-		}
+		r := gonmap.GetTcpBanner(netloc, gonmap.New(), k.config.Timeout*10)
+		return r
 	}
 
-	//banner识别任务下发终止器，结束信道
+	//启用TCP层面协议识别任务下发器
+	go func() {
+		for out := range k.pool.port.Out {
+			k.pool.tcpBanner.In <- out
+		}
+		k.pool.tcpBanner.InDone()
+	}()
+
+	//开始执行TCP层面协议识别任务
+	k.pool.tcpBanner.Run()
+}
+
+func (k *kscan) GetAppBanner() {
+	k.pool.appBanner.Function = func(i interface{}) interface{} {
+		var r *gonmap.AppBanner
+		switch i.(type) {
+		case string:
+			url, _ := urlparse.Load(i.(string))
+			r = gonmap.GetAppBannerFromUrl(url)
+		case *gonmap.TcpBanner:
+			tcpBanner := i.(*gonmap.TcpBanner)
+			r = gonmap.GetAppBannerFromTcpBanner(tcpBanner)
+		}
+		return r
+	}
+
+	//appBanner识别任务下发终止器，结束信道
 	isDone := make(chan bool)
 	go func() {
 		i := 0
@@ -123,33 +149,35 @@ func (k *kscan) GetPortBanner() {
 				break
 			}
 		}
-		k.pool.banner.InDone()
+		k.pool.appBanner.InDone()
 	}()
 
 	//指定Url任务下发器
 	go func() {
 		for _, url := range k.config.UrlTarget {
-			k.pool.banner.In <- url
+			k.pool.appBanner.In <- url
 		}
 		isDone <- true
 	}()
 
-	//启用协议识别任务下发器
+	//启用App层面协议识别任务下发器
 	go func() {
-		for out := range k.pool.port.Out {
-			k.pool.banner.In <- out
+		for out := range k.pool.tcpBanner.Out {
+			k.pool.appBanner.In <- out
 		}
-		isDone <- true
+		k.pool.appBanner.InDone()
 	}()
 
-	//开始执行协议识别任务
-	k.pool.banner.Run()
+	//开始执行App层面协议识别任务
+	k.pool.appBanner.Run()
 }
+
 func (k *kscan) Output() {
 	//输出协议识别结果
-	for out := range k.pool.banner.Out {
-		portinfo := out.(*PortInformation)
-		portinfo.MakeInfo()
-		fmt.Println(portinfo.Info)
+	for out := range k.pool.appBanner.Out {
+		a := out.(*gonmap.AppBanner)
+		if a != nil {
+			slog.Data(a.Output())
+		}
 	}
 }

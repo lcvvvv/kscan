@@ -11,18 +11,17 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
-	"sync"
+	"time"
 )
 
 type Config struct {
 	HostTarget, UrlTarget       []string
 	Port                        []int
-	PingAliveMap                *sync.Map
 	Output                      *os.File
 	Proxy, Host, Path, Encoding string
 	OSEncoding, NewLine         string
 	Threads                     int
-	Timeout                     int
+	Timeout                     time.Duration
 	HostTargetNum               int
 	UrlTargetNum                int
 	PortNum                     int
@@ -48,12 +47,11 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.loadPort(p.Top())
 	c.loadPortNum()
 	c.loadOutput(p.Output())
-	c.loadPingAliveMap(p.ScanPing())
+	c.loadTimeout(p.Timeout())
 	c.Path = p.Path()
 	c.Proxy = p.Proxy()
 	c.Host = p.Host()
 	c.Threads = p.Threads()
-	c.Timeout = p.Timeout()
 	c.Encoding = p.Encoding()
 }
 
@@ -102,6 +100,9 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		}
 	}
 }
+func (c *Config) loadTimeout(i int) {
+	c.Timeout = time.Duration(i) * time.Second
+}
 
 func (c *Config) loadPort(v interface{}) {
 	switch v.(type) {
@@ -130,16 +131,6 @@ func (c *Config) loadOutput(expr string) {
 	}
 }
 
-func (c *Config) loadPingAliveMap(p bool) {
-	if p != true {
-		return
-	}
-	c.PingAliveMap = &sync.Map{}
-	for _, host := range c.HostTarget {
-		c.PingAliveMap.Store(host, 0)
-	}
-}
-
 func (c *Config) loadTargetNum() {
 	c.HostTargetNum = len(c.HostTarget)
 	c.UrlTargetNum = len(c.UrlTarget)
@@ -149,13 +140,12 @@ func (c *Config) loadPortNum() {
 	c.PortNum = len(c.Port)
 }
 
-func New() *Config {
-	return &Config{
+func New() Config {
+	return Config{
 		HostTarget:    []string{},
 		HostTargetNum: 0,
 		UrlTarget:     []string{},
 		UrlTargetNum:  0,
-		PingAliveMap:  nil,
 		Path:          "/",
 		Port:          WOOYUN_PORT_TOP_1000[:400],
 		PortNum:       0,

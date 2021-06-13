@@ -83,7 +83,6 @@ func (t *logger) DoPrint(logType string, logStr string) {
 		logStr = chinese.ToGBK(logStr)
 	} else {
 		logStr = chinese.ToUTF8(logStr)
-
 	}
 	switch logType {
 	case "Debug":
@@ -142,8 +141,8 @@ func Debugf(format string, v ...interface{}) {
 	this.DoPrint("Debug", fmt.Sprintf(format, v...))
 }
 
-func Data(s string) {
-	this.DoPrint("Data", s)
+func Data(v ...interface{}) {
+	this.DoPrint("Data", fmt.Sprint(v...))
 }
 
 //func Error(s string) {

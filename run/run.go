@@ -15,10 +15,13 @@ func Start(config app.Config) {
 	time.Sleep(time.Microsecond * 200)
 	go K.PortDiscovery()
 
-	//STEP3：存活端口指纹识别
+	//STEP3：TCP指纹识别
 	time.Sleep(time.Microsecond * 200)
-	go K.GetPortBanner()
+	go K.GetTcpBanner()
 
+	//STEP3: 应用层指纹识别
+	time.Sleep(time.Microsecond * 200)
+	go K.GetAppBanner()
 	////STEP4: 输出
 	K.Output()
 }

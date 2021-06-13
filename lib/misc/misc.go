@@ -2,6 +2,7 @@ package misc
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"math/rand"
 	"os"
@@ -151,6 +152,21 @@ func FilterPrintStr(s string) string {
 	return string(dstRunes)
 }
 
+func SprintStringMap(stringMap map[string]string) string {
+	var rArr []string
+	var assistArr []string
+	for key, value := range stringMap {
+		if value == "" {
+			continue
+		}
+		if IsInStrArr(assistArr, value) == false {
+			assistArr = append(assistArr, value)
+			rArr = append(rArr, fmt.Sprintf("%s:%s", key, value))
+		}
+	}
+	return strings.Join(rArr, "、")
+}
+
 func MustLength(s string, i int) string {
 	if len(s) > i {
 		return s[:i]
@@ -170,7 +186,7 @@ func StrRandomCut(s string, length int) string {
 	sRune := []rune(s)
 	if len(sRune) > length {
 		i := rand.Intn(len(sRune) - length)
-		return string(sRune[i : i+30])
+		return string(sRune[i : i+length])
 	} else {
 		return s
 	}

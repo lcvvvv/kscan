@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"testing"
+	"time"
 )
 
 func TestName(t *testing.T) {
@@ -32,4 +34,66 @@ func TestName(t *testing.T) {
 	utf8Str = string(utf8Buf)
 	fmt.Println(utf8Buf) //byte
 	fmt.Println(utf8Str) //打印为乱码
+}
+
+type AppBanner struct {
+	TcpFinger string
+	AppFinger string
+	Response  string
+	Status    string
+}
+
+func (a *AppBanner) set(s string) {
+	a.TcpFinger = s
+	fmt.Println(a.TcpFinger)
+}
+
+func TestType(t *testing.T) {
+	a := AppBanner{
+		TcpFinger: "",
+		AppFinger: "",
+		Response:  "",
+		Status:    "",
+	}
+	fmt.Println(a.TcpFinger)
+
+	a.set("asdfadsfadsfasdf")
+
+	fmt.Println(a.TcpFinger)
+
+}
+
+func TestContext1(t *testing.T) {
+	go Context()
+	time.Sleep(10 * time.Second)
+}
+
+func Context() {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	resChan := make(chan string)
+
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+			}
+		}()
+
+		time.Sleep(3 * time.Second)
+		resChan <- ""
+	}()
+
+	for {
+		select {
+		case <-ctx.Done():
+			close(resChan)
+			fmt.Println("超时执行结束")
+			return
+		case <-resChan:
+			fmt.Println("正常执行完毕")
+			close(resChan)
+			return
+		}
+	}
 }

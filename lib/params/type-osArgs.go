@@ -90,7 +90,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.StringVar(&o.encoding, "encoding", "utf-8", "")
 	flag.IntVar(&o.top, "top", 400, "")
 	flag.IntVar(&o.threads, "threads", 400, "")
-	flag.IntVar(&o.timeout, "timeout", 0, "")
+	flag.IntVar(&o.timeout, "timeout", 3, "")
 	flag.Parse()
 }
 

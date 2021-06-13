@@ -10,35 +10,38 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]优化代码结构，现在更加容易读懂了。">
-      <change afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/hostscan.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/portscan.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pool/pool.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pool/pool_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run/type-kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。">
+      <change afterPath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/gonmap/get-tcpbanner.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/gonmap/type-appbanner.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/gonmap/type-httpfinger.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/gonmap/type-tcpbanner.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/.idea/gonmap.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/go.mod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/go.sum" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-finger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-tcpfinger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-match.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-match.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-portinfo.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap/type-probe.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-probe.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/queue/queue.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/queue/queue.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-response.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-response.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-target.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-target.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pool/pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pool/pool.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/scan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-portinfomation.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-urlfinger.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +65,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProblemsViewState">
@@ -105,6 +108,13 @@
     <option name="SHOW_DIALOG" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/gonmap" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$/lib/run" />
+      <recent name="$PROJECT_DIR$/lib/update" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/go" />
       <recent name="$PROJECT_DIR$/run" />
@@ -112,15 +122,8 @@
       <recent name="$USER_HOME$/Desktop" />
       <recent name="$PROJECT_DIR$" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/app" />
-      <recent name="$PROJECT_DIR$/lib/run" />
-      <recent name="$PROJECT_DIR$/lib/update" />
-      <recent name="$PROJECT_DIR$/lib/banner" />
-    </key>
   </component>
-  <component name="RunManager" selected="Go 测试.kscan 中的 TestAlivePort">
+  <component name="RunManager" selected="Go 测试.kscan 中的 TestType">
     <configuration name="kscan 中的 TestAlivePort" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -132,7 +135,7 @@
       <pattern value="^TestAlivePort$" />
       <method v="2" />
     </configuration>
-    <configuration name="kscan 中的 TestName" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="kscan 中的 TestContext" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
       <framework value="gotest" />
@@ -140,10 +143,10 @@
       <package value="kscan" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
-      <pattern value="^TestName$" />
+      <pattern value="^TestContext$" />
       <method v="2" />
     </configuration>
-    <configuration name="kscan 中的 TestPing" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="kscan 中的 TestContext1" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
       <framework value="gotest" />
@@ -151,7 +154,18 @@
       <package value="kscan" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
-      <pattern value="^TestPing$" />
+      <pattern value="^TestContext1$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="kscan 中的 TestType" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="kscan" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^TestType$" />
       <method v="2" />
     </configuration>
     <configuration name="kscan/lib/gonmap 中的 TestPortscan" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
@@ -165,17 +179,6 @@
       <pattern value="^TestPortscan$" />
       <method v="2" />
     </configuration>
-    <configuration name="kscan/lib/pool 中的 TestName" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="kscan" />
-      <working_directory value="$PROJECT_DIR$/lib/pool" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="kscan/lib/pool" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^TestName$" />
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="js.build_tools.grunt">
       <node-interpreter value="project" />
       <envs />
@@ -183,11 +186,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go 测试.kscan 中的 TestType" />
+        <item itemvalue="Go 测试.kscan 中的 TestContext1" />
+        <item itemvalue="Go 测试.kscan 中的 TestContext" />
         <item itemvalue="Go 测试.kscan 中的 TestAlivePort" />
         <item itemvalue="Go 测试.kscan/lib/gonmap 中的 TestPortscan" />
-        <item itemvalue="Go 测试.kscan 中的 TestPing" />
-        <item itemvalue="Go 测试.kscan/lib/pool 中的 TestName" />
-        <item itemvalue="Go 测试.kscan 中的 TestName" />
       </list>
     </recent_temporary>
   </component>
@@ -218,7 +221,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="优化报错信息" />
     <MESSAGE value="优化帮助信息" />
     <MESSAGE value="[+]新增README.md" />
     <MESSAGE value="[*]修复大资产扫描载入时间过长的问题" />
@@ -243,7 +245,8 @@
     <MESSAGE value="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。" />
     <MESSAGE value="[*]优化output输出方式，现在绝大部分情况下，都不会出现乱码的情况了，并会根据操作系统使用合适的换行符。" />
     <MESSAGE value="[*]优化代码结构，现在更加容易读懂了。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]优化代码结构，现在更加容易读懂了。" />
+    <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -255,53 +258,57 @@
     <state x="797" y="358" key="#com.intellij.fileTypes.FileTypeChooser/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955515368" />
     <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1618712651343" />
     <state x="797" y="341" key="#com.intellij.fileTypes.FileTypeChooser/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618069067829" />
-    <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1614839216818">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="1540" y="100" width="1720" height="880" key="DiffContextDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839216818" />
     <state x="799" y="445" key="Github.CreateGistDialog" timestamp="1623065762017">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="799" y="445" key="Github.CreateGistDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623065762017" />
-    <state width="1878" height="348" key="GridCell.Tab.0.bottom" timestamp="1623404650952">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="348" key="GridCell.Tab.0.bottom" timestamp="1623546184416">
+      <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650952" />
     <state width="1878" height="304" key="GridCell.Tab.0.bottom/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838260" />
     <state width="1878" height="240" key="GridCell.Tab.0.bottom/-1440.25.1440.875/0.0.1920.1080@0.0.1920.1080" timestamp="1623312833379" />
+    <state width="1878" height="348" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1623503427217" />
+    <state width="1878" height="348" key="GridCell.Tab.0.bottom/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623546184416" />
     <state width="699" height="453" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1618791659860" />
     <state width="699" height="244" key="GridCell.Tab.0.bottom/0.25.1440.816@0.25.1440.816" timestamp="1618730716345" />
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053655" />
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710711" />
     <state width="1878" height="240" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195996" />
-    <state width="1878" height="348" key="GridCell.Tab.0.center" timestamp="1623404650951">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="348" key="GridCell.Tab.0.center" timestamp="1623546184414">
+      <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.center/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650951" />
     <state width="1878" height="304" key="GridCell.Tab.0.center/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838257" />
     <state width="1878" height="240" key="GridCell.Tab.0.center/-1440.25.1440.875/0.0.1920.1080@0.0.1920.1080" timestamp="1623312833377" />
+    <state width="1878" height="348" key="GridCell.Tab.0.center/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1623503427212" />
+    <state width="1878" height="348" key="GridCell.Tab.0.center/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623546184414" />
     <state width="699" height="453" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
     <state width="699" height="244" key="GridCell.Tab.0.center/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1878" height="348" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053653" />
     <state width="1878" height="348" key="GridCell.Tab.0.center/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710709" />
     <state width="1878" height="240" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195994" />
-    <state width="1878" height="348" key="GridCell.Tab.0.left" timestamp="1623404650950">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="348" key="GridCell.Tab.0.left" timestamp="1623546184413">
+      <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.left/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650950" />
     <state width="1878" height="304" key="GridCell.Tab.0.left/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838256" />
     <state width="1878" height="240" key="GridCell.Tab.0.left/-1440.25.1440.875/0.0.1920.1080@0.0.1920.1080" timestamp="1623312833377" />
+    <state width="1878" height="348" key="GridCell.Tab.0.left/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1623503427210" />
+    <state width="1878" height="348" key="GridCell.Tab.0.left/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623546184413" />
     <state width="699" height="453" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1618791659858" />
     <state width="699" height="244" key="GridCell.Tab.0.left/0.25.1440.816@0.25.1440.816" timestamp="1618730716343" />
     <state width="1878" height="348" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053652" />
     <state width="1878" height="348" key="GridCell.Tab.0.left/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710708" />
     <state width="1878" height="240" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195993" />
-    <state width="1878" height="348" key="GridCell.Tab.0.right" timestamp="1623404650952">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="348" key="GridCell.Tab.0.right" timestamp="1623546184415">
+      <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.right/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650952" />
     <state width="1878" height="304" key="GridCell.Tab.0.right/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838259" />
     <state width="1878" height="240" key="GridCell.Tab.0.right/-1440.25.1440.875/0.0.1920.1080@0.0.1920.1080" timestamp="1623312833378" />
+    <state width="1878" height="348" key="GridCell.Tab.0.right/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1623503427213" />
+    <state width="1878" height="348" key="GridCell.Tab.0.right/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623546184415" />
     <state width="699" height="453" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1618791659859" />
     <state width="699" height="244" key="GridCell.Tab.0.right/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1878" height="348" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053654" />
@@ -327,49 +334,42 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="591" y="319" width="865" height="469" key="MultipleFileMergeDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618069041646" />
-    <state x="2226" y="246" key="RollbackChangesDialog" timestamp="1614839221998">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="2226" y="246" key="RollbackChangesDialog/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839221998" />
     <state x="180" y="207" key="SettingsEditor" timestamp="1619334598291">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1623161588216">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1623422472286">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422472286" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
-    <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1619581724636">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="109" y="73" width="1720" height="902" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1623423707820">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="110" y="96" width="1720" height="880" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619517475523" />
     <state x="110" y="96" width="1720" height="880" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1440.25.1440.816/0.0.1920.1080@0.0.1920.1080" timestamp="1619517046323" />
     <state x="109" y="96" width="1720" height="880" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1440.25.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1619518456316" />
     <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1619581724636" />
-    <state x="2157" y="442" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1614839199625">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="2157" y="442" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614839199625" />
-    <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1614844211621">
-      <screen x="1440" y="0" width="1920" height="1080" />
-    </state>
-    <state x="1986" y="280" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1614844211621" />
-    <state x="1083" y="160" width="682" height="737" key="find.popup" timestamp="1623420360278">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="109" y="73" width="1720" height="902" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623423707820" />
+    <state x="606" y="-903" width="682" height="737" key="find.popup" timestamp="1623561328128">
+      <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623400242725" />
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
     <state x="1081" y="175" width="682" height="719" key="find.popup/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955792930" />
+    <state x="-1011" y="177" width="682" height="737" key="find.popup/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1623509380097" />
+    <state x="723" y="-903" width="682" height="737" key="find.popup/0.0.1440.900/-235.-1080.1920.1080@-235.-1080.1920.1080" timestamp="1623499234389" />
+    <state x="606" y="-903" width="682" height="737" key="find.popup/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623561328128" />
     <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1620786867422" />
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623335207803" />
     <state x="2124" y="172" width="552" height="735" key="find.popup/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1614926652084" />
-    <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623420360278" />
+    <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422852935" />
     <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623160611415" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
