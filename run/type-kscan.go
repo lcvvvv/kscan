@@ -8,7 +8,6 @@ import (
 	"kscan/lib/pool"
 	"kscan/lib/queue"
 	"kscan/lib/slog"
-	"time"
 )
 
 type kscan struct {
@@ -77,6 +76,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 			k.pool.host.In <- host
 		}
 		//关闭主机存活性探测下发信道
+		slog.Info("主机存活性探测任务下发完毕，关闭信道")
 		k.pool.host.InDone()
 	}()
 	//开始执行主机存活性探测任务
@@ -86,7 +86,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 func (k *kscan) PortDiscovery() {
 	k.pool.port.Function = func(i interface{}) interface{} {
 		netloc := i.(string)
-		if ok := gonmap.PortScan(netloc, time.Duration(k.config.Timeout)*time.Second); ok {
+		if gonmap.PortScan(netloc, k.config.Timeout) {
 			return netloc
 		}
 		return nil
@@ -100,6 +100,7 @@ func (k *kscan) PortDiscovery() {
 				k.pool.port.In <- netloc
 			}
 		}
+		slog.Info("端口存活性探测任务下发完毕，关闭信道")
 		k.pool.port.InDone()
 	}()
 	//开始执行端口存活性探测任务
@@ -118,6 +119,7 @@ func (k *kscan) GetTcpBanner() {
 		for out := range k.pool.port.Out {
 			k.pool.tcpBanner.In <- out
 		}
+		slog.Info("端口TCP层协议识别任务下发完毕，关闭信道")
 		k.pool.tcpBanner.InDone()
 	}()
 
@@ -150,6 +152,7 @@ func (k *kscan) GetAppBanner() {
 			}
 		}
 		k.pool.appBanner.InDone()
+		slog.Info("全部端口应用层协议识别任务下发完毕，关闭信道")
 	}()
 
 	//指定Url任务下发器
@@ -158,6 +161,7 @@ func (k *kscan) GetAppBanner() {
 			k.pool.appBanner.In <- url
 		}
 		isDone <- true
+		slog.Info("自定义应用层协议识别任务下发完毕")
 	}()
 
 	//启用App层面协议识别任务下发器
@@ -165,7 +169,8 @@ func (k *kscan) GetAppBanner() {
 		for out := range k.pool.tcpBanner.Out {
 			k.pool.appBanner.In <- out
 		}
-		k.pool.appBanner.InDone()
+		isDone <- true
+		slog.Info("存活应用层协议识别任务下发完毕")
 	}()
 
 	//开始执行App层面协议识别任务

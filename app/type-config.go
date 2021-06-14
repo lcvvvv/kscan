@@ -28,7 +28,7 @@ type Config struct {
 	//FofaEmail, FofaKey    string
 }
 
-var CConfig = New()
+var Setting = New()
 
 func (c *Config) WriteLine(s string) {
 	if c.OSEncoding == "utf-8" {

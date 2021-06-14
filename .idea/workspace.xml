@@ -10,38 +10,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。">
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/get-tcpbanner.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/type-appbanner.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/type-httpfinger.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/gonmap/type-tcpbanner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]对代码逻辑以及实现方式进行了大调整，现在会进行智能存活性检测和指纹识别。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-finger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-tcpfinger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-match.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-match.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-portinfo.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-probe.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-probe.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-response.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-target.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-target.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-httpfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-httpfinger.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/pool/pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pool/pool.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shttp/shttp.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/scan.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run/type-kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-portinfomation.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-urlfinger.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +42,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProblemsViewState">
@@ -221,7 +198,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="优化帮助信息" />
     <MESSAGE value="[+]新增README.md" />
     <MESSAGE value="[*]修复大资产扫描载入时间过长的问题" />
     <MESSAGE value="[*]调整目录结构和包导入方式，现在更赏心悦目了" />
@@ -246,7 +222,8 @@
     <MESSAGE value="[*]优化output输出方式，现在绝大部分情况下，都不会出现乱码的情况了，并会根据操作系统使用合适的换行符。" />
     <MESSAGE value="[*]优化代码结构，现在更加容易读懂了。" />
     <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。" />
+    <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，现在会进行智能存活性检测和指纹识别。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]对代码逻辑以及实现方式进行了大调整，现在会进行智能存活性检测和指纹识别。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -340,10 +317,11 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1623422472286">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="124" y="-856" key="Vcs.Push.Dialog.v2" timestamp="1623582441616">
+      <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
+    <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623582441616" />
     <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422472286" />

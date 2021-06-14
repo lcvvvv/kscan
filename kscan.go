@@ -56,7 +56,7 @@ func main() {
 	//app.CheckUpdate()
 
 	//开始扫描
-	run.Start(app.CConfig)
+	run.Start(app.Setting)
 	//计算程序运行时间
 	elapsed := time.Since(startTime)
 	slog.Infof("程序执行总时长为：[%s]", elapsed.String())
@@ -73,16 +73,16 @@ func Init() {
 	//参数合法性校验
 	param.CheckArgs()
 	//配置文件初始化
-	app.CConfig.Load(param)
-	slog.Warning("当前环境为：", runtime.GOOS, ", 输出编码为：", app.CConfig.Encoding)
+	app.Setting.Load(param)
+	slog.Warning("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
 	slog.Warning("开始读取扫描对象...")
-	slog.Infof("成功读取URL地址:[%d]个\n", len(app.CConfig.UrlTarget))
-	slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.CConfig.HostTarget), len(app.CConfig.HostTarget)*len(app.CConfig.Port))
+	slog.Infof("成功读取URL地址:[%d]个\n", len(app.Setting.UrlTarget))
+	slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
 	//HTTP指纹库初始化
 	r := httpfinger.Init()
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条\n", r["FaviconHash"], r["KeywordFinger"])
 	//gonmap探针/指纹库初始化
-	r = gonmap.Init(3, app.CConfig.Timeout)
+	r = gonmap.Init(3, app.Setting.Timeout)
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条\n", r["PROBE"], r["MATCH"])
 	slog.Warningf("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条\n", r["USED_PROBE"], r["USED_MATCH"])
 }
