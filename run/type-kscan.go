@@ -182,7 +182,11 @@ func (k *kscan) Output() {
 	for out := range k.pool.appBanner.Out {
 		a := out.(*gonmap.AppBanner)
 		if a != nil {
-			slog.Data(a.Output())
+			str := a.Output()
+			slog.Data(str)
+			if k.config.Output != nil {
+				k.config.WriteLine(str)
+			}
 		}
 	}
 }

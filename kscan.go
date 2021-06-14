@@ -41,7 +41,7 @@ optional arguments:
   --threads       线程参数,默认线程400,最大值为2048
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOSTS值，慎用！
-  --timeout       设置超时时间，默认为预设的探针超时时间！
+  --timeout       设置超时时间。
   --encoding      设置终端输出编码，可指定为：gb2312或者utf-8
 `
 
