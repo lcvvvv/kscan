@@ -25,6 +25,7 @@ type Config struct {
 	HostTargetNum               int
 	UrlTargetNum                int
 	PortNum                     int
+	ScanPing, Check             bool
 	//FofaEmail, FofaKey    string
 }
 
@@ -48,6 +49,8 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.loadPortNum()
 	c.loadOutput(p.Output())
 	c.loadTimeout(p.Timeout())
+	c.ScanPing = p.ScanPing()
+	c.Check = p.Check()
 	c.Path = p.Path()
 	c.Proxy = p.Proxy()
 	c.Host = p.Host()

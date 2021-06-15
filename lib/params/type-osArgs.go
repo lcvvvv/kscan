@@ -76,7 +76,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.help, "help", false, "")
 	flag.BoolVar(&o.debug, "debug", false, "")
 	flag.BoolVar(&o.debug, "d", false, "")
-	flag.BoolVar(&o.scanPing, "ping", false, "")
+	flag.BoolVar(&o.scanPing, "Pn", true, "")
 	flag.BoolVar(&o.check, "check", false, "")
 	flag.StringVar(&o.target, "t", "", "")
 	flag.StringVar(&o.target, "target", "", "")

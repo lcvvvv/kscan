@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"kscan/lib/chinese"
 	"math/rand"
 	"os"
 	"strconv"
@@ -164,6 +165,11 @@ func SprintStringMap(stringMap map[string]string) string {
 			rArr = append(rArr, fmt.Sprintf("%s:%s", key, value))
 		}
 	}
+
+	for index, value := range rArr {
+		rArr[index] = chinese.ToUTF8(value)
+	}
+
 	return strings.Join(rArr, "、")
 }
 

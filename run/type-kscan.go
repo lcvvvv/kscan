@@ -136,6 +136,9 @@ func (k *kscan) GetAppBanner() {
 			r = gonmap.GetAppBannerFromUrl(url)
 		case *gonmap.TcpBanner:
 			tcpBanner := i.(*gonmap.TcpBanner)
+			if tcpBanner == nil {
+				return nil
+			}
 			r = gonmap.GetAppBannerFromTcpBanner(tcpBanner)
 		}
 		return r
@@ -171,6 +174,33 @@ func (k *kscan) GetAppBanner() {
 		}
 		isDone <- true
 		slog.Info("存活应用层协议识别任务下发完毕")
+	}()
+
+	//开始执行App层面协议识别任务
+	k.pool.appBanner.Run()
+}
+
+func (k *kscan) GetAppBannerFromCheck() {
+	k.pool.appBanner.Function = func(i interface{}) interface{} {
+		var r *gonmap.AppBanner
+		switch i.(type) {
+		case string:
+			url, _ := urlparse.Load(i.(string))
+			r = gonmap.GetAppBannerFromUrl(url)
+		case *gonmap.TcpBanner:
+			tcpBanner := i.(*gonmap.TcpBanner)
+			r = gonmap.GetAppBannerFromTcpBanner(tcpBanner)
+		}
+		return r
+	}
+
+	//指定Url任务下发器
+	go func() {
+		for _, url := range k.config.UrlTarget {
+			k.pool.appBanner.In <- url
+		}
+		k.pool.appBanner.InDone()
+		slog.Info("自定义应用层协议识别任务下发完毕")
 	}()
 
 	//开始执行App层面协议识别任务

@@ -27,7 +27,6 @@ const logo = `
 const help = `
 optional arguments:
   -h , --help     show this help message and exit
-  --ping          在扫描端口之前会先进行Ping探测，若不存活，则不会进行端口扫描
   -t , --target   指定探测对象：
                   IP地址：114.114.114.114
                   IP地址段：114.114.114.114/24,不建议子网掩码小于12
@@ -35,17 +34,18 @@ optional arguments:
                   文件地址：file:/tmp/target.txt
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
+  -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
   --path          指定请求访问的目录，逗号分割，慎用！
   --host          指定所有请求的头部HOSTS值，慎用！
-  --timeout       设置超时时间。
+  --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312或者utf-8
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [--ping] [--check] [--encoding]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding]\n\n"
 
 func main() {
 	startTime := time.Now()
