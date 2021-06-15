@@ -10,20 +10,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修复更新后，-o参数无效的问题。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/chinese/chinese.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/chinese/chinese.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-appbanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-appbanner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-httpfinger.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-httpfinger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/pool/pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pool/pool.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run/type-kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-kscan.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +192,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]修复大资产扫描载入时间过长的问题" />
     <MESSAGE value="[*]调整目录结构和包导入方式，现在更赏心悦目了" />
     <MESSAGE value="[*]修复漏资产的问题" />
     <MESSAGE value="[*]优化日志输出" />
@@ -228,7 +216,8 @@
     <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，从之前使用共享变量变成通过信道通信，现在的效率更高了。" />
     <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，现在会进行智能存活性检测和指纹识别。" />
     <MESSAGE value="[*]修复更新后，-o参数无效的问题。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]修复更新后，-o参数无效的问题。" />
+    <MESSAGE value="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

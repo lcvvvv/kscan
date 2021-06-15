@@ -1,6 +1,8 @@
 package pool
 
 import (
+	"errors"
+	"fmt"
 	"sync"
 )
 
@@ -13,11 +15,11 @@ type Worker struct {
 func NewWorker(f func(interface{}) interface{}) *Worker {
 	return &Worker{
 		f: func(in interface{}) (out interface{}, err error) {
-			//defer func() {
-			//	if e := recover(); e != nil {
-			//		err = errors.New(fmt.Sprint("param: ", in, e))
-			//	}
-			//}()
+			defer func() {
+				if e := recover(); e != nil {
+					err = errors.New(fmt.Sprint("param: ", in, e))
+				}
+			}()
 			out = f(in)
 			return out, err
 		},
@@ -66,9 +68,9 @@ func (p *Pool) work() {
 		if err == nil && out != nil {
 			p.Out <- out
 		}
-		if err != nil {
-			panic(err)
-		}
+		//if err != nil {
+		//	panic(err)
+		//}
 	}
 }
 
