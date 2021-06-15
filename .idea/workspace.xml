@@ -10,9 +10,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]完善容错处理问题，现在即便单个协程发生故障，也不会导致程序崩溃。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pool/pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pool/pool.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/chinese/chinese.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/chinese/chinese.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,6 +173,16 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -192,7 +206,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]调整目录结构和包导入方式，现在更赏心悦目了" />
     <MESSAGE value="[*]修复漏资产的问题" />
     <MESSAGE value="[*]优化日志输出" />
     <MESSAGE value="[+]新增Debug参数" />
@@ -217,7 +230,8 @@
     <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，现在会进行智能存活性检测和指纹识别。" />
     <MESSAGE value="[*]修复更新后，-o参数无效的问题。" />
     <MESSAGE value="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。" />
+    <MESSAGE value="[*]完善容错处理问题，现在即便单个协程发生故障，也不会导致程序崩溃。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]完善容错处理问题，现在即便单个协程发生故障，也不会导致程序崩溃。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -229,6 +243,10 @@
     <state x="797" y="358" key="#com.intellij.fileTypes.FileTypeChooser/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955515368" />
     <state x="598" y="284" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1618712651343" />
     <state x="797" y="341" key="#com.intellij.fileTypes.FileTypeChooser/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618069067829" />
+    <state x="98" y="100" width="1240" height="700" key="DiffContextDialog" timestamp="1623764671694">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="98" y="100" width="1240" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1623764671694" />
     <state x="799" y="445" key="Github.CreateGistDialog" timestamp="1623065762017">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -311,15 +329,19 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="124" y="-856" key="Vcs.Push.Dialog.v2" timestamp="1623632011196">
-      <screen x="-303" y="-1080" width="1920" height="1080" />
+    <state x="328" y="183" key="Vcs.Push.Dialog.v2" timestamp="1623764399158">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
-    <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1619081973551" />
+    <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623764399158" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422472286" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
+    <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1623764671694">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1623764671694" />
     <state x="109" y="73" width="1720" height="902" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1623423707820">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
