@@ -10,9 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]解决绝大部分乱码问题。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]v1.20发布~~~~~">
+      <change afterPath="$PROJECT_DIR$/assets/Kscan意见反馈群.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/Kscan意见反馈群.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +68,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -80,19 +82,19 @@
     <option name="SHOW_DIALOG" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$PROJECT_DIR$/go" />
+      <recent name="$PROJECT_DIR$/run" />
+      <recent name="$USER_HOME$/Desktop" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib/gonmap" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/lib/run" />
       <recent name="$PROJECT_DIR$/lib/update" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/go" />
-      <recent name="$PROJECT_DIR$/run" />
-      <recent name="$PROJECT_DIR$/assets" />
-      <recent name="$USER_HOME$/Desktop" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager" selected="Go 测试.kscan 中的 TestType">
@@ -203,7 +205,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]优化日志输出" />
     <MESSAGE value="[+]新增Debug参数" />
     <MESSAGE value="[+]解决GBK乱码问题" />
     <MESSAGE value="[*]尝试修改config格式" />
@@ -228,7 +229,8 @@
     <MESSAGE value="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。" />
     <MESSAGE value="[*]完善容错处理问题，现在即便单个协程发生故障，也不会导致程序崩溃。" />
     <MESSAGE value="[*]解决绝大部分乱码问题。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]解决绝大部分乱码问题。" />
+    <MESSAGE value="[+]v1.20发布~~~~~" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]v1.20发布~~~~~" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -326,12 +328,12 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="328" y="183" key="Vcs.Push.Dialog.v2" timestamp="1623764876558">
+    <state x="327" y="182" key="Vcs.Push.Dialog.v2" timestamp="1623766097596">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
-    <state x="328" y="183" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623764876558" />
+    <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766097596" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422472286" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
