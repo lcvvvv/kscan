@@ -73,7 +73,7 @@ func (t *logger) Debug(s string) {
 	if debugFilter(s) {
 		return
 	}
-	_, file, line, _ := runtime.Caller(2)
+	_, file, line, _ := runtime.Caller(3)
 	file = file[strings.LastIndex(file, "/")+1:]
 	t.debug.Printf("%s%s(%d) %s", splitStr, file, line, s)
 }

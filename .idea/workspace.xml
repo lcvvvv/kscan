@@ -11,8 +11,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]v1.20发布~~~~~">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/chinese/chinese.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/chinese/chinese.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +40,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProblemsViewState">
@@ -325,12 +329,12 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="327" y="182" key="Vcs.Push.Dialog.v2" timestamp="1623766430769">
+    <state x="327" y="182" key="Vcs.Push.Dialog.v2" timestamp="1623766643415">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
-    <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766430769" />
+    <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422472286" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
@@ -346,7 +350,7 @@
     <state x="109" y="96" width="1720" height="880" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1440.25.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1619518456316" />
     <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1619581724636" />
     <state x="109" y="73" width="1720" height="902" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623423707820" />
-    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1623761573446">
+    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1623767685605">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623400242725" />
@@ -355,7 +359,7 @@
     <state x="-1011" y="177" width="682" height="737" key="find.popup/0.0.1440.900/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1623509380097" />
     <state x="723" y="-903" width="682" height="737" key="find.popup/0.0.1440.900/-235.-1080.1920.1080@-235.-1080.1920.1080" timestamp="1623499234389" />
     <state x="606" y="-903" width="682" height="737" key="find.popup/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623631762253" />
-    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1623761573446" />
+    <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1623767685605" />
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623335207803" />
     <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422852935" />
