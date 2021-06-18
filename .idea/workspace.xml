@@ -10,13 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]v1.20发布~~~~~">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]目前来看完美解决了乱码问题~">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/chinese/chinese.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/chinese/chinese.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/slog/slog.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slog/slog.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +97,25 @@
     </key>
   </component>
   <component name="RunManager" selected="Go 测试.kscan 中的 TestType">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <framework value="gotest" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="kscan 中的 TestAlivePort" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -206,7 +223,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[+]新增Debug参数" />
     <MESSAGE value="[+]解决GBK乱码问题" />
     <MESSAGE value="[*]尝试修改config格式" />
     <MESSAGE value="[*]尝试改善端口验证逻辑" />
@@ -231,7 +247,8 @@
     <MESSAGE value="[*]完善容错处理问题，现在即便单个协程发生故障，也不会导致程序崩溃。" />
     <MESSAGE value="[*]解决绝大部分乱码问题。" />
     <MESSAGE value="[+]v1.20发布~~~~~" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+]v1.20发布~~~~~" />
+    <MESSAGE value="[+]目前来看完美解决了乱码问题~" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]目前来看完美解决了乱码问题~" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
