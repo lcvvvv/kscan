@@ -60,7 +60,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	k.pool.host.Function = func(i interface{}) interface{} {
 		ip := i.(string)
 		//如果关闭存活性检测，则默认所有IP存活
-		if open == false {
+		if open == true {
 			return ip
 		}
 		//经过存活性检测未存活的IP不会进行下一步测试

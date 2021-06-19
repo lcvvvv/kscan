@@ -10,11 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]目前来看完美解决了乱码问题~">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]修复部分https协议识别成ssl协议的问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/get-appbanner.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/type-kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-kscan.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +38,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProblemsViewState">
@@ -97,25 +97,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Go 测试.kscan 中的 TestType">
-    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <module name="kscan" />
-      <working_directory value="$PROJECT_DIR$" />
-      <go_parameters value="-i" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$" />
-      <directory value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
-      <module name="kscan" />
-      <working_directory value="$PROJECT_DIR$" />
-      <go_parameters value="-i" />
-      <framework value="gotest" />
-      <kind value="DIRECTORY" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
     <configuration name="kscan 中的 TestAlivePort" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -223,7 +204,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[+]解决GBK乱码问题" />
     <MESSAGE value="[*]尝试修改config格式" />
     <MESSAGE value="[*]尝试改善端口验证逻辑" />
     <MESSAGE value="[*]犹如重置般的改动" />
@@ -248,7 +228,8 @@
     <MESSAGE value="[*]解决绝大部分乱码问题。" />
     <MESSAGE value="[+]v1.20发布~~~~~" />
     <MESSAGE value="[+]目前来看完美解决了乱码问题~" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+]目前来看完美解决了乱码问题~" />
+    <MESSAGE value="[+]修复部分https协议识别成ssl协议的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]修复部分https协议识别成ssl协议的问题" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -346,14 +327,14 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="327" y="182" key="Vcs.Push.Dialog.v2" timestamp="1623766643415">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1624020000296">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619399042656" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
     <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422472286" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624020000296" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
     <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1623764671694">
       <screen x="0" y="0" width="1440" height="900" />
@@ -367,8 +348,8 @@
     <state x="109" y="96" width="1720" height="880" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1440.25.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1619518456316" />
     <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1619581724636" />
     <state x="109" y="73" width="1720" height="902" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623423707820" />
-    <state x="811" y="128" width="511" height="613" key="find.popup" timestamp="1623767685605">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="1083" y="160" width="682" height="737" key="find.popup" timestamp="1624088012852">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623400242725" />
     <state x="1081" y="154" width="682" height="737" key="find.popup/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960736167" />
@@ -379,7 +360,7 @@
     <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1623767685605" />
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623335207803" />
-    <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623422852935" />
+    <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624088012852" />
     <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623160611415" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />
