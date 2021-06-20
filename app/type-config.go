@@ -81,7 +81,7 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 				slog.Error(expr + err.Error())
 			}
 		} else {
-			c.HostTarget = append(c.HostTarget, Hosts...)
+			c.HostTarget = misc.UniStrAppend(c.HostTarget, Hosts...)
 			return
 		}
 	}
