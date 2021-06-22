@@ -70,6 +70,8 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 				slog.Error(expr + err.Error())
 			}
 		}
+		c.HostTarget = misc.RemoveDuplicateElement(c.HostTarget)
+		c.UrlTarget = misc.RemoveDuplicateElement(c.UrlTarget)
 		return
 	}
 	//判断target字符串是否为类IP/MASK
@@ -81,7 +83,7 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 				slog.Error(expr + err.Error())
 			}
 		} else {
-			c.HostTarget = misc.UniStrAppend(c.HostTarget, Hosts...)
+			c.HostTarget = append(c.HostTarget, Hosts...)
 			return
 		}
 	}
@@ -94,11 +96,11 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		}
 	} else {
 		if url.Scheme != "" {
-			c.UrlTarget = misc.UniStrAppend(c.UrlTarget, expr)
-			c.HostTarget = misc.UniStrAppend(c.HostTarget, url.Netloc)
+			c.UrlTarget = append(c.UrlTarget, expr)
+			c.HostTarget = append(c.HostTarget, url.Netloc)
 			return
 		} else {
-			c.HostTarget = misc.UniStrAppend(c.HostTarget, url.Netloc)
+			c.HostTarget = append(c.HostTarget, url.Netloc)
 			return
 		}
 	}
