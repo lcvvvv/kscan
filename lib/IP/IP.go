@@ -17,8 +17,7 @@ var regxIsIPRange = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1
 
 func FormatCheck(ipExpr string) bool {
 	if regxIsIP.MatchString(ipExpr) {
-		expr := regxIsIP.FindStringSubmatch(ipExpr)[1]
-		return addrCheck(expr)
+		return addrCheck(ipExpr)
 	}
 	if regxIsIPMask.MatchString(ipExpr) {
 		ip := regxIsIPMask.FindStringSubmatch(ipExpr)[1]
@@ -53,8 +52,7 @@ func FormatCheck(ipExpr string) bool {
 func ExprToList(ipExpr string) []string {
 	var r []string
 	if regxIsIP.MatchString(ipExpr) {
-		expr := regxIsIP.FindStringSubmatch(ipExpr)[1]
-		return append(r, expr)
+		return append(r, ipExpr)
 	}
 	if regxIsIPMask.MatchString(ipExpr) {
 		ip := regxIsIPMask.FindStringSubmatch(ipExpr)[1]
