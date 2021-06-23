@@ -75,17 +75,9 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		return
 	}
 	//判断target字符串是否为类IP/MASK
-	if _, ok := IP.Check(expr); ok {
-		if Hosts, err := IP.IPMask2IPArr(expr); err != nil {
-			if recursion == true {
-				slog.Debug(expr + err.Error())
-			} else {
-				slog.Error(expr + err.Error())
-			}
-		} else {
-			c.HostTarget = append(c.HostTarget, Hosts...)
-			return
-		}
+	if ok := IP.FormatCheck(expr); ok {
+		c.HostTarget = append(c.HostTarget, IP.ExprToList(expr)...)
+		return
 	}
 	//判断target字符串是否为类URL
 	if url, err := urlparse.Load(expr); err != nil {

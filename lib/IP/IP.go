@@ -1,65 +1,150 @@
 package IP
 
 import (
-	"errors"
-	"kscan/lib/misc"
+	"bytes"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
-type Ip struct {
-	Addr string
-	Mask int
+/*
+	根据网络网段，获取该段所有IP
+*/
+
+var regxIsIP = regexp.MustCompile("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$")
+var regxIsIPMask = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})/(\\d{1,2})$")
+var regxIsIPRange = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})-(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})$")
+
+func FormatCheck(ipExpr string) bool {
+	if regxIsIP.MatchString(ipExpr) {
+		expr := regxIsIP.FindStringSubmatch(ipExpr)[1]
+		return addrCheck(expr)
+	}
+	if regxIsIPMask.MatchString(ipExpr) {
+		ip := regxIsIPMask.FindStringSubmatch(ipExpr)[1]
+		mask := regxIsIPMask.FindStringSubmatch(ipExpr)[2]
+		if addrCheck(ip) == false {
+			return false
+		}
+		if maskCheck(mask) == false {
+			return false
+		}
+		return true
+	}
+	if regxIsIPRange.MatchString(ipExpr) {
+		first := regxIsIPRange.FindStringSubmatch(ipExpr)[1]
+		last := regxIsIPRange.FindStringSubmatch(ipExpr)[2]
+		if addrCheck(first) == false {
+			return false
+		}
+		if addrCheck(last) == false {
+			return false
+		}
+		firstInt := addrStrToInt(first)
+		lastInt := addrStrToInt(last)
+		if firstInt > lastInt {
+			return false
+		}
+		return true
+	}
+	return false
 }
 
-var regIsIP, _ = regexp.Compile("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$")
-var regIsIPs, _ = regexp.Compile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})/(\\d{1,2})$")
-
-func Check(v string) (Ip, bool) {
-	if regIsIP.MatchString(v) {
-		vArr := strings.Split(v, ".")
-		if len(vArr) != 4 {
-			return Ip{}, false
+func ExprToList(ipExpr string) []string {
+	var r []string
+	if regxIsIP.MatchString(ipExpr) {
+		expr := regxIsIP.FindStringSubmatch(ipExpr)[1]
+		return append(r, expr)
+	}
+	if regxIsIPMask.MatchString(ipExpr) {
+		ip := regxIsIPMask.FindStringSubmatch(ipExpr)[1]
+		mask := regxIsIPMask.FindStringSubmatch(ipExpr)[2]
+		maskInt, _ := strconv.Atoi(mask)
+		ipInt := addrStrToInt(ip)
+		maskhead := uint32(0xFFFFFFFF)
+		for i := 1; i <= 32-maskInt; i++ {
+			maskhead = maskhead << 1
 		}
-		vIntArr, err := misc.StrArr2IntArr(vArr)
+		masktail := uint32(0xFFFFFFFF)
+		for i := 1; i <= maskInt; i++ {
+			masktail = masktail >> 1
+		}
+		ipStart := uint32(ipInt) & maskhead
+		ipEnd := uint32(ipInt) | masktail
+		return RangeToList(ipStart, ipEnd)
+	}
+	if regxIsIPRange.MatchString(ipExpr) {
+		start := regxIsIPRange.FindStringSubmatch(ipExpr)[1]
+		end := regxIsIPRange.FindStringSubmatch(ipExpr)[2]
+		startInt := addrStrToInt(start)
+		endInt := addrStrToInt(end)
+		return RangeToList(uint32(startInt), uint32(endInt))
+	}
+	return r
+}
+
+func RangeToList(start uint32, end uint32) (result []string) {
+	for i := start; i <= end; i++ {
+		result = append(result, addrIntToStr(int(i)))
+	}
+	return result
+}
+
+func addrCheck(ip string) bool {
+	sArr := strings.Split(ip, ".")
+	if len(sArr) != 4 {
+		return false
+	}
+	for _, s := range sArr {
+		i, err := strconv.Atoi(s)
 		if err != nil {
-			return Ip{}, false
+			return false
 		}
-		for _, vInt := range vIntArr {
-			if vInt < 0 || vInt > 255 {
-				return Ip{}, false
-			}
+		if i > 255 || i < 0 {
+			return false
 		}
-		return Ip{v, 32}, true
 	}
-	if regIsIPs.MatchString(v) {
-		addr := regIsIPs.FindStringSubmatch(v)[1]
-		mask := regIsIPs.FindStringSubmatch(v)[2]
-		_, isip := Check(addr)
-		if !isip {
-			return Ip{}, false
-		}
-		maskInt := misc.Str2Int(mask)
-		if maskInt < 0 || maskInt > 32 {
-			return Ip{}, false
-		}
-		return Ip{addr, maskInt}, true
-	}
-	return Ip{}, false
+	return true
 }
 
-func IPMask2IPArr(v string) ([]string, error) {
-	IP, isIP := Check(v)
-	if !isIP {
-		return nil, errors.New("IP格式不正确")
+func addrStrToInt(ipStr string) int {
+	ipArr := strings.Split(ipStr, ".")
+	var ipInt int
+	var pos uint = 24
+	for _, ipSeg := range ipArr {
+		tempInt, _ := strconv.Atoi(ipSeg)
+		tempInt = tempInt << pos
+		ipInt = ipInt | tempInt
+		pos -= 8
 	}
-	o := NewIpRangeLib()
-	result, err := o.IpRangeToIpList(IP.Addr + "/" + misc.Int2Str(IP.Mask))
+	return ipInt
+}
+
+func addrIntToStr(ipInt int) string {
+	ipArr := make([]string, 4)
+	length := len(ipArr)
+	buffer := bytes.NewBufferString("")
+	for i := 0; i < length; i++ {
+		tempInt := ipInt & 0xFF
+		ipArr[length-i-1] = strconv.Itoa(tempInt)
+		ipInt = ipInt >> 8
+	}
+	for i := 0; i < length; i++ {
+		buffer.WriteString(ipArr[i])
+		if i < length-1 {
+			buffer.WriteString(".")
+		}
+	}
+	return buffer.String()
+}
+
+func maskCheck(mask string) bool {
+	maskInt, err := strconv.Atoi(mask)
 	if err != nil {
-		return nil, err
+		return false
 	}
-	if result[0][len(result[0])-2:] == ".0" {
-		result = result[1:]
+	if maskInt > 32 || maskInt < 0 {
+		return false
 	}
-	return result, nil
+	return true
 }
