@@ -10,9 +10,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]优化IP模块，现在可以扫描8位以上的掩码了，且现在能够支持类似：192.168.10.11-192.168.100.11的扫描参数了。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修复单个IP地址无法正常识别的问题。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/IP/IP.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/IP/IP.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -203,7 +202,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]犹如重置般的改动,解决中文乱码问题，以及部分显示异常问题" />
     <MESSAGE value="[*]犹如重置般的改动,优化协程存活检测逻辑，现在协程不会突然死掉了" />
     <MESSAGE value="[*]更新了版本发布说明" />
     <MESSAGE value="[*]增加关键字指纹库，现在一共有786条了，优化载入说明" />
@@ -228,7 +226,8 @@
     <MESSAGE value="[*]现在从文件导入扫描对象，会进行去重" />
     <MESSAGE value="[*]优化去重性能，修复在进行大资产扫描的情况下，载入扫描目标会卡死的问题。" />
     <MESSAGE value="[+]优化IP模块，现在可以扫描8位以上的掩码了，且现在能够支持类似：192.168.10.11-192.168.100.11的扫描参数了。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+]优化IP模块，现在可以扫描8位以上的掩码了，且现在能够支持类似：192.168.10.11-192.168.100.11的扫描参数了。" />
+    <MESSAGE value="[*]修复单个IP地址无法正常识别的问题。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]修复单个IP地址无法正常识别的问题。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
