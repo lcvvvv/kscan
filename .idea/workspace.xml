@@ -10,9 +10,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修复单个IP地址无法正常识别的问题。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]update。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +37,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
   </component>
   <component name="ProblemsViewState">
     <hideBySeverity>
@@ -202,7 +202,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]犹如重置般的改动,优化协程存活检测逻辑，现在协程不会突然死掉了" />
     <MESSAGE value="[*]更新了版本发布说明" />
     <MESSAGE value="[*]增加关键字指纹库，现在一共有786条了，优化载入说明" />
     <MESSAGE value="[*]解决指纹库不能正常识别问题，现在一共有1323条了" />
@@ -227,7 +226,8 @@
     <MESSAGE value="[*]优化去重性能，修复在进行大资产扫描的情况下，载入扫描目标会卡死的问题。" />
     <MESSAGE value="[+]优化IP模块，现在可以扫描8位以上的掩码了，且现在能够支持类似：192.168.10.11-192.168.100.11的扫描参数了。" />
     <MESSAGE value="[*]修复单个IP地址无法正常识别的问题。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]修复单个IP地址无法正常识别的问题。" />
+    <MESSAGE value="[*]update。" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]update。" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -325,10 +325,10 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1624422059632">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1624505967393">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624422059632" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624505967393" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
     <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
