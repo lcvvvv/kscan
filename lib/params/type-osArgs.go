@@ -8,7 +8,7 @@ import (
 )
 
 type OsArgs struct {
-	help, debug, scanPing, check                      bool
+	help, debug, scanPing, check, spy                 bool
 	target, port, output, proxy, path, host, encoding string
 	USAGE, HELP, LOGO                                 string
 	top, threads, timeout                             int
@@ -66,6 +66,10 @@ func (o OsArgs) Encoding() string {
 	return o.encoding
 }
 
+func (o OsArgs) Spy() bool {
+	return o.spy
+}
+
 //初始化参数
 func (o *OsArgs) LoadOsArgs() {
 	//自定义Usage
@@ -78,6 +82,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.debug, "d", false, "")
 	flag.BoolVar(&o.scanPing, "Pn", false, "")
 	flag.BoolVar(&o.check, "check", false, "")
+	flag.BoolVar(&o.spy, "spy", false, "")
 	flag.StringVar(&o.target, "t", "", "")
 	flag.StringVar(&o.target, "target", "", "")
 	flag.StringVar(&o.port, "p", "", "")
@@ -114,6 +119,10 @@ func (o *OsArgs) PrintBanner() {
 
 func (o *OsArgs) CheckArgs() {
 	//判断必须的参数是否存在
+	if o.spy == true {
+		return
+	}
+
 	if o.target == "" {
 		slog.Error("必须输入TARGET参数")
 	}

@@ -10,10 +10,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]update。">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]新增--spy参数，自动化探测存活内网网段，HW再也不抓瞎~">
+      <change afterPath="$PROJECT_DIR$/lib/spy/spy.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/IP/IP.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/IP/IP.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/shttp/shttp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/hostscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/hostscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/run.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +45,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
     <hideBySeverity>
@@ -79,13 +87,6 @@
     <option name="SHOW_DIALOG" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/assets" />
-      <recent name="$PROJECT_DIR$/go" />
-      <recent name="$PROJECT_DIR$/run" />
-      <recent name="$USER_HOME$/Desktop" />
-      <recent name="$PROJECT_DIR$" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib/gonmap" />
       <recent name="$PROJECT_DIR$" />
@@ -93,8 +94,15 @@
       <recent name="$PROJECT_DIR$/lib/run" />
       <recent name="$PROJECT_DIR$/lib/update" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$PROJECT_DIR$/go" />
+      <recent name="$PROJECT_DIR$/run" />
+      <recent name="$USER_HOME$/Desktop" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
-  <component name="RunManager" selected="Go 测试.kscan 中的 TestType">
+  <component name="RunManager" selected="Go 测试.kscan 中的 TestDns">
     <configuration name="kscan 中的 TestAlivePort" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -128,6 +136,17 @@
       <pattern value="^TestContext1$" />
       <method v="2" />
     </configuration>
+    <configuration name="kscan 中的 TestDns" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="kscan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="kscan" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^TestDns$" />
+      <method v="2" />
+    </configuration>
     <configuration name="kscan 中的 TestType" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="kscan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -139,17 +158,6 @@
       <pattern value="^TestType$" />
       <method v="2" />
     </configuration>
-    <configuration name="kscan/lib/gonmap 中的 TestPortscan" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="kscan" />
-      <working_directory value="$PROJECT_DIR$/lib/gonmap" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="kscan/lib/gonmap" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^TestPortscan$" />
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="js.build_tools.grunt">
       <node-interpreter value="project" />
       <envs />
@@ -157,11 +165,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go 测试.kscan 中的 TestDns" />
         <item itemvalue="Go 测试.kscan 中的 TestType" />
         <item itemvalue="Go 测试.kscan 中的 TestContext1" />
         <item itemvalue="Go 测试.kscan 中的 TestContext" />
         <item itemvalue="Go 测试.kscan 中的 TestAlivePort" />
-        <item itemvalue="Go 测试.kscan/lib/gonmap 中的 TestPortscan" />
       </list>
     </recent_temporary>
   </component>
@@ -202,8 +210,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]更新了版本发布说明" />
-    <MESSAGE value="[*]增加关键字指纹库，现在一共有786条了，优化载入说明" />
     <MESSAGE value="[*]解决指纹库不能正常识别问题，现在一共有1323条了" />
     <MESSAGE value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
     <MESSAGE value="[*]删除掉无用的slog.Error输出" />
@@ -227,7 +233,9 @@
     <MESSAGE value="[+]优化IP模块，现在可以扫描8位以上的掩码了，且现在能够支持类似：192.168.10.11-192.168.100.11的扫描参数了。" />
     <MESSAGE value="[*]修复单个IP地址无法正常识别的问题。" />
     <MESSAGE value="[*]update。" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]update。" />
+    <MESSAGE value="[*]修复--host参数失效的问题。" />
+    <MESSAGE value="[+]新增--spy参数，自动化探测存活内网网段，HW再也不抓瞎~" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]新增--spy参数，自动化探测存活内网网段，HW再也不抓瞎~" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -247,8 +255,8 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="799" y="445" key="Github.CreateGistDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623065762017" />
-    <state width="1878" height="348" key="GridCell.Tab.0.bottom" timestamp="1623738370631">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom" timestamp="1625150706554">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650952" />
     <state width="1878" height="304" key="GridCell.Tab.0.bottom/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838260" />
@@ -259,9 +267,11 @@
     <state width="699" height="244" key="GridCell.Tab.0.bottom/0.25.1440.816@0.25.1440.816" timestamp="1618730716345" />
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053655" />
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710711" />
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706554" />
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253991" />
     <state width="1878" height="240" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195996" />
-    <state width="1878" height="348" key="GridCell.Tab.0.center" timestamp="1623738370628">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="305" key="GridCell.Tab.0.center" timestamp="1625150706552">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.center/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650951" />
     <state width="1878" height="304" key="GridCell.Tab.0.center/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838257" />
@@ -272,9 +282,11 @@
     <state width="699" height="244" key="GridCell.Tab.0.center/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1878" height="348" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053653" />
     <state width="1878" height="348" key="GridCell.Tab.0.center/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710709" />
+    <state width="1878" height="305" key="GridCell.Tab.0.center/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706552" />
+    <state width="1878" height="305" key="GridCell.Tab.0.center/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253989" />
     <state width="1878" height="240" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195994" />
-    <state width="1878" height="348" key="GridCell.Tab.0.left" timestamp="1623738370627">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="305" key="GridCell.Tab.0.left" timestamp="1625150706551">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.left/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650950" />
     <state width="1878" height="304" key="GridCell.Tab.0.left/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838256" />
@@ -285,9 +297,11 @@
     <state width="699" height="244" key="GridCell.Tab.0.left/0.25.1440.816@0.25.1440.816" timestamp="1618730716343" />
     <state width="1878" height="348" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053652" />
     <state width="1878" height="348" key="GridCell.Tab.0.left/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710708" />
+    <state width="1878" height="305" key="GridCell.Tab.0.left/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706551" />
+    <state width="1878" height="305" key="GridCell.Tab.0.left/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253987" />
     <state width="1878" height="240" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195993" />
-    <state width="1878" height="348" key="GridCell.Tab.0.right" timestamp="1623738370630">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1878" height="305" key="GridCell.Tab.0.right" timestamp="1625150706553">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.right/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650952" />
     <state width="1878" height="304" key="GridCell.Tab.0.right/-1440.112.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1617960838259" />
@@ -298,6 +312,8 @@
     <state width="699" height="244" key="GridCell.Tab.0.right/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1878" height="348" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053654" />
     <state width="1878" height="348" key="GridCell.Tab.0.right/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710710" />
+    <state width="1878" height="305" key="GridCell.Tab.0.right/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706553" />
+    <state width="1878" height="305" key="GridCell.Tab.0.right/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253990" />
     <state width="1878" height="240" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195995" />
     <state width="1878" height="376" key="GridCell.Tab.1.bottom" timestamp="1617973543483">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -325,10 +341,10 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1624505967393">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1624520008378">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624505967393" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624520008378" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
     <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
@@ -346,7 +362,7 @@
     <state x="109" y="96" width="1720" height="880" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1440.25.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1619518456316" />
     <state x="82" y="61" width="1290" height="751" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1619581724636" />
     <state x="109" y="73" width="1720" height="902" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623423707820" />
-    <state x="1083" y="160" width="682" height="737" key="find.popup" timestamp="1624088012852">
+    <state x="1083" y="160" width="682" height="737" key="find.popup" timestamp="1625141568245">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1083" y="160" width="682" height="737" key="find.popup/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623400242725" />
@@ -358,7 +374,7 @@
     <state x="811" y="128" width="511" height="613" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1623767685605" />
     <state x="812" y="146" width="512" height="557" key="find.popup/0.25.1440.815@0.25.1440.815" timestamp="1620719213486" />
     <state x="2272" y="190" width="706" height="735" key="find.popup/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623335207803" />
-    <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624088012852" />
+    <state x="1083" y="160" width="682" height="737" key="find.popup/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625141568245" />
     <state x="1036" y="159" width="682" height="737" key="find.popup/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623160611415" />
     <state width="300" height="62" key="javadoc.popup.new" timestamp="1618643899041">
       <screen x="0" y="0" width="1440" height="900" />

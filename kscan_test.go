@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"golang.org/x/text/encoding/simplifiedchinese"
+	"net"
 	"testing"
 	"time"
 )
@@ -61,6 +62,15 @@ func TestType(t *testing.T) {
 
 	fmt.Println(a.TcpFinger)
 
+}
+
+func TestDns(t *testing.T) {
+	addr, err := net.ResolveIPAddr("ip", "www.basdfasfasdfsdafaasdfasdaidu.com")
+	if err != nil {
+		fmt.Println("Resolution error", err.Error())
+		return
+	}
+	fmt.Println("Resolved address is ", addr.String())
 }
 
 func TestContext1(t *testing.T) {

@@ -2,6 +2,7 @@ package IP
 
 import (
 	"bytes"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,6 +15,12 @@ import (
 var regxIsIP = regexp.MustCompile("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$")
 var regxIsIPMask = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})/(\\d{1,2})$")
 var regxIsIPRange = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})-(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})$")
+
+var regxPrivateIPArr = []*regexp.Regexp{
+	regexp.MustCompile("^10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$"),
+	regexp.MustCompile("^172\\.(?:[123]\\d)\\.\\d{1,3}\\.\\d{1,3}$"),
+	regexp.MustCompile("^192\\.168\\.\\d{1,3}\\.\\d{1,3}$"),
+}
 
 func FormatCheck(ipExpr string) bool {
 	if regxIsIP.MatchString(ipExpr) {
@@ -45,6 +52,44 @@ func FormatCheck(ipExpr string) bool {
 			return false
 		}
 		return true
+	}
+	return false
+}
+
+func GetGatewayList(ip string, t string) []string {
+	var gatewayArr []string
+	if FormatCheck(ip) == false {
+		return gatewayArr
+	}
+	strArr := strings.Split(ip, ".")
+	if t == "b" {
+		for i := 0; i < 255; i++ {
+			gatewayArr = append(gatewayArr, fmt.Sprintf("%s.%s.%d.1", strArr[0], strArr[1], i))
+			gatewayArr = append(gatewayArr, fmt.Sprintf("%s.%s.%d.255", strArr[0], strArr[1], i))
+		}
+	}
+	if t == "a" {
+		for i := 0; i < 255; i++ {
+			for j := 0; j < 255; j++ {
+				gatewayArr = append(gatewayArr, fmt.Sprintf("%s.%d.%d.1", strArr[0], i, j))
+				gatewayArr = append(gatewayArr, fmt.Sprintf("%s.%d.%d.255", strArr[0], i, j))
+			}
+		}
+	}
+	if t == "s" {
+		for i := 0; i < 255; i++ {
+			gatewayArr = append(gatewayArr, fmt.Sprintf("%d.%d.%d.1", i, i, i))
+			gatewayArr = append(gatewayArr, fmt.Sprintf("%d.%d.%d.255", i, i, i))
+		}
+	}
+	return gatewayArr
+}
+
+func IsPrivateIPAddr(ip string) bool {
+	for _, regxPrivateIP := range regxPrivateIPArr {
+		if regxPrivateIP.MatchString(ip) {
+			return true
+		}
 	}
 	return false
 }

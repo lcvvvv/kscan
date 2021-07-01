@@ -6,6 +6,7 @@ import (
 	"kscan/lib/httpfinger"
 	"kscan/lib/params"
 	"kscan/lib/slog"
+	"kscan/lib/spy"
 	"kscan/run"
 	"runtime"
 	"time"
@@ -18,7 +19,7 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.23#\#| \#|
+|#|\#\#####/ \#####/#/ v1.25#\#| \#|
            轻量级资产测绘工具 by：kv2
 
 `
@@ -39,27 +40,35 @@ optional arguments:
   --top           扫描WooYun统计开放端口前x个，最高支持1000个
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
-  --path          指定请求访问的目录，逗号分割，慎用！
-  --host          指定所有请求的头部HOSTS值，慎用！
+  --path          指定请求访问的目录，逗号分割
+  --host          指定所有请求的头部Host值
   --timeout       设置超时时间
-  --encoding      设置终端输出编码，可指定为：gb2312或者utf-8
+  --encoding      设置终端输出编码，可指定为：gb2312、utf-8
+  --spy           网段探测模式，此模式下将自动探测主机可达的内网网段,无需配置其他任何参数
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding]\n\n"
 
 func main() {
 	startTime := time.Now()
-	//模块初始化
+
+	//环境初始化
 	Init()
 
 	//校验升级情况
 	//app.CheckUpdate()
-
-	//开始扫描
-	run.Start(app.Setting)
+	if app.Setting.Spy {
+		spy.Start()
+	} else {
+		//扫描模块初始化
+		KscanInit()
+		//开始扫描
+		run.Start(app.Setting)
+	}
 	//计算程序运行时间
 	elapsed := time.Since(startTime)
 	slog.Infof("程序执行总时长为：[%s]", elapsed.String())
+	slog.Info("若有问题欢迎来我的Github提交Bug[https://github.com/lcvvvv/kscan/]")
 }
 
 func Init() {
@@ -75,6 +84,9 @@ func Init() {
 	//配置文件初始化
 	app.Setting.Load(param)
 	slog.Warning("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
+}
+
+func KscanInit() {
 	slog.Warning("开始读取扫描对象...")
 	slog.Infof("成功读取URL地址:[%d]个\n", len(app.Setting.UrlTarget))
 	slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
