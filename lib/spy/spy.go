@@ -60,7 +60,7 @@ func Start() {
 }
 
 func internetTesting() bool {
-	if gonmap.HostDiscovery("114.114.114.114") {
+	if gonmap.HostDiscoveryIcmp("114.114.114.114") {
 		slog.Data("Internet--------[√]")
 		return true
 	} else {
