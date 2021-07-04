@@ -37,7 +37,7 @@ optional arguments:
   -o , --output   将扫描结果保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   --check         针对目标地址做指纹识别，仅不会进行端口探测
-  --top           扫描WooYun统计开放端口前x个，最高支持1000个
+  --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP4000
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
   --path          指定请求访问的目录，逗号分割

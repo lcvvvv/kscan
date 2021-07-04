@@ -10,11 +10,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]v1.25发布~~~~">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]修复在windows环境下ping模块不能正常使用的问题~">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/hostscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/hostscan.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/spy/spy.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/spy/spy.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +39,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
     <hideBySeverity>
@@ -203,7 +204,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]解决了直接进行URL识别是可能导致输出结果有误的BUG" />
     <MESSAGE value="[*]删除掉无用的slog.Error输出" />
     <MESSAGE value="[*]优化slog输出模式，现在更容易使用了" />
     <MESSAGE value="[*]优化终端输出方式，现在可以指定编码为gb2312或者utf-8，这样即便是在CS终端下面也不会显示乱码了。" />
@@ -228,7 +228,8 @@
     <MESSAGE value="[*]修复--host参数失效的问题。" />
     <MESSAGE value="[+]新增--spy参数，自动化探测存活内网网段，HW再也不抓瞎~" />
     <MESSAGE value="[+]v1.25发布~~~~" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+]v1.25发布~~~~" />
+    <MESSAGE value="[+]修复在windows环境下ping模块不能正常使用的问题~" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]修复在windows环境下ping模块不能正常使用的问题~" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -334,14 +335,14 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1625234706486">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1625296844628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624520008378" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
     <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625234706486" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625296844628" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
     <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1623764671694">
       <screen x="0" y="0" width="1440" height="900" />

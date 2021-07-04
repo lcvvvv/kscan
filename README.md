@@ -99,7 +99,7 @@
 鄙人是一个懒人，所以在写工具的时候也往易用性上进行了更多的考量
 
 ```
-usage: kscan [-h,--help] (-t,--target) [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding]
+usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding]
 
 
 optional arguments:
@@ -113,13 +113,14 @@ optional arguments:
   -o , --output   将扫描结果保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   --check         针对目标地址做指纹识别，仅不会进行端口探测
-  --top           扫描WooYun统计开放端口前x个，最高支持1000个
+  --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP4000
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
-  --path          指定请求访问的目录，逗号分割，慎用！
-  --host          指定所有请求的头部HOSTS值，慎用！
+  --path          指定请求访问的目录，逗号分割
+  --host          指定所有请求的头部Host值
   --timeout       设置超时时间
-  --encoding      设置终端输出编码，可指定为：gb2312或者utf-8
+  --encoding      设置终端输出编码，可指定为：gb2312、utf-8
+  --spy           网段探测模式，此模式下将自动探测主机可达的内网网段,无需配置其他任何参数
 ```
 
 功能不复杂，其他的自行探索
