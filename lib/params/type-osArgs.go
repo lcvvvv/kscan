@@ -11,7 +11,7 @@ type OsArgs struct {
 	help, debug, scanPing, check, spy                 bool
 	target, port, output, proxy, path, host, encoding string
 	USAGE, HELP, LOGO                                 string
-	top, threads, timeout                             int
+	top, threads, timeout, rarity                     int
 	intsReg, strsReg, proxyReg                        *regexp.Regexp
 }
 
@@ -48,6 +48,10 @@ func (o OsArgs) Threads() int {
 
 func (o OsArgs) Timeout() int {
 	return o.timeout
+}
+
+func (o OsArgs) Rarity() int {
+	return o.rarity
 }
 
 func (o OsArgs) ScanPing() bool {
@@ -93,6 +97,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.StringVar(&o.path, "path", "", "")
 	flag.StringVar(&o.host, "host", "", "")
 	flag.StringVar(&o.encoding, "encoding", "utf-8", "")
+	flag.IntVar(&o.rarity, "rarity", 4, "")
 	flag.IntVar(&o.top, "top", 400, "")
 	flag.IntVar(&o.threads, "threads", 400, "")
 	flag.IntVar(&o.timeout, "timeout", 3, "")

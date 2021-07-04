@@ -45,9 +45,10 @@ optional arguments:
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
   --spy           网段探测模式，此模式下将自动探测主机可达的内网网段,无需配置其他任何参数
+  --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：4
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity]\n\n"
 
 func main() {
 	startTime := time.Now()
@@ -89,12 +90,15 @@ func Init() {
 func KscanInit() {
 	slog.Warning("开始读取扫描对象...")
 	slog.Infof("成功读取URL地址:[%d]个\n", len(app.Setting.UrlTarget))
-	slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
+
+	if app.Setting.Check == false {
+		slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个\n", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
+	}
 	//HTTP指纹库初始化
 	r := httpfinger.Init()
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条\n", r["FaviconHash"], r["KeywordFinger"])
 	//gonmap探针/指纹库初始化
-	r = gonmap.Init(4, app.Setting.Timeout)
+	r = gonmap.Init(app.Setting.Rarity, app.Setting.Timeout)
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条\n", r["PROBE"], r["MATCH"])
 	slog.Warningf("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条\n", r["USED_PROBE"], r["USED_MATCH"])
 }
