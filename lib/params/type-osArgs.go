@@ -2,6 +2,7 @@ package params
 
 import (
 	"flag"
+	"fmt"
 	"kscan/lib/slog"
 	"os"
 	"regexp"
@@ -78,7 +79,7 @@ func (o OsArgs) Spy() bool {
 func (o *OsArgs) LoadOsArgs() {
 	//自定义Usage
 	flag.Usage = func() {
-		slog.Data(o.LOGO)
+		fmt.Print(o.LOGO)
 	}
 	flag.BoolVar(&o.help, "h", false, "")
 	flag.BoolVar(&o.help, "help", false, "")
