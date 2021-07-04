@@ -8,6 +8,7 @@ import (
 	"kscan/lib/pool"
 	"kscan/lib/queue"
 	"kscan/lib/slog"
+	"strings"
 )
 
 type kscan struct {
@@ -86,7 +87,11 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 func (k *kscan) PortDiscovery() {
 	k.pool.port.Function = func(i interface{}) interface{} {
 		netloc := i.(string)
-		if gonmap.PortScan(netloc, k.config.Timeout) {
+		protocol := "tcp"
+		if port := strings.Split(netloc, ":")[1]; port == "161" {
+			protocol = "udp"
+		}
+		if gonmap.PortScan(protocol, netloc, k.config.Timeout) {
 			return netloc
 		}
 		return nil

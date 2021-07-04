@@ -94,7 +94,7 @@ func KscanInit() {
 	r := httpfinger.Init()
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条\n", r["FaviconHash"], r["KeywordFinger"])
 	//gonmap探针/指纹库初始化
-	r = gonmap.Init(3, app.Setting.Timeout)
+	r = gonmap.Init(4, app.Setting.Timeout)
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条\n", r["PROBE"], r["MATCH"])
 	slog.Warningf("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条\n", r["USED_PROBE"], r["USED_MATCH"])
 }
