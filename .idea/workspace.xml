@@ -10,12 +10,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]fix">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修复当-t参数为空时，会出现报错的问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kscan_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/gonmap.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/gonmap.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gonmap/portscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/portscan.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +39,7 @@
         <option name="title" value="All" />
       </GitPushTagMode>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib/gonmap" />
   </component>
   <component name="ProblemsViewState">
     <hideBySeverity>
@@ -204,7 +204,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[*]对代码逻辑以及实现方式进行了大调整，现在会进行智能存活性检测和指纹识别。" />
     <MESSAGE value="[*]修复更新后，-o参数无效的问题。" />
     <MESSAGE value="[*]新增-Pn、--check参数，并解决绝大部分乱码问题。" />
     <MESSAGE value="[*]完善容错处理问题，现在即便单个协程发生故障，也不会导致程序崩溃。" />
@@ -229,7 +228,8 @@
     <MESSAGE value="[+]端口服务清单以及排序。" />
     <MESSAGE value="[+]新增--rarity参数，现在可以指定Nmap端口协议识别深度。" />
     <MESSAGE value="[*]fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]fix" />
+    <MESSAGE value="[*]修复当-t参数为空时，会出现报错的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="[*]修复当-t参数为空时，会出现报错的问题" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -249,7 +249,7 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="799" y="445" key="Github.CreateGistDialog/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623065762017" />
-    <state width="1878" height="305" key="GridCell.Tab.0.bottom" timestamp="1625150706554">
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom" timestamp="1625496183378">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650952" />
@@ -261,10 +261,10 @@
     <state width="699" height="244" key="GridCell.Tab.0.bottom/0.25.1440.816@0.25.1440.816" timestamp="1618730716345" />
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053655" />
     <state width="1878" height="348" key="GridCell.Tab.0.bottom/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710711" />
-    <state width="1878" height="305" key="GridCell.Tab.0.bottom/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706554" />
+    <state width="1878" height="305" key="GridCell.Tab.0.bottom/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625496183378" />
     <state width="1878" height="305" key="GridCell.Tab.0.bottom/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253991" />
     <state width="1878" height="240" key="GridCell.Tab.0.bottom/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195996" />
-    <state width="1878" height="305" key="GridCell.Tab.0.center" timestamp="1625150706552">
+    <state width="1878" height="305" key="GridCell.Tab.0.center" timestamp="1625496183377">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.center/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650951" />
@@ -276,10 +276,10 @@
     <state width="699" height="244" key="GridCell.Tab.0.center/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1878" height="348" key="GridCell.Tab.0.center/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053653" />
     <state width="1878" height="348" key="GridCell.Tab.0.center/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710709" />
-    <state width="1878" height="305" key="GridCell.Tab.0.center/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706552" />
+    <state width="1878" height="305" key="GridCell.Tab.0.center/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625496183377" />
     <state width="1878" height="305" key="GridCell.Tab.0.center/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253989" />
     <state width="1878" height="240" key="GridCell.Tab.0.center/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195994" />
-    <state width="1878" height="305" key="GridCell.Tab.0.left" timestamp="1625150706551">
+    <state width="1878" height="305" key="GridCell.Tab.0.left" timestamp="1625496183376">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.left/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650950" />
@@ -291,10 +291,10 @@
     <state width="699" height="244" key="GridCell.Tab.0.left/0.25.1440.816@0.25.1440.816" timestamp="1618730716343" />
     <state width="1878" height="348" key="GridCell.Tab.0.left/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053652" />
     <state width="1878" height="348" key="GridCell.Tab.0.left/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710708" />
-    <state width="1878" height="305" key="GridCell.Tab.0.left/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706551" />
+    <state width="1878" height="305" key="GridCell.Tab.0.left/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625496183376" />
     <state width="1878" height="305" key="GridCell.Tab.0.left/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253987" />
     <state width="1878" height="240" key="GridCell.Tab.0.left/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195993" />
-    <state width="1878" height="305" key="GridCell.Tab.0.right" timestamp="1625150706553">
+    <state width="1878" height="305" key="GridCell.Tab.0.right" timestamp="1625496183378">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="348" key="GridCell.Tab.0.right/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623404650952" />
@@ -306,7 +306,7 @@
     <state width="699" height="244" key="GridCell.Tab.0.right/0.25.1440.816@0.25.1440.816" timestamp="1618730716344" />
     <state width="1878" height="348" key="GridCell.Tab.0.right/1440.0.1920.1080/0.0.1440.900@1440.0.1920.1080" timestamp="1623336053654" />
     <state width="1878" height="348" key="GridCell.Tab.0.right/1440.0.1920.1080/0.25.1440.875@1440.0.1920.1080" timestamp="1623330710710" />
-    <state width="1878" height="305" key="GridCell.Tab.0.right/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625150706553" />
+    <state width="1878" height="305" key="GridCell.Tab.0.right/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625496183378" />
     <state width="1878" height="305" key="GridCell.Tab.0.right/1920.25.1440.875/0.25.1920.991@0.25.1920.991" timestamp="1625141253990" />
     <state width="1878" height="240" key="GridCell.Tab.0.right/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623077195995" />
     <state width="1878" height="376" key="GridCell.Tab.1.bottom" timestamp="1617973543483">
@@ -335,14 +335,14 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1625396613809">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1625400085312">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1624520008378" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
     <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625396613809" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625400085312" />
     <state x="427" y="224" key="Vcs.Push.Dialog.v2/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1623161588216" />
     <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1623764671694">
       <screen x="0" y="0" width="1440" height="900" />

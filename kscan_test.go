@@ -65,12 +65,21 @@ func TestType(t *testing.T) {
 }
 
 func TestDns(t *testing.T) {
-	addr, err := net.ResolveIPAddr("ip", "www.basdfasfasdfsdafaasdfasdaidu.com")
-	if err != nil {
-		fmt.Println("Resolution error", err.Error())
-		return
+	r := &net.Resolver{
+		PreferGo: true,
+		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+			d := net.Dialer{
+				Timeout: 10 * time.Second,
+			}
+			return d.DialContext(ctx, "udp", "114.114.114.114:513")
+		},
 	}
-	fmt.Println("Resolved address is ", addr.String())
+
+	ips, err := r.LookupHost(context.Background(), "asdfasdfasfasdf")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(ips)
 }
 
 func TestContext1(t *testing.T) {
