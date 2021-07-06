@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/lcvvvv/urlparse"
 	"kscan/app"
+	"kscan/lib/IP"
 	"kscan/lib/gonmap"
 	"kscan/lib/pool"
 	"kscan/lib/queue"
@@ -101,6 +102,12 @@ func (k *kscan) PortDiscovery() {
 	go func() {
 		for out := range k.pool.host.Out {
 			for _, port := range k.config.Port {
+				if port == 161 {
+					//如果是公网IP且使用默认端口扫描策略，则不会扫描161端口
+					if IP.IsPrivateIPAddr(out.(string)) == false && len(app.Setting.Port) == 400 {
+						continue
+					}
+				}
 				netloc := fmt.Sprintf("%s:%d", out, port)
 				k.pool.port.In <- netloc
 			}
