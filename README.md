@@ -20,7 +20,30 @@
 
 又经过了几次某演练的试炼，现在kscan更强大了。
 
-## 二、更新日志
+
+## 二、开发计划
+
+- 从fofa获取资产 [-f/--fofa]
+
+- 暴力破解模块 [--hydra]
+  - smb 
+  - ssh
+  - telnet
+  - ftp
+  - Database
+    - Oracle
+    - MySQL
+    - SQLServer
+    - MongoDB
+    - PostgreSQL
+    - Redis
+  - Http
+    - Tomcat
+    - Websphere
+- Json格式输出 [-oJ]
+  
+
+## 三、更新日志
 - 2021年07月02日  发布v1.25
 
   - [+]新增--spy参数，自动化探测存活内网网段，HW再也不抓瞎~ 
@@ -94,7 +117,7 @@
   - [*]变更httpStatusCode的检测逻辑，现在默认会记录所有状态码
   
 
-## 三、使用方法
+## 四、使用方法
 
 鄙人是一个懒人，所以在写工具的时候也往易用性上进行了更多的考量
 
@@ -127,7 +150,7 @@ optional arguments:
 
 功能不复杂，其他的自行探索
 
-## 四、演示
+## 五、演示
 
 ### 端口扫描模式
 
@@ -137,7 +160,7 @@ optional arguments:
 
 ![image-20210220162851992](assets/演示截图2-v1.25.png)
 
-## 五、碎碎念
+## 六、碎碎念
 
 在开始正式介绍kscan之前，我决定聊一聊有关渗透过程过程中最重要的信息收集阶段：资产发现。
 
@@ -165,7 +188,7 @@ optional arguments:
 
   最后一个阶段，就是应用层检测了，类似CMS指纹识别、敏感目录/文件探测等等，kscan的开发初衷是在不发送更多数据的情况下更多的获取目标的信息，所以不会进行更深层次的目录扫描、指纹比对。但是会进行ico文件hash比对以及首页关键字比对，和返回包头部比对。这其实基本可以满足大部分的指纹识别需求了。
 
-## 六、特别感谢
+## 七、特别感谢
 
 - [EdgeSecurityTeam](https://github.com/EdgeSecurityTeam)
 
@@ -175,7 +198,7 @@ optional arguments:
 
 - [NMAP](https://github.com/nmap/nmap/)
 
-## 七、文末
+## 八、文末
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
 
@@ -184,6 +207,6 @@ Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lc
 ![image-20210220164117923](assets/image-20210220164117923.png)
 
 
-## 八、下载地址
+## 九、下载地址
 
 [kscan](https://github.com/lcvvvv/kscan/releases)
