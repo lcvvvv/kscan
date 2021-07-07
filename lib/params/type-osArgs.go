@@ -98,7 +98,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.StringVar(&o.path, "path", "", "")
 	flag.StringVar(&o.host, "host", "", "")
 	flag.StringVar(&o.encoding, "encoding", "utf-8", "")
-	flag.IntVar(&o.rarity, "rarity", 4, "")
+	flag.IntVar(&o.rarity, "rarity", 9, "")
 	flag.IntVar(&o.top, "top", 400, "")
 	flag.IntVar(&o.threads, "threads", 400, "")
 	flag.IntVar(&o.timeout, "timeout", 3, "")
