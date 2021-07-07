@@ -11,6 +11,7 @@ import (
 type OsArgs struct {
 	help, debug, scanPing, check, spy                 bool
 	target, port, output, proxy, path, host, encoding string
+	outputJson                                        string
 	USAGE, HELP, LOGO                                 string
 	top, threads, timeout, rarity                     int
 	intsReg, strsReg, proxyReg                        *regexp.Regexp
@@ -26,6 +27,10 @@ func (o OsArgs) Port() string {
 
 func (o OsArgs) Output() string {
 	return o.output
+}
+
+func (o OsArgs) OutputJson() string {
+	return o.outputJson
 }
 
 func (o OsArgs) Proxy() string {
@@ -94,6 +99,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.StringVar(&o.port, "port", "", "")
 	flag.StringVar(&o.output, "o", "", "")
 	flag.StringVar(&o.output, "output", "", "")
+	flag.StringVar(&o.outputJson, "oJ", "", "")
 	flag.StringVar(&o.proxy, "proxy", "", "")
 	flag.StringVar(&o.path, "path", "", "")
 	flag.StringVar(&o.host, "host", "", "")
@@ -154,6 +160,9 @@ func (o *OsArgs) CheckArgs() {
 	}
 	if o.output != "" {
 		//验证output参数
+	}
+	if o.outputJson != "" {
+		//验证outputJson参数
 	}
 	if o.proxy != "" {
 		if !o.proxyReg.MatchString(o.proxy) {

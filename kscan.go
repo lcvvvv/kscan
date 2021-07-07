@@ -36,6 +36,7 @@ optional arguments:
                   文件地址：file:/tmp/target.txt
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
+  -oJ             将扫描结果使用json格式保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP4000
@@ -49,7 +50,7 @@ optional arguments:
   --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：9
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity] \n\n"
 
 func main() {
 	startTime := time.Now()

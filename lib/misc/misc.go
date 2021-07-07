@@ -209,3 +209,26 @@ func RemoveDuplicateElement(languages []string) []string {
 	}
 	return result
 }
+
+func WriteLine(fileName string, byte []byte) error {
+	//file, err := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0666)
+	if err != nil {
+		return err
+	}
+	//创建成功挂起关闭文件流,在函数结束前执行
+	defer file.Close()
+	//NewWriter创建一个以目标文件具有默认大小缓冲、写入w的*Writer。
+	writer := bufio.NewWriter(file)
+	//写入器将内容写入缓冲。返回写入的字节数。
+	_, err = writer.Write(byte)
+	//Flush方法将缓冲中的数据写入下层的io.Writer接口。缺少，数据将保留在缓冲区，并未写入io.Writer接口
+	_ = writer.Flush()
+	if err != nil {
+		if err == io.EOF {
+			return nil
+		}
+		return err
+	}
+	return err
+}

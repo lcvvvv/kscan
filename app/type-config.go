@@ -20,6 +20,7 @@ type Config struct {
 	Output                      *os.File
 	Proxy, Host, Path, Encoding string
 	OSEncoding, NewLine         string
+	OutputJson                  string
 	Threads, Rarity             int
 	Timeout                     time.Duration
 	HostTargetNum               int
@@ -61,8 +62,8 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.Host = p.Host()
 	c.Threads = p.Threads()
 	c.Encoding = p.Encoding()
-	c.Encoding = p.Encoding()
 	c.Rarity = p.Rarity()
+	c.OutputJson = p.OutputJson()
 }
 
 func (c *Config) loadTarget(expr string, recursion bool) {

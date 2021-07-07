@@ -1,14 +1,18 @@
 package run
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/lcvvvv/urlparse"
 	"kscan/app"
 	"kscan/lib/IP"
 	"kscan/lib/gonmap"
+	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/lib/queue"
 	"kscan/lib/slog"
+	"os"
+	"path"
 	"strings"
 )
 
@@ -221,14 +225,30 @@ func (k *kscan) GetAppBannerFromCheck() {
 
 func (k *kscan) Output() {
 	//输出协议识别结果
+	var bannerMapArr []map[string]string
 	for out := range k.pool.appBanner.Out {
-		a := out.(*gonmap.AppBanner)
-		if a != nil {
-			str := a.Output()
+		banner := out.(*gonmap.AppBanner)
+		bannerMapArr = append(bannerMapArr, banner.Map())
+		if banner != nil {
+			str := banner.Output()
 			slog.Data(str)
 			if k.config.Output != nil {
 				k.config.WriteLine(str)
 			}
+		}
+	}
+	//输出json
+	if app.Setting.OutputJson != "" {
+		fileName := app.Setting.OutputJson
+		if _, err := os.Stat(fileName); os.IsNotExist(err) {
+			_ = os.MkdirAll(path.Dir(fileName), os.ModePerm)
+		}
+		bytes, _ := json.Marshal(bannerMapArr)
+		err := misc.WriteLine(fileName, bytes)
+		if err == nil {
+			slog.Infof("扫描完成，Json文件已输出至：", fileName)
+		} else {
+			slog.Warning("输出Json失败！错误信息：", err.Error())
 		}
 	}
 }
