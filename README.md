@@ -27,6 +27,7 @@
 
 - 暴力破解模块 [--hydra]
   - smb 
+  - rdp
   - ssh
   - telnet
   - ftp

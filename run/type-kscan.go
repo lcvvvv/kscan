@@ -228,8 +228,8 @@ func (k *kscan) Output() {
 	var bannerMapArr []map[string]string
 	for out := range k.pool.appBanner.Out {
 		banner := out.(*gonmap.AppBanner)
-		bannerMapArr = append(bannerMapArr, banner.Map())
 		if banner != nil {
+			bannerMapArr = append(bannerMapArr, banner.Map())
 			str := banner.Output()
 			slog.Data(str)
 			if k.config.Output != nil {

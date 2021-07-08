@@ -10,15 +10,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[*]修改rarity参数默认值为9，为了适配识别更多的协议类型，且经过测试改参数对性能的影响并不大">
+    <list default="true" id="e5aff2ba-b451-492b-9e49-6d6dea3ef625" name="默认的" comment="[+]新增输出json功能[-oJ]">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/type-config.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/type-config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/kscan.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/gonmap" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/gonmap/type-appbanner.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/gonmap/type-appbanner.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/misc/misc.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/misc/misc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/params/type-osArgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/lib/params/type-osArgs.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run/type-kscan.go" beforeDir="false" afterPath="$PROJECT_DIR$/run/type-kscan.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -208,7 +203,6 @@
       <path value="$PROJECT_DIR$/src/golang.org/x/term" />
       <path value="$PROJECT_DIR$/src/golang.org/x/text" />
     </ignored-roots>
-    <MESSAGE value="[+]v1.20发布~~~~~" />
     <MESSAGE value="[+]目前来看完美解决了乱码问题~" />
     <MESSAGE value="[+]修复部分https协议识别成ssl协议的问题" />
     <MESSAGE value="[+]修复-Pn参数失效的问题" />
@@ -233,7 +227,8 @@
     <MESSAGE value="[*]为了提高默认策略扫描速率，现在默认策略下，如果扫描对象为公网IP，则不会扫描161端口。" />
     <MESSAGE value="[*]新增开发计划，有新需求欢迎各位提~" />
     <MESSAGE value="[*]修改rarity参数默认值为9，为了适配识别更多的协议类型，且经过测试改参数对性能的影响并不大" />
-    <option name="LAST_COMMIT_MESSAGE" value="[*]修改rarity参数默认值为9，为了适配识别更多的协议类型，且经过测试改参数对性能的影响并不大" />
+    <MESSAGE value="[+]新增输出json功能[-oJ]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]新增输出json功能[-oJ]" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -339,10 +334,10 @@
     <state x="180" y="207" key="SettingsEditor/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1619334598291" />
     <state x="180" y="227" key="SettingsEditor/-1440.137.1440.816/0.25.1920.1055@0.25.1920.1055" timestamp="1617955378182" />
     <state x="180" y="207" key="SettingsEditor/1920.95.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1618235570756" />
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1625625897504">
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2" timestamp="1625635219499">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625625897504" />
+    <state x="427" y="224" key="Vcs.Push.Dialog.v2/-1440.0.1440.900/0.0.1920.1080@0.0.1920.1080" timestamp="1625635219499" />
     <state x="124" y="-856" key="Vcs.Push.Dialog.v2/0.0.1440.900/-303.-1080.1920.1080@-303.-1080.1920.1080" timestamp="1623632011196" />
     <state x="327" y="182" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1623766643415" />
     <state x="320" y="194" key="Vcs.Push.Dialog.v2/0.25.1440.816@0.25.1440.816" timestamp="1620359386740" />
