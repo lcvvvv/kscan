@@ -26,7 +26,7 @@ type Config struct {
 	HostTargetNum               int
 	UrlTargetNum                int
 	PortNum                     int
-	ScanPing, Check, Spy        bool
+	ScanPing, Check, Spy, Hydra bool
 	//FofaEmail, FofaKey    string
 }
 
@@ -64,6 +64,7 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.Encoding = p.Encoding()
 	c.Rarity = p.Rarity()
 	c.OutputJson = p.OutputJson()
+	c.Hydra = p.Hydra()
 }
 
 func (c *Config) loadTarget(expr string, recursion bool) {

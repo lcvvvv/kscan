@@ -7,6 +7,7 @@ import (
 	"kscan/app"
 	"kscan/lib/IP"
 	"kscan/lib/gonmap"
+	"kscan/lib/hydra"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/lib/queue"
@@ -14,6 +15,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"sync"
 )
 
 type kscan struct {
@@ -25,6 +27,11 @@ type kscan struct {
 		port      *pool.Pool
 		tcpBanner *pool.Pool
 		appBanner *pool.Pool
+	}
+	watchDog struct {
+		output chan interface{}
+		hydra  chan interface{}
+		wg     *sync.WaitGroup
 	}
 }
 
@@ -45,6 +52,10 @@ func New(config app.Config) *kscan {
 	k.pool.tcpBanner = pool.NewPool(config.Threads)
 	k.pool.port = pool.NewPool(config.Threads)
 	k.pool.host = pool.NewPool(hostThreads)
+
+	k.watchDog.hydra = make(chan interface{})
+	k.watchDog.output = make(chan interface{})
+	k.watchDog.wg = &sync.WaitGroup{}
 	return k
 }
 
@@ -226,15 +237,26 @@ func (k *kscan) GetAppBannerFromCheck() {
 func (k *kscan) Output() {
 	//输出协议识别结果
 	var bannerMapArr []map[string]string
-	for out := range k.pool.appBanner.Out {
-		banner := out.(*gonmap.AppBanner)
-		if banner != nil {
-			bannerMapArr = append(bannerMapArr, banner.Map())
-			str := banner.Output()
-			slog.Data(str)
-			if k.config.Output != nil {
-				k.config.WriteLine(str)
+	for out := range k.watchDog.output {
+		if out == nil {
+			continue
+		}
+		var disp string
+		switch out.(type) {
+		case *gonmap.AppBanner:
+			banner := out.(*gonmap.AppBanner)
+			if banner == nil {
+				return
 			}
+			bannerMapArr = append(bannerMapArr, banner.Map())
+			disp = banner.Output()
+		case hydra.AuthInfo:
+			info := out.(hydra.AuthInfo)
+			disp = info.Output()
+		}
+		slog.Data(disp)
+		if k.config.Output != nil {
+			k.config.WriteLine(disp)
 		}
 	}
 	//输出json
@@ -251,4 +273,51 @@ func (k *kscan) Output() {
 			slog.Warning("输出Json失败！错误信息：", err.Error())
 		}
 	}
+}
+
+func (k *kscan) WatchDog() {
+
+	k.watchDog.wg.Add(1)
+
+	if app.Setting.Hydra {
+		slog.Info("hydra模块已开启，开始监听暴力破解任务")
+		k.watchDog.wg.Add(1)
+	}
+
+	go func() {
+		for out := range k.pool.appBanner.Out {
+			k.watchDog.output <- out
+			if app.Setting.Hydra {
+				k.watchDog.hydra <- out
+			}
+		}
+		k.watchDog.wg.Done()
+		close(k.watchDog.hydra)
+	}()
+	k.watchDog.wg.Wait()
+	close(k.watchDog.output)
+}
+
+func (k *kscan) Hydra() {
+	//初始化默认密码字典
+	hydra.InitDefaultAuthMap()
+	//开始监听暴力破解任务
+	for out := range k.watchDog.hydra {
+		banner := out.(*gonmap.AppBanner)
+		if banner == nil {
+			continue
+		}
+		if hydra.Ok(banner.Protocol, banner.Port) == false {
+			continue
+		}
+		//适配爆破模块
+		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
+		crack := hydra.NewCracker(authInfo, 10)
+		go crack.Run()
+		//爆破结果获取
+		for info := range crack.Out {
+			k.watchDog.output <- info
+		}
+	}
+	k.watchDog.wg.Done()
 }

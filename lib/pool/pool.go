@@ -45,6 +45,8 @@ type Pool struct {
 	Jobs chan *Worker
 	//用于阻塞
 	wg *sync.WaitGroup
+	//提前结束标识符
+	Done bool
 }
 
 //实例化工作池使用
@@ -55,6 +57,7 @@ func NewPool(threads int) *Pool {
 		Out:      make(chan interface{}),
 		In:       make(chan interface{}),
 		Function: nil,
+		Done:     false,
 	}
 }
 
@@ -63,6 +66,9 @@ func (p *Pool) work() {
 	//减少waitGroup计数器的值
 	defer func() { p.wg.Done() }()
 	for param := range p.In {
+		if p.Done {
+			return
+		}
 		f := NewWorker(p.Function)
 		out, err := f.Run(param)
 		if err == nil && out != nil {
@@ -94,4 +100,9 @@ func (p *Pool) InDone() {
 //结束输出信道
 func (p *Pool) OutDone() {
 	close(p.Out)
+}
+
+//向各工作协程发送提前结束指令
+func (p *Pool) Stop() {
+	p.Done = true
 }
