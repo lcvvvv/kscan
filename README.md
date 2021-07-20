@@ -145,7 +145,7 @@ optional arguments:
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP4000
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程400,最大值为2048
-  --path          指定请求访问的目录，逗号分割
+  --path          指定请求访问的目录，只支持单个目录
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8

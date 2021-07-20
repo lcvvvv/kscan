@@ -9,7 +9,7 @@ import (
 )
 
 type OsArgs struct {
-	help, debug, scanPing, check, spy                 bool
+	help, debug, scanPing, check, spy, hydra          bool
 	target, port, output, proxy, path, host, encoding string
 	outputJson                                        string
 	USAGE, HELP, LOGO                                 string
@@ -72,6 +72,10 @@ func (o OsArgs) Debug() bool {
 	return o.debug
 }
 
+func (o OsArgs) Hydra() bool {
+	return o.hydra
+}
+
 func (o OsArgs) Encoding() string {
 	return o.encoding
 }
@@ -93,6 +97,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.scanPing, "Pn", false, "")
 	flag.BoolVar(&o.check, "check", false, "")
 	flag.BoolVar(&o.spy, "spy", false, "")
+	flag.BoolVar(&o.hydra, "hydra", false, "")
 	flag.StringVar(&o.target, "t", "", "")
 	flag.StringVar(&o.target, "target", "", "")
 	flag.StringVar(&o.port, "p", "", "")
@@ -194,7 +199,7 @@ func New(logo string, usage string, help string) *OsArgs {
 		USAGE:    usage,
 		HELP:     help,
 		intsReg:  regexp.MustCompile("^((?:[0-9]+)(?:-[0-9]+)?)(?:,(?:[0-9]+)(?:-[0-9]+)?)*$"),
-		strsReg:  regexp.MustCompile("^([A-Za-z0-9/]+)(,[A-Za-z0-9/])*$"),
+		strsReg:  regexp.MustCompile("^([\\.A-Za-z0-9/]+)(,[\\.A-Za-z0-9/])*$"),
 		proxyReg: regexp.MustCompile("^(http|https|socks5|socks4)://[0-9.]+:[0-9]+$"),
 	}
 }
