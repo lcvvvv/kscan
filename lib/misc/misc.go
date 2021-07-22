@@ -81,6 +81,26 @@ func ReadLine(fileName string, handler func(string, bool)) error {
 	}
 }
 
+func ReadLineAll(fileName string) []string {
+	var strArr []string
+	f, err := os.Open(fileName)
+	if err != nil {
+		return strArr
+	}
+	buf := bufio.NewReader(f)
+	for {
+		line, err := buf.ReadString('\n')
+		line = FixLine(line)
+		strArr = append(strArr, line)
+		if err != nil {
+			if err == io.EOF {
+				return strArr
+			}
+			return strArr
+		}
+	}
+}
+
 func FixLine(line string) string {
 	line = strings.Replace(line, "\r", "", -1)
 	line = strings.Replace(line, " ", "", -1)

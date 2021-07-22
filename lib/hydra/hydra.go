@@ -1,6 +1,8 @@
 package hydra
 
 import (
+	"kscan/app"
+	"kscan/lib/hydra/rdp"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 )
@@ -16,8 +18,21 @@ func NewCracker(info *AuthInfo, threads int) *Cracker {
 	c := &Cracker{}
 	c.Pool = pool.NewPool(threads)
 	c.authInfo = info
-	c.fixProtocol()
-	c.authList = DefaultAuthMap[c.authInfo.Protocol]
+	if misc.IsInStrArr(app.Setting.HydraMod, c.authInfo.Protocol) == false {
+		c.authInfo.Protocol = app.Setting.HydraMap[c.authInfo.Port]
+	}
+	c.authList = func() *AuthList {
+		list := DefaultAuthMap[c.authInfo.Protocol]
+		if app.Setting.HydraUpdate {
+			list.Merge(CustomAuthMap)
+			return list
+		}
+		if CustomAuthMap.IsEmpty() == false {
+			list.Replace(CustomAuthMap)
+			return list
+		}
+		return list
+	}()
 	c.Out = make(chan AuthInfo)
 	return c
 }
@@ -91,66 +106,46 @@ func (c *Cracker) OutWatchDog() {
 	close(c.Out)
 }
 
-func (c *Cracker) fixProtocol() {
-	protocolMap := map[int]string{
-		3389:  "rdp",
-		3306:  "mysql",
-		1433:  "mssql",
-		1521:  "oracle",
-		389:   "ldap",
-		22:    "ssh",
-		23:    "telnet",
-		21:    "ftp",
-		50000: "db2",
-		27017: "mongodb",
-		6379:  "redis",
-		445:   "smb",
+func rdpCracker(i interface{}) interface{} {
+	info := i.(AuthInfo)
+	info.Auth.MakePassword()
+	domain := "workgroup"
+	if _, ok := info.Auth.Other["domain"]; ok {
+		domain = info.Auth.Other["domain"]
 	}
-	c.authInfo.Protocol = protocolMap[c.authInfo.Port]
-
+	if ok, _ := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
+		info.Status = true
+		return info
+	}
+	return nil
 }
 
 //func rdpCracker(i interface{}) interface{} {
 //	info := i.(AuthInfo)
 //	info.Auth.MakePassword()
-//	domain := "workgroup"
-//	if _, ok := info.Auth.Other["domain"]; ok {
-//		domain = info.Auth.Other["domain"]
-//	}
-//	if ok, _ := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
-//		info.Status = true
-//		return info
-//	}
+//	//domain := "workgroup"
+//	//if _, ok := info.Auth.Other["domain"]; ok {
+//	//	domain = info.Auth.Other["domain"]
+//	//}
+//	//if ok, _ := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
+//	//	info.Status = true
+//	//	return info
+//	//}
 //	return nil
 //}
 
-func rdpCracker(i interface{}) interface{} {
-	info := i.(AuthInfo)
-	info.Auth.MakePassword()
-	//domain := "workgroup"
-	//if _, ok := info.Auth.Other["domain"]; ok {
-	//	domain = info.Auth.Other["domain"]
-	//}
-	//if ok, _ := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
-	//	info.Status = true
-	//	return info
-	//}
-	return nil
-}
-
 func Ok(protocol string, port int) bool {
-	protocolArr := []string{"rdp"}
-	if misc.IsInStrArr(protocolArr, protocol) {
+	if misc.IsInStrArr(app.Setting.HydraProtocolArr, protocol) {
 		return true
 	}
-	portArr := []int{3389}
-	if misc.IsInIntArr(portArr, port) {
+	if misc.IsInIntArr(app.Setting.HydraPortArr, port) {
 		return true
 	}
 	return false
 }
 
 var DefaultAuthMap map[string]*AuthList
+var CustomAuthMap *AuthList
 
 func InitDefaultAuthMap() {
 	m := make(map[string]*AuthList)
@@ -169,4 +164,10 @@ func InitDefaultAuthMap() {
 	}
 	m["rdp"] = DefaultRdpList()
 	DefaultAuthMap = m
+}
+
+func InitCustomAuthMap() {
+	CustomAuthMap = NewAuthList()
+	CustomAuthMap.Password = app.Setting.HydraPass
+	CustomAuthMap.Username = app.Setting.HydraUser
 }

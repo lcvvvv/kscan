@@ -9,12 +9,16 @@ import (
 )
 
 type OsArgs struct {
-	help, debug, scanPing, check, spy, hydra          bool
+	help, debug, scanPing, check, spy                 bool
 	target, port, output, proxy, path, host, encoding string
 	outputJson                                        string
 	USAGE, HELP, LOGO                                 string
 	top, threads, timeout, rarity                     int
-	intsReg, strsReg, proxyReg                        *regexp.Regexp
+	//hydra模块
+	hydra, hydraUpdate             bool
+	hydraUser, hydraPass, hydraMod string
+	//参数校验正则
+	intsReg, strsReg, proxyReg *regexp.Regexp
 }
 
 func (o OsArgs) Target() string {
@@ -76,6 +80,22 @@ func (o OsArgs) Hydra() bool {
 	return o.hydra
 }
 
+func (o OsArgs) HydraUpdate() bool {
+	return o.hydraUpdate
+}
+
+func (o OsArgs) HydraMod() string {
+	return o.hydraMod
+}
+
+func (o OsArgs) HydraUser() string {
+	return o.hydraUser
+}
+
+func (o OsArgs) HydraPass() string {
+	return o.hydraPass
+}
+
 func (o OsArgs) Encoding() string {
 	return o.encoding
 }
@@ -98,8 +118,12 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.check, "check", false, "")
 	flag.BoolVar(&o.spy, "spy", false, "")
 	flag.BoolVar(&o.hydra, "hydra", false, "")
-	flag.StringVar(&o.target, "t", "", "")
+	flag.BoolVar(&o.hydraUpdate, "hydra-update", false, "")
+	flag.StringVar(&o.hydraUser, "hydra-user", "", "")
+	flag.StringVar(&o.hydraPass, "hydra-pass", "", "")
+	flag.StringVar(&o.hydraMod, "hydra-mod", "", "")
 	flag.StringVar(&o.target, "target", "", "")
+	flag.StringVar(&o.target, "t", "", "")
 	flag.StringVar(&o.port, "p", "", "")
 	flag.StringVar(&o.port, "port", "", "")
 	flag.StringVar(&o.output, "o", "", "")

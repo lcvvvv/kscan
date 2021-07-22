@@ -26,7 +26,13 @@ type Config struct {
 	HostTargetNum               int
 	UrlTargetNum                int
 	PortNum                     int
-	ScanPing, Check, Spy, Hydra bool
+	ScanPing, Check, Spy        bool
+	//hydra
+	Hydra, HydraUpdate             bool
+	HydraPass, HydraUser, HydraMod []string
+	HydraPortArr                   []int
+	HydraProtocolArr               []string
+	HydraMap                       map[int]string
 	//FofaEmail, FofaKey    string
 }
 
@@ -47,7 +53,6 @@ func (c *Config) Load(p *params.OsArgs) {
 		c.Spy = p.Spy()
 		return
 	}
-
 	c.loadTarget(p.Target(), false)
 	c.loadTargetNum()
 	c.loadPort(p.Port())
@@ -65,6 +70,14 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.Rarity = p.Rarity()
 	c.OutputJson = p.OutputJson()
 	c.Hydra = p.Hydra()
+	c.HydraUpdate = p.HydraUpdate()
+	c.HydraUser = c.makeHydraUser(p.HydraUser())
+	c.HydraPass = c.makeHydraPass(p.HydraPass())
+	c.HydraMap = c.makeHydraMap()
+	c.HydraPortArr = c.makeHydraPortArr(c.HydraMap)
+	c.HydraProtocolArr = c.makeHydraProtocolArr(c.HydraMap)
+	c.loadHydraMod(p.HydraMod())
+
 }
 
 func (c *Config) loadTarget(expr string, recursion bool) {
@@ -144,6 +157,109 @@ func (c *Config) loadTargetNum() {
 
 func (c *Config) loadPortNum() {
 	c.PortNum = len(c.Port)
+}
+
+func (c *Config) makeHydraUser(expr string) []string {
+	//判断对象是否为文件
+	if regexp.MustCompile("^file:.+$").MatchString(expr) {
+		path := strings.Replace(expr, "file:", "", 1)
+		return misc.ReadLineAll(path)
+	}
+	//判断对象是否为多个
+	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
+		var userArr []string
+		for _, str := range strings.Split(strArr, ",") {
+			userArr = append(userArr, strings.ReplaceAll(str, "[DouHao]", ","))
+		}
+		return userArr
+	}
+	//对象为单个且不为空时直接返回
+	if expr != "" {
+		return []string{expr}
+	}
+	return []string{}
+}
+
+func (c *Config) makeHydraPass(expr string) []string {
+	//判断对象是否为文件
+	if regexp.MustCompile("^file:.+$").MatchString(expr) {
+		path := strings.Replace(expr, "file:", "", 1)
+		return misc.ReadLineAll(path)
+	}
+	//判断对象是否为多个
+	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
+		var passArr []string
+		for _, str := range strings.Split(strArr, ",") {
+			passArr = append(passArr, strings.ReplaceAll(str, "[DouHao]", ","))
+		}
+		return passArr
+	}
+	//对象为单个且不为空时直接返回
+	if expr != "" {
+		return []string{expr}
+	}
+	return []string{}
+}
+
+func (c *Config) makeHydraMap() map[int]string {
+	return map[int]string{
+		3389: "rdp",
+		//3306:  "mysql",
+		//1433:  "mssql",
+		//1521:  "oracle",
+		//389:   "ldap",
+		//22:    "ssh",
+		//23:    "telnet",
+		//21:    "ftp",
+		//50000: "db2",
+		//27017: "mongodb",
+		//6379:  "redis",
+		//445:   "smb",
+	}
+}
+
+func (c *Config) makeHydraPortArr(hydraMap map[int]string) []int {
+	var intArr []int
+	for key := range hydraMap {
+		intArr = append(intArr, key)
+	}
+	return intArr
+}
+
+func (c *Config) makeHydraProtocolArr(hydraMap map[int]string) []string {
+	var strArr []string
+	for _, value := range hydraMap {
+		strArr = append(strArr, value)
+	}
+	return strArr
+}
+
+func (c *Config) loadHydraMod(expr string) {
+	if expr == "" || expr == "all" {
+		return
+	}
+	var protocolArr []string
+	if strings.Contains(expr, ",") {
+		for _, protocol := range strings.Split(expr, ",") {
+			if misc.IsInStrArr(c.HydraProtocolArr, protocol) {
+				protocolArr = append(protocolArr, protocol)
+			}
+		}
+	} else {
+		if misc.IsInStrArr(c.HydraProtocolArr, expr) {
+			protocolArr = append(protocolArr, expr)
+		}
+	}
+	c.HydraMod = protocolArr
+
+	hydraMap := make(map[int]string)
+	for port, protocol := range c.HydraMap {
+		if misc.IsInStrArr(c.HydraMod, protocol) {
+			hydraMap[port] = protocol
+		}
+	}
+	c.HydraPortArr = c.makeHydraPortArr(hydraMap)
+	c.HydraProtocolArr = c.makeHydraProtocolArr(hydraMap)
 }
 
 func New() Config {

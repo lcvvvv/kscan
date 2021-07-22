@@ -19,7 +19,7 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.26#\#| \#|
+|#|\#\#####/ \#####/#/ v1.27#\#| \#|
            轻量级资产测绘工具 by：kv2
 
 `
@@ -38,7 +38,6 @@ optional arguments:
   -o , --output   将扫描结果保存到文件
   -oJ             将扫描结果使用json格式保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
-  --hydra         自动化爆破支持协议：rdp、ssh、telnet、mssql、mysql等等....
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP4000
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
@@ -49,9 +48,15 @@ optional arguments:
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
   --spy           网段探测模式，此模式下将自动探测主机可达的内网网段,无需配置其他任何参数
   --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：9
+  --hydra         自动化爆破支持协议：rdp、ssh、telnet、mssql、mysql等等....
+   --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt
+   --hydra-pass   自定义hydra爆破密码:password or pass1,pass2 or file:password.txt
+                  若密码中存在使用逗号的情况，则使用\,进行转义，其他符号无需转义
+   --hydra-update 自定义用户名、密码模式，若携带此参数，则为新增模式，会将用户名和密码补充在默认字典后面。否则将替换默认字典。
+   --hydra-mod    指定自动化暴力破解模块:rdp or rdp,ssh,smb
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity] [--hydra]\n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity] [--hydra] [--hydra-user] [--hydra-pass] [--hydra-update] [--hydra-mod] \n\n"
 
 func main() {
 	startTime := time.Now()

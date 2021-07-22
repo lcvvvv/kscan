@@ -301,6 +301,8 @@ func (k *kscan) WatchDog() {
 func (k *kscan) Hydra() {
 	//初始化默认密码字典
 	hydra.InitDefaultAuthMap()
+	//加载自定义字典
+	hydra.InitCustomAuthMap()
 	//开始监听暴力破解任务
 	for out := range k.watchDog.hydra {
 		banner := out.(*gonmap.AppBanner)

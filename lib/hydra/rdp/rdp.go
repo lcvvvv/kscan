@@ -4,7 +4,10 @@ package rdp
 #cgo CFLAGS: -I./freerdp2/include/freerdp2
 #cgo CFLAGS: -I./freerdp2/include/winpr2
 #cgo LDFLAGS: -L./freerdp2/lib
-
+#cgo LDFLAGS: ${SRCDIR}/freerdp2/lib/libcrypto.a
+#cgo LDFLAGS: ${SRCDIR}/freerdp2/lib/libssl.a
+#cgo LDFLAGS: ${SRCDIR}/freerdp2/lib/libfreerdp2.a
+#cgo LDFLAGS: ${SRCDIR}/freerdp2/lib/libwinpr2.a
 
 
 #include <freerdp/freerdp.h>
