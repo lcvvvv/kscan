@@ -17,10 +17,10 @@ func NewAuthList() *AuthList {
 }
 
 func (a *AuthList) IsEmpty() bool {
-	if len(a.Username) == 0 && len(a.Password) == 0 && len(a.Special) == 0 {
-		return true
+	if len(a.Username) > 0 && len(a.Password) > 0 {
+		return false
 	}
-	return false
+	return true
 }
 
 func (a *AuthList) Merge(list *AuthList) {
