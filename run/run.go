@@ -39,6 +39,7 @@ func Start(config app.Config) {
 	go K.WatchDog()
 
 	//STEP4: 暴力破解
+	time.Sleep(time.Microsecond * 200)
 	if app.Setting.Hydra {
 		time.Sleep(time.Microsecond * 200)
 		go K.Hydra()

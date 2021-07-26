@@ -246,7 +246,7 @@ func (k *kscan) Output() {
 		case *gonmap.AppBanner:
 			banner := out.(*gonmap.AppBanner)
 			if banner == nil {
-				return
+				continue
 			}
 			bannerMapArr = append(bannerMapArr, banner.Map())
 			disp = banner.Output()
@@ -283,17 +283,16 @@ func (k *kscan) WatchDog() {
 		slog.Info("hydra模块已开启，开始监听暴力破解任务")
 		k.watchDog.wg.Add(1)
 	}
-
-	go func() {
-		for out := range k.pool.appBanner.Out {
-			k.watchDog.output <- out
-			if app.Setting.Hydra {
-				k.watchDog.hydra <- out
-			}
+	for out := range k.pool.appBanner.Out {
+		k.watchDog.output <- out
+		if app.Setting.Hydra {
+			k.watchDog.hydra <- out
 		}
-		k.watchDog.wg.Done()
-		close(k.watchDog.hydra)
-	}()
+	}
+
+	k.watchDog.wg.Done()
+	close(k.watchDog.hydra)
+
 	k.watchDog.wg.Wait()
 	close(k.watchDog.output)
 }
