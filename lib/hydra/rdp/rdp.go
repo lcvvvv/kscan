@@ -13,18 +13,14 @@ package rdp
 #cgo windows CFLAGS: -I./lib/windows/freerdp2/include/freerdp2
 #cgo windows CFLAGS: -I./lib/windows/freerdp2/include/winpr2
 #cgo windows LDFLAGS: -L${SRCDIR}/lib/windows/freerdp2/lib
-#cgo windows LDFLAGS: ${SRCDIR}/lib/windows/freerdp2/lib/libfreerdp2.a
-#cgo windows LDFLAGS: ${SRCDIR}/lib/windows/freerdp2/lib/libwinpr2.a
-#cgo windows LDFLAGS: ${SRCDIR}/lib/windows/freerdp2/lib/libcrypto.a
-#cgo windows LDFLAGS: ${SRCDIR}/lib/windows/freerdp2/lib/libssl.a
-//#cgo windows LDFLAGS: -lfreerdp2 -lwinpr2 -lcrypto -lssl
+#cgo windows LDFLAGS: -lcrypto -lssl -lfreerdp2 -lwinpr2
 
 
 //linux编译环境配置
 #cgo linux CFLAGS: -DCGO_OS_LINUX=1
-#cgo linux CFLAGS: -I./lib/mac/freerdp2/include/freerdp2
-#cgo linux CFLAGS: -I./lib/mac/freerdp2/include/winpr2
-#cgo linux LDFLAGS: -L${SRCDIR}/lib/mac/freerdp2/lib
+#cgo linux CFLAGS: -I./lib/linux/freerdp2/include/freerdp2
+#cgo linux CFLAGS: -I./lib/linux/freerdp2/include/winpr2
+#cgo linux LDFLAGS: -L${SRCDIR}/lib/linux/freerdp2/lib
 #cgo linux LDFLAGS: -lcrypto -lssl -lfreerdp2 -lwinpr2
 
 

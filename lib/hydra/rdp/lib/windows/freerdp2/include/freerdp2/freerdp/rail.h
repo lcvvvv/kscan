@@ -247,17 +247,51 @@ enum SPI_MASK
 
 /* ImeConvMode */
 #ifndef _IME_CMODES_
+
+#ifndef IME_CMODE_NATIVE
 #define IME_CMODE_NATIVE 0x00000001
+#endif
+
+#ifndef IME_CMODE_KATAKANA
 #define IME_CMODE_KATAKANA 0x00000002
+#endif
+
+#ifndef IME_CMODE_FULLSHAPE
 #define IME_CMODE_FULLSHAPE 0x00000008
+#endif
+
+#ifndef IME_CMODE_ROMAN
 #define IME_CMODE_ROMAN 0x00000010
+#endif
+
+#ifndef IME_CMODE_CHARCODE
 #define IME_CMODE_CHARCODE 0x00000020
+#endif
+
+#ifndef IME_CMODE_HANJACONVERT
 #define IME_CMODE_HANJACONVERT 0x00000040
+#endif
+
+#ifndef IME_CMODE_SOFTKBD
 #define IME_CMODE_SOFTKBD 0x00000080
+#endif
+
+#ifndef IME_CMODE_NOCONVERSION
 #define IME_CMODE_NOCONVERSION 0x00000100
+#endif
+
+#ifndef IME_CMODE_EUDC
 #define IME_CMODE_EUDC 0x00000200
+#endif
+
+#ifndef IME_CMODE_SYMBOL
 #define IME_CMODE_SYMBOL 0x00000400
+#endif
+
+#ifndef IME_CMODE_SYMBOL
 #define IME_CMODE_FIXED 0x00000800
+#endif
+
 #endif
 
 /* ImeSentenceMode */

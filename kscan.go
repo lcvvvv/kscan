@@ -28,6 +28,7 @@ const logo = `
 const help = `
 optional arguments:
   -h , --help     show this help message and exit
+  -f , --fofa     从fofa获取检测对象，需提前在环境变量配置APIKEY，FOFA_EMAIL、FOFA_TOKEN
   -t , --target   指定探测对象：
                   IP地址：114.114.114.114
                   IP地址段：114.114.114.114/24,不建议子网掩码小于12
@@ -49,14 +50,20 @@ optional arguments:
   --spy           网段探测模式，此模式下将自动探测主机可达的内网网段,无需配置其他任何参数
   --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：9
   --hydra         自动化爆破支持协议：rdp、ssh、telnet、mssql、mysql等等....
+hydra options:
    --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt
    --hydra-pass   自定义hydra爆破密码:password or pass1,pass2 or file:password.txt
                   若密码中存在使用逗号的情况，则使用\,进行转义，其他符号无需转义
    --hydra-update 自定义用户名、密码模式，若携带此参数，则为新增模式，会将用户名和密码补充在默认字典后面。否则将替换默认字典。
    --hydra-mod    指定自动化暴力破解模块:rdp or rdp,ssh,smb
+fofa options:
+   --fofa-syntax  将获取fofa搜索语法说明
+   --fofa-size    将设置fofa返回条目数，默认100条
+   --fofa-field   可设置fofa搜索返回结果的字段排列顺序，默认排列顺序为：title,host,ip,port
+   --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help] (-t,--target) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity] [--hydra] [--hydra-user] [--hydra-pass] [--hydra-update] [--hydra-mod] \n\n"
+const usage = "usage: kscan [-h,--help] (-t,--target,-f,--fofa) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity] [--hydra] [hydra options] [fofa options]\n\n"
 
 func main() {
 	startTime := time.Now()

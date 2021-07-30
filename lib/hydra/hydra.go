@@ -120,20 +120,6 @@ func rdpCracker(i interface{}) interface{} {
 	return nil
 }
 
-//func rdpCracker(i interface{}) interface{} {
-//	info := i.(AuthInfo)
-//	info.Auth.MakePassword()
-//	//domain := "workgroup"
-//	//if _, ok := info.Auth.Other["domain"]; ok {
-//	//	domain = info.Auth.Other["domain"]
-//	//}
-//	//if ok, _ := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
-//	//	info.Status = true
-//	//	return info
-//	//}
-//	return nil
-//}
-
 func Ok(protocol string, port int) bool {
 	if misc.IsInStrArr(app.Setting.HydraProtocolArr, protocol) {
 		return true
