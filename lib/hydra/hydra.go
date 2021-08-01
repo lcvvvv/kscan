@@ -5,6 +5,7 @@ import (
 	"kscan/lib/hydra/rdp"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
+	"kscan/lib/slog"
 )
 
 type Cracker struct {
@@ -113,7 +114,11 @@ func rdpCracker(i interface{}) interface{} {
 	if _, ok := info.Auth.Other["domain"]; ok {
 		domain = info.Auth.Other["domain"]
 	}
-	if ok, _ := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
+	if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
+		if err != nil {
+			slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+			return nil
+		}
 		info.Status = true
 		return info
 	}
