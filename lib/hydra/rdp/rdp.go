@@ -26,12 +26,13 @@ package rdp
 
 #include <freerdp/freerdp.h>
 
-BOOL rdp_connect(char *server, int port, char *domain, char *login, char *password) {
-    int err;
+u_int rdp_connect(char *server, u_int port, char *domain, char *login, char *password) {
+    u_int err;
+	err = 500;
     freerdp* instance;
     instance = freerdp_new();
     if (instance == NULL || freerdp_context_new(instance) == FALSE) {
-        return -1;
+        return err;
     }
     instance->settings->Username = login;
     instance->settings->Password = password;
@@ -42,31 +43,51 @@ BOOL rdp_connect(char *server, int port, char *domain, char *login, char *passwo
     instance->settings->Domain = domain;
     freerdp_connect(instance);
     err = freerdp_get_last_error(instance->context);
-    switch (err) {
-        case 0:
-        	freerdp_disconnect(instance);
-			freerdp_free(instance);
-            return err;
-        case 0x00020009:
-        case 0x00020014:
-        case 0x00020015:
-			// login failure
-        case 0x0002000d:
-        case 0x00020006:
-        case 0x00020008:
-        case 0x0002000c:
-			freerdp_free(instance);
-            // cannot establish rdp connection, either the port is not opened or it's
-            // not rdp
-			return err;
-    }
+	if (err == 0){
+		freerdp_disconnect(instance);
+		freerdp_free(instance);
+		err = 200;
+		return err;
+	}
+	if (err == 0x00020014){
+		freerdp_free(instance);
+		err = 404;
+		// login failure
+		return err;
+	}
+	if (err == 0x00020015){
+		freerdp_free(instance);
+		err = 404;
+		// login failure
+		return err;
+	}
+	if (err == 0x0002000c){
+		freerdp_free(instance);
+		err = 501;
+		// cannot establish rdp connection, either the port is not opened or it's
+		//no rdp
+		return err;
+	}
 	freerdp_free(instance);
     return err;
+    //switch (err) {
+    //    case 0:
+	//
+    //    case 0x00020009:
+    //    case 0x0002000d:
+    //    case 0x00020006:
+    //    case 0x00020008:
+    //    case :
+	//		freerdp_free(instance);
+	//		return err;
+    //        // cannot establish rdp connection, either the port is not opened or it's
+    //        // not rdp
+    //}
 }
 
-int check_rdp(char *ip, int port, char *domain, char *login, char *password) {
+u_int check_rdp(char *ip, u_int port, char *domain, char *login, char *password) {
 //int check_rdp() {
-    int login_result = 0;
+    u_int login_result = 0;
     wLog *root = WLog_GetRoot();
     WLog_SetStringLogLevel(root, "OFF");
     login_result = rdp_connect(ip, port, domain, login, password);
@@ -90,7 +111,7 @@ func Check(ip, domain, login, password string, port int) (bool, error) {
 	var nDomain *C.char = C.CString(domain)
 	var nLogin *C.char = C.CString(login)
 	var nPassword *C.char = C.CString(password)
-	var nPort C.int = C.int(port)
+	var nPort C.uint = C.uint(port)
 
 	//defer func() {
 	//	C.free(unsafe.Pointer(nIp))
@@ -99,12 +120,14 @@ func Check(ip, domain, login, password string, port int) (bool, error) {
 	//	C.free(unsafe.Pointer(nPassword))
 	//}()
 
-	rInt := int(C.check_rdp(nIp, nPort, nDomain, nLogin, nPassword))
+	rInt := uint(C.check_rdp(nIp, nPort, nDomain, nLogin, nPassword))
 	switch rInt {
-	case 0:
+	case 200:
 		return true, nil
-	case -1:
+	case 500:
 		return false, errors.New("freerdp init failed")
+	case 501:
+		return false, errors.New("no rdp")
 	default:
 		return false, nil
 	}
