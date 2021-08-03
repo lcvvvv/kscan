@@ -21,13 +21,30 @@ package rdp
 #cgo linux CFLAGS: -I./lib/linux/freerdp2/include/freerdp2
 #cgo linux CFLAGS: -I./lib/linux/freerdp2/include/winpr2
 #cgo linux LDFLAGS: -L${SRCDIR}/lib/linux/freerdp2/lib
-#cgo linux LDFLAGS: -lcrypto -lssl -lfreerdp2 -lwinpr2
+#cgo linux LDFLAGS: -lfreerdp2 -lwinpr2 -lm -ldl -lcrypto -lssl
+
+#if defined(CGO_OS_WINDOWS)
+	//static char* os = "windows";
+	#define uint u_int
+#endif
+
+
+
+#if defined(CGO_OS_DARWIN)
+	//static char* os = "darwin";
+#endif
+
+
+#if defined(CGO_OS_LINUX)
+	//static char* os = "linux";
+	#define uint int
+#endif
 
 
 #include <freerdp/freerdp.h>
 
-u_int rdp_connect(char *server, u_int port, char *domain, char *login, char *password) {
-    u_int err;
+uint rdp_connect(char *server, uint port, char *domain, char *login, char *password) {
+    uint err;
 	err = 500;
     freerdp* instance;
     instance = freerdp_new();
@@ -65,7 +82,7 @@ u_int rdp_connect(char *server, u_int port, char *domain, char *login, char *pas
 		freerdp_free(instance);
 		err = 501;
 		// cannot establish rdp connection, either the port is not opened or it's
-		//no rdp
+		// no rdp
 		return err;
 	}
 	freerdp_free(instance);
@@ -85,9 +102,8 @@ u_int rdp_connect(char *server, u_int port, char *domain, char *login, char *pas
     //}
 }
 
-u_int check_rdp(char *ip, u_int port, char *domain, char *login, char *password) {
-//int check_rdp() {
-    u_int login_result = 0;
+uint check_rdp(char *ip, uint port, char *domain, char *login, char *password) {
+    uint login_result = 0;
     wLog *root = WLog_GetRoot();
     WLog_SetStringLogLevel(root, "OFF");
     login_result = rdp_connect(ip, port, domain, login, password);
