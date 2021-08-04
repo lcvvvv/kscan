@@ -12,13 +12,38 @@ type OsArgs struct {
 	help, debug, scanPing, check, spy                 bool
 	target, port, output, proxy, path, host, encoding string
 	outputJson                                        string
-	USAGE, HELP, LOGO                                 string
+	USAGE, HELP, LOGO, SYNTAX                         string
 	top, threads, timeout, rarity                     int
 	//hydra模块
 	hydra, hydraUpdate             bool
 	hydraUser, hydraPass, hydraMod string
+	//fofa模块
+	fofa, fofaField, fofaFixKeyword string
+	fofaSize                        int
+	fofaSyntax                      bool
+	scan                            bool
 	//参数校验正则
 	intsReg, strsReg, proxyReg *regexp.Regexp
+}
+
+func (o OsArgs) Fofa() string {
+	return o.fofa
+}
+
+func (o OsArgs) Scan() bool {
+	return o.scan
+}
+
+func (o OsArgs) FofaField() string {
+	return o.fofaField
+}
+
+func (o OsArgs) FofaFixKeyword() string {
+	return o.fofaFixKeyword
+}
+
+func (o OsArgs) FofaSize() int {
+	return o.fofaSize
 }
 
 func (o OsArgs) Target() string {
@@ -114,29 +139,41 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.help, "help", false, "")
 	flag.BoolVar(&o.debug, "debug", false, "")
 	flag.BoolVar(&o.debug, "d", false, "")
-	flag.BoolVar(&o.scanPing, "Pn", false, "")
-	flag.BoolVar(&o.check, "check", false, "")
+	//spy模块
 	flag.BoolVar(&o.spy, "spy", false, "")
+	//hydra模块
 	flag.BoolVar(&o.hydra, "hydra", false, "")
 	flag.BoolVar(&o.hydraUpdate, "hydra-update", false, "")
 	flag.StringVar(&o.hydraUser, "hydra-user", "", "")
 	flag.StringVar(&o.hydraPass, "hydra-pass", "", "")
 	flag.StringVar(&o.hydraMod, "hydra-mod", "", "")
+	//fofa模块
+	flag.StringVar(&o.fofa, "fofa", "", "")
+	flag.StringVar(&o.fofa, "f", "", "")
+	flag.StringVar(&o.fofaField, "fofa-field", "", "")
+	flag.StringVar(&o.fofaFixKeyword, "fofa-fix-keyword", "", "")
+	flag.IntVar(&o.fofaSize, "fofa-size", 100, "")
+	flag.BoolVar(&o.fofaSyntax, "fofa-syntax", false, "")
+	flag.BoolVar(&o.scan, "scan", false, "")
+	//kscan模块
 	flag.StringVar(&o.target, "target", "", "")
 	flag.StringVar(&o.target, "t", "", "")
 	flag.StringVar(&o.port, "p", "", "")
 	flag.StringVar(&o.port, "port", "", "")
-	flag.StringVar(&o.output, "o", "", "")
-	flag.StringVar(&o.output, "output", "", "")
-	flag.StringVar(&o.outputJson, "oJ", "", "")
 	flag.StringVar(&o.proxy, "proxy", "", "")
 	flag.StringVar(&o.path, "path", "", "")
 	flag.StringVar(&o.host, "host", "", "")
-	flag.StringVar(&o.encoding, "encoding", "utf-8", "")
 	flag.IntVar(&o.rarity, "rarity", 9, "")
 	flag.IntVar(&o.top, "top", 400, "")
 	flag.IntVar(&o.threads, "threads", 400, "")
 	flag.IntVar(&o.timeout, "timeout", 3, "")
+	flag.BoolVar(&o.scanPing, "Pn", false, "")
+	flag.BoolVar(&o.check, "check", false, "")
+	//输出模块
+	flag.StringVar(&o.encoding, "encoding", "utf-8", "")
+	flag.StringVar(&o.output, "o", "", "")
+	flag.StringVar(&o.output, "output", "", "")
+	flag.StringVar(&o.outputJson, "oJ", "", "")
 	flag.Parse()
 }
 
@@ -154,6 +191,12 @@ func (o *OsArgs) PrintBanner() {
 		slog.Data(o.HELP)
 		os.Exit(0)
 	}
+	if o.fofaSyntax {
+		slog.Data(o.LOGO)
+		slog.Data(o.USAGE)
+		slog.Data(o.SYNTAX)
+		os.Exit(0)
+	}
 	//打印logo
 	slog.Data(o.LOGO)
 }
@@ -164,16 +207,16 @@ func (o *OsArgs) CheckArgs() {
 		return
 	}
 
-	if o.target == "" {
-		slog.Error("必须输入TARGET参数")
+	if o.target == "" && o.fofa == "" {
+		slog.Error("至少有target、fofa两个参数中的一个")
 	}
 
 	//判断冲突参数
 	if o.port != "" && o.top != 400 {
-		slog.Error("PORT、TOP只允许同时出现一个")
+		slog.Error("port、top参数不能同时使用")
 	}
-	if o.port != "" && o.top == 400 {
-		o.top = 0
+	if o.target != "" && o.fofa != "" {
+		slog.Error("target、fofa参数不能同时使用")
 	}
 
 	//判断内容
@@ -195,7 +238,7 @@ func (o *OsArgs) CheckArgs() {
 	}
 	if o.proxy != "" {
 		if !o.proxyReg.MatchString(o.proxy) {
-			slog.Error("PROXY参数输入错误，其格式应为：http://IP:PORT，支持socks5/4")
+			slog.Error("PROXY参数输入错误，其格式应为：http://ip:port，支持socks5/4")
 		}
 	}
 	if o.path != "" {
@@ -217,11 +260,12 @@ func (o *OsArgs) CheckArgs() {
 	}
 }
 
-func New(logo string, usage string, help string) *OsArgs {
+func New(logo string, usage string, help string, syntax string) *OsArgs {
 	return &OsArgs{
 		LOGO:     logo,
 		USAGE:    usage,
 		HELP:     help,
+		SYNTAX:   syntax,
 		intsReg:  regexp.MustCompile("^((?:[0-9]+)(?:-[0-9]+)?)(?:,(?:[0-9]+)(?:-[0-9]+)?)*$"),
 		strsReg:  regexp.MustCompile("^([\\.A-Za-z0-9/]+)(,[\\.A-Za-z0-9/])*$"),
 		proxyReg: regexp.MustCompile("^(http|https|socks5|socks4)://[0-9.]+:[0-9]+$"),

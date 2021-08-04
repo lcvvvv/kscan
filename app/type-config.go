@@ -23,9 +23,6 @@ type Config struct {
 	OutputJson                  string
 	Threads, Rarity             int
 	Timeout                     time.Duration
-	HostTargetNum               int
-	UrlTargetNum                int
-	PortNum                     int
 	ScanPing, Check, Spy        bool
 	//hydra
 	Hydra, HydraUpdate             bool
@@ -33,7 +30,11 @@ type Config struct {
 	HydraPortArr                   []int
 	HydraProtocolArr               []string
 	HydraMap                       map[int]string
-	//FofaEmail, FofaKey    string
+	//fofa
+	Fofa, FofaField []string
+	FofaFixKeywored string
+	FofaSize        int
+	Scan            bool
 }
 
 var Setting = New()
@@ -54,10 +55,8 @@ func (c *Config) Load(p *params.OsArgs) {
 		return
 	}
 	c.loadTarget(p.Target(), false)
-	c.loadTargetNum()
 	c.loadPort(p.Port())
 	c.loadPort(p.Top())
-	c.loadPortNum()
 	c.loadOutput(p.Output())
 	c.loadTimeout(p.Timeout())
 	c.ScanPing = p.ScanPing()
@@ -69,6 +68,7 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.Encoding = p.Encoding()
 	c.Rarity = p.Rarity()
 	c.OutputJson = p.OutputJson()
+	//hydra模块
 	c.Hydra = p.Hydra()
 	c.HydraUpdate = p.HydraUpdate()
 	c.HydraUser = c.makeHydraUser(p.HydraUser())
@@ -77,10 +77,19 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.HydraPortArr = c.makeHydraPortArr(c.HydraMap)
 	c.HydraProtocolArr = c.makeHydraProtocolArr(c.HydraMap)
 	c.loadHydraMod(p.HydraMod())
+	//fofa模块
+	c.Fofa = c.loadFofa(p.Fofa())
+	c.FofaSize = p.FofaSize()
+	c.FofaField = c.loadFofaField(p.FofaField())
+	c.FofaFixKeywored = p.FofaFixKeyword()
+	c.Scan = p.Scan()
 
 }
 
 func (c *Config) loadTarget(expr string, recursion bool) {
+	if expr == "" {
+		return
+	}
 	//判断target字符串是否为文件
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
@@ -148,15 +157,6 @@ func (c *Config) loadOutput(expr string) {
 	} else {
 		c.Output = f
 	}
-}
-
-func (c *Config) loadTargetNum() {
-	c.HostTargetNum = len(c.HostTarget)
-	c.UrlTargetNum = len(c.UrlTarget)
-}
-
-func (c *Config) loadPortNum() {
-	c.PortNum = len(c.Port)
 }
 
 func (c *Config) makeHydraUser(expr string) []string {
@@ -262,23 +262,57 @@ func (c *Config) loadHydraMod(expr string) {
 	c.HydraProtocolArr = c.makeHydraProtocolArr(hydraMap)
 }
 
+func (c *Config) loadFofa(expr string) []string {
+	//判断对象是否为文件
+	if regexp.MustCompile("^file:.+$").MatchString(expr) {
+		path := strings.Replace(expr, "file:", "", 1)
+		return misc.ReadLineAll(path)
+	}
+	//判断对象是否为多个
+	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
+		var passArr []string
+		for _, str := range strings.Split(strArr, ",") {
+			passArr = append(passArr, strings.ReplaceAll(str, "[DouHao]", ","))
+		}
+		return passArr
+	}
+	//对象为单个且不为空时直接返回
+	if expr != "" {
+		return []string{expr}
+	}
+	return []string{}
+}
+
+func (c *Config) loadFofaField(expr string) []string {
+	//判断对象是否为多个
+	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
+		var passArr []string
+		for _, str := range strings.Split(strArr, ",") {
+			passArr = append(passArr, strings.ReplaceAll(str, "[DouHao]", ","))
+		}
+		return passArr
+	}
+	//对象为单个且不为空时直接返回
+	if expr != "" {
+		return []string{expr}
+	}
+	return []string{}
+}
+
 func New() Config {
 	return Config{
-		HostTarget:    []string{},
-		HostTargetNum: 0,
-		UrlTarget:     []string{},
-		UrlTargetNum:  0,
-		Path:          "/",
-		Port:          TOP_1000[:400],
-		PortNum:       0,
-		Output:        nil,
-		Proxy:         "",
-		Host:          "",
-		Threads:       500,
-		Timeout:       0,
-		Encoding:      "utf-8",
-		OSEncoding:    getOSEncoding(),
-		NewLine:       getNewline(),
+		HostTarget: []string{},
+		UrlTarget:  []string{},
+		Path:       "/",
+		Port:       TOP_1000[:400],
+		Output:     nil,
+		Proxy:      "",
+		Host:       "",
+		Threads:    500,
+		Timeout:    0,
+		Encoding:   "utf-8",
+		OSEncoding: getOSEncoding(),
+		NewLine:    getNewline(),
 	}
 }
 

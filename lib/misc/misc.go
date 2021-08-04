@@ -2,9 +2,11 @@ package misc
 
 import (
 	"bufio"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"kscan/lib/chinese"
+	"kscan/lib/slog"
 	"math/rand"
 	"os"
 	"strconv"
@@ -251,4 +253,19 @@ func WriteLine(fileName string, byte []byte) error {
 		return err
 	}
 	return err
+}
+
+func Base64Encode(keyword string) string {
+	input := []byte(keyword)
+	encodeString := base64.StdEncoding.EncodeToString(input)
+	return encodeString
+}
+
+func Base64Decode(encodeString string) string {
+	decodeBytes, err := base64.StdEncoding.DecodeString(encodeString)
+	if err != nil {
+		slog.Debug(err)
+		return ""
+	}
+	return string(decodeBytes)
 }
