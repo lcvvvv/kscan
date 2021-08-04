@@ -21,19 +21,24 @@ func Check(ip string) bool {
 		p.SetPrivileged(true)
 	}
 	if runtime.GOOS == "linux" && linuxInit == false {
-		cmd := exec.Command("sysctl", "-n", "net.ipv4.ping_group_range")
-		buf, _ := cmd.Output() // 错误处理略
-		str := string(buf)
-		if strings.Contains(str, "2147483647") == true {
-			return true
-		}
-		cmd = exec.Command("cat", "/proc/sys/net/ipv4/ping_group_range")
-		buf, _ = cmd.Output() // 错误处理略
-		str = string(buf)
-		if strings.Contains(str, "2147483647") == true {
-			return true
-		}
-		linuxInit = false
+		linuxInit = func() bool {
+			cmd := exec.Command("sysctl", "-n", "net.ipv4.ping_group_range")
+			buf, _ := cmd.Output() // 错误处理略
+			str := string(buf)
+			if strings.Contains(str, "2147483647") == true {
+				return true
+			}
+			cmd = exec.Command("cat", "/proc/sys/net/ipv4/ping_group_range")
+			buf, _ = cmd.Output() // 错误处理略
+			str = string(buf)
+			if strings.Contains(str, "2147483647") == true {
+				return true
+			}
+			slog.Error("检测到当前操作系统为linux，Ping模块运行不正常，请执行下列命令后，再次打开此程序:\n",
+				"sudo sysctl -w net.ipv4.ping_group_range=\"0 2147483647\"",
+			)
+			return false
+		}()
 	}
 	p.Count = 2
 	p.Timeout = time.Second * 2
