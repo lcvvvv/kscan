@@ -9,6 +9,10 @@ import (
 func Start(config app.Config) {
 	K := New(config)
 
+	//STEP0: 扫描结果调度器
+	time.Sleep(time.Microsecond * 200)
+	go K.WatchDog()
+
 	if config.Check {
 		slog.Info("当前为验证模式，不会进行端口扫描，仅对给定URL地址进行指纹识别")
 		time.Sleep(time.Microsecond * 200)
@@ -33,10 +37,6 @@ func Start(config app.Config) {
 	//STEP3: 应用层指纹识别
 	time.Sleep(time.Microsecond * 200)
 	go K.GetAppBanner()
-
-	//STEP4: 扫描结果调度器
-	time.Sleep(time.Microsecond * 200)
-	go K.WatchDog()
 
 	//STEP4: 暴力破解
 	time.Sleep(time.Microsecond * 200)
