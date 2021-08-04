@@ -37,7 +37,7 @@ package rdp
 
 #if defined(CGO_OS_LINUX)
 	//static char* os = "linux";
-	#define uint int
+	//#define uint int
 #endif
 
 
