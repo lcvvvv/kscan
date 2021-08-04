@@ -6,14 +6,14 @@ package rdp
 #cgo darwin CFLAGS: -I./lib/mac/freerdp2/include/freerdp2
 #cgo darwin CFLAGS: -I./lib/mac/freerdp2/include/winpr2
 #cgo darwin LDFLAGS: -L${SRCDIR}/lib/mac/freerdp2/lib
-#cgo darwin LDFLAGS: -lcrypto -lssl -lfreerdp2 -lwinpr2
+#cgo darwin LDFLAGS: -lfreerdp2 -lwinpr2 -lssl -lcrypto
 
 //windows编译环境配置
 #cgo windows CFLAGS: -DCGO_OS_WINDOWS=1
 #cgo windows CFLAGS: -I./lib/windows/freerdp2/include/freerdp2
 #cgo windows CFLAGS: -I./lib/windows/freerdp2/include/winpr2
 #cgo windows LDFLAGS: -L${SRCDIR}/lib/windows/freerdp2/lib
-#cgo windows LDFLAGS: -lcrypto -lssl -lfreerdp2 -lwinpr2
+#cgo windows LDFLAGS: -lfreerdp2 -lwinpr2 -lssl -lcrypto
 
 
 //linux编译环境配置
@@ -21,11 +21,11 @@ package rdp
 #cgo linux CFLAGS: -I./lib/linux/freerdp2/include/freerdp2
 #cgo linux CFLAGS: -I./lib/linux/freerdp2/include/winpr2
 #cgo linux LDFLAGS: -L${SRCDIR}/lib/linux/freerdp2/lib
-#cgo linux LDFLAGS: -lfreerdp2 -lwinpr2 -lm -ldl -lcrypto -lssl
+#cgo linux LDFLAGS: -lfreerdp2 -lwinpr2 -lssl -lcrypto -lpthread -ldl -lm
 
 #if defined(CGO_OS_WINDOWS)
 	//static char* os = "windows";
-	#define uint u_int
+	//#define uint u_int
 #endif
 
 
