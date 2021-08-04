@@ -147,4 +147,5 @@ func Check(ip, domain, login, password string, port int) (bool, error) {
 	default:
 		return false, nil
 	}
+
 }

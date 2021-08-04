@@ -24,12 +24,12 @@ var regxPrivateIPArr = []*regexp.Regexp{
 
 func FormatCheck(ipExpr string) bool {
 	if regxIsIP.MatchString(ipExpr) {
-		return addrCheck(ipExpr)
+		return AddrCheck(ipExpr)
 	}
 	if regxIsIPMask.MatchString(ipExpr) {
 		ip := regxIsIPMask.FindStringSubmatch(ipExpr)[1]
 		mask := regxIsIPMask.FindStringSubmatch(ipExpr)[2]
-		if addrCheck(ip) == false {
+		if AddrCheck(ip) == false {
 			return false
 		}
 		if maskCheck(mask) == false {
@@ -40,10 +40,10 @@ func FormatCheck(ipExpr string) bool {
 	if regxIsIPRange.MatchString(ipExpr) {
 		first := regxIsIPRange.FindStringSubmatch(ipExpr)[1]
 		last := regxIsIPRange.FindStringSubmatch(ipExpr)[2]
-		if addrCheck(first) == false {
+		if AddrCheck(first) == false {
 			return false
 		}
-		if addrCheck(last) == false {
+		if AddrCheck(last) == false {
 			return false
 		}
 		firstInt := addrStrToInt(first)
@@ -133,7 +133,7 @@ func RangeToList(start uint32, end uint32) (result []string) {
 	return result
 }
 
-func addrCheck(ip string) bool {
+func AddrCheck(ip string) bool {
 	sArr := strings.Split(ip, ".")
 	if len(sArr) != 4 {
 		return false

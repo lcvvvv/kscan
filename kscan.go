@@ -88,7 +88,6 @@ cert="baidu"	搜索证书(https或者imaps等)中带有baidu的资产。	-
 cert.subject="Oracle Corporation"	搜索证书持有者是Oracle Corporation的资产	-
 cert.issuer="DigiCert"	搜索证书颁发者为DigiCert Inc的资产	-
 cert.is_valid=true	验证证书是否有效，true有效，false无效	仅限FOFA高级会员使用
-banner=users && protocol=ftp	搜索FTP协议中带有users文本的资产。	-
 type=service	搜索所有协议资产，支持subdomain和service两种	搜索所有协议资产
 os="centos"	搜索CentOS资产。	-
 server=="Microsoft-IIS/10"	搜索IIS 10服务器。	-
