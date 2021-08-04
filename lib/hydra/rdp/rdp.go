@@ -25,7 +25,7 @@ package rdp
 
 #if defined(CGO_OS_WINDOWS)
 	//static char* os = "windows";
-	//#define uint u_int
+	#define uint u_int
 #endif
 
 
