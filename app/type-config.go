@@ -135,7 +135,7 @@ func (c *Config) loadTimeout(i int) {
 func (c *Config) loadPort(v interface{}) {
 	switch v.(type) {
 	case int:
-		if v.(int) == 0 {
+		if v.(int) == 400 {
 			return
 		}
 		c.Port = TOP_1000[:v.(int)]
