@@ -27,11 +27,11 @@
   - js跳转
   - js渲染
 
-- 从fofa获取资产 [-f/--fofa]
+- 从fofa获取资产 [-f/--fofa] √已完成
 
-- 暴力破解模块 [--hydra]
+- 暴力破解模块 [--hydra] √已完成
   - smb 
-  - rdp
+  - rdp √已完成
   - ssh
   - telnet
   - ftp
