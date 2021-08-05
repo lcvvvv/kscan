@@ -33,6 +33,11 @@ type kscan struct {
 		hydra  chan interface{}
 		wg     *sync.WaitGroup
 	}
+	hydra struct {
+		pool  *pool.Pool
+		queue *queue.Queue
+		done  bool
+	}
 }
 
 func New(config app.Config) *kscan {
@@ -56,6 +61,10 @@ func New(config app.Config) *kscan {
 	k.watchDog.hydra = make(chan interface{})
 	k.watchDog.output = make(chan interface{})
 	k.watchDog.wg = &sync.WaitGroup{}
+
+	k.hydra.pool = pool.NewPool(10)
+	k.hydra.queue = queue.New()
+	k.hydra.done = false
 	return k
 }
 
@@ -302,23 +311,52 @@ func (k *kscan) Hydra() {
 	hydra.InitDefaultAuthMap()
 	//加载自定义字典
 	hydra.InitCustomAuthMap()
-	//开始监听暴力破解任务
-	for out := range k.watchDog.hydra {
-		banner := out.(*gonmap.AppBanner)
-		if banner == nil {
-			continue
-		}
-		if hydra.Ok(banner.Protocol, banner.Port) == false {
-			continue
-		}
+	//初始化变量
+	k.hydra.pool.Function = func(i interface{}) interface{} {
+		banner := i.(*gonmap.AppBanner)
 		//适配爆破模块
 		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
 		crack := hydra.NewCracker(authInfo, 10)
 		go crack.Run()
 		//爆破结果获取
+		var out hydra.AuthInfo
 		for info := range crack.Out {
-			k.watchDog.output <- info
+			out = info
 		}
+		return out
 	}
-	k.watchDog.wg.Done()
+	//暴力破解任务收集器
+	go func() {
+		for out := range k.watchDog.hydra {
+			banner := out.(*gonmap.AppBanner)
+			if banner == nil {
+				continue
+			}
+			if hydra.Ok(banner.Protocol, banner.Port) == false {
+				continue
+			}
+			k.hydra.queue.Push(banner)
+		}
+		k.hydra.done = true
+	}()
+	//暴力破解任务下发器
+	go func() {
+		for true {
+			if k.hydra.queue.Len() == 0 && k.hydra.done == true {
+				break
+			}
+			k.hydra.pool.In <- k.hydra.queue.Pop()
+		}
+		//关闭输出信道
+		k.hydra.pool.InDone()
+	}()
+	//暴力破解输出接受器
+	go func() {
+		for out := range k.hydra.pool.Out {
+			k.watchDog.output <- out
+		}
+		k.watchDog.wg.Done()
+	}()
+
+	k.hydra.pool.Run()
 }
