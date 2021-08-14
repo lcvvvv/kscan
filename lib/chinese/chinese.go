@@ -18,7 +18,7 @@ func ByteToGBK(strBuf []byte) []byte {
 			}
 		}
 		//if HZGB2312Buf, err := simplifiedchinese.HZGB2312.NewEncoder().Bytes(strBuf); err == nil {
-		//	if isUtf8(HZGB2312Buf) {
+		//	if isUtf8(HZGB2312Buf) == false {
 		//		return HZGB2312Buf
 		//	}
 		//}
@@ -44,7 +44,7 @@ func ByteToUTF8(strBuf []byte) []byte {
 		}
 		//if HZGB2312Buf, err := simplifiedchinese.HZGB2312.NewDecoder().Bytes(strBuf); err == nil {
 		//	fmt.Println("3")
-		//	if isUtf8(HZGB2312Buf) {
+		//	if isUtf8(HZGB2312Buf) == true {
 		//		return HZGB2312Buf
 		//	}
 		//}

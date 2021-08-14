@@ -169,9 +169,11 @@ func FilterPrintStr(s string) string {
 		if c == 127 {
 			continue
 		}
+		if c > 65519 {
+			continue
+		}
 		dstRunes = append(dstRunes, c)
 	}
-
 	return string(dstRunes)
 }
 
