@@ -177,7 +177,7 @@ func FilterPrintStr(s string) string {
 	return string(dstRunes)
 }
 
-func SprintStringMap(stringMap map[string]string) string {
+func SprintStringMap(stringMap map[string]string, keyPrint bool) string {
 	var rArr []string
 	var assistArr []string
 	for key, value := range stringMap {
@@ -186,7 +186,11 @@ func SprintStringMap(stringMap map[string]string) string {
 		}
 		if IsInStrArr(assistArr, value) == false {
 			assistArr = append(assistArr, value)
-			rArr = append(rArr, fmt.Sprintf("%s:%s", key, value))
+			if keyPrint == true {
+				rArr = append(rArr, fmt.Sprintf("%s:%s", key, value))
+			} else {
+				rArr = append(rArr, value)
+			}
 		}
 	}
 
@@ -270,4 +274,20 @@ func Base64Decode(encodeString string) string {
 		return ""
 	}
 	return string(decodeBytes)
+}
+
+func CloneStrMap(strMap map[string]string) map[string]string {
+	newStrMap := make(map[string]string)
+	for k, v := range strMap {
+		newStrMap[k] = v
+	}
+	return newStrMap
+}
+
+func CloneIntMap(intMap map[int]string) map[int]string {
+	newIntMap := make(map[int]string)
+	for k, v := range intMap {
+		newIntMap[k] = v
+	}
+	return newIntMap
 }

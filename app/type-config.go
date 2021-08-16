@@ -15,15 +15,15 @@ import (
 )
 
 type Config struct {
-	HostTarget, UrlTarget       []string
-	Port                        []int
-	Output                      *os.File
-	Proxy, Host, Path, Encoding string
-	OSEncoding, NewLine         string
-	OutputJson                  string
-	Threads, Rarity             int
-	Timeout                     time.Duration
-	ScanPing, Check, Spy        bool
+	HostTarget, UrlTarget         []string
+	Port                          []int
+	Output                        *os.File
+	Proxy, Host, Path, Encoding   string
+	OSEncoding, NewLine           string
+	OutputJson                    string
+	Threads, Rarity               int
+	Timeout                       time.Duration
+	ScanPing, Check, Spy, NoColor bool
 	//hydra
 	Hydra, HydraUpdate             bool
 	HydraPass, HydraUser, HydraMod []string
@@ -68,6 +68,7 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.Encoding = p.Encoding()
 	c.Rarity = p.Rarity()
 	c.OutputJson = p.OutputJson()
+	c.NoColor = p.NoColor()
 	//hydra模块
 	c.Hydra = p.Hydra()
 	c.HydraUpdate = p.HydraUpdate()

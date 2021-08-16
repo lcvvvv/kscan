@@ -251,6 +251,7 @@ func (k *kscan) Output() {
 			continue
 		}
 		var disp string
+		var write string
 		switch out.(type) {
 		case *gonmap.AppBanner:
 			banner := out.(*gonmap.AppBanner)
@@ -258,14 +259,16 @@ func (k *kscan) Output() {
 				continue
 			}
 			bannerMapArr = append(bannerMapArr, banner.Map())
-			disp = banner.Output()
+			write = banner.Output()
+			disp = banner.Display()
 		case hydra.AuthInfo:
 			info := out.(hydra.AuthInfo)
-			disp = info.Output()
+			write = info.Output()
+			disp = info.Display()
 		}
 		slog.Data(disp)
 		if k.config.Output != nil {
-			k.config.WriteLine(disp)
+			k.config.WriteLine(write)
 		}
 	}
 	//输出json

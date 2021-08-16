@@ -9,7 +9,7 @@ import (
 )
 
 type OsArgs struct {
-	help, debug, scanPing, check, spy                 bool
+	help, debug, scanPing, check, spy, noColor        bool
 	target, port, output, proxy, path, host, encoding string
 	outputJson                                        string
 	USAGE, HELP, LOGO, SYNTAX                         string
@@ -24,6 +24,10 @@ type OsArgs struct {
 	scan                            bool
 	//参数校验正则
 	intsReg, strsReg, proxyReg *regexp.Regexp
+}
+
+func (o OsArgs) NoColor() bool {
+	return o.noColor
 }
 
 func (o OsArgs) Fofa() string {
@@ -174,6 +178,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.StringVar(&o.output, "o", "", "")
 	flag.StringVar(&o.output, "output", "", "")
 	flag.StringVar(&o.outputJson, "oJ", "", "")
+	flag.BoolVar(&o.noColor, "Cn", false, "")
 	flag.Parse()
 }
 

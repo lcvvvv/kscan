@@ -2,6 +2,7 @@ package main
 
 import (
 	"kscan/app"
+	"kscan/lib/color"
 	"kscan/lib/fofa"
 	"kscan/lib/gonmap"
 	"kscan/lib/httpfinger"
@@ -41,6 +42,7 @@ optional arguments:
   -o , --output   将扫描结果保存到文件
   -oJ             将扫描结果使用json格式保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
+  -Cn             使用此参数后，控制台输出结果将不会带颜色。
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP400
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
@@ -65,7 +67,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [--check] [--encoding] [--rarity] [--hydra] [hydra options] [fofa options]\n\n"
+const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--rarity] [--hydra] [hydra options] [fofa options]\n\n"
 
 const syntax = `title="beijing"	从标题中搜索"北京"	-
 header="elastic"	从http头中搜索"elastic"	-
@@ -149,6 +151,8 @@ func Init() {
 	param.CheckArgs()
 	//配置文件初始化
 	app.Setting.Load(param)
+	//color包初始化
+	app.Setting.NoColor = color.Init(app.Setting.NoColor)
 	slog.Warning("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
 }
 
