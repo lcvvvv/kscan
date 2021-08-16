@@ -2,6 +2,7 @@ package hydra
 
 import (
 	"fmt"
+	"kscan/lib/color"
 	"kscan/lib/misc"
 )
 
@@ -24,6 +25,14 @@ func NewAuthInfo(IPAddr string, Port int, Protocol string) *AuthInfo {
 	return a
 }
 
+func (a *AuthInfo) Display() string {
+	s := a.Output()
+	s = color.Red(s)
+	s = color.Overturn(s)
+	return s
+}
+
 func (a *AuthInfo) Output() string {
-	return fmt.Sprintf("%s://%s:%d\t200\tUsername:%s、Password:%s、%s", a.Protocol, a.IPAddr, a.Port, a.Auth.Username, a.Auth.Password, misc.SprintStringMap(a.Auth.Other))
+	s := fmt.Sprintf("%s://%s:%d\t200\tUsername:%s、Password:%s、%s", a.Protocol, a.IPAddr, a.Port, a.Auth.Username, a.Auth.Password, misc.SprintStringMap(a.Auth.Other, true))
+	return s
 }
