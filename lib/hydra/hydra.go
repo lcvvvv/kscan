@@ -97,12 +97,21 @@ func (c *Cracker) Run() {
 }
 
 func (c *Cracker) OutWatchDog() {
+	count := 0
+	var info interface{}
 	for out := range c.Pool.Out {
 		if out == nil {
 			continue
 		}
 		c.Pool.Stop()
-		c.Out <- out.(AuthInfo)
+		count += 1
+		info = out
+	}
+	if count == 1 {
+		c.Out <- info.(AuthInfo)
+	}
+	if count > 1 {
+		slog.Debugf("rdp://%s:%d,协议不支持", info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
 	close(c.Out)
 }

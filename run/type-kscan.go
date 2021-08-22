@@ -263,6 +263,9 @@ func (k *kscan) Output() {
 			disp = banner.Display()
 		case hydra.AuthInfo:
 			info := out.(hydra.AuthInfo)
+			if info.Status == false {
+				continue
+			}
 			write = info.Output()
 			disp = info.Display()
 		}

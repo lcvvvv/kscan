@@ -115,6 +115,7 @@ import "C"
 import (
 	"errors"
 	"sync"
+	"unsafe"
 )
 
 var mtx sync.Mutex
@@ -129,12 +130,12 @@ func Check(ip, domain, login, password string, port int) (bool, error) {
 	var nPassword *C.char = C.CString(password)
 	var nPort C.uint = C.uint(port)
 
-	//defer func() {
-	//	C.free(unsafe.Pointer(nIp))
-	//	C.free(unsafe.Pointer(nDomain))
-	//	C.free(unsafe.Pointer(nLogin))
-	//	C.free(unsafe.Pointer(nPassword))
-	//}()
+	defer func() {
+		C.free(unsafe.Pointer(nIp))
+		C.free(unsafe.Pointer(nDomain))
+		C.free(unsafe.Pointer(nLogin))
+		C.free(unsafe.Pointer(nPassword))
+	}()
 
 	rInt := uint(C.check_rdp(nIp, nPort, nDomain, nLogin, nPassword))
 	switch rInt {
