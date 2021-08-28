@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"kscan/lib/chinese"
+	"kscan/lib/color"
 	"log"
 	"os"
 	"runtime"
@@ -75,7 +76,9 @@ func (t *logger) Debug(s string) {
 	}
 	_, file, line, _ := runtime.Caller(3)
 	file = file[strings.LastIndex(file, "/")+1:]
-	t.debug.Printf("%s%s(%d) %s", splitStr, file, line, s)
+	logStr := fmt.Sprintf("%s%s(%d) %s", splitStr, file, line, s)
+	logStr = color.Yellow(logStr)
+	t.debug.Printf(logStr)
 }
 
 func (t *logger) DoPrint(logType string, logStr string) {
