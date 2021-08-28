@@ -3,6 +3,7 @@ package pool
 import (
 	"errors"
 	"fmt"
+	"kscan/lib/slog"
 	"sync"
 )
 
@@ -18,6 +19,7 @@ func NewWorker(f func(interface{}) interface{}) *Worker {
 			defer func() {
 				if e := recover(); e != nil {
 					err = errors.New(fmt.Sprint("param: ", in, e))
+					slog.Debug(err, e)
 				}
 			}()
 			out = f(in)
