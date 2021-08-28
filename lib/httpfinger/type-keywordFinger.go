@@ -326,20 +326,20 @@ var keywordFingerSourceByte = []byte(`
 		"cms": "\u7985\u9053",
 		"rules": [{
 			"type": "body",
-			"keyword": "self.location"
-		}]
-	},
-	{
-		"cms": "\u7985\u9053",
-		"rules": [{
-			"type": "body",
 			"keyword": "/theme/default/images/main/zt-logo.png"
 		}]
 	},
 	{
-		"cms": "\u7985\u9053",
+		"cms": "ADSL/Router",
 		"rules": [{
-			"type": "ADSL/Router",
+			"type": "body",
+			"keyword": "zentaosid"
+		}]
+	},
+	{
+		"cms": "ADSL/Router",
+		"rules": [{
+			"type": "header",
 			"keyword": "zentaosid"
 		}]
 	},
