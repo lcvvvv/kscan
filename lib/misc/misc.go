@@ -109,6 +109,7 @@ func FixLine(line string) string {
 	line = strings.Replace(line, "\t", "", -1)
 	line = strings.Replace(line, "\r", "", -1)
 	line = strings.Replace(line, "\n", "", -1)
+	line = strings.Replace(line, "\xc2\xa0", "", -1)
 	return line
 }
 
@@ -197,7 +198,6 @@ func SprintStringMap(stringMap map[string]string, keyPrint bool) string {
 	for index, value := range rArr {
 		rArr[index] = chinese.ToUTF8(value)
 	}
-
 	return strings.Join(rArr, "、")
 }
 
