@@ -98,7 +98,6 @@ func Context() {
 			if err := recover(); err != nil {
 			}
 		}()
-
 		time.Sleep(3 * time.Second)
 		resChan <- ""
 	}()

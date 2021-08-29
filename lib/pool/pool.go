@@ -3,7 +3,9 @@ package pool
 import (
 	"errors"
 	"fmt"
+	"kscan/lib/misc"
 	"kscan/lib/slog"
+	"kscan/lib/smap"
 	"sync"
 )
 
@@ -43,6 +45,8 @@ type Pool struct {
 	Out chan interface{}
 	//size用来表明池的大小，不能超发。
 	threads int
+	//正在执行的任务清单
+	JobsList *smap.SMap
 	//jobs表示执行任务的通道用于作为队列，我们将任务从切片当中取出来，然后存放到通道当中，再从通道当中取出任务并执行。
 	Jobs chan *Worker
 	//用于阻塞
@@ -55,6 +59,7 @@ type Pool struct {
 func NewPool(threads int) *Pool {
 	return &Pool{
 		threads:  threads,
+		JobsList: smap.New(),
 		wg:       &sync.WaitGroup{},
 		Out:      make(chan interface{}),
 		In:       make(chan interface{}),
@@ -66,13 +71,23 @@ func NewPool(threads int) *Pool {
 //从jobs当中取出任务并执行。
 func (p *Pool) work() {
 	//减少waitGroup计数器的值
-	defer func() { p.wg.Done() }()
+	defer func() {
+		p.wg.Done()
+	}()
 	for param := range p.In {
 		if p.Done {
 			return
 		}
+		//获取任务唯一票据
+		Tick := p.NewTick()
+		//压入工作任务到工作清单
+		p.JobsList.Set(Tick, param)
+		//开始工作
 		f := NewWorker(p.Function)
+		//开始工作，输出工作结果
 		out, err := f.Run(param)
+		//工作结束，删除工作清单
+		p.JobsList.Delete(Tick)
 		if err == nil && out != nil {
 			p.Out <- out
 		}
@@ -107,4 +122,9 @@ func (p *Pool) OutDone() {
 //向各工作协程发送提前结束指令
 func (p *Pool) Stop() {
 	p.Done = true
+}
+
+//生成工作票据
+func (p *Pool) NewTick() string {
+	return misc.RandomString()
 }

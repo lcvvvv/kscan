@@ -291,3 +291,19 @@ func CloneIntMap(intMap map[int]string) map[int]string {
 	}
 	return newIntMap
 }
+
+func RandomString(i ...int) string {
+	var length int
+	var str string
+	if len(i) != 1 {
+		length = 32
+	} else {
+		length = i[0]
+	}
+	Char := "01234567890abcdef"
+	for range Xrange(length) {
+		j := rand.Intn(len(Char) - 1)
+		str += Char[j : j+1]
+	}
+	return str
+}

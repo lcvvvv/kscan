@@ -16,6 +16,7 @@ import (
 	"path"
 	"strings"
 	"sync"
+	"time"
 )
 
 type kscan struct {
@@ -29,9 +30,10 @@ type kscan struct {
 		appBanner *pool.Pool
 	}
 	watchDog struct {
-		output chan interface{}
-		hydra  chan interface{}
-		wg     *sync.WaitGroup
+		output  chan interface{}
+		hydra   chan interface{}
+		wg      *sync.WaitGroup
+		trigger bool
 	}
 	hydra struct {
 		pool  *pool.Pool
@@ -61,6 +63,7 @@ func New(config app.Config) *kscan {
 	k.watchDog.hydra = make(chan interface{})
 	k.watchDog.output = make(chan interface{})
 	k.watchDog.wg = &sync.WaitGroup{}
+	k.watchDog.trigger = false
 
 	k.hydra.pool = pool.NewPool(10)
 	k.hydra.queue = queue.New()
@@ -258,6 +261,9 @@ func (k *kscan) Output() {
 		}
 		var disp string
 		var write string
+		//打开触发器,若长时间无输出，触发器会输出进度
+		k.watchDog.trigger = true
+		//输出结果
 		switch out.(type) {
 		case *gonmap.AppBanner:
 			banner := out.(*gonmap.AppBanner)
@@ -299,11 +305,61 @@ func (k *kscan) Output() {
 func (k *kscan) WatchDog() {
 
 	k.watchDog.wg.Add(1)
-
+	//触发器校准，每隔60秒会将触发器关闭
+	go func() {
+		for true {
+			time.Sleep(60 * time.Second)
+			k.watchDog.trigger = false
+		}
+	}()
+	//轮询触发器，每隔一段时间会检测触发器是否打开
+	go func() {
+		for true {
+			time.Sleep(59 * time.Second)
+			if k.watchDog.trigger == false {
+				if num := k.pool.host.JobsList.Length(); num > 0 {
+					i := k.pool.host.JobsList.Peek()
+					info := i.(string)
+					slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					continue
+				}
+				if num := k.pool.port.JobsList.Length(); num > 0 {
+					i := k.pool.port.JobsList.Peek()
+					info := i.(string)
+					slog.Warningf("当前端口存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					continue
+				}
+				if num := k.pool.tcpBanner.JobsList.Length(); num > 0 {
+					i := k.pool.tcpBanner.JobsList.Peek()
+					info := i.(string)
+					slog.Warningf("当前TCP层指纹识别任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					continue
+				}
+				if num := k.pool.appBanner.JobsList.Length(); num > 0 {
+					i := k.pool.appBanner.JobsList.Peek()
+					var info string
+					switch i.(type) {
+					case string:
+						info = i.(string)
+					case *gonmap.TcpBanner:
+						tcpBanner := i.(*gonmap.TcpBanner)
+						if tcpBanner == nil {
+							continue
+						}
+						info = tcpBanner.Target.URI()
+					}
+					slog.Warningf("当前应用层指纹检测并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					continue
+				}
+			}
+		}
+	}()
+	//Hydra模块
 	if app.Setting.Hydra {
 		slog.Info("hydra模块已开启，开始监听暴力破解任务")
 		k.watchDog.wg.Add(1)
 	}
+
 	for out := range k.pool.appBanner.Out {
 		k.watchDog.output <- out
 		if app.Setting.Hydra {
