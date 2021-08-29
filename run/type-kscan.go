@@ -107,6 +107,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	}()
 	//开始执行主机存活性探测任务
 	k.pool.host.Run()
+	slog.Info("主机存活性探测任务完成")
 }
 
 func (k *kscan) PortDiscovery() {
@@ -141,6 +142,7 @@ func (k *kscan) PortDiscovery() {
 	}()
 	//开始执行端口存活性探测任务
 	k.pool.port.Run()
+	slog.Info("端口存活性探测任务完成")
 }
 
 func (k *kscan) GetTcpBanner() {
@@ -155,12 +157,14 @@ func (k *kscan) GetTcpBanner() {
 		for out := range k.pool.port.Out {
 			k.pool.tcpBanner.In <- out
 		}
-		slog.Info("端口TCP层协议识别任务下发完毕，关闭信道")
+		slog.Info("TCP层协议识别任务下发完毕，关闭信道")
 		k.pool.tcpBanner.InDone()
 	}()
 
 	//开始执行TCP层面协议识别任务
 	k.pool.tcpBanner.Run()
+	slog.Info("TCP层协议识别任务完成")
+
 }
 
 func (k *kscan) GetAppBanner() {
@@ -191,7 +195,7 @@ func (k *kscan) GetAppBanner() {
 			}
 		}
 		k.pool.appBanner.InDone()
-		slog.Info("全部端口应用层协议识别任务下发完毕，关闭信道")
+		slog.Info("应用层协议识别任务下发完毕，关闭信道")
 	}()
 
 	//指定Url任务下发器
@@ -209,11 +213,12 @@ func (k *kscan) GetAppBanner() {
 			k.pool.appBanner.In <- out
 		}
 		isDone <- true
-		slog.Info("存活应用层协议识别任务下发完毕")
+		slog.Info("开放端口应用层协议识别任务下发完毕")
 	}()
 
 	//开始执行App层面协议识别任务
 	k.pool.appBanner.Run()
+	slog.Info("应用层协议识别任务完成")
 }
 
 func (k *kscan) GetAppBannerFromCheck() {
@@ -236,11 +241,12 @@ func (k *kscan) GetAppBannerFromCheck() {
 			k.pool.appBanner.In <- url
 		}
 		k.pool.appBanner.InDone()
-		slog.Info("自定义应用层协议识别任务下发完毕")
+		slog.Info("应用层协议识别任务下发完毕，关闭信道")
 	}()
 
 	//开始执行App层面协议识别任务
 	k.pool.appBanner.Run()
+	slog.Info("应用层协议识别任务完成")
 }
 
 func (k *kscan) Output() {

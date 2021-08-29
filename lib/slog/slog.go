@@ -58,6 +58,7 @@ func (t *logger) Data(s string) {
 }
 
 func (t *logger) Info(s string) {
+	s = color.Green(s)
 	t.info.Print(splitStr, s)
 }
 
