@@ -47,29 +47,20 @@ func (c *Cracker) Run() {
 		c.Pool.Function = rdpCracker
 		//go 任务下发器
 		go func() {
-			if _, ok := c.authList.Other["domain"]; ok == false {
-				c.authList.Other["domain"] = []string{"workgroup"}
-			}
 			for _, password := range c.authList.Password {
 				for _, username := range c.authList.Username {
-					for _, domain := range c.authList.Other["domain"] {
-						if c.Pool.Done {
-							c.Pool.InDone()
-							return
-						}
-						a := NewAuth()
-						a.Password = password
-						a.Username = username
-						a.Other["domain"] = domain
-						c.authInfo.Auth = a
-						c.Pool.In <- *c.authInfo
+					if c.Pool.Done {
+						c.Pool.InDone()
+						return
 					}
+					a := NewAuth()
+					a.Password = password
+					a.Username = username
+					c.authInfo.Auth = a
+					c.Pool.In <- *c.authInfo
 				}
 			}
 			for _, a := range c.authList.Special {
-				if _, ok := a.Other["domain"]; ok == false {
-					a.Other["domain"] = "workgroup"
-				}
 				if c.Pool.Done {
 					c.Pool.InDone()
 					return
@@ -120,9 +111,6 @@ func rdpCracker(i interface{}) interface{} {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	domain := "workgroup"
-	if _, ok := info.Auth.Other["domain"]; ok {
-		domain = info.Auth.Other["domain"]
-	}
 	if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
 		if err != nil {
 			slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)

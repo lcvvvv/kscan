@@ -3,7 +3,6 @@ package hydra
 import (
 	"fmt"
 	"kscan/lib/color"
-	"kscan/lib/misc"
 )
 
 type AuthInfo struct {
@@ -33,6 +32,6 @@ func (a *AuthInfo) Display() string {
 }
 
 func (a *AuthInfo) Output() string {
-	s := fmt.Sprintf("%s://%s:%d\t200\tUsername:%s、Password:%s、%s", a.Protocol, a.IPAddr, a.Port, a.Auth.Username, a.Auth.Password, misc.SprintStringMap(a.Auth.Other, true))
+	s := fmt.Sprintf("%s://%s:%d\t200\tUsername:%s、Password:%s", a.Protocol, a.IPAddr, a.Port, a.Auth.Username, a.Auth.Password)
 	return s
 }
