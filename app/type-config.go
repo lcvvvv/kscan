@@ -205,7 +205,7 @@ func (c *Config) makeHydraPass(expr string) []string {
 func (c *Config) makeHydraMap() map[int]string {
 	return map[int]string{
 		3389: "rdp",
-		//3306:  "mysql",
+		3306: "mysql",
 		//1433:  "mssql",
 		//1521:  "oracle",
 		//389:   "ldap",

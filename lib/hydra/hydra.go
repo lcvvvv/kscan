@@ -71,22 +71,21 @@ func (c *Cracker) Run() {
 	switch c.authInfo.Protocol {
 	case "rdp":
 		c.Pool.Function = rdpCracker
-		//开始暴力破解
-		c.Pool.Run()
 	case "mysql":
+		c.Pool.Function = mysqlCracker
 	case "mssql":
 	case "oracle":
 	case "ldap":
 	case "ssh":
 		c.Pool.Function = sshCracker
-		//开始暴力破解
-		c.Pool.Run()
 	case "telnet":
 	case "db2":
 	case "mongodb":
 	case "redis":
 	case "smb":
 	}
+	//开始暴力破解
+	c.Pool.Run()
 }
 
 func (c *Cracker) OutWatchDog() {
@@ -139,6 +138,7 @@ func InitDefaultAuthMap() {
 	}
 	m["rdp"] = DefaultRdpList()
 	m["ssh"] = DefaultSshList()
+	m["mysql"] = DefaultMysqlList()
 	DefaultAuthMap = m
 }
 

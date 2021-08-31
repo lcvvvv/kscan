@@ -25,7 +25,20 @@ func NewAuthInfo(IPAddr string, Port int, Protocol string) *AuthInfo {
 }
 
 func (a *AuthInfo) Display() string {
-	s := a.Output()
+	URL := fmt.Sprintf("%s://%s:%d", a.Protocol, a.IPAddr, a.Port)
+	splitChar := func(i int) string {
+		if i <= 23 {
+			return "\t\t"
+		}
+		if i <= 16 {
+			return "\t\t\t"
+		}
+		if i <= 8 {
+			return "\t\t\t\t"
+		}
+		return "\t"
+	}(len(URL))
+	s := fmt.Sprintf("%s%s200\tUsername:%s、Password:%s", URL, splitChar, a.Auth.Username, a.Auth.Password)
 	s = color.Red(s)
 	s = color.Overturn(s)
 	return s
