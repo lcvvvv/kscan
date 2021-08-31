@@ -28,12 +28,9 @@ package rdp
 	#define uint u_int
 #endif
 
-
-
 #if defined(CGO_OS_DARWIN)
 	//static char* os = "darwin";
 #endif
-
 
 #if defined(CGO_OS_LINUX)
 	//static char* os = "linux";

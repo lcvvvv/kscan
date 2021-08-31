@@ -2,7 +2,6 @@ package hydra
 
 import (
 	"kscan/app"
-	"kscan/lib/hydra/rdp"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/lib/slog"
@@ -42,43 +41,46 @@ func (c *Cracker) Run() {
 	//开启输出监测
 	go c.OutWatchDog()
 
-	switch c.authInfo.Protocol {
-	case "rdp":
-		c.Pool.Function = rdpCracker
-		//go 任务下发器
-		go func() {
-			for _, password := range c.authList.Password {
-				for _, username := range c.authList.Username {
-					if c.Pool.Done {
-						c.Pool.InDone()
-						return
-					}
-					a := NewAuth()
-					a.Password = password
-					a.Username = username
-					c.authInfo.Auth = a
-					c.Pool.In <- *c.authInfo
-				}
-			}
-			for _, a := range c.authList.Special {
+	//go 任务下发器
+	go func() {
+		for _, password := range c.authList.Password {
+			for _, username := range c.authList.Username {
 				if c.Pool.Done {
 					c.Pool.InDone()
 					return
 				}
+				a := NewAuth()
+				a.Password = password
+				a.Username = username
 				c.authInfo.Auth = a
 				c.Pool.In <- *c.authInfo
 			}
-			//关闭信道
-			c.Pool.InDone()
-		}()
+		}
+		for _, a := range c.authList.Special {
+			if c.Pool.Done {
+				c.Pool.InDone()
+				return
+			}
+			c.authInfo.Auth = a
+			c.Pool.In <- *c.authInfo
+		}
+		//关闭信道
+		c.Pool.InDone()
+	}()
+
+	switch c.authInfo.Protocol {
+	case "rdp":
+		c.Pool.Function = rdpCracker
 		//开始暴力破解
 		c.Pool.Run()
-
 	case "mysql":
 	case "mssql":
 	case "oracle":
 	case "ldap":
 	case "ssh":
+		c.Pool.Function = sshCracker
+		//开始暴力破解
+		c.Pool.Run()
 	case "telnet":
 	case "db2":
 	case "mongodb":
@@ -102,24 +104,9 @@ func (c *Cracker) OutWatchDog() {
 		c.Out <- info.(AuthInfo)
 	}
 	if count > 1 {
-		slog.Debugf("rdp://%s:%d,协议不支持", info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
+		slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
 	close(c.Out)
-}
-
-func rdpCracker(i interface{}) interface{} {
-	info := i.(AuthInfo)
-	info.Auth.MakePassword()
-	domain := "workgroup"
-	if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
-		if err != nil {
-			slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
-			return nil
-		}
-		info.Status = true
-		return info
-	}
-	return nil
 }
 
 func Ok(protocol string, port int) bool {
@@ -151,6 +138,7 @@ func InitDefaultAuthMap() {
 		"smb":     NewAuthList(),
 	}
 	m["rdp"] = DefaultRdpList()
+	m["ssh"] = DefaultSshList()
 	DefaultAuthMap = m
 }
 

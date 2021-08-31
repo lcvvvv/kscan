@@ -1,9 +1,9 @@
 package hydra
 
-func DefaultRdpList() *AuthList {
+func DefaultSshList() *AuthList {
 	a := NewAuthList()
 	a.Username = []string{
-		"administrator",
+		"root",
 		"admin",
 		"test",
 		//"user",
@@ -34,7 +34,6 @@ func DefaultRdpList() *AuthList {
 		"%user%!@#",
 		"%user%~!@",
 		"%user%!@#123",
-		"qweasdzxc",
 		"%user%2022",
 		"%user%2021",
 		"%user%2020",
@@ -46,6 +45,7 @@ func DefaultRdpList() *AuthList {
 		"%user%@2017",
 		"%user%@2016",
 		"%user%@2015",
+		"qweasdzxc",
 		"Passw0rd",
 		"admin123!@#",
 		"admin",
@@ -55,35 +55,35 @@ func DefaultRdpList() *AuthList {
 		"password",
 		"12345",
 		"1234",
-		//"root",
 		"123",
 		"qwerty",
-		//"test",
 		"1q2w3e4r",
 		"1qaz2wsx",
 		"qazwsx",
 		"123qwe",
 		"123qaz",
-		"0000",
 		"1234567",
 		"123456qwerty",
 		"password123",
 		"12345678",
 		"1q2w3e",
 		"abc123",
-		//"okmnji",
 		"test123",
 		"123456789",
-		//"postgres",
 		"q1w2e3r4",
+		//"0000",
+		//"root",
+		//"test",
+		//"okmnji",
+		//"postgres",
 		//"user",
 	}
 	a.Special = []Auth{
-		NewSpecialAuth("guest", "guest"),
-		NewSpecialAuth("guest", "123456"),
 		NewSpecialAuth("db2admin", "db2admin"),
 		NewSpecialAuth("oracle", "oracle"),
 		NewSpecialAuth("mysql", "mysql"),
+		NewSpecialAuth("postgres", "postgres"),
+		NewSpecialAuth("kali", "kali"),
 	}
 	return a
 }
