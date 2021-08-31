@@ -40,13 +40,13 @@
 - 暴力破解模块 [--hydra] √已完成
   - smb 
   - rdp √已完成
-  - ssh
+  - ssh √已完成
   - telnet
   - ftp
   - Database
     - Oracle
-    - MySQL
-    - SQLServer
+    - MySQL √已完成
+    - MsSQL √已完成
     - MongoDB
     - PostgreSQL
     - Redis

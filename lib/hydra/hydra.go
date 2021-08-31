@@ -18,7 +18,7 @@ func NewCracker(info *AuthInfo, threads int) *Cracker {
 	c := &Cracker{}
 	c.Pool = pool.NewPool(threads)
 	c.authInfo = info
-	if misc.IsInStrArr(app.Setting.HydraMod, c.authInfo.Protocol) == false {
+	if misc.IsInStrArr(app.Setting.HydraProtocolArr, c.authInfo.Protocol) == false {
 		c.authInfo.Protocol = app.Setting.HydraMap[c.authInfo.Port]
 	}
 	c.authList = func() *AuthList {
@@ -74,6 +74,7 @@ func (c *Cracker) Run() {
 	case "mysql":
 		c.Pool.Function = mysqlCracker
 	case "mssql":
+		c.Pool.Function = mssqlCracker
 	case "oracle":
 	case "ldap":
 	case "ssh":
@@ -139,6 +140,7 @@ func InitDefaultAuthMap() {
 	m["rdp"] = DefaultRdpList()
 	m["ssh"] = DefaultSshList()
 	m["mysql"] = DefaultMysqlList()
+	m["mssql"] = DefaultMssqlList()
 	DefaultAuthMap = m
 }
 

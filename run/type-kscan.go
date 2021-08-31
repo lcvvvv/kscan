@@ -381,6 +381,9 @@ func (k *kscan) Hydra() {
 	hydra.InitCustomAuthMap()
 	//初始化变量
 	k.hydra.pool.Function = func(i interface{}) interface{} {
+		if i == nil {
+			return nil
+		}
 		banner := i.(*gonmap.AppBanner)
 		//适配爆破模块
 		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
