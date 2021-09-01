@@ -7,6 +7,7 @@ require (
 	github.com/denisenkom/go-mssqldb v0.10.0
 	github.com/go-ping/ping v0.0.0-20210407214646-e4e642a95741
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/jlaffaye/ftp v0.0.0-20210307004419-5d4190119067
 	github.com/lcvvvv/urlparse v0.0.0-20210409080819-2d59a7e1fa30
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/twmb/murmur3 v1.1.5

@@ -14,6 +14,11 @@ type Cracker struct {
 	Out      chan AuthInfo
 }
 
+var (
+	DefaultAuthMap map[string]*AuthList
+	CustomAuthMap  *AuthList
+)
+
 func NewCracker(info *AuthInfo, threads int) *Cracker {
 	c := &Cracker{}
 	c.Pool = pool.NewPool(threads)
@@ -80,6 +85,8 @@ func (c *Cracker) Run() {
 	case "ssh":
 		c.Pool.Function = sshCracker
 	case "telnet":
+	case "ftp":
+		c.Pool.Function = ftpCracker
 	case "db2":
 	case "mongodb":
 	case "redis":
@@ -120,9 +127,6 @@ func Ok(protocol string, port int) bool {
 	return false
 }
 
-var DefaultAuthMap map[string]*AuthList
-var CustomAuthMap *AuthList
-
 func InitDefaultAuthMap() {
 	m := make(map[string]*AuthList)
 	m = map[string]*AuthList{
@@ -142,6 +146,8 @@ func InitDefaultAuthMap() {
 	m["ssh"] = DefaultSshList()
 	m["mysql"] = DefaultMysqlList()
 	m["mssql"] = DefaultMssqlList()
+	m["redis"] = DefaultRedisList()
+	m["ftp"] = DefaultFtpList()
 	DefaultAuthMap = m
 }
 

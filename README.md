@@ -47,9 +47,9 @@
     - Oracle
     - MySQL √已完成
     - MsSQL √已完成
-    - MongoDB
-    - PostgreSQL
-    - Redis
+    - MongoDB 
+    - PostgreSQL 
+    - Redis √已完成
   - Http
     - Tomcat
     - Websphere
