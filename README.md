@@ -42,13 +42,13 @@
   - rdp √已完成
   - ssh √已完成
   - telnet
-  - ftp
+  - ftp √已完成
   - Database
     - Oracle
     - MySQL √已完成
     - MsSQL √已完成
     - MongoDB 
-    - PostgreSQL 
+    - PostgreSQL √已完成
     - Redis √已完成
   - Http
     - Tomcat

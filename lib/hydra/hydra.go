@@ -81,6 +81,8 @@ func (c *Cracker) Run() {
 	case "mssql":
 		c.Pool.Function = mssqlCracker
 	case "oracle":
+	case "postgresql":
+		c.Pool.Function = postgresqlCracker
 	case "ldap":
 	case "ssh":
 		c.Pool.Function = sshCracker
@@ -95,6 +97,48 @@ func (c *Cracker) Run() {
 	}
 	//开始暴力破解
 	c.Pool.Run()
+}
+
+func InitDefaultAuthMap() {
+	m := make(map[string]*AuthList)
+	m = map[string]*AuthList{
+		"rdp":        NewAuthList(),
+		"mysql":      NewAuthList(),
+		"mssql":      NewAuthList(),
+		"oracle":     NewAuthList(),
+		"ldap":       NewAuthList(),
+		"ssh":        NewAuthList(),
+		"telnet":     NewAuthList(),
+		"db2":        NewAuthList(),
+		"mongodb":    NewAuthList(),
+		"redis":      NewAuthList(),
+		"smb":        NewAuthList(),
+		"postgresql": NewAuthList(),
+	}
+	m["rdp"] = DefaultRdpList()
+	m["ssh"] = DefaultSshList()
+	m["mysql"] = DefaultMysqlList()
+	m["mssql"] = DefaultMssqlList()
+	m["redis"] = DefaultRedisList()
+	m["ftp"] = DefaultFtpList()
+	m["postgresql"] = DefaultPostgresqlList()
+	DefaultAuthMap = m
+}
+
+func InitCustomAuthMap() {
+	CustomAuthMap = NewAuthList()
+	CustomAuthMap.Password = app.Setting.HydraPass
+	CustomAuthMap.Username = app.Setting.HydraUser
+}
+
+func Ok(protocol string, port int) bool {
+	if misc.IsInStrArr(app.Setting.HydraProtocolArr, protocol) {
+		return true
+	}
+	if misc.IsInIntArr(app.Setting.HydraPortArr, port) {
+		return true
+	}
+	return false
 }
 
 func (c *Cracker) OutWatchDog() {
@@ -115,44 +159,4 @@ func (c *Cracker) OutWatchDog() {
 		slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
 	close(c.Out)
-}
-
-func Ok(protocol string, port int) bool {
-	if misc.IsInStrArr(app.Setting.HydraProtocolArr, protocol) {
-		return true
-	}
-	if misc.IsInIntArr(app.Setting.HydraPortArr, port) {
-		return true
-	}
-	return false
-}
-
-func InitDefaultAuthMap() {
-	m := make(map[string]*AuthList)
-	m = map[string]*AuthList{
-		"rdp":     NewAuthList(),
-		"mysql":   NewAuthList(),
-		"mssql":   NewAuthList(),
-		"oracle":  NewAuthList(),
-		"ldap":    NewAuthList(),
-		"ssh":     NewAuthList(),
-		"telnet":  NewAuthList(),
-		"db2":     NewAuthList(),
-		"mongodb": NewAuthList(),
-		"redis":   NewAuthList(),
-		"smb":     NewAuthList(),
-	}
-	m["rdp"] = DefaultRdpList()
-	m["ssh"] = DefaultSshList()
-	m["mysql"] = DefaultMysqlList()
-	m["mssql"] = DefaultMssqlList()
-	m["redis"] = DefaultRedisList()
-	m["ftp"] = DefaultFtpList()
-	DefaultAuthMap = m
-}
-
-func InitCustomAuthMap() {
-	CustomAuthMap = NewAuthList()
-	CustomAuthMap.Password = app.Setting.HydraPass
-	CustomAuthMap.Username = app.Setting.HydraUser
 }
