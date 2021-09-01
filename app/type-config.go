@@ -214,7 +214,7 @@ func (c *Config) makeHydraMap() map[int]string {
 		//21:    "ftp",
 		//50000: "db2",
 		//27017: "mongodb",
-		//6379:  "redis",
+		6379: "redis",
 		//445:   "smb",
 	}
 }

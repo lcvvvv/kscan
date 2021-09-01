@@ -14,7 +14,7 @@ func Start(config app.Config) {
 	go K.WatchDog()
 
 	if config.Check {
-		slog.Info("当前为验证模式，不会进行端口扫描，仅对给定地址进行指纹识别")
+		slog.Warning("当前为验证模式，不会进行端口扫描，仅对给定地址进行指纹识别")
 		//STEP1:验证模式直接进行应用层指纹识别
 		time.Sleep(time.Microsecond * 200)
 		go K.GetAppBannerFromCheck()

@@ -4,6 +4,7 @@ import (
 	"kscan/lib/hydra/mssql"
 	"kscan/lib/hydra/mysql"
 	"kscan/lib/hydra/rdp"
+	"kscan/lib/hydra/redis"
 	"kscan/lib/hydra/ssh"
 	"kscan/lib/slog"
 )
@@ -57,6 +58,20 @@ func mssqlCracker(i interface{}) interface{} {
 	if ok, err := mssql.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
 		if err != nil {
 			slog.Debugf("mssql://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+			return nil
+		}
+		info.Status = true
+		return info
+	}
+	return nil
+}
+
+func redisCracker(i interface{}) interface{} {
+	info := i.(AuthInfo)
+	info.Auth.MakePassword()
+	if ok, err := redis.Check(info.IPAddr, info.Auth.Password, info.Port); ok {
+		if err != nil {
+			slog.Debugf("redis://%s:%s/auth:%s,%s", info.IPAddr, info.Port, info.Auth.Password, err)
 			return nil
 		}
 		info.Status = true

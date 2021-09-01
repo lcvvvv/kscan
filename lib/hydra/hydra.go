@@ -83,6 +83,7 @@ func (c *Cracker) Run() {
 	case "db2":
 	case "mongodb":
 	case "redis":
+		c.Pool.Function = redisCracker
 	case "smb":
 	}
 	//开始暴力破解
