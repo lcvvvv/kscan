@@ -44,10 +44,10 @@
   - telnet
   - ftp √已完成
   - Database
-    - Oracle
+    - Oracle √已完成
     - MySQL √已完成
     - MsSQL √已完成
-    - MongoDB 
+    - MongoDB √已完成
     - PostgreSQL √已完成
     - Redis √已完成
   - Http
