@@ -90,12 +90,12 @@ func (c *Cracker) Run() {
 	case "telnet":
 	case "ftp":
 		c.Pool.Function = ftpCracker
-	case "db2":
 	case "mongodb":
 		c.Pool.Function = mongodbCracker
 	case "redis":
 		c.Pool.Function = redisCracker
 	case "smb":
+		c.Pool.Function = smbCracker
 	}
 	//开始暴力破解
 	c.Pool.Run()
@@ -112,10 +112,11 @@ func InitDefaultAuthMap() {
 		"postgresql": NewAuthList(),
 		"redis":      NewAuthList(),
 		"telnet":     NewAuthList(),
-		"db2":        NewAuthList(),
 		"mongodb":    NewAuthList(),
 		"smb":        NewAuthList(),
 		"ldap":       NewAuthList(),
+		//"db2":        NewAuthList(),
+
 	}
 	m["rdp"] = DefaultRdpList()
 	m["ssh"] = DefaultSshList()
@@ -126,6 +127,7 @@ func InitDefaultAuthMap() {
 	m["redis"] = DefaultRedisList()
 	m["ftp"] = DefaultFtpList()
 	m["mongodb"] = DefaultMongodbList()
+	m["smb"] = DefaultSmbList()
 	DefaultAuthMap = m
 }
 

@@ -1,6 +1,6 @@
 package hydra
 
-func DefaultRdpList() *AuthList {
+func DefaultSmbList() *AuthList {
 	a := NewAuthList()
 	a.Username = []string{
 		"administrator",
@@ -81,7 +81,7 @@ func DefaultRdpList() *AuthList {
 	a.Special = []Auth{
 		NewSpecialAuth("guest", "guest"),
 		NewSpecialAuth("guest", "123456"),
-		NewSpecialAuth("db2admin", "db2admin"),
+		//NewSpecialAuth("db2admin", "db2admin"),
 		//NewSpecialAuth("oracle", "oracle"),
 		//NewSpecialAuth("mysql", "mysql"),
 	}

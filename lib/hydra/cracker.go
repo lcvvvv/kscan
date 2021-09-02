@@ -9,6 +9,7 @@ import (
 	"kscan/lib/hydra/postgresql"
 	"kscan/lib/hydra/rdp"
 	"kscan/lib/hydra/redis"
+	"kscan/lib/hydra/smb"
 	"kscan/lib/hydra/ssh"
 	"kscan/lib/slog"
 )
@@ -20,6 +21,21 @@ func rdpCracker(i interface{}) interface{} {
 	if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
 		if err != nil {
 			slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+			return nil
+		}
+		info.Status = true
+		return info
+	}
+	return nil
+}
+
+func smbCracker(i interface{}) interface{} {
+	info := i.(AuthInfo)
+	info.Auth.MakePassword()
+	domain := "workgroup"
+	if ok, err := smb.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
+		if err != nil {
+			slog.Debugf("smb://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
 			return nil
 		}
 		info.Status = true
