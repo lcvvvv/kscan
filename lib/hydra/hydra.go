@@ -81,6 +81,7 @@ func (c *Cracker) Run() {
 	case "mssql":
 		c.Pool.Function = mssqlCracker
 	case "oracle":
+		c.Pool.Function = oracleCracker
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "ldap":
@@ -91,6 +92,7 @@ func (c *Cracker) Run() {
 		c.Pool.Function = ftpCracker
 	case "db2":
 	case "mongodb":
+		c.Pool.Function = mongodbCracker
 	case "redis":
 		c.Pool.Function = redisCracker
 	case "smb":
@@ -103,25 +105,27 @@ func InitDefaultAuthMap() {
 	m := make(map[string]*AuthList)
 	m = map[string]*AuthList{
 		"rdp":        NewAuthList(),
+		"ssh":        NewAuthList(),
 		"mysql":      NewAuthList(),
 		"mssql":      NewAuthList(),
 		"oracle":     NewAuthList(),
-		"ldap":       NewAuthList(),
-		"ssh":        NewAuthList(),
+		"postgresql": NewAuthList(),
+		"redis":      NewAuthList(),
 		"telnet":     NewAuthList(),
 		"db2":        NewAuthList(),
 		"mongodb":    NewAuthList(),
-		"redis":      NewAuthList(),
 		"smb":        NewAuthList(),
-		"postgresql": NewAuthList(),
+		"ldap":       NewAuthList(),
 	}
 	m["rdp"] = DefaultRdpList()
 	m["ssh"] = DefaultSshList()
 	m["mysql"] = DefaultMysqlList()
 	m["mssql"] = DefaultMssqlList()
+	m["oracle"] = DefaultPostgresqlList()
+	m["postgresql"] = DefaultPostgresqlList()
 	m["redis"] = DefaultRedisList()
 	m["ftp"] = DefaultFtpList()
-	m["postgresql"] = DefaultPostgresqlList()
+	m["mongodb"] = DefaultMongodbList()
 	DefaultAuthMap = m
 }
 

@@ -3,8 +3,7 @@ package hydra
 func DefaultPostgresqlList() *AuthList {
 	a := NewAuthList()
 	a.Username = []string{
-		"root",
-		"admin",
+		"postgres",
 		"test",
 		//"user",
 		//"root",
@@ -12,6 +11,7 @@ func DefaultPostgresqlList() *AuthList {
 		//"webadmin",
 	}
 	a.Password = []string{
+		"",
 		"1",
 		"123456",
 		"zaq1@WSX",
@@ -79,11 +79,7 @@ func DefaultPostgresqlList() *AuthList {
 		//"user",
 	}
 	a.Special = []Auth{
-		NewSpecialAuth("db2admin", "db2admin"),
-		NewSpecialAuth("oracle", "oracle"),
-		NewSpecialAuth("mysql", "mysql"),
-		NewSpecialAuth("postgres", "postgres"),
-		NewSpecialAuth("kali", "kali"),
+		//NewSpecialAuth("postgres", "postgres"),
 	}
 	return a
 }
