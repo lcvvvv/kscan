@@ -59,7 +59,7 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.loadPort(p.Top())
 	c.loadOutput(p.Output())
 	c.loadTimeout(p.Timeout())
-	c.ScanPing = p.ScanPing()
+	c.ScanPing = c.loadScanPing(p.ScanPing())
 	c.Check = p.Check()
 	c.Path = p.Path()
 	c.Proxy = p.Proxy()
@@ -213,7 +213,7 @@ func (c *Config) makeHydraMap() map[int]string {
 		27017: "mongodb",
 		6379:  "redis",
 		//389:   "ldap",
-		//23:    "telnet",
+		23:   "telnet",
 		21:   "ftp",
 		2121: "ftp",
 		//50000: "db2",
@@ -300,6 +300,13 @@ func (c *Config) loadFofaField(expr string) []string {
 		return []string{expr}
 	}
 	return []string{}
+}
+
+func (c *Config) loadScanPing(ping bool) bool {
+	if len(c.Port) < 10 {
+		return true
+	}
+	return ping
 }
 
 func New() Config {
