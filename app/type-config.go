@@ -51,9 +51,8 @@ func (c *Config) WriteLine(s string) {
 }
 
 func (c *Config) Load(p *params.OsArgs) {
-	if p.Spy() != "None" {
-		c.Spy = p.Spy()
-	} else {
+	c.Spy = p.Spy()
+	if p.Spy() == "None" {
 		c.loadTarget(p.Target(), false)
 	}
 	c.loadPort(p.Port())
