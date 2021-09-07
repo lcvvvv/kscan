@@ -15,15 +15,16 @@ import (
 )
 
 type Config struct {
-	HostTarget, UrlTarget         []string
-	Port                          []int
-	Output                        *os.File
-	Proxy, Host, Path, Encoding   string
-	OSEncoding, NewLine           string
-	OutputJson                    string
-	Threads, Rarity               int
-	Timeout                       time.Duration
-	ScanPing, Check, Spy, NoColor bool
+	HostTarget, UrlTarget       []string
+	Port                        []int
+	Output                      *os.File
+	Proxy, Host, Path, Encoding string
+	OSEncoding, NewLine         string
+	OutputJson                  string
+	Threads, Rarity             int
+	Timeout                     time.Duration
+	ScanPing, Check, NoColor    bool
+	Spy                         string
 	//hydra
 	Hydra, HydraUpdate             bool
 	HydraPass, HydraUser, HydraMod []string
@@ -50,11 +51,11 @@ func (c *Config) WriteLine(s string) {
 }
 
 func (c *Config) Load(p *params.OsArgs) {
-	if p.Spy() {
+	if p.Spy() != "None" {
 		c.Spy = p.Spy()
-		return
+	} else {
+		c.loadTarget(p.Target(), false)
 	}
-	c.loadTarget(p.Target(), false)
 	c.loadPort(p.Port())
 	c.loadPort(p.Top())
 	c.loadOutput(p.Output())

@@ -2,6 +2,7 @@ package spy
 
 import (
 	"fmt"
+	"kscan/app"
 	"kscan/lib/IP"
 	"kscan/lib/gonmap"
 	"kscan/lib/misc"
@@ -16,8 +17,81 @@ func Start() {
 	slog.Info("现在开始进行自动网络环境探测")
 	internet := internetTesting()
 	_ = dnsTesting()
-	up, down := getInterfaces()
+	var gatewayArr, All []string
+	//若spy参数格式为IP地址，则将对指定的IP地址进行B段存活网关探测
+	if IP.FormatCheck(app.Setting.Spy) {
+		slog.Infof("现在开始指定网段：%s，B段存活网关探测", app.Setting.Spy)
+		gatewayArr = IP.GetGatewayList(app.Setting.Spy, "b")
+		HostDiscoveryIcmpPool(gatewayArr)
+		return
+	}
+	//依据情况判断是否进行172B段存活网关探测
+	if app.Setting.Spy == "all" || app.Setting.Spy == "172" {
+		//探测172段，B段存活网关
+		slog.Infof("当前spy参数值为%s，将开始172段，大B段存活网关探测，此探测时间较长，请耐心等待", app.Setting.Spy)
+		gatewayArr = []string{}
+		for i := 16; i <= 31; i++ {
+			slog.Infof("现在开始枚举常见网段172.%d.0.0", i)
+			gatewayArr = IP.GetGatewayList(fmt.Sprintf("172.%d.0.0", i), "b")
+			gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
+			if len(gatewayArr) > 0 {
+				HostDiscoveryIcmpPool(gatewayArr)
+				All = append(All, gatewayArr...)
+			} else {
+				slog.Info("该网段在之前已经枚举，此处不将不再重复枚举")
+			}
+		}
+	}
+	//依据情况判断是否进行10A段存活网关探测
+	if app.Setting.Spy == "all" || app.Setting.Spy == "10" {
+		//探测10段，A段存活网关
+		slog.Infof("当前spy参数值为%s，将开始10段，A段存活网关探测，此探测时间较长，请耐心等待", app.Setting.Spy)
+		slog.Info("现在开始枚举常见网段10.0.0.0")
+		gatewayArr = IP.GetGatewayList("10.0.0.1", "a")
+		HostDiscoveryIcmpPool(gatewayArr)
+	}
+	//依据情况判断是否进行常规探测
+	if app.Setting.Spy == "all" || app.Setting.Spy == "" {
+		//探测网卡所在网段
+		slog.Info("现在开始当前所在网段的B段网关存活性探测")
+		gatewayArr = makeInterfaceGatwayList()
+		gatewayArr = misc.RemoveDuplicateElement(gatewayArr)
+		//探测当前所在网段B段网关
+		gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
+		if len(gatewayArr) > 0 {
+			HostDiscoveryIcmpPool(gatewayArr)
+			All = append(All, gatewayArr...)
+		} else {
+			slog.Info("该网段在之前已经枚举，此处不将不再重复枚举")
+		}
+		//探测存在特殊规律的网段
+		if internet == false {
+			slog.Info("现在开始枚举特殊网段1.1.1.0-255.255.255.0")
+			gatewayArr = append(IP.GetGatewayList("1.1.1.1", "s"))
+			HostDiscoveryIcmpPool(gatewayArr)
+		}
+	}
+
+	//依据情况判断是否进行192B段存活网关探测
+	if app.Setting.Spy == "all" || app.Setting.Spy == "" || app.Setting.Spy == "192" {
+		//探测常见网段192段，B段存活网关
+		slog.Info("现在开始枚举常见网段192.168.0.0")
+		gatewayArr = IP.GetGatewayList("192.168.0.1", "b")
+		gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
+		if len(gatewayArr) > 0 {
+			HostDiscoveryIcmpPool(gatewayArr)
+			All = append(All, gatewayArr...)
+		} else {
+			slog.Info("该网段在之前已经枚举，此处不将不再重复枚举")
+		}
+	}
+	slog.Info("自动化存活网段探测结束")
+	slog.Info("小提示：若需要对指定某一b段探测，可设置spy参数值为该段任意IP地址")
+}
+
+func makeInterfaceGatwayList() []string {
 	var gatewayArr []string
+	up, down := getInterfaces()
 	for _, ip := range up {
 		if strings.Contains(ip, "169.254") {
 			continue
@@ -30,33 +104,7 @@ func Start() {
 		}
 		gatewayArr = append(gatewayArr, IP.GetGatewayList(ip, "b")...)
 	}
-	gatewayArr = misc.RemoveDuplicateElement(gatewayArr)
-
-	slog.Info("现在开始当前所在网段的B段网关存活性探测")
-	HostDiscoveryIcmpPool(gatewayArr)
-
-	slog.Info("现在开始枚举常见网段192.168.0.0")
-	gatewayArr = IP.GetGatewayList("192.168.0.1", "b")
-	HostDiscoveryIcmpPool(gatewayArr)
-
-	slog.Info("现在开始枚举常见网段10.0.0.0")
-	gatewayArr = IP.GetGatewayList("10.0.0.1", "a")
-	HostDiscoveryIcmpPool(gatewayArr)
-
-	slog.Info("现在开始枚举常见网段172.16.0.0-172.31.0.0")
-	gatewayArr = []string{}
-	for i := 16; i <= 31; i++ {
-		gatewayArr = append(IP.GetGatewayList(fmt.Sprintf("172.%d.0.0", i), "b"))
-	}
-	HostDiscoveryIcmpPool(gatewayArr)
-
-	if internet == false {
-		slog.Info("现在开始枚举特殊网段1.1.1.0-255.255.255.0")
-		gatewayArr = append(IP.GetGatewayList("1.1.1.1", "s"))
-		HostDiscoveryIcmpPool(gatewayArr)
-	}
-
-	slog.Info("自动化存活网段探测结束")
+	return gatewayArr
 }
 
 func internetTesting() bool {
@@ -123,9 +171,19 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 	go spyPool.Run()
 	//开始监测输出结果
 	for out := range spyPool.Out {
-		if out != nil {
-			ip := out.(string)
-			slog.Data(ip)
+		if out == nil {
+			continue
 		}
+		ip := out.(string)
+		slog.Data(ip)
+		if app.Setting.Scan == false {
+			continue
+		}
+		ipArr := IP.ExprToList(fmt.Sprintf("%s/24", ip))
+		app.Setting.HostTarget = append(app.Setting.HostTarget, ipArr...)
 	}
+	if app.Setting.Scan == true {
+		misc.RemoveDuplicateElement(app.Setting.HostTarget)
+	}
+
 }

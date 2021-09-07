@@ -238,6 +238,21 @@ func RemoveDuplicateElement(languages []string) []string {
 	return result
 }
 
+func RemoveDuplicateElementForMultiple(mainArr, otherArr []string) []string {
+	//合并所有辅切片为一个切片
+	result := []string{}
+	temp := map[string]struct{}{}
+	for _, item := range otherArr {
+		temp[item] = struct{}{}
+	}
+	for _, item := range mainArr {
+		if _, ok := temp[item]; ok == false {
+			result = append(result, item)
+		}
+	}
+	return result
+}
+
 func WriteLine(fileName string, byte []byte) error {
 	//file, err := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
 	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0666)

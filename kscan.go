@@ -51,7 +51,8 @@ optional arguments:
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
-  --spy           网段探测模式，此模式下将自动探测主机可达的内网网段,无需配置其他任何参数
+  --spy           网段探测模式，此模式下将自动探测主机可达的内网网段可接收参数为：
+                  (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
   --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：9
   --hydra         自动化爆破支持协议：rdp、ssh、telnet、mssql、mysql等等....
 hydra options:
@@ -121,7 +122,7 @@ func main() {
 
 	//校验升级情况
 	//app.CheckUpdate()
-	if app.Setting.Spy {
+	if app.Setting.Spy != "None" {
 		spy.Start()
 	}
 	if len(app.Setting.Fofa) > 0 {

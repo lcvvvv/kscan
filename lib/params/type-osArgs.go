@@ -3,16 +3,18 @@ package params
 import (
 	"flag"
 	"fmt"
+	"kscan/lib/misc"
 	"kscan/lib/slog"
 	"os"
 	"regexp"
 )
 
 type OsArgs struct {
-	help, debug, scanPing, check, spy, noColor        bool
+	help, debug, scanPing, check, noColor             bool
 	target, port, output, proxy, path, host, encoding string
 	outputJson                                        string
 	USAGE, HELP, LOGO, SYNTAX                         string
+	spy                                               string
 	top, threads, timeout, rarity                     int
 	//hydra模块
 	hydra, hydraUpdate             bool
@@ -129,7 +131,7 @@ func (o OsArgs) Encoding() string {
 	return o.encoding
 }
 
-func (o OsArgs) Spy() bool {
+func (o OsArgs) Spy() string {
 	return o.spy
 }
 
@@ -144,7 +146,7 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.debug, "debug", false, "")
 	flag.BoolVar(&o.debug, "d", false, "")
 	//spy模块
-	flag.BoolVar(&o.spy, "spy", false, "")
+	flag.StringVar(&o.spy, "spy", "None", "")
 	//hydra模块
 	flag.BoolVar(&o.hydra, "hydra", false, "")
 	flag.BoolVar(&o.hydraUpdate, "hydra-update", false, "")
@@ -179,7 +181,28 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.StringVar(&o.output, "output", "", "")
 	flag.StringVar(&o.outputJson, "oJ", "", "")
 	flag.BoolVar(&o.noColor, "Cn", false, "")
+	//fix,os.args
+	fixOsArgs()
+	//实例化参数值
 	flag.Parse()
+}
+
+func fixOsArgs() {
+	var newArgs []string
+	var list = []string{"--spy"}
+	for index, value := range os.Args {
+		newArgs = append(newArgs, value)
+		if misc.IsInStrArr(list, value) {
+			if index+2 > len(os.Args) {
+				newArgs = append(newArgs, "")
+				break
+			}
+			if os.Args[index+1][:2] == "--" {
+				newArgs = append(newArgs, "")
+			}
+		}
+	}
+	os.Args = newArgs
 }
 
 //初始化函数
@@ -208,14 +231,9 @@ func (o *OsArgs) PrintBanner() {
 
 func (o *OsArgs) CheckArgs() {
 	//判断必须的参数是否存在
-	if o.spy == true {
-		return
+	if o.target == "" && o.fofa == "" && o.spy == "None" {
+		slog.Error("至少有target、fofa、spy参数中的一个")
 	}
-
-	if o.target == "" && o.fofa == "" {
-		slog.Error("至少有target、fofa两个参数中的一个")
-	}
-
 	//判断冲突参数
 	if o.port != "" && o.top != 400 {
 		slog.Error("port、top参数不能同时使用")
