@@ -94,6 +94,10 @@ func Init(b bool) bool {
 		mod = 0
 		return true
 	}
+	if (runtimePSArr[1] == "cmd.exe" || runtimePSArr[1] == "powershell.exe") && runtimePSArr[2] == "explorer.exe" {
+		mod = 0
+		return true
+	}
 	if strings.Contains(runtimePSArr[len(runtimePSArr)-2], "cmd.exe") == false {
 		if strings.Contains(runtimePSArr[len(runtimePSArr)-2], "powershell.exe") == false {
 			mod = 1
