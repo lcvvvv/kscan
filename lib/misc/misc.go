@@ -2,15 +2,18 @@ package misc
 
 import (
 	"bufio"
+	"context"
 	"encoding/base64"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"kscan/lib/chinese"
 	"kscan/lib/slog"
 	"math/rand"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func StrArr2IntArr(strArr []string) ([]int, error) {
@@ -321,4 +324,39 @@ func RandomString(i ...int) string {
 		str += Char[j : j+1]
 	}
 	return str
+}
+
+func ReadAll(r io.Reader, duration time.Duration) []byte {
+	ctx, cancel := context.WithTimeout(context.Background(), duration)
+	defer cancel()
+	BufChan := make(chan []byte)
+
+	go func() {
+		var Buf []byte
+		defer func() {
+			if err := recover(); err != nil {
+				if len(Buf) != 0 {
+					slog.Debug(err, ",reader response is :", StrRandomCut(string(Buf), 20))
+				}
+			}
+		}()
+		Buf, err := ioutil.ReadAll(r)
+		if err != nil {
+			slog.Debug(err.Error())
+		}
+		BufChan <- Buf
+	}()
+
+	var Buf []byte
+	for {
+		select {
+		case <-ctx.Done():
+			close(BufChan)
+			return Buf
+		case Buf = <-BufChan:
+			close(BufChan)
+			return Buf
+		}
+	}
+
 }

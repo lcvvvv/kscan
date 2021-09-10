@@ -412,11 +412,34 @@ func (k *kscan) Hydra() {
 	}()
 	//暴力破解任务下发器
 	go func() {
+		var TargetMap = make(map[string][]string)
 		for true {
 			if k.hydra.queue.Len() == 0 && k.hydra.done == true {
 				break
 			}
-			k.hydra.pool.In <- k.hydra.queue.Pop()
+			banner := k.hydra.queue.Pop().(*gonmap.AppBanner)
+			//若目标是第一次出现，则直接进行扫描
+			if _, ok := TargetMap[banner.Netloc()]; ok == false {
+				TargetMap[banner.Netloc()] = []string{banner.Protocol}
+				k.hydra.pool.In <- banner
+				continue
+			}
+			protocolArr := TargetMap[banner.Netloc()]
+			if misc.IsInStrArr(protocolArr, banner.Protocol) == false {
+				if arr := []string{"rdp", "smb"}; misc.IsInStrArr(arr, banner.Protocol) {
+					TargetMap[banner.Netloc()] = append(protocolArr, arr...)
+					k.hydra.pool.In <- banner
+					continue
+				}
+				if arr := []string{"pop3", "smtp", "imap"}; misc.IsInStrArr(arr, banner.Protocol) {
+					TargetMap[banner.Netloc()] = append(protocolArr, arr...)
+					k.hydra.pool.In <- banner
+					continue
+				}
+				TargetMap[banner.Netloc()] = append(protocolArr, banner.Protocol)
+				k.hydra.pool.In <- banner
+				continue
+			}
 		}
 		//关闭输出信道
 		k.hydra.pool.InDone()
