@@ -399,6 +399,9 @@ func (k *kscan) Hydra() {
 	//暴力破解任务收集器
 	go func() {
 		for out := range k.watchDog.hydra {
+			if out == nil {
+				continue
+			}
 			banner := out.(*gonmap.AppBanner)
 			if banner == nil {
 				continue
@@ -417,7 +420,11 @@ func (k *kscan) Hydra() {
 			if k.hydra.queue.Len() == 0 && k.hydra.done == true {
 				break
 			}
-			banner := k.hydra.queue.Pop().(*gonmap.AppBanner)
+			pop := k.hydra.queue.Pop()
+			if pop == nil {
+				continue
+			}
+			banner := pop.(*gonmap.AppBanner)
 			//若目标是第一次出现，则直接进行扫描
 			if _, ok := TargetMap[banner.Netloc()]; ok == false {
 				TargetMap[banner.Netloc()] = []string{banner.Protocol}
