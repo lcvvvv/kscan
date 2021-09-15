@@ -19,6 +19,7 @@ func Check(Host, Password string, Port int) (bool, error) {
 		return false, err
 	}
 	_, err = conn.Write([]byte(fmt.Sprintf("auth %s\r\n", Password)))
+	time.Sleep(time.Millisecond * 500)
 	if err != nil {
 		return false, err
 	}
