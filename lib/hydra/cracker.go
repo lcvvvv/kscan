@@ -58,6 +58,20 @@ func sshCracker(i interface{}) interface{} {
 	return nil
 }
 
+func telnetCracker(i interface{}) interface{} {
+	//info := i.(AuthInfo)
+	//info.Auth.MakePassword()
+	//if ok, err := telnet.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
+	//	if err != nil {
+	//		slog.Debugf("telnet://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+	//		return nil
+	//	}
+	//	info.Status = true
+	//	return info
+	//}
+	return nil
+}
+
 func mysqlCracker(i interface{}) interface{} {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()

@@ -88,6 +88,7 @@ func (c *Cracker) Run() {
 	case "ssh":
 		c.Pool.Function = sshCracker
 	case "telnet":
+		c.Pool.Function = telnetCracker
 	case "ftp":
 		c.Pool.Function = ftpCracker
 	case "mongodb":
@@ -128,6 +129,7 @@ func InitDefaultAuthMap() {
 	m["ftp"] = DefaultFtpList()
 	m["mongodb"] = DefaultMongodbList()
 	m["smb"] = DefaultSmbList()
+	m["telnet"] = DefaultTelnetList()
 	DefaultAuthMap = m
 }
 
@@ -141,9 +143,9 @@ func Ok(protocol string, port int) bool {
 	if misc.IsInStrArr(app.Setting.HydraProtocolArr, protocol) {
 		return true
 	}
-	if misc.IsInIntArr(app.Setting.HydraPortArr, port) {
-		return true
-	}
+	//if misc.IsInIntArr(app.Setting.HydraPortArr, port) {
+	//	return true
+	//}
 	return false
 }
 
