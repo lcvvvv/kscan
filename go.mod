@@ -9,7 +9,6 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/godror/godror v0.25.3
 	github.com/jlaffaye/ftp v0.0.0-20210307004419-5d4190119067
-	github.com/lcvvvv/urlparse v0.0.0-20210409080819-2d59a7e1fa30
 	github.com/lib/pq v1.10.2
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/stacktitan/smb v0.0.0-20190531122847-da9a425dceb8

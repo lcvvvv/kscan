@@ -3,7 +3,6 @@ package run
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lcvvvv/urlparse"
 	"kscan/app"
 	"kscan/lib/IP"
 	"kscan/lib/gonmap"
@@ -12,6 +11,7 @@ import (
 	"kscan/lib/pool"
 	"kscan/lib/queue"
 	"kscan/lib/slog"
+	"kscan/lib/urlparse"
 	"os"
 	"path"
 	"strings"

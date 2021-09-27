@@ -1,12 +1,12 @@
 package app
 
 import (
-	"github.com/lcvvvv/urlparse"
 	"kscan/lib/IP"
 	"kscan/lib/chinese"
 	"kscan/lib/misc"
 	"kscan/lib/params"
 	"kscan/lib/slog"
+	"kscan/lib/urlparse"
 	"os"
 	"regexp"
 	"runtime"
