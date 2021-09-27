@@ -1,47 +1,48 @@
 package urlparse
 
 import (
-	"errors"
 	"fmt"
-	"regexp"
+	"net/url"
 	"strconv"
 )
 
 type URL struct {
 	Scheme, Netloc, Path string
 	Port                 int
+	url                  *url.URL
 }
 
 func Load(s string) (*URL, error) {
-	r := regexp.MustCompile("^(?:(http|https)://)?([A-Za-z0-9.\\-]+(?:\\.[A-Za-z0-9.\\-]+))(?::(\\d+))?(/*[\\w/%]*)?$")
-	o := r.FindStringSubmatch(s)
-
-	if len(o) != 5 {
-		return nil, errors.New("URL格式不正确")
+	r, err := url.Parse(s)
+	if err != nil {
+		return nil, err
 	}
-
-	Scheme := o[1]
-	Netloc := o[2]
-	Port, _ := strconv.Atoi(o[3])
-	Path := o[4]
-
-	if Port == 0 {
-		switch Scheme {
-		case "https":
-			Port = 443
-		case "http":
-			Port = 80
-		}
-	}
-
 	return &URL{
-		Scheme: Scheme,
-		Netloc: Netloc,
-		Port:   Port,
-		Path:   Path,
+		Scheme: r.Scheme,
+		Netloc: r.Host,
+		Path:   r.Path,
+		Port: func() int {
+			if r.Port() != "" {
+				p, _ := strconv.Atoi(r.Port())
+				return p
+			}
+			if r.Scheme == "https" {
+				return 443
+			}
+			if r.Scheme == "http" {
+				return 80
+			}
+			return 80
+		}(),
 	}, nil
 }
 
 func (i *URL) UnParse() string {
+	if i.Scheme == "https" && i.Port == 443 {
+		return fmt.Sprintf("https://%s%s", i.Netloc, i.Path)
+	}
+	if i.Scheme == "http" && i.Port == 80 {
+		return fmt.Sprintf("http://%s%s", i.Netloc, i.Path)
+	}
 	return fmt.Sprintf("%s://%s:%d%s", i.Scheme, i.Netloc, i.Port, i.Path)
 }
