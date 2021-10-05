@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type URL struct {
@@ -15,11 +16,17 @@ type URL struct {
 func Load(s string) (*URL, error) {
 	r, err := url.Parse(s)
 	if err != nil {
-		return nil, err
+		if strings.Contains(err.Error(), "first path segment in URL cannot contain colon") {
+			r, _ = url.Parse("http://" + s)
+			r.Scheme = ""
+		} else {
+			return nil, err
+		}
 	}
+
 	return &URL{
 		Scheme: r.Scheme,
-		Netloc: r.Host,
+		Netloc: r.Hostname(),
 		Path:   r.Path,
 		Port: func() int {
 			if r.Port() != "" {
@@ -43,6 +50,9 @@ func (i *URL) UnParse() string {
 	}
 	if i.Scheme == "http" && i.Port == 80 {
 		return fmt.Sprintf("http://%s%s", i.Netloc, i.Path)
+	}
+	if i.Scheme == "" {
+		return fmt.Sprintf("%s%s", i.Netloc, i.Path)
 	}
 	return fmt.Sprintf("%s://%s:%d%s", i.Scheme, i.Netloc, i.Port, i.Path)
 }
