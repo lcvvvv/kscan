@@ -151,7 +151,6 @@ func (k *kscan) PortDiscovery() {
 func (k *kscan) GetTcpBanner() {
 	k.pool.tcpBanner.Function = func(i interface{}) interface{} {
 		netloc := i.(string)
-		//slog.Debug(netloc)
 		r := gonmap.GetTcpBanner(netloc, gonmap.New(), k.config.Timeout*10)
 		return r
 	}

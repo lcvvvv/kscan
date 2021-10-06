@@ -7,7 +7,7 @@ import (
 
 func TestName(t *testing.T) {
 	var s string
-	s = "114.114.114.114:144"
+	s = "www.baidu.com:443"
 	a, err := Load(s)
 	fmt.Println(err)
 	fmt.Printf("\n%#v", a)
