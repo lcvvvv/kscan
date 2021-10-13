@@ -91,6 +91,12 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 	if expr == "" {
 		return
 	}
+	if strings.Contains(expr, ",") {
+		for _, s := range strings.Split(expr, ",") {
+			c.loadTarget(s, true)
+		}
+		return
+	}
 	//判断target字符串是否为文件
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
