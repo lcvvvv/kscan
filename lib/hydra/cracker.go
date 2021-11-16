@@ -17,7 +17,7 @@ import (
 func rdpCracker(i interface{}) interface{} {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
-	domain := "workgroup"
+	domain := ""
 	if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
 		if err != nil {
 			slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
@@ -32,7 +32,7 @@ func rdpCracker(i interface{}) interface{} {
 func smbCracker(i interface{}) interface{} {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
-	domain := "workgroup"
+	domain := ""
 	if ok, err := smb.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
 		if err != nil {
 			slog.Debugf("smb://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
