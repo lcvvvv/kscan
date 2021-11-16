@@ -83,7 +83,7 @@ func (c *Cracker) Run() {
 	case "mssql":
 		c.Pool.Function = mssqlCracker
 	case "oracle":
-		c.Pool.Function = oracleCracker
+		//c.Pool.Function = oracleCracker
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "ldap":

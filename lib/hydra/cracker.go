@@ -5,7 +5,6 @@ import (
 	"kscan/lib/hydra/mongodb"
 	"kscan/lib/hydra/mssql"
 	"kscan/lib/hydra/mysql"
-	"kscan/lib/hydra/oracle"
 	"kscan/lib/hydra/postgresql"
 	"kscan/lib/hydra/rdp"
 	"kscan/lib/hydra/redis"
@@ -142,19 +141,19 @@ func postgresqlCracker(i interface{}) interface{} {
 	return nil
 }
 
-func oracleCracker(i interface{}) interface{} {
-	info := i.(AuthInfo)
-	info.Auth.MakePassword()
-	if ok, err := oracle.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
-		if err != nil {
-			slog.Debugf("oracle://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
-			return nil
-		}
-		info.Status = true
-		return info
-	}
-	return nil
-}
+//func oracleCracker(i interface{}) interface{} {
+//	info := i.(AuthInfo)
+//	info.Auth.MakePassword()
+//	if ok, err := oracle.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
+//		if err != nil {
+//			slog.Debugf("oracle://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+//			return nil
+//		}
+//		info.Status = true
+//		return info
+//	}
+//	return nil
+//}
 
 func mongodbCracker(i interface{}) interface{} {
 	info := i.(AuthInfo)
