@@ -7,6 +7,7 @@ import (
 	"kscan/lib/slog"
 	"kscan/lib/smap"
 	"sync"
+	"time"
 )
 
 //创建worker，每一个worker抽象成一个可以执行任务的函数
@@ -45,6 +46,8 @@ type Pool struct {
 	Out chan interface{}
 	//size用来表明池的大小，不能超发。
 	threads int
+	//启动协程等待时间
+	Interval time.Duration
 	//正在执行的任务清单
 	JobsList *smap.SMap
 	//jobs表示执行任务的通道用于作为队列，我们将任务从切片当中取出来，然后存放到通道当中，再从通道当中取出任务并执行。
@@ -65,6 +68,7 @@ func NewPool(threads int) *Pool {
 		In:       make(chan interface{}),
 		Function: nil,
 		Done:     false,
+		Interval: time.Duration(0),
 	}
 }
 
@@ -102,6 +106,7 @@ func (p *Pool) Run() {
 	//只启动有限大小的协程，协程的数量不可以超过工作池设定的数量，防止计算资源崩溃
 	for i := 0; i < p.threads; i++ {
 		p.wg.Add(1)
+		time.Sleep(p.Interval)
 		go p.work()
 	}
 	p.wg.Wait()
