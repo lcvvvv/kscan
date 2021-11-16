@@ -5,6 +5,7 @@ import (
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/lib/slog"
+	"time"
 )
 
 type Cracker struct {
@@ -39,6 +40,7 @@ func NewCracker(info *AuthInfo, threads int) *Cracker {
 		return list
 	}()
 	c.Out = make(chan AuthInfo)
+	c.Pool.Interval = time.Second * 1
 	return c
 }
 
