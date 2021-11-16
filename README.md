@@ -211,6 +211,8 @@ optional arguments:
 
 - [NMAP](https://github.com/nmap/nmap/)
 
+- [grdp](https://github.com/tomatome/grdp/)
+
 ## 八、文末
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
