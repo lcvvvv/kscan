@@ -1,7 +1,6 @@
 module kscan
 
 go 1.14
-
 require (
 	github.com/PuerkitoBio/goquery v1.6.1
 	github.com/denisenkom/go-mssqldb v0.10.0
@@ -16,4 +15,8 @@ require (
 	go.mongodb.org/mongo-driver v1.7.1
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	golang.org/x/text v0.3.6
+	github.com/huin/asn1ber v0.0.0-20120622192748-af09f62e6358
+    github.com/icodeface/tls v0.0.0-20190904083142-17aec93c60e5
+    github.com/lunixbochs/struc v0.0.0-20200707160740-784aaebc1d40
+    golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
 )
