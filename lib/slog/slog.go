@@ -68,6 +68,7 @@ func (t *logger) Error(s string) {
 }
 
 func (t *logger) Warning(s string) {
+	s = color.Red(s)
 	t.warning.Print(splitStr, s)
 }
 
