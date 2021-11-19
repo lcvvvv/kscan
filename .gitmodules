@@ -1,0 +1,3 @@
+[submodule "gonmap"]
+	path = lib/gonmap
+	url = https://github.com/lcvvvv/gonmap
