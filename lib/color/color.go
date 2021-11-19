@@ -2,7 +2,6 @@ package color
 
 import (
 	"fmt"
-	"github.com/mitchellh/go-ps"
 	"os"
 	"runtime"
 	"strconv"
@@ -39,29 +38,8 @@ var (
 	}
 )
 
-//git bash
-//$ ./color.exe
-//2021/09/07 12:24:41 Process color.exe with PID 1524 and PPID 3296
-//2021/09/07 12:24:41 Process bash.exe with PID 3296 and PPID 3116
-//2021/09/07 12:24:41 Process bash.exe with PID 3116 and PPID 1156
-
-//ConEmu (x64)
-//# color.exe
-//2021/09/07 12:31:50 Process color.exe with PID 1224 and PPID 4720
-//2021/09/07 12:31:50 Process cmd.exe with PID 4720 and PPID 5064
-//2021/09/07 12:31:50 Process ConEmuC64.exe with PID 5064 and PPID 1376
-//2021/09/07 12:31:50 Process ConEmu64.exe with PID 1376 and PPID 1764
-//2021/09/07 12:31:50 Process explorer.exe with PID 1764 and PPID 1648
-
-//cmd.exe
-//C:\Users\Pentest\Desktop>color.exe
-//2021/09/07 12:33:10 Process color.exe with PID 4160 and PPID 4608
-//2021/09/07 12:33:10 Process cmd.exe with PID 4608 and PPID 1764
-//2021/09/07 12:33:10 Process explorer.exe with PID 1764 and PPID 1648
-//初始化color包，监测输出终端是否支持颜色输出，
 //mod = 0 则为不输出颜色;
 //mod = 1 则依据ANSI转义序列输出颜色体系;
-
 func Init(b bool) bool {
 	if b == true {
 		mod = 0
@@ -71,38 +49,8 @@ func Init(b bool) bool {
 		mod = 1
 		return false
 	}
-	runtimePSArr := func() []string {
-		pid := os.Getpid()
-		var sArr []string
-		for {
-			p, err := ps.FindProcess(pid)
-			if err != nil || p == nil {
-				break
-			}
-			sArr = append(sArr, p.Executable())
-			pid = p.PPid()
-		}
-		return sArr
-	}()
-	for _, name := range runtimePSArr {
-		if name == "bash.exe" {
-			mod = 1
-			return false
-		}
-	}
-	if len(runtimePSArr) <= 3 {
-		mod = 0
-		return true
-	}
-	if (runtimePSArr[1] == "cmd.exe" || runtimePSArr[1] == "powershell.exe") && runtimePSArr[2] == "explorer.exe" {
-		mod = 0
-		return true
-	}
-	if strings.Contains(runtimePSArr[len(runtimePSArr)-2], "cmd.exe") == false {
-		if strings.Contains(runtimePSArr[len(runtimePSArr)-2], "powershell.exe") == false {
-			mod = 1
-			return false
-		}
+	if os.Getenv("KSCAN_COLOR") == "TRUE" {
+		return false
 	}
 	mod = 0
 	return true
