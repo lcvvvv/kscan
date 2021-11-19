@@ -3,11 +3,15 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
+	"io"
+	"log"
 	"time"
 )
 
 func Check(Host, Username, Password string, Port int) (bool, error) {
+	_ = mysql.SetLogger(log.New(io.Discard, "", log.Ldate|log.Ltime))
 	dataSourceName := fmt.Sprintf("%v:%v@tcp(%v:%v)/mysql?charset=utf8&timeout=%v", Username, Password, Host, Port, 5*time.Second)
 	db, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
