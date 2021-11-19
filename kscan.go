@@ -154,13 +154,15 @@ func Init() {
 	app.Setting.Load(param)
 	//color包初始化
 	app.Setting.NoColor = color.Init(app.Setting.NoColor)
-	slog.Warning("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
+	slog.Info("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
+	if runtime.GOOS == "windows" && app.Setting.NoColor == true {
+		slog.Info("在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
+	}
 }
 
 func KscanInit() {
-	slog.Warning("开始读取扫描对象...")
+	//slog.Warning("开始读取扫描对象...")
 	slog.Infof("成功读取URL地址:[%d]个", len(app.Setting.UrlTarget))
-
 	if app.Setting.Check == false {
 		slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
 	}
@@ -170,7 +172,7 @@ func KscanInit() {
 	//gonmap探针/指纹库初始化
 	r = gonmap.Init(app.Setting.Rarity, app.Setting.Timeout)
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
-	slog.Warningf("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条", r["USED_PROBE"], r["USED_MATCH"])
+	//slog.Infof("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条", r["USED_PROBE"], r["USED_MATCH"])
 }
 
 func FofaInit() {
