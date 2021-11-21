@@ -71,19 +71,18 @@ func DefaultRdpList() *AuthList {
 		"12345678",
 		"1q2w3e",
 		"abc123",
-		//"okmnji",
 		"test123",
 		"123456789",
-		//"postgres",
 		"q1w2e3r4",
 		//"user",
+		//"okmnji",
+		//"postgres",
+
 	}
 	a.Special = []Auth{
 		NewSpecialAuth("guest", "guest"),
 		NewSpecialAuth("guest", "123456"),
 		NewSpecialAuth("db2admin", "db2admin"),
-		//NewSpecialAuth("oracle", "oracle"),
-		//NewSpecialAuth("mysql", "mysql"),
 	}
 	return a
 }
