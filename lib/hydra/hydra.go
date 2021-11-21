@@ -164,7 +164,8 @@ func (c *Cracker) OutWatchDog() {
 	}
 	if count > 3 {
 		slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
-	} else {
+	}
+	if count > 0 && count <= 3 {
 		c.Out <- info.(AuthInfo)
 	}
 	close(c.Out)
