@@ -83,7 +83,7 @@ func (c *Cracker) Run() {
 	case "mssql":
 		c.Pool.Function = mssqlCracker
 	case "oracle":
-		//c.Pool.Function = oracleCracker
+		c.Pool.Function = oracleCracker
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "ldap":
@@ -125,7 +125,7 @@ func InitDefaultAuthMap() {
 	m["ssh"] = DefaultSshList()
 	m["mysql"] = DefaultMysqlList()
 	m["mssql"] = DefaultMssqlList()
-	m["oracle"] = DefaultPostgresqlList()
+	m["oracle"] = DefaultOracleList()
 	m["postgresql"] = DefaultPostgresqlList()
 	m["redis"] = DefaultRedisList()
 	m["ftp"] = DefaultFtpList()
@@ -162,11 +162,10 @@ func (c *Cracker) OutWatchDog() {
 		count += 1
 		info = out
 	}
-	if count == 1 {
-		c.Out <- info.(AuthInfo)
-	}
-	if count > 1 {
+	if count > 3 {
 		slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
+	} else {
+		c.Out <- info.(AuthInfo)
 	}
 	close(c.Out)
 }
