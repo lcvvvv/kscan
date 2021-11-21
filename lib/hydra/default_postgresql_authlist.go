@@ -78,8 +78,6 @@ func DefaultPostgresqlList() *AuthList {
 		//"postgres",
 		//"user",
 	}
-	a.Special = []Auth{
-		//NewSpecialAuth("postgres", "postgres"),
-	}
+	a.Special = []Auth{}
 	return a
 }
