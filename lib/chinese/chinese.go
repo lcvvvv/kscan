@@ -2,6 +2,7 @@ package chinese
 
 import (
 	"golang.org/x/text/encoding/simplifiedchinese"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -113,3 +114,13 @@ func isUtf8(buf []byte) bool {
 //	}
 //	return i
 //}
+
+func CountChinese(s string) int {
+	count := 0
+	for _, c1 := range s {
+		if unicode.Is(unicode.Han, c1) {
+			count++
+		}
+	}
+	return count
+}

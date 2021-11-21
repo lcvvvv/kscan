@@ -38,13 +38,10 @@ func New(email, key string) *Fofa {
 		baseUrl:    "https://fofa.so",
 		searchPath: "/api/v1/search/all",
 		loginPath:  "/api/v1/info/my",
-		//fieldList: []string{
-		//	"host", "title", "ip", "domain", "port", "country", "province", "city", "country_name", "header", "server",
-		//	"protocol", "banner", "cert", "isp", "as_number", "as_organization", "latitude", "longitude",
-		//},
 		fieldList: []string{
-			"host", "title", "ip", "domain", "port", "country", "province", "city", "country_name", "header", "server",
-			"protocol", "banner", "cert", "isp", "as_organization",
+			"host", "title", "ip", "domain", "port", "country", "province",
+			"city", "country_name", "header", "server", "protocol", "banner",
+			"cert", "isp", "as_organization",
 		},
 		field: []string{},
 	}
