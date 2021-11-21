@@ -60,6 +60,10 @@ func New(config app.Config) *kscan {
 	k.pool.port = pool.NewPool(config.Threads)
 	k.pool.host = pool.NewPool(hostThreads)
 
+	k.pool.appBanner.Interval = time.Microsecond * 500
+	k.pool.tcpBanner.Interval = time.Microsecond * 500
+	k.pool.port.Interval = time.Microsecond * 500
+
 	k.watchDog.hydra = make(chan interface{})
 	k.watchDog.output = make(chan interface{})
 	k.watchDog.wg = &sync.WaitGroup{}
@@ -356,7 +360,7 @@ func (k *kscan) WatchDog() {
 	}()
 	//Hydra模块
 	if app.Setting.Hydra {
-		slog.Info("hydra模块已开启，开始监听暴力破解任务")
+		slog.Warning("hydra模块已开启，开始监听暴力破解任务")
 		k.watchDog.wg.Add(1)
 	}
 
