@@ -22,7 +22,7 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.50#\#| \#|
+|#|\#\#####/ \#####/#/ v1.51#\#| \#|
            轻量级资产测绘工具 by：kv2
 
 `
@@ -125,9 +125,11 @@ func main() {
 	if app.Setting.Spy != "None" {
 		spy.Start()
 	}
+	//fofa模块初始化
 	if len(app.Setting.Fofa) > 0 {
 		FofaInit()
 	}
+	//kscan模块启动
 	if len(app.Setting.UrlTarget) > 0 || len(app.Setting.HostTarget) > 0 {
 		//扫描模块初始化
 		KscanInit()
