@@ -7,6 +7,7 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"math/big"
 	"unicode/utf16"
@@ -357,6 +358,14 @@ func (s *SEC) readEncryptedPayload(data []byte, checkSum bool) []byte {
 
 }
 func (s *SEC) writeEncryptedPayload(data []byte, checkSum bool) []byte {
+	defer func() {
+		if e := recover(); e != nil {
+			err := errors.New(fmt.Sprint("write encrypted payload error: ", e))
+			glog.Debug(err, e)
+			return
+		}
+	}()
+
 	if s.nbEncryptedPacket == 4096 {
 
 	}
@@ -624,6 +633,15 @@ func (e *ClientSecurityExchangePDU) serialize() []byte {
 	return buff.Bytes()
 }
 func (c *Client) sendClientRandom() {
+	defer func() {
+		if e := recover(); e != nil {
+			err := errors.New(fmt.Sprint("send client random error: ", e))
+			glog.Debug(err, e)
+			_ = c.Close()
+			return
+		}
+	}()
+
 	glog.Info("send Client Random")
 
 	clientRandom := core.Random(32)

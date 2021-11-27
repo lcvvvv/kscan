@@ -3,6 +3,8 @@ package pdu
 import (
 	"bytes"
 	"encoding/hex"
+	"errors"
+	"fmt"
 
 	"kscan/lib/grdp/core"
 	"kscan/lib/grdp/emission"
@@ -138,6 +140,14 @@ func (c *Client) connect(data *gcc.ClientCoreData, userId uint16, channelId uint
 }
 
 func (c *Client) recvDemandActivePDU(s []byte) {
+	defer func() {
+		if e := recover(); e != nil {
+			err := errors.New(fmt.Sprint("recv demand active pdu error: ", e))
+			glog.Debug(err, e)
+			return
+		}
+	}()
+
 	glog.Debug("PDU recvDemandActivePDU", hex.EncodeToString(s))
 	r := bytes.NewReader(s)
 	pdu, err := readPDU(r)
