@@ -14,7 +14,7 @@ type OsArgs struct {
 	target, port, output, proxy, path, host, encoding string
 	outputJson                                        string
 	USAGE, HELP, LOGO, SYNTAX                         string
-	spy                                               string
+	spy, touch                                        string
 	top, threads, timeout, rarity                     int
 	//hydra模块
 	hydra, hydraUpdate             bool
@@ -135,6 +135,10 @@ func (o OsArgs) Spy() string {
 	return o.spy
 }
 
+func (o OsArgs) Touch() string {
+	return o.touch
+}
+
 //初始化参数
 func (o *OsArgs) LoadOsArgs() {
 	//自定义Usage
@@ -147,6 +151,8 @@ func (o *OsArgs) LoadOsArgs() {
 	flag.BoolVar(&o.debug, "d", false, "")
 	//spy模块
 	flag.StringVar(&o.spy, "spy", "None", "")
+	//touch模块
+	flag.StringVar(&o.touch, "touch", "None", "")
 	//hydra模块
 	flag.BoolVar(&o.hydra, "hydra", false, "")
 	flag.BoolVar(&o.hydraUpdate, "hydra-update", false, "")
@@ -231,8 +237,8 @@ func (o *OsArgs) PrintBanner() {
 
 func (o *OsArgs) CheckArgs() {
 	//判断必须的参数是否存在
-	if o.target == "" && o.fofa == "" && o.spy == "None" {
-		slog.Error("至少有target、fofa、spy参数中的一个")
+	if o.target == "" && o.fofa == "" && o.spy == "None" && o.touch == "None" {
+		slog.Error("至少有target、fofa、spy、touch参数中的一个")
 	}
 	//判断冲突参数
 	if o.port != "" && o.top != 400 {
@@ -290,7 +296,7 @@ func New(logo string, usage string, help string, syntax string) *OsArgs {
 		HELP:     help,
 		SYNTAX:   syntax,
 		intsReg:  regexp.MustCompile("^((?:[0-9]+)(?:-[0-9]+)?)(?:,(?:[0-9]+)(?:-[0-9]+)?)*$"),
-		strsReg:  regexp.MustCompile("^([\\.A-Za-z0-9/]+)(,[\\.A-Za-z0-9/])*$"),
+		strsReg:  regexp.MustCompile("^([.A-Za-z0-9/]+)(,[.A-Za-z0-9/])*$"),
 		proxyReg: regexp.MustCompile("^(http|https|socks5|socks4)://[0-9.]+:[0-9]+$"),
 	}
 }

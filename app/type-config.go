@@ -36,6 +36,8 @@ type Config struct {
 	FofaFixKeywored string
 	FofaSize        int
 	Scan            bool
+	//
+	Touch string
 }
 
 var Setting = New()
@@ -51,6 +53,7 @@ func (c *Config) WriteLine(s string) {
 }
 
 func (c *Config) Load(p *params.OsArgs) {
+	c.Touch = p.Touch()
 	c.Spy = p.Spy()
 	if p.Spy() == "None" {
 		c.loadTarget(p.Target(), false)
