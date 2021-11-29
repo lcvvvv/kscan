@@ -9,6 +9,7 @@ import (
 	"kscan/lib/params"
 	"kscan/lib/slog"
 	"kscan/lib/spy"
+	"kscan/lib/touch"
 	"kscan/run"
 	"os"
 	"runtime"
@@ -22,7 +23,7 @@ const logo = `
 |#.#/|#|___  |#|      /###\  |##\|#|
 |##|  \#####\|#|     /#/_\#\ |#.#.#|
 |#.#\_____|#||#|____/#/###\#\|#|\##|
-|#|\#\#####/ \#####/#/ v1.51#\#| \#|
+|#|\#\#####/ \#####/#/ v1.52#\#| \#|
            轻量级资产测绘工具 by：kv2
 
 `
@@ -55,6 +56,7 @@ optional arguments:
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
   --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：9
   --hydra         自动化爆破支持协议：rdp、ssh、telnet、mssql、mysql等等....
+  --touch         获取指定端口返回包，可以使用此次参数获取返回包，完善指纹库，格式为：IP:PORT
 hydra options:
    --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt
    --hydra-pass   自定义hydra爆破密码:password or pass1,pass2 or file:password.txt
@@ -68,7 +70,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--rarity] [--hydra] [hydra options] [fofa options]\n\n"
+const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--rarity] [--hydra] [hydra options] [fofa options]\n\n"
 
 const syntax = `title="beijing"			从标题中搜索"北京"			-
 header="elastic"		从http头中搜索"elastic"			-
@@ -135,6 +137,15 @@ func main() {
 		KscanInit()
 		//开始扫描
 		run.Start(app.Setting)
+	}
+	//touch模块启动
+	if app.Setting.Touch != "None" {
+		r := touch.Touch(app.Setting.Touch)
+		slog.Info("Netloc：", app.Setting.Touch)
+		slog.Info("Status：", r.Status)
+		slog.Info("Length：", r.Length)
+		slog.Info("Response：")
+		slog.Data(r.Text)
 	}
 	//计算程序运行时间
 	elapsed := time.Since(startTime)
