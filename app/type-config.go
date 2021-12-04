@@ -33,7 +33,7 @@ type Config struct {
 	HydraMap                       map[int]string
 	//fofa
 	Fofa, FofaField []string
-	FofaFixKeywored string
+	FofaFixKeyword  string
 	FofaSize        int
 	Scan            bool
 	//
@@ -85,7 +85,7 @@ func (c *Config) Load(p *params.OsArgs) {
 	c.Fofa = c.loadFofa(p.Fofa())
 	c.FofaSize = p.FofaSize()
 	c.FofaField = c.loadFofaField(p.FofaField())
-	c.FofaFixKeywored = p.FofaFixKeyword()
+	c.FofaFixKeyword = p.FofaFixKeyword()
 	c.Scan = p.Scan()
 
 }
@@ -101,6 +101,7 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		return
 	}
 	//判断target字符串是否为文件
+	slog.Info(expr)
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
 		err := misc.ReadLine(expr, c.loadTarget)

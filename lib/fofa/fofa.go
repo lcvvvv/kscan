@@ -117,11 +117,11 @@ func (f *Fofa) loadField() {
 }
 
 func (f *Fofa) loadKeywordArr() {
-	if app.Setting.FofaFixKeywored == "" {
+	if app.Setting.FofaFixKeyword == "" {
 		f.keywordArr = app.Setting.Fofa
 	} else {
 		for _, keyword := range app.Setting.Fofa {
-			keyword = strings.ReplaceAll(app.Setting.FofaFixKeywored, "{}", keyword)
+			keyword = strings.ReplaceAll(app.Setting.FofaFixKeyword, "{}", keyword)
 			f.keywordArr = append(f.keywordArr, keyword)
 		}
 	}
