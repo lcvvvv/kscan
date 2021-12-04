@@ -156,7 +156,7 @@ func main() {
 func Init() {
 	param := params.New(logo, usage, help, syntax)
 	//参数初始化
-	param.LoadOsArgs()
+	param.Parse()
 	//日志初始化
 	slog.SetLogger(func() slog.LEVEL {
 		if param.Debug() {
