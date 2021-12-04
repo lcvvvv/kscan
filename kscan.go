@@ -32,7 +32,7 @@ const logo = `
 const help = `
 optional arguments:
   -h , --help     show this help message and exit
-  -f , --fofa     从fofa获取检测对象，需提前在环境变量配置APIKEY，FOFA_EMAIL、FOFA_TOKEN
+  -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_TOKEN
   -t , --target   指定探测对象：
                   IP地址：114.114.114.114
                   IP地址段：114.114.114.114/24,不建议子网掩码小于12
@@ -154,26 +154,25 @@ func main() {
 }
 
 func Init() {
-	param := params.New(logo, usage, help, syntax)
+	params.Args.SetLogo(logo)
+	params.Args.SetUsage(usage)
+	params.Args.SetHelp(help)
+	params.Args.SetSyntax(syntax)
 	//参数初始化
-	param.Parse()
+	params.Args.Parse()
 	//日志初始化
 	slog.SetLogger(func() slog.LEVEL {
-		if param.Debug() {
+		if params.Args.Debug {
 			return slog.DEBUG
 		}
 		return slog.INFO
-	}(), param.Encoding())
-	//输出Banner
-	param.PrintBanner()
-	//参数合法性校验
-	param.CheckArgs()
+	}(), params.Args.Encoding)
 	//配置文件初始化
-	app.Setting.Load(param)
+	app.ConfigInit()
 	//color包初始化
-	app.Setting.NoColor = color.Init(app.Setting.NoColor)
+	app.Setting.CloseColor = color.Init(app.Setting.CloseColor)
 	slog.Info("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
-	if runtime.GOOS == "windows" && app.Setting.NoColor == true {
+	if runtime.GOOS == "windows" && app.Setting.CloseColor == true {
 		slog.Info("在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
 	}
 }

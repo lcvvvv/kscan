@@ -15,16 +15,17 @@ import (
 )
 
 type Config struct {
-	HostTarget, UrlTarget       []string
-	Port                        []int
-	Output                      *os.File
-	Proxy, Host, Path, Encoding string
-	OSEncoding, NewLine         string
-	OutputJson                  string
-	Threads, Rarity             int
-	Timeout                     time.Duration
-	ScanPing, Check, NoColor    bool
-	Spy                         string
+	HostTarget                   []string
+	UrlTarget                    []string
+	Port                         []int
+	Output                       *os.File
+	Proxy, Host, Path, Encoding  string
+	OSEncoding, NewLine          string
+	OutputJson                   string
+	Threads, Rarity              int
+	Timeout                      time.Duration
+	ClosePing, Check, CloseColor bool
+	Spy                          string
 	//hydra
 	Hydra, HydraUpdate             bool
 	HydraPass, HydraUser, HydraMod []string
@@ -36,58 +37,48 @@ type Config struct {
 	FofaFixKeyword  string
 	FofaSize        int
 	Scan            bool
-	//
+	//touch
 	Touch string
 }
 
 var Setting = New()
 
-func (c *Config) WriteLine(s string) {
-	if c.OSEncoding == "utf-8" {
-		s = chinese.ToUTF8(s)
-	} else {
-		s = chinese.ToGBK(s)
-	}
-	s = s + c.NewLine
-	_, _ = c.Output.WriteString(s)
-}
+func ConfigInit() {
+	args := params.Args
 
-func (c *Config) Load(p *params.OsArgs) {
-	c.Touch = p.Touch()
-	c.Spy = p.Spy()
-	if p.Spy() == "None" {
-		c.loadTarget(p.Target(), false)
+	Setting.Touch = args.Touch
+	Setting.Spy = args.Spy
+	if args.Spy == "None" {
+		Setting.loadTarget(args.Target, false)
 	}
-	c.loadPort(p.Port())
-	c.loadPort(p.Top())
-	c.loadOutput(p.Output())
-	c.loadTimeout(p.Timeout())
-	c.ScanPing = c.loadScanPing(p.ScanPing())
-	c.Check = p.Check()
-	c.Path = p.Path()
-	c.Proxy = p.Proxy()
-	c.Host = p.Host()
-	c.Threads = p.Threads()
-	c.Encoding = p.Encoding()
-	c.Rarity = p.Rarity()
-	c.OutputJson = p.OutputJson()
-	c.NoColor = p.NoColor()
+	Setting.loadPort()
+	Setting.loadOutput()
+	Setting.loadScanPing()
+	Setting.Timeout = time.Duration(args.Timeout) * time.Second
+	Setting.Check = args.Check
+	Setting.Path = args.Path
+	Setting.Proxy = args.Proxy
+	Setting.Host = args.Host
+	Setting.Threads = args.Threads
+	Setting.Encoding = args.Encoding
+	Setting.Rarity = args.Rarity
+	Setting.OutputJson = args.OutputJson
+	Setting.CloseColor = args.CloseColor
 	//hydra模块
-	c.Hydra = p.Hydra()
-	c.HydraUpdate = p.HydraUpdate()
-	c.HydraUser = c.makeHydraUser(p.HydraUser())
-	c.HydraPass = c.makeHydraPass(p.HydraPass())
-	c.HydraMap = c.makeHydraMap()
-	c.HydraPortArr = c.makeHydraPortArr(c.HydraMap)
-	c.HydraProtocolArr = c.makeHydraProtocolArr(c.HydraMap)
-	c.loadHydraMod(p.HydraMod())
+	Setting.Hydra = args.Hydra
+	Setting.HydraUpdate = args.HydraUpdate
+	Setting.HydraUser = strParam2StrArr(args.HydraUser)
+	Setting.HydraPass = strParam2StrArr(args.HydraPass)
+	Setting.HydraMap = Setting.makeHydraMap()
+	Setting.HydraPortArr = Setting.makeHydraPortArr(Setting.HydraMap)
+	Setting.HydraProtocolArr = Setting.makeHydraProtocolArr(Setting.HydraMap)
+	Setting.loadHydraMod(args.HydraMod)
 	//fofa模块
-	c.Fofa = c.loadFofa(p.Fofa())
-	c.FofaSize = p.FofaSize()
-	c.FofaField = c.loadFofaField(p.FofaField())
-	c.FofaFixKeyword = p.FofaFixKeyword()
-	c.Scan = p.Scan()
-
+	Setting.Fofa = Setting.loadFofa(args.Fofa)
+	Setting.FofaSize = args.FofaSize
+	Setting.FofaField = Setting.loadFofaField(args.FofaField)
+	Setting.FofaFixKeyword = args.FofaFixKeyword
+	Setting.Scan = args.Scan
 }
 
 func (c *Config) loadTarget(expr string, recursion bool) {
@@ -138,26 +129,21 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		}
 	}
 }
-func (c *Config) loadTimeout(i int) {
-	c.Timeout = time.Duration(i) * time.Second
-}
 
-func (c *Config) loadPort(v interface{}) {
-	switch v.(type) {
-	case int:
-		if v.(int) == 400 {
-			return
-		}
-		c.Port = TOP_1000[:v.(int)]
-	case string:
-		if v.(string) == "" {
-			return
-		}
-		c.Port = intParam2IntArr(v.(string))
+func (c *Config) loadPort() {
+	if params.Args.Port != "" {
+		c.Port = append(c.Port, intParam2IntArr(params.Args.Port)...)
+	}
+	if params.Args.Top != 400 {
+		c.Port = append(c.Port, TOP_1000[:params.Args.Top]...)
+	}
+	if len(c.Port) == 0 {
+		c.Port = TOP_1000[:400]
 	}
 }
 
-func (c *Config) loadOutput(expr string) {
+func (c *Config) loadOutput() {
+	expr := params.Args.Output
 	if expr == "" {
 		return
 	}
@@ -169,46 +155,12 @@ func (c *Config) loadOutput(expr string) {
 	}
 }
 
-func (c *Config) makeHydraUser(expr string) []string {
-	//判断对象是否为文件
-	if regexp.MustCompile("^file:.+$").MatchString(expr) {
-		path := strings.Replace(expr, "file:", "", 1)
-		return misc.ReadLineAll(path)
+func (c *Config) loadScanPing() {
+	if len(c.Port) < 10 {
+		c.ClosePing = true
+	} else {
+		c.ClosePing = params.Args.ClosePing
 	}
-	//判断对象是否为多个
-	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
-		var userArr []string
-		for _, str := range strings.Split(strArr, ",") {
-			userArr = append(userArr, strings.ReplaceAll(str, "[DouHao]", ","))
-		}
-		return userArr
-	}
-	//对象为单个且不为空时直接返回
-	if expr != "" {
-		return []string{expr}
-	}
-	return []string{}
-}
-
-func (c *Config) makeHydraPass(expr string) []string {
-	//判断对象是否为文件
-	if regexp.MustCompile("^file:.+$").MatchString(expr) {
-		path := strings.Replace(expr, "file:", "", 1)
-		return misc.ReadLineAll(path)
-	}
-	//判断对象是否为多个
-	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
-		var passArr []string
-		for _, str := range strings.Split(strArr, ",") {
-			passArr = append(passArr, strings.ReplaceAll(str, "[DouHao]", ","))
-		}
-		return passArr
-	}
-	//对象为单个且不为空时直接返回
-	if expr != "" {
-		return []string{expr}
-	}
-	return []string{}
 }
 
 func (c *Config) makeHydraMap() map[int]string {
@@ -317,11 +269,14 @@ func (c *Config) loadFofaField(expr string) []string {
 	return []string{}
 }
 
-func (c *Config) loadScanPing(ping bool) bool {
-	if len(c.Port) < 10 {
-		return true
+func (c *Config) WriteLine(s string) {
+	if c.OSEncoding == "utf-8" {
+		s = chinese.ToUTF8(s)
+	} else {
+		s = chinese.ToGBK(s)
 	}
-	return ping
+	s = s + c.NewLine
+	_, _ = c.Output.WriteString(s)
 }
 
 func New() Config {
@@ -329,7 +284,7 @@ func New() Config {
 		HostTarget: []string{},
 		UrlTarget:  []string{},
 		Path:       "/",
-		Port:       TOP_1000[:400],
+		Port:       []int{},
 		Output:     nil,
 		Proxy:      "",
 		Host:       "",
@@ -357,9 +312,9 @@ func getOSEncoding() string {
 	}
 }
 
-func intParam2IntArr(v string) []int {
+func intParam2IntArr(expr string) []int {
 	var res []int
-	vArr := strings.Split(v, ",")
+	vArr := strings.Split(expr, ",")
 	for _, v := range vArr {
 		var vvArr []int
 		if strings.Contains(v, "-") {
@@ -380,6 +335,27 @@ func intParam2IntArr(v string) []int {
 		res = append(res, vvArr...)
 	}
 	return res
+}
+
+func strParam2StrArr(expr string) []string {
+	//判断对象是否为文件
+	if regexp.MustCompile("^file:.+$").MatchString(expr) {
+		path := strings.Replace(expr, "file:", "", 1)
+		return misc.ReadLineAll(path)
+	}
+	//判断对象是否为多个
+	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
+		var userArr []string
+		for _, str := range strings.Split(strArr, ",") {
+			userArr = append(userArr, strings.ReplaceAll(str, "[DouHao]", ","))
+		}
+		return userArr
+	}
+	//对象为单个且不为空时直接返回
+	if expr != "" {
+		return []string{expr}
+	}
+	return []string{}
 }
 
 var TOP_1000 = []int{21, 22, 23, 25, 53, 69, 80, 81, 88, 89, 110, 135, 161, 445, 139,

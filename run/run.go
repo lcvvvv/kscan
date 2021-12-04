@@ -21,7 +21,7 @@ func Start(config app.Config) {
 	} else {
 		//STEP1:主机存活性检测
 		time.Sleep(time.Microsecond * 200)
-		go K.HostDiscovery(K.config.HostTarget, config.ScanPing)
+		go K.HostDiscovery(K.config.HostTarget, config.ClosePing)
 
 		//STEP2：端口存活性检测
 		time.Sleep(time.Microsecond * 200)
