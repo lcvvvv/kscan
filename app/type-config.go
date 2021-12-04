@@ -101,7 +101,6 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		return
 	}
 	//判断target字符串是否为文件
-	slog.Info(expr)
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
 		err := misc.ReadLine(expr, c.loadTarget)
