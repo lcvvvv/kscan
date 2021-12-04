@@ -158,7 +158,12 @@ func Init() {
 	//参数初始化
 	param.LoadOsArgs()
 	//日志初始化
-	slog.Init(param.Debug(), param.Encoding())
+	slog.SetLogger(func() slog.LEVEL {
+		if param.Debug() {
+			return slog.DEBUG
+		}
+		return slog.INFO
+	}(), param.Encoding())
 	//输出Banner
 	param.PrintBanner()
 	//参数合法性校验

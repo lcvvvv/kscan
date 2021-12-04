@@ -15,42 +15,52 @@ import (
 var this logger
 var splitStr = "> "
 
-type logger struct {
-	info     *log.Logger
-	warning  *log.Logger
-	debug    *log.Logger
-	data     *log.Logger
-	error    *log.Logger
-	encoding string
-	//fooLine *log.Logger
+type (
+	LEVEL int
+
+	logger struct {
+		info     *log.Logger
+		warning  *log.Logger
+		debug    *log.Logger
+		data     *log.Logger
+		error    *log.Logger
+		encoding string
+		//fooLine *log.Logger
+	}
+)
+
+const (
+	DEBUG LEVEL = iota
+	INFO
+	WARN
+	ERROR
+	NONE
+)
+
+func init() {
+	this.info = log.New(ioutil.Discard, "", 0)
+	this.warning = log.New(ioutil.Discard, "", 0)
+	this.error = log.New(ioutil.Discard, "", 0)
+	this.data = log.New(os.Stdout, "\r", 0)
 }
 
-func Init(Debug bool, encoding string) {
-	this.info = log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime)
-	this.warning = log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime)
-	this.error = log.New(io.MultiWriter(os.Stderr), "\rError:", 0)
-	this.data = log.New(os.Stdout, "\r", 0)
-	if Debug {
-		this.debug = log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime)
-	} else {
-		this.debug = log.New(ioutil.Discard, "\r[-]", log.Ldate|log.Ltime)
+func SetLogger(level LEVEL, encoding string) {
+	if level <= ERROR {
+		this.error = log.New(io.MultiWriter(os.Stderr), "\rError:", 0)
 	}
-
+	if level <= WARN {
+		this.warning = log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime)
+	}
+	if level <= INFO {
+		this.info = log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime)
+	}
+	if level <= DEBUG {
+		this.debug = log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime)
+	}
+	if level <= NONE {
+		//nothing
+	}
 	this.encoding = encoding
-	//this.fooline = log.New(os.Stdout, "[*]", 0)
-	//infoFile,err:=os.OpenFile("/data/service_logs/info.log",os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
-	//warnFile,err:=os.OpenFile("/data/service_logs/warn.log",os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
-	//errFile,err:=os.OpenFile("/data/service_logs/errors.log",os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
-	//
-	//if infoFile!=nil || warnFile != nil || err!=nil{
-	//	log.Fatalln("打开日志文件失败：",err)
-	//}
-	//Info = log.New(os.Stdout, "[*]", log.Ldate|log.Ltime)
-	//Warning = log.New(os.Stdout, "[*]", log.Ldate|log.Ltime)
-	//Error = log.New(io.MultiWriter(os.Stderr,errFile),"Error:",log.Ldate | log.Ltime | log.Lshortfile)
-	//Info = log.New(io.MultiWriter(os.Stderr,infoFile),"Info:",log.Ldate | log.Ltime | log.Lshortfile)
-	//Warning = log.New(io.MultiWriter(os.Stderr,warnFile),"Warning:",log.Ldate | log.Ltime | log.Lshortfile)
-	//Error = log.New(io.MultiWriter(os.Stderr,errFile),"Error:",log.Ldate | log.Ltime | log.Lshortfile)
 }
 
 func (t *logger) Data(s string) {
