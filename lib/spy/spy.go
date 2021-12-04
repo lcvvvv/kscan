@@ -108,7 +108,7 @@ func makeInterfaceGatwayList() []string {
 }
 
 func internetTesting() bool {
-	if gonmap.HostDiscoveryIcmp("114.114.114.114") {
+	if gonmap.HostDiscoveryForIcmp("114.114.114.114") {
 		slog.Data("Internet--------[√]")
 		return true
 	} else {
@@ -154,7 +154,7 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 	spyPool.Function = func(i interface{}) interface{} {
 		ip := i.(string)
 		//经过存活性检测未存活的IP不会进行下一步测试
-		if gonmap.HostDiscoveryIcmp(ip) {
+		if gonmap.HostDiscoveryForIcmp(ip) {
 			return ip
 		}
 		return nil
