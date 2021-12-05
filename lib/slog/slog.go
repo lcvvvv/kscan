@@ -41,12 +41,12 @@ func init() {
 	this.info = log.New(ioutil.Discard, "", 0)
 	this.warning = log.New(ioutil.Discard, "", 0)
 	this.error = log.New(ioutil.Discard, "", 0)
+	this.debug = log.New(ioutil.Discard, "", 0)
 	this.data = log.New(os.Stdout, "\r", 0)
 }
 
 func SetEncoding(encoding string) {
 	this.encoding = encoding
-
 }
 
 func SetPrintDebug(PrintDebug bool) {
