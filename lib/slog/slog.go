@@ -44,7 +44,20 @@ func init() {
 	this.data = log.New(os.Stdout, "\r", 0)
 }
 
-func SetLogger(level LEVEL, encoding string) {
+func SetEncoding(encoding string) {
+	this.encoding = encoding
+
+}
+
+func SetPrintDebug(PrintDebug bool) {
+	if PrintDebug {
+		SetLogger(DEBUG)
+	} else {
+		SetLogger(INFO)
+	}
+}
+
+func SetLogger(level LEVEL) {
 	if level <= ERROR {
 		this.error = log.New(io.MultiWriter(os.Stderr), "\rError:", 0)
 	}
@@ -60,7 +73,6 @@ func SetLogger(level LEVEL, encoding string) {
 	if level <= NONE {
 		//nothing
 	}
-	this.encoding = encoding
 }
 
 func (t *logger) Data(s string) {

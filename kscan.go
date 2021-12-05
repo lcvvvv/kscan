@@ -6,7 +6,6 @@ import (
 	"kscan/lib/fofa"
 	"kscan/lib/gonmap"
 	"kscan/lib/httpfinger"
-	"kscan/lib/params"
 	"kscan/lib/slog"
 	"kscan/lib/spy"
 	"kscan/lib/touch"
@@ -125,16 +124,20 @@ func main() {
 	//校验升级情况
 	//app.CheckUpdate()
 	if app.Setting.Spy != "None" {
+		InitSpy()
 		spy.Start()
+		if spy.Scan {
+			app.Setting.HostTarget = spy.Target
+		}
 	}
 	//fofa模块初始化
 	if len(app.Setting.Fofa) > 0 {
-		FofaInit()
+		InitFofa()
 	}
 	//kscan模块启动
 	if len(app.Setting.UrlTarget) > 0 || len(app.Setting.HostTarget) > 0 {
 		//扫描模块初始化
-		KscanInit()
+		InitKscan()
 		//开始扫描
 		run.Start(app.Setting)
 	}
@@ -154,19 +157,15 @@ func main() {
 }
 
 func Init() {
-	params.Args.SetLogo(logo)
-	params.Args.SetUsage(usage)
-	params.Args.SetHelp(help)
-	params.Args.SetSyntax(syntax)
+	app.Args.SetLogo(logo)
+	app.Args.SetUsage(usage)
+	app.Args.SetHelp(help)
+	app.Args.SetSyntax(syntax)
 	//参数初始化
-	params.Args.Parse()
+	app.Args.Parse()
 	//日志初始化
-	slog.SetLogger(func() slog.LEVEL {
-		if params.Args.Debug {
-			return slog.DEBUG
-		}
-		return slog.INFO
-	}(), params.Args.Encoding)
+	slog.SetEncoding(app.Args.Encoding)
+	slog.SetPrintDebug(app.Args.Debug)
 	//配置文件初始化
 	app.ConfigInit()
 	//color包初始化
@@ -177,7 +176,7 @@ func Init() {
 	}
 }
 
-func KscanInit() {
+func InitKscan() {
 	//slog.Warning("开始读取扫描对象...")
 	slog.Infof("成功读取URL地址:[%d]个", len(app.Setting.UrlTarget))
 	if app.Setting.Check == false {
@@ -193,7 +192,7 @@ func KscanInit() {
 	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
 }
 
-func FofaInit() {
+func InitFofa() {
 	email := os.Getenv("FOFA_EMAIL")
 	key := os.Getenv("FOFA_KEY")
 	if email == "" || key == "" {
@@ -214,4 +213,9 @@ func FofaInit() {
 		slog.Info("scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
 		f.Scan()
 	}
+}
+
+func InitSpy() {
+	spy.Keyword = app.Setting.Spy
+	spy.Scan = app.Setting.Scan
 }

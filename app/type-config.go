@@ -5,7 +5,6 @@ import (
 	"kscan/lib/chinese"
 	"kscan/lib/hydra"
 	"kscan/lib/misc"
-	"kscan/lib/params"
 	"kscan/lib/slog"
 	"kscan/lib/urlparse"
 	"os"
@@ -42,7 +41,7 @@ type Config struct {
 var Setting = New()
 
 func ConfigInit() {
-	args := params.Args
+	args := Args
 
 	Setting.Touch = args.Touch
 	Setting.Spy = args.Spy
@@ -126,11 +125,11 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 }
 
 func (c *Config) loadPort() {
-	if params.Args.Port != "" {
-		c.Port = append(c.Port, intParam2IntArr(params.Args.Port)...)
+	if Args.Port != "" {
+		c.Port = append(c.Port, intParam2IntArr(Args.Port)...)
 	}
-	if params.Args.Top != 400 {
-		c.Port = append(c.Port, TOP_1000[:params.Args.Top]...)
+	if Args.Top != 400 {
+		c.Port = append(c.Port, TOP_1000[:Args.Top]...)
 	}
 	if len(c.Port) == 0 {
 		c.Port = TOP_1000[:400]
@@ -138,7 +137,7 @@ func (c *Config) loadPort() {
 }
 
 func (c *Config) loadOutput() {
-	expr := params.Args.Output
+	expr := Args.Output
 	if expr == "" {
 		return
 	}
@@ -154,7 +153,7 @@ func (c *Config) loadScanPing() {
 	if len(c.Port) < 10 {
 		c.ClosePing = true
 	} else {
-		c.ClosePing = params.Args.ClosePing
+		c.ClosePing = Args.ClosePing
 	}
 }
 

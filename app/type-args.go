@@ -1,4 +1,4 @@
-package params
+package app
 
 import (
 	"fmt"

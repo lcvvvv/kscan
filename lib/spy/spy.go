@@ -2,7 +2,6 @@ package spy
 
 import (
 	"fmt"
-	"kscan/app"
 	"kscan/lib/IP"
 	"kscan/lib/gonmap"
 	"kscan/lib/misc"
@@ -12,6 +11,12 @@ import (
 	"strings"
 )
 
+var (
+	Keyword = ""
+	Scan    = false
+	Target  []string
+)
+
 func Start() {
 	slog.Info("将开始自动化存活网段探测，请注意，该模式会发送大量数据包，极易被风控感知，请慎用")
 	slog.Info("现在开始进行自动网络环境探测")
@@ -19,16 +24,16 @@ func Start() {
 	_ = dnsTesting()
 	var gatewayArr, All []string
 	//若spy参数格式为IP地址，则将对指定的IP地址进行B段存活网关探测
-	if IP.FormatCheck(app.Setting.Spy) {
-		slog.Infof("现在开始指定网段：%s，B段存活网关探测", app.Setting.Spy)
-		gatewayArr = IP.GetGatewayList(app.Setting.Spy, "b")
+	if IP.FormatCheck(Keyword) {
+		slog.Infof("现在开始指定网段：%s，B段存活网关探测", Keyword)
+		gatewayArr = IP.GetGatewayList(Keyword, "b")
 		HostDiscoveryIcmpPool(gatewayArr)
 		return
 	}
 	//依据情况判断是否进行172B段存活网关探测
-	if app.Setting.Spy == "all" || app.Setting.Spy == "172" {
+	if Keyword == "all" || Keyword == "172" {
 		//探测172段，B段存活网关
-		slog.Infof("当前spy参数值为%s，将开始172段，大B段存活网关探测，此探测时间较长，请耐心等待", app.Setting.Spy)
+		slog.Infof("当前spy参数值为%s，将开始172段，大B段存活网关探测，此探测时间较长，请耐心等待", Keyword)
 		gatewayArr = []string{}
 		for i := 16; i <= 31; i++ {
 			slog.Infof("现在开始枚举常见网段172.%d.0.0", i)
@@ -43,15 +48,15 @@ func Start() {
 		}
 	}
 	//依据情况判断是否进行10A段存活网关探测
-	if app.Setting.Spy == "all" || app.Setting.Spy == "10" {
+	if Keyword == "all" || Keyword == "10" {
 		//探测10段，A段存活网关
-		slog.Infof("当前spy参数值为%s，将开始10段，A段存活网关探测，此探测时间较长，请耐心等待", app.Setting.Spy)
+		slog.Infof("当前spy参数值为%s，将开始10段，A段存活网关探测，此探测时间较长，请耐心等待", Keyword)
 		slog.Info("现在开始枚举常见网段10.0.0.0")
 		gatewayArr = IP.GetGatewayList("10.0.0.1", "a")
 		HostDiscoveryIcmpPool(gatewayArr)
 	}
 	//依据情况判断是否进行常规探测
-	if app.Setting.Spy == "all" || app.Setting.Spy == "" {
+	if Keyword == "all" || Keyword == "" {
 		//探测网卡所在网段
 		slog.Info("现在开始当前所在网段的B段网关存活性探测")
 		gatewayArr = makeInterfaceGatwayList()
@@ -73,7 +78,7 @@ func Start() {
 	}
 
 	//依据情况判断是否进行192B段存活网关探测
-	if app.Setting.Spy == "all" || app.Setting.Spy == "" || app.Setting.Spy == "192" {
+	if Keyword == "all" || Keyword == "" || Keyword == "192" {
 		//探测常见网段192段，B段存活网关
 		slog.Info("现在开始枚举常见网段192.168.0.0")
 		gatewayArr = IP.GetGatewayList("192.168.0.1", "b")
@@ -176,14 +181,14 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 		}
 		ip := out.(string)
 		slog.Data(ip)
-		if app.Setting.Scan == false {
+		if Scan == false {
 			continue
 		}
 		ipArr := IP.ExprToList(fmt.Sprintf("%s/24", ip))
-		app.Setting.HostTarget = append(app.Setting.HostTarget, ipArr...)
+		Target = append(Target, ipArr...)
 	}
-	if app.Setting.Scan == true {
-		misc.RemoveDuplicateElement(app.Setting.HostTarget)
+	if Scan == true {
+		Target = misc.RemoveDuplicateElement(Target)
 	}
 
 }
