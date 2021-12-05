@@ -189,7 +189,8 @@ func KscanInit() {
 	//gonmap探针/指纹库初始化
 	r = gonmap.Init(app.Setting.Rarity, app.Setting.Timeout)
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
-	//slog.Infof("本次扫描将使用NMAP探针:[%d]个,指纹[%d]条", r["USED_PROBE"], r["USED_MATCH"])
+	//gonmap应用层指纹识别初始化
+	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
 }
 
 func FofaInit() {
