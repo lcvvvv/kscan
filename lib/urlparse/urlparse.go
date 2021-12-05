@@ -66,6 +66,11 @@ func Load(s string) (*URL, error) {
 }
 
 func (i *URL) UnParse() string {
+	if i.Path != "" {
+		if i.Path[:1] != "/" {
+			i.Path = "/" + i.Path
+		}
+	}
 	if i.Scheme == "https" && i.Port == 443 {
 		return fmt.Sprintf("https://%s%s", i.Netloc, i.Path)
 	}
