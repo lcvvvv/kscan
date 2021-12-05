@@ -3,6 +3,7 @@ package app
 import (
 	"kscan/lib/IP"
 	"kscan/lib/chinese"
+	"kscan/lib/hydra"
 	"kscan/lib/misc"
 	"kscan/lib/params"
 	"kscan/lib/slog"
@@ -29,9 +30,6 @@ type Config struct {
 	//hydra
 	Hydra, HydraUpdate             bool
 	HydraPass, HydraUser, HydraMod []string
-	HydraPortArr                   []int
-	HydraProtocolArr               []string
-	HydraMap                       map[int]string
 	//fofa
 	Fofa, FofaField []string
 	FofaFixKeyword  string
@@ -69,9 +67,6 @@ func ConfigInit() {
 	Setting.HydraUpdate = args.HydraUpdate
 	Setting.HydraUser = strParam2StrArr(args.HydraUser)
 	Setting.HydraPass = strParam2StrArr(args.HydraPass)
-	Setting.HydraMap = Setting.makeHydraMap()
-	Setting.HydraPortArr = Setting.makeHydraPortArr(Setting.HydraMap)
-	Setting.HydraProtocolArr = Setting.makeHydraProtocolArr(Setting.HydraMap)
 	Setting.loadHydraMod(args.HydraMod)
 	//fofa模块
 	Setting.Fofa = Setting.loadFofa(args.Fofa)
@@ -163,73 +158,12 @@ func (c *Config) loadScanPing() {
 	}
 }
 
-func (c *Config) makeHydraMap() map[int]string {
-	return map[int]string{
-		22:    "ssh",
-		3389:  "rdp",
-		3306:  "mysql",
-		1433:  "mssql",
-		1521:  "oracle",
-		5432:  "postgresql",
-		27017: "mongodb",
-		6379:  "redis",
-		//110:   "pop3",
-		//995:   "pop3",
-		//25:    "smtp",
-		//994:   "smtp",
-		//143:   "imap",
-		//993:   "imap",
-		//389:   "ldap",
-		//23:   "telnet",
-		21:   "ftp",
-		2121: "ftp",
-		//50000: "db2",
-		445: "smb",
-	}
-}
-
-func (c *Config) makeHydraPortArr(hydraMap map[int]string) []int {
-	var intArr []int
-	for key := range hydraMap {
-		intArr = append(intArr, key)
-	}
-	return intArr
-}
-
-func (c *Config) makeHydraProtocolArr(hydraMap map[int]string) []string {
-	var strArr []string
-	for _, value := range hydraMap {
-		strArr = append(strArr, value)
-	}
-	return strArr
-}
-
 func (c *Config) loadHydraMod(expr string) {
 	if expr == "" || expr == "all" {
+		c.HydraMod = hydra.ProtocolList
 		return
 	}
-	var protocolArr []string
-	if strings.Contains(expr, ",") {
-		for _, protocol := range strings.Split(expr, ",") {
-			if misc.IsInStrArr(c.HydraProtocolArr, protocol) {
-				protocolArr = append(protocolArr, protocol)
-			}
-		}
-	} else {
-		if misc.IsInStrArr(c.HydraProtocolArr, expr) {
-			protocolArr = append(protocolArr, expr)
-		}
-	}
-	c.HydraMod = protocolArr
-
-	hydraMap := make(map[int]string)
-	for port, protocol := range c.HydraMap {
-		if misc.IsInStrArr(c.HydraMod, protocol) {
-			hydraMap[port] = protocol
-		}
-	}
-	c.HydraPortArr = c.makeHydraPortArr(hydraMap)
-	c.HydraProtocolArr = c.makeHydraProtocolArr(hydraMap)
+	c.HydraMod = strParam2StrArr(expr)
 }
 
 func (c *Config) loadFofa(expr string) []string {

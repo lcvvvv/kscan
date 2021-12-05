@@ -360,7 +360,6 @@ func (k *kscan) WatchDog() {
 	}()
 	//Hydra模块
 	if app.Setting.Hydra {
-		slog.Warning("hydra模块已开启，开始监听暴力破解任务")
 		k.watchDog.wg.Add(1)
 	}
 
@@ -379,10 +378,12 @@ func (k *kscan) WatchDog() {
 }
 
 func (k *kscan) Hydra() {
+	slog.Info("hydra模块已开启，开始监听暴力破解任务")
+	slog.Warning("当前已开启的hydra模块为：", misc.Intersection(hydra.ProtocolList, app.Setting.HydraMod))
 	//初始化默认密码字典
 	hydra.InitDefaultAuthMap()
 	//加载自定义字典
-	hydra.InitCustomAuthMap()
+	hydra.InitCustomAuthMap(app.Setting.HydraUser, app.Setting.HydraPass)
 	//初始化变量
 	k.hydra.pool.Function = func(i interface{}) interface{} {
 		if i == nil {
@@ -391,7 +392,7 @@ func (k *kscan) Hydra() {
 		banner := i.(*gonmap.AppBanner)
 		//适配爆破模块
 		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
-		crack := hydra.NewCracker(authInfo, 10)
+		crack := hydra.NewCracker(authInfo, app.Setting.HydraUpdate, 10)
 		go crack.Run()
 		//爆破结果获取
 		var out hydra.AuthInfo
@@ -410,7 +411,10 @@ func (k *kscan) Hydra() {
 			if banner == nil {
 				continue
 			}
-			if hydra.Ok(banner.Protocol, banner.Port) == false {
+			if misc.IsInStrArr(app.Setting.HydraMod, banner.Protocol) == false {
+				continue
+			}
+			if hydra.Ok(banner.Protocol) == false {
 				continue
 			}
 			k.hydra.queue.Push(banner)

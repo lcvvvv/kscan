@@ -1,10 +1,8 @@
 package hydra
 
 import (
-	"kscan/app"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
-	"kscan/lib/slog"
 	"time"
 )
 
@@ -18,18 +16,28 @@ type Cracker struct {
 var (
 	DefaultAuthMap map[string]*AuthList
 	CustomAuthMap  *AuthList
+	ProtocolList   = []string{
+		"ssh", "rdp", "ftp", "smb",
+		"mysql", "mssql", "oracle", "postgresql", "mongodb", "redis",
+		//110:   "pop3",
+		//995:   "pop3",
+		//25:    "smtp",
+		//994:   "smtp",
+		//143:   "imap",
+		//993:   "imap",
+		//389:   "ldap",
+		//23:   "telnet",
+		//50000: "db2",
+	}
 )
 
-func NewCracker(info *AuthInfo, threads int) *Cracker {
+func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 	c := &Cracker{}
 	c.Pool = pool.NewPool(threads)
 	c.authInfo = info
-	if misc.IsInStrArr(app.Setting.HydraProtocolArr, c.authInfo.Protocol) == false {
-		c.authInfo.Protocol = app.Setting.HydraMap[c.authInfo.Port]
-	}
 	c.authList = func() *AuthList {
 		list := DefaultAuthMap[c.authInfo.Protocol]
-		if app.Setting.HydraUpdate {
+		if isAuthUpdate {
 			list.Merge(CustomAuthMap)
 			return list
 		}
@@ -135,19 +143,16 @@ func InitDefaultAuthMap() {
 	DefaultAuthMap = m
 }
 
-func InitCustomAuthMap() {
+func InitCustomAuthMap(user, pass []string) {
 	CustomAuthMap = NewAuthList()
-	CustomAuthMap.Password = app.Setting.HydraPass
-	CustomAuthMap.Username = app.Setting.HydraUser
+	CustomAuthMap.Password = user
+	CustomAuthMap.Username = pass
 }
 
-func Ok(protocol string, port int) bool {
-	if misc.IsInStrArr(app.Setting.HydraProtocolArr, protocol) {
+func Ok(protocol string) bool {
+	if misc.IsInStrArr(ProtocolList, protocol) {
 		return true
 	}
-	//if misc.IsInIntArr(app.Setting.HydraPortArr, port) {
-	//	return true
-	//}
 	return false
 }
 
@@ -163,7 +168,7 @@ func (c *Cracker) OutWatchDog() {
 		info = out
 	}
 	if count > 3 {
-		slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
+		//slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
 	if count > 0 && count <= 3 {
 		c.Out <- info.(AuthInfo)

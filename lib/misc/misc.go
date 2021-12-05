@@ -360,3 +360,14 @@ func ReadAll(r io.Reader, duration time.Duration) []byte {
 	}
 
 }
+
+func Intersection(a []string, b []string) (inter []string) {
+	for _, s1 := range a {
+		for _, s2 := range b {
+			if s1 == s2 {
+				inter = append(inter, s1)
+			}
+		}
+	}
+	return inter
+}
