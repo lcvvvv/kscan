@@ -17,7 +17,10 @@ func Load(s string) (*URL, error) {
 	r, err := url.Parse(s)
 	if err != nil {
 		if strings.Contains(err.Error(), "first path segment in URL cannot contain colon") {
-			r, _ = url.Parse("http://" + s)
+			r, err = url.Parse("http://" + s)
+			if err != nil {
+				return nil, err
+			}
 			r.Scheme = ""
 		} else {
 			return nil, err
