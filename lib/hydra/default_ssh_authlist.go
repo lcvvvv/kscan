@@ -113,6 +113,10 @@ func DefaultSshList() *AuthList {
 		NewSpecialAuth("root", "Changeme@321"),
 		NewSpecialAuth("root", "Changeme123"),
 		NewSpecialAuth("sa", "Changeme123"),
+		NewSpecialAuth("db2inst1", "db2inst1"),
+		NewSpecialAuth("db2fenc1", "db2fenc1"),
+		NewSpecialAuth("dasusr1", "dasusr1"),
+		NewSpecialAuth("db2admin", "db2admin"),
 	}
 	return a
 }
