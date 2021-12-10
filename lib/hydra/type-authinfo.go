@@ -38,7 +38,12 @@ func (a *AuthInfo) Display() string {
 		}
 		return "\t"
 	}(len(URL))
-	s := fmt.Sprintf("%s%s200\tUsername:%s、Password:%s", URL, splitChar, a.Auth.Username, a.Auth.Password)
+	var s string
+	if a.Auth.Username == "" {
+		s = fmt.Sprintf("%s%s200\tPassword:%s", URL, splitChar, a.Auth.Password)
+	} else {
+		s = fmt.Sprintf("%s%s200\tUsername:%s、Password:%s", URL, splitChar, a.Auth.Username, a.Auth.Password)
+	}
 	s = color.Red(s)
 	s = color.Overturn(s)
 	return s
