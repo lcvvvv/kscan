@@ -1,6 +1,10 @@
-# Kscan-简单好用的资产测绘工具
-
-有点懒，编译好的发布版更新不一定及时，想要最新版的可以关注公众号或者进群找我要
+# Kscan-简单的资产测绘工具
+<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/golang-1.6+-9cf"></a>
+<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.51-ff69b4"></a>
+<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/LICENSE-GPL-important"></a>
+![GitHub Repo stars](https://img.shields.io/github/stars/lcvvvv/kscan?color=success)
+![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
+![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
 ## 一、简介
 
@@ -14,7 +18,7 @@
 
 ```
 
-Kscan是一款纯go开发的轻量级的资产发现工具，可针对指定IP段、资产清单、存活网段自动化进行端口扫描以及TCP指纹识别和Banner抓取，在不发送更多的数据包的情况下尽可能的获取端口更多信息。并且能够针对扫描结果进行自动化暴力破解，且是go平台首款开源的RDP暴力破解工具。 
+kscan是一款资产测绘工具，可针对指定IP段、资产清单、存活网段自动化进行端口扫描以及TCP指纹识别和Banner抓取，在不发送更多的数据包的情况下尽可能的获取端口更多信息。并且能够针对扫描结果进行自动化暴力破解，且是go平台首款开源的RDP暴力破解工具。 
 
 ## 二、开发计划
 - 子域名扫描
