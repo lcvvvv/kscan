@@ -125,6 +125,7 @@ func (k *kscan) PortDiscovery() {
 			protocol = "udp"
 		}
 		if gonmap.PortScan(protocol, netloc, k.config.Timeout) {
+			//slog.Debug(netloc," is open")
 			return netloc
 		}
 		return nil
