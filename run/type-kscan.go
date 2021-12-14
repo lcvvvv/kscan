@@ -394,6 +394,7 @@ func (k *kscan) Hydra() {
 		//适配爆破模块
 		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
 		crack := hydra.NewCracker(authInfo, app.Setting.HydraUpdate, 10)
+		slog.Infof("[hydra]->开始对%v:%v[%v]进行暴力破解，用户名：%v,密码：%v", banner.IPAddr, banner.Port, banner.Protocol, len(hydra.DefaultAuthMap[authInfo.Protocol].Username), len(hydra.DefaultAuthMap[authInfo.Protocol].Password))
 		go crack.Run()
 		//爆破结果获取
 		var out hydra.AuthInfo
