@@ -53,7 +53,6 @@ optional arguments:
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
   --spy           网段探测模式，此模式下将自动探测主机可达的内网网段可接收参数为：
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
-  --rarity        指定Nmap指纹识别级别[0-9],数字越大可识别的协议越多越准确，但是扫描时间会更长,默认为：9
   --hydra         自动化爆破支持协议：rdp、ssh、telnet、mssql、mysql等等....
   --touch         获取指定端口返回包，可以使用此次参数获取返回包，完善指纹库，格式为：IP:PORT
 hydra options:
@@ -69,7 +68,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--rarity] [--hydra] [hydra options] [fofa options]\n\n"
+const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--hydra] [hydra options] [fofa options]\n\n"
 
 const syntax = `title="beijing"			从标题中搜索"北京"			-
 header="elastic"		从http头中搜索"elastic"			-
@@ -186,7 +185,7 @@ func InitKscan() {
 	r := httpfinger.Init()
 	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条", r["FaviconHash"], r["KeywordFinger"])
 	//gonmap探针/指纹库初始化
-	r = gonmap.Init(app.Setting.Rarity, app.Setting.Timeout)
+	r = gonmap.Init(9, app.Setting.Timeout)
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
 	//gonmap应用层指纹识别初始化
 	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)

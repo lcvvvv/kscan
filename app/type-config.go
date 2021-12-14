@@ -22,7 +22,7 @@ type Config struct {
 	Proxy, Host, Path, Encoding  string
 	OSEncoding, NewLine          string
 	OutputJson                   string
-	Threads, Rarity              int
+	Threads                      int
 	Timeout                      time.Duration
 	ClosePing, Check, CloseColor bool
 	Spy                          string
@@ -58,7 +58,6 @@ func ConfigInit() {
 	Setting.Host = args.Host
 	Setting.Threads = args.Threads
 	Setting.Encoding = args.Encoding
-	Setting.Rarity = args.Rarity
 	Setting.OutputJson = args.OutputJson
 	Setting.CloseColor = args.CloseColor
 	//hydra模块

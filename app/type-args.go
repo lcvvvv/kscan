@@ -14,7 +14,7 @@ type args struct {
 	Target, Port, Output, Proxy, Path, Host, Encoding string
 	OutputJson                                        string
 	Spy, Touch                                        string
-	Top, Threads, Timeout, Rarity                     int
+	Top, Threads, Timeout                             int
 	//hydra模块
 	Hydra, HydraUpdate             bool
 	HydraUser, HydraPass, HydraMod string
@@ -72,7 +72,6 @@ func (o *args) define() {
 	sflag.StringVar(&o.Proxy, "proxy", "")
 	sflag.StringVar(&o.Path, "path", "")
 	sflag.StringVar(&o.Host, "host", "")
-	sflag.IntVar(&o.Rarity, "rarity", 9)
 	sflag.IntVar(&o.Top, "top", 400)
 	sflag.IntVar(&o.Threads, "threads", 400)
 	sflag.IntVar(&o.Timeout, "timeout", 3)
