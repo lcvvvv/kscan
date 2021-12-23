@@ -2,28 +2,12 @@ package color
 
 import (
 	"fmt"
-	"github.com/mitchellh/go-ps"
-	"log"
-	"os"
 	"testing"
 )
 
 type gogo struct {
 	string
 	int
-}
-
-func TestName(t *testing.T) {
-	pid := os.Getpid()
-
-	for {
-		p, err := ps.FindProcess(pid)
-		if err != nil || p == nil {
-			break
-		}
-		log.Printf("Process %s with PID %d and PPID %d", p.Executable(), p.Pid(), p.PPid())
-		pid = p.PPid()
-	}
 }
 
 func TestColor(t *testing.T) {
