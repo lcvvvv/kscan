@@ -2,11 +2,13 @@ package fofa
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"kscan/app"
 	"kscan/lib/misc"
 	"kscan/lib/slog"
 	"net/http"
+	"reflect"
 	"strings"
 )
 
@@ -85,24 +87,40 @@ func (f *Fofa) Search(keyword string) {
 		slog.Error(body, err)
 	}
 	r := f.makeResult(responseJson)
+	f.results = append(f.results, r...)
 	//输出扫描结果
-	r.Output()
-	f.results = append(f.results, r)
+	for _, row := range r {
+		m := row.Map()
+		m["Header"] = ""
+		m["Cert"] = ""
+		m["Title"] = ""
+		m["Host"] = ""
+		m["As_organization"] = ""
+		m["Ip"] = ""
+		m["Port"] = ""
+		m["Country_name"] = ""
+		fmt.Printf("%-30v\t%v\t%v\n", row.Host, row.Title, misc.SprintStringMap(m, true))
+	}
+
+	//table.SetPrintColumns(misc.First2UpperForSlice(f.field))
+	//t := table.Table(r)
+	//fmt.Println(t)
 }
 
-func (f *Fofa) makeResult(responseJson ResponseJson) Result {
-	var r Result
-	r.field = f.field
-	r.query = responseJson.Query
-	r.size = responseJson.Size
-	for _, rowArr := range responseJson.Results {
-		rowMap := make(map[string]string)
-		for i := range misc.Xrange(len(f.fieldList) - 1) {
-			rowMap[f.fieldList[i]] = rowArr[i]
+func (f *Fofa) makeResult(responseJson ResponseJson) []Result {
+	var results []Result
+	var result Result
+
+	for _, row := range responseJson.Results {
+		m := reflect.ValueOf(&result).Elem()
+		for index, f := range f.fieldList {
+			f = misc.First2Upper(f)
+			m.FieldByName(f).SetString(row[index])
 		}
-		r.result = append(r.result, rowMap)
+		result.Fix()
+		results = append(results, result)
 	}
-	return r
+	return results
 }
 
 func (f *Fofa) loadField() {
@@ -130,9 +148,7 @@ func (f *Fofa) loadKeywordArr() {
 func (f *Fofa) Check() {
 	var strArr []string
 	for _, result := range f.results {
-		for _, row := range result.result {
-			strArr = append(strArr, row["host"])
-		}
+		strArr = append(strArr, result.Host)
 	}
 	app.Setting.UrlTarget = strArr
 }
@@ -140,9 +156,7 @@ func (f *Fofa) Check() {
 func (f *Fofa) Scan() {
 	var strArr []string
 	for _, result := range f.results {
-		for _, row := range result.result {
-			strArr = append(strArr, row["ip"])
-		}
+		strArr = append(strArr, result.Host)
 	}
 	strArr = misc.RemoveDuplicateElement(strArr)
 	app.Setting.HostTarget = strArr

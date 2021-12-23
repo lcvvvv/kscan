@@ -371,3 +371,15 @@ func Intersection(a []string, b []string) (inter []string) {
 	}
 	return inter
 }
+
+func First2Upper(s string) string {
+	return strings.ToUpper(s[:1]) + s[1:]
+}
+
+func First2UpperForSlice(s []string) []string {
+	var r []string
+	for _, str := range s {
+		r = append(r, First2Upper(str))
+	}
+	return r
+}
