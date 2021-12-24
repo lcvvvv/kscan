@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"kscan/app"
+	"kscan/lib/color"
 	"kscan/lib/misc"
 	"kscan/lib/slog"
 	"net/http"
@@ -99,7 +100,8 @@ func (f *Fofa) Search(keyword string) {
 		m["Ip"] = ""
 		m["Port"] = ""
 		m["Country_name"] = ""
-		fmt.Printf("%-30v\t%v\t%v\n", row.Host, row.Title, misc.SprintStringMap(m, true))
+		m = misc.FixMap(m)
+		fmt.Printf("%-30v\t%v\t%v\n", row.Host, row.Title, color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}))
 	}
 
 	//table.SetPrintColumns(misc.First2UpperForSlice(f.field))
@@ -154,10 +156,14 @@ func (f *Fofa) Check() {
 }
 
 func (f *Fofa) Scan() {
-	var strArr []string
+	var ipArr []string
+	var hostArr []string
 	for _, result := range f.results {
-		strArr = append(strArr, result.Host)
+		ipArr = append(ipArr, result.Ip)
+		hostArr = append(hostArr, result.Host)
 	}
-	strArr = misc.RemoveDuplicateElement(strArr)
-	app.Setting.HostTarget = strArr
+	ipArr = misc.RemoveDuplicateElement(ipArr)
+	hostArr = misc.RemoveDuplicateElement(hostArr)
+	app.Setting.HostTarget = ipArr
+	app.Setting.UrlTarget = hostArr
 }
