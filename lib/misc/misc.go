@@ -107,12 +107,12 @@ func ReadLineAll(fileName string) []string {
 }
 
 func FixLine(line string) string {
-	line = strings.Replace(line, "\r", "", -1)
-	line = strings.Replace(line, " ", "", -1)
-	line = strings.Replace(line, "\t", "", -1)
-	line = strings.Replace(line, "\r", "", -1)
-	line = strings.Replace(line, "\n", "", -1)
-	line = strings.Replace(line, "\xc2\xa0", "", -1)
+	line = strings.ReplaceAll(line, "\r", "")
+	line = strings.ReplaceAll(line, "\t", "")
+	line = strings.ReplaceAll(line, "\r", "")
+	line = strings.ReplaceAll(line, "\n", "")
+	line = strings.ReplaceAll(line, "\xc2\xa0", "")
+	line = strings.ReplaceAll(line, " ", "")
 	return line
 }
 
@@ -181,20 +181,21 @@ func FilterPrintStr(s string) string {
 	return string(dstRunes)
 }
 
-func SprintStringMap(stringMap map[string]string, keyPrint bool) string {
+func StrMap2Str(stringMap map[string]string, keyPrint bool) string {
 	var rArr []string
 	var assistArr []string
 	for key, value := range stringMap {
 		if value == "" {
 			continue
 		}
-		if IsInStrArr(assistArr, value) == false {
-			assistArr = append(assistArr, value)
-			if keyPrint == true {
-				rArr = append(rArr, fmt.Sprintf("%s:%s", key, value))
-			} else {
-				rArr = append(rArr, value)
-			}
+		if IsInStrArr(assistArr, value) == true {
+			continue
+		}
+		assistArr = append(assistArr, value)
+		if keyPrint == true {
+			rArr = append(rArr, fmt.Sprintf("%s:%s", key, value))
+		} else {
+			rArr = append(rArr, value)
 		}
 	}
 
@@ -382,4 +383,20 @@ func First2UpperForSlice(s []string) []string {
 		r = append(r, First2Upper(str))
 	}
 	return r
+}
+
+func FixMap(m map[string]string) map[string]string {
+	var arr []string
+	rm := make(map[string]string)
+	for key, value := range m {
+		if value == "" {
+			continue
+		}
+		if IsInStrArr(arr, value) {
+			continue
+		}
+		arr = append(arr, value)
+		rm[key] = value
+	}
+	return rm
 }
