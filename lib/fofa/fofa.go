@@ -59,6 +59,8 @@ func (f *Fofa) LoadArgs() {
 
 func (f *Fofa) SearchAll() {
 	for _, keyword := range f.keywordArr {
+		slog.Warningf("本次搜索关键字为：%v", keyword)
+
 		f.Search(keyword)
 	}
 }
