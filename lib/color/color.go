@@ -2,6 +2,7 @@ package color
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"runtime"
 	"strconv"
@@ -78,7 +79,6 @@ func convANSI(s string, color int, background int, format []int) string {
 func convColor(s string, color string) string {
 	return convANSI(s, colorMap[color], 0, []int{})
 }
-
 func convBackground(s string, color string) string {
 	return convANSI(s, 0, backgroundMap[color], []int{})
 }
@@ -181,4 +181,45 @@ func Warning(s string) string {
 func Tips(s string) string {
 	s = Green(s)
 	return s
+}
+
+func Random(s string) string {
+	return convANSI(s, rand.Intn(len(colorMap))+30, 0, []int{})
+}
+
+func RandomImportant(s string) string {
+	r := rand.Intn(len(colorMap)) + 30
+	return convANSI(s, r, r, []int{7})
+}
+
+func StrMapRandomColor(m map[string]string, printKey bool, importantKey []string) string {
+	var s string
+	if len(m) == 0 {
+		return ""
+	}
+	for key, value := range m {
+		var cell string
+		if printKey {
+			cell += key + ":"
+		}
+		cell += value
+
+		if isInStrArr(importantKey, key) {
+			cell = RandomImportant(cell)
+		} else {
+			cell = Random(cell)
+
+		}
+		s += cell + ", "
+	}
+	return s[:len(s)-2]
+}
+
+func isInStrArr(slice []string, val string) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
 }
