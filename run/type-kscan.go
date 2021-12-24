@@ -276,8 +276,8 @@ func (k *kscan) Output() {
 				continue
 			}
 			bannerMapArr = append(bannerMapArr, banner.Map())
-			write = banner.Output()
-			disp = banner.Display()
+			write = banner.Output(app.Setting.CloseColor)
+			disp = banner.Display(app.Setting.CloseColor)
 		case hydra.AuthInfo:
 			info := out.(hydra.AuthInfo)
 			if info.Status == false {
