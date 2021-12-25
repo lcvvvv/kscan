@@ -38,7 +38,7 @@ func TestName(t *testing.T) {
 	targetArr := []string{
 		//"50.57.49.172:3389",
 		//"20.49.22.250:3389",
-		"192.168.217.147:3389",
+		"192.168.217.166:3389",
 	}
 	for _, target := range targetArr {
 		fmt.Println(target)

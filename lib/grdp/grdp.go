@@ -179,7 +179,7 @@ func (g *Client) loginForRDP(domain, user, pwd string) error {
 	}
 	wg.Wait()
 
-	if updateCount > 100 {
+	if updateCount > 50 {
 		return nil
 	}
 	err = errors.New("login failed")
