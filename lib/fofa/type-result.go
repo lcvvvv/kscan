@@ -45,38 +45,3 @@ func (r Result) Map() map[string]string {
 	}
 	return m
 }
-
-//
-//func (r *Result) Output() {
-//	slog.Info("搜索关键字为：", r.query)
-//	//for _, result := range r.result {
-//	//	var row string
-//	//	var diff int
-//	//	for _, col := range r.field {
-//	//		col = misc.FixLine(col)
-//	//		col = misc.FilterPrintStr(col)
-//	//
-//	//		cell := result[col]
-//	//		if col == "host" {
-//	//			if regexp.MustCompile("http(s?)://.*").MatchString(cell) == false {
-//	//				cell = "http://" + cell
-//	//			}
-//	//		}
-//	//		colRuneBuf := []rune(cell)
-//	//		length := len(cell)
-//	//		width := lengthMap[col]
-//	//
-//	//		if length >= width && col != "host" {
-//	//			cell = string(colRuneBuf[:width-5]) + "..."
-//	//		}
-//	//		if length+diff >= width {
-//	//			diff = length + diff - width
-//	//		}
-//	//		row = row + fmt.Sprintf("%-"+strconv.Itoa(width)+"v ", cell)
-//	//	}
-//	//	slog.Data(row)
-//	//}
-//	t := table.Table(r.result)
-//	fmt.Println(t)
-//	slog.Info("搜索返回总数量为：", r.size, ",本次返回数量为：", len(r.result))
-//}
