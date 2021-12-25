@@ -103,8 +103,10 @@ func (f *Fofa) Search(keyword string) {
 		m["Port"] = ""
 		m["Country_name"] = ""
 		m = misc.FixMap(m)
-		fmt.Printf("%-30v\t%v\t%v\n", row.Host, row.Title, color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}))
+		line := fmt.Sprintf("%-30v\t%v\t%v\n", row.Host, row.Title, color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}))
+		slog.Data(line)
 	}
+	slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", responseJson.Size, len(responseJson.Results))
 
 	//table.SetPrintColumns(misc.First2UpperForSlice(f.field))
 	//t := table.Table(r)
