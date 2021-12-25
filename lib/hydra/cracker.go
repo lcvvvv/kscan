@@ -1,6 +1,8 @@
 package hydra
 
 import (
+	"fmt"
+	"kscan/lib/grdp"
 	"kscan/lib/hydra/ftp"
 	"kscan/lib/hydra/mongodb"
 	"kscan/lib/hydra/mssql"
@@ -14,19 +16,25 @@ import (
 	"kscan/lib/slog"
 )
 
-func rdpCracker(i interface{}) interface{} {
-	info := i.(AuthInfo)
-	info.Auth.MakePassword()
-	domain := ""
-	if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port); ok {
-		if err != nil {
-			slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
-			return nil
+func rdpCracker(IPAddr string, port int) func(interface{}) interface{} {
+	target := fmt.Sprintf("%s:%d", IPAddr, port)
+	protocol := grdp.VerifyProtocol(target)
+	slog.Debug("rdp protocol is :", protocol)
+	return func(i interface{}) interface{} {
+		info := i.(AuthInfo)
+		info.Auth.MakePassword()
+		domain := ""
+		if ok, err := rdp.Check(info.IPAddr, domain, info.Auth.Username, info.Auth.Password, info.Port, protocol); ok {
+			if err != nil {
+				slog.Debugf("rdp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+				return nil
+			}
+			info.Status = true
+			return info
 		}
-		info.Status = true
-		return info
+		return nil
 	}
-	return nil
+
 }
 
 func smbCracker(i interface{}) interface{} {

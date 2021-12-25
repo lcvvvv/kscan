@@ -235,7 +235,7 @@ func VerifyProtocol(target string) string {
 		return PROTOCOL_SSL
 	}
 	if err.Error() != PROTOCOL_RDP {
-		return PROTOCOL_RDP
+		return PROTOCOL_SSL
 	}
-	return PROTOCOL_SSL
+	return PROTOCOL_RDP
 }

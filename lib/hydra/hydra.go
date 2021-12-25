@@ -85,7 +85,7 @@ func (c *Cracker) Run() {
 
 	switch c.authInfo.Protocol {
 	case "rdp":
-		c.Pool.Function = rdpCracker
+		c.Pool.Function = rdpCracker(c.authInfo.IPAddr, c.authInfo.Port)
 	case "mysql":
 		c.Pool.Function = mysqlCracker
 	case "mssql":
