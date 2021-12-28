@@ -10,6 +10,7 @@ import (
 	"kscan/lib/slog"
 	"net/http"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -103,7 +104,10 @@ func (f *Fofa) Search(keyword string) {
 		m["Port"] = ""
 		m["Country_name"] = ""
 		m = misc.FixMap(m)
-		line := fmt.Sprintf("%-30v\t%v\t%v\n", row.Host, row.Title, color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}))
+		line := fmt.Sprintf("%-30v %-"+strconv.Itoa(misc.AutoWidth(row.Title, 26))+"v %v\n",
+			row.Host,
+			row.Title,
+			color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}))
 		slog.Data(line)
 	}
 	slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", responseJson.Size, len(responseJson.Results))

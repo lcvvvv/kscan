@@ -400,3 +400,13 @@ func FixMap(m map[string]string) map[string]string {
 	}
 	return rm
 }
+
+func AutoWidth(s string, length int) int {
+	length1 := len(s)
+	length2 := len([]rune(s))
+
+	if length1 == length2 {
+		return length
+	}
+	return length - (length1-length2)/2
+}
