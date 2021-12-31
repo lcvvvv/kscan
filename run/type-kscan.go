@@ -121,8 +121,8 @@ func (k *kscan) PortDiscovery() {
 	k.pool.port.Function = func(i interface{}) interface{} {
 		netloc := i.(string)
 		protocol := "tcp"
-		if port := strings.Split(netloc, ":")[1]; port == "161" {
-			protocol = "udp"
+		if port := strings.Split(netloc, ":")[1]; port == "161" || port == "137" {
+			return netloc
 		}
 		if gonmap.PortScan(protocol, netloc, k.config.Timeout) {
 			slog.Debug(netloc, " is open")
