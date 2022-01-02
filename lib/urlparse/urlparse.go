@@ -16,7 +16,7 @@ type URL struct {
 func Load(s string) (*URL, error) {
 	r, err := url.Parse(s)
 	if err != nil {
-		if strings.Contains(err.Error(), "first path segment in URL cannot contain colon") {
+		if strings.Contains(err.Error(), "first path segment in URL cannot contain colon") || strings.Contains(err.Error(), "missing protocol scheme") {
 			r, err = url.Parse("http://" + s)
 			if err != nil {
 				return nil, err
