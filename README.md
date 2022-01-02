@@ -231,15 +231,8 @@ optional arguments:
 
 - [grdp](https://github.com/tomatome/grdp/)
 
+- [fscan](https://github.com/shadow1ng/fscan)
+
 ## 八、文末
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
-
-![image-20210220164117920](assets/Kscan意见反馈群.jpeg)
-
-![image-20210220164117923](assets/image-20210220164117923.png)
-
-
-## 九、下载地址
-
-[kscan](https://github.com/lcvvvv/kscan/releases)
