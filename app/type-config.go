@@ -30,10 +30,10 @@ type Config struct {
 	Hydra, HydraUpdate             bool
 	HydraPass, HydraUser, HydraMod []string
 	//fofa
-	Fofa, FofaField []string
-	FofaFixKeyword  string
-	FofaSize        int
-	Scan            bool
+	Fofa           []string
+	FofaFixKeyword string
+	FofaSize       int
+	Scan           bool
 	//touch
 	Touch string
 }
@@ -69,7 +69,6 @@ func ConfigInit() {
 	//fofa模块
 	Setting.Fofa = Setting.loadFofa(args.Fofa)
 	Setting.FofaSize = args.FofaSize
-	Setting.FofaField = Setting.loadFofaField(args.FofaField)
 	Setting.FofaFixKeyword = args.FofaFixKeyword
 	Setting.Scan = args.Scan
 }

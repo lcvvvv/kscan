@@ -20,7 +20,6 @@ type Fofa struct {
 	fieldList                      []string
 
 	keywordArr []string
-	field      []string
 	size       int
 
 	results []Result
@@ -47,7 +46,6 @@ func New(email, key string) *Fofa {
 			"city", "country_name", "header", "server", "protocol", "banner",
 			"cert", "isp", "as_organization",
 		},
-		field: []string{},
 	}
 	return f
 }
@@ -55,7 +53,6 @@ func New(email, key string) *Fofa {
 func (f *Fofa) LoadArgs() {
 	f.loadKeywordArr()
 	f.size = app.Setting.FofaSize
-	f.loadField()
 }
 
 func (f *Fofa) SearchAll() {
@@ -131,17 +128,6 @@ func (f *Fofa) makeResult(responseJson ResponseJson) []Result {
 		results = append(results, result)
 	}
 	return results
-}
-
-func (f *Fofa) loadField() {
-	for _, field := range app.Setting.FofaField {
-		if misc.IsInStrArr(f.fieldList, field) {
-			f.field = append(f.field, field)
-		}
-	}
-	if len(f.field) == 0 {
-		f.field = []string{"host", "title", "ip", "port"}
-	}
 }
 
 func (f *Fofa) loadKeywordArr() {
