@@ -128,7 +128,6 @@ func ftpCracker(i interface{}) interface{} {
 	if ok, err := ftp.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
 		if err != nil {
 			slog.Debugf("ftp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
-			return nil
 		}
 		info.Status = true
 		return info
