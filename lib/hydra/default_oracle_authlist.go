@@ -18,6 +18,7 @@ func DefaultOracleList() *AuthList {
 	a.Special = []Auth{
 		NewSpecialAuth("internal", "oracle"),
 		NewSpecialAuth("system", "manager"),
+		NewSpecialAuth("system", "oracle"),
 		NewSpecialAuth("sys", "change_on_install"),
 		NewSpecialAuth("SYS", "CHANGE_ON_INSTALLorINTERNAL"),
 		NewSpecialAuth("SYSTEM", "MANAGER"),

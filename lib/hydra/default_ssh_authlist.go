@@ -5,7 +5,7 @@ func DefaultSshList() *AuthList {
 	a.Username = []string{
 		"root",
 		"admin",
-		"test",
+		//"test",
 		//"user",
 		//"root",
 		//"manager",
