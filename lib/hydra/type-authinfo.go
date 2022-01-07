@@ -26,30 +26,29 @@ func NewAuthInfo(IPAddr string, Port int, Protocol string) *AuthInfo {
 
 func (a *AuthInfo) Display() string {
 	URL := fmt.Sprintf("%s://%s:%d", a.Protocol, a.IPAddr, a.Port)
-	splitChar := func(i int) string {
-		if i <= 23 {
-			return "\t\t"
-		}
-		if i <= 16 {
-			return "\t\t\t"
-		}
-		if i <= 8 {
-			return "\t\t\t\t"
-		}
-		return "\t"
-	}(len(URL))
-	var s string
+	authChar := ""
 	if a.Auth.Username == "" {
-		s = fmt.Sprintf("%s%s200\tPassword:%s", URL, splitChar, a.Auth.Password)
+		authChar = fmt.Sprintf("Password:%s", a.Auth.Password)
 	} else {
-		s = fmt.Sprintf("%s%s200\tUsername:%s、Password:%s", URL, splitChar, a.Auth.Username, a.Auth.Password)
+		authChar = fmt.Sprintf("Username:%s、Password:%s", a.Auth.Username, a.Auth.Password)
 	}
+
+	var s string
+	s = fmt.Sprintf("%-30v %-26v %v", URL, "Success", authChar)
 	s = color.Red(s)
 	s = color.Overturn(s)
 	return s
 }
 
 func (a *AuthInfo) Output() string {
-	s := fmt.Sprintf("%s://%s:%d\t200\tUsername:%s、Password:%s", a.Protocol, a.IPAddr, a.Port, a.Auth.Username, a.Auth.Password)
+	URL := fmt.Sprintf("%s://%s:%d", a.Protocol, a.IPAddr, a.Port)
+	authChar := ""
+	if a.Auth.Username == "" {
+		authChar = fmt.Sprintf("Password:%s", a.Auth.Password)
+	} else {
+		authChar = fmt.Sprintf("Username:%s、Password:%s", a.Auth.Username, a.Auth.Password)
+	}
+	var s string
+	s = fmt.Sprintf("%-30v %-26v %v", URL, "Success", authChar)
 	return s
 }
