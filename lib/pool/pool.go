@@ -109,6 +109,19 @@ func (p *Pool) Run() {
 		time.Sleep(p.Interval)
 		go p.work()
 	}
+	p.Wait()
+}
+
+func (p *Pool) RunBack() {
+	//只启动有限大小的协程，协程的数量不可以超过工作池设定的数量，防止计算资源崩溃
+	for i := 0; i < p.threads; i++ {
+		p.wg.Add(1)
+		time.Sleep(p.Interval)
+		go p.work()
+	}
+}
+
+func (p *Pool) Wait() {
 	p.wg.Wait()
 	//关闭输出信道
 	p.OutDone()
