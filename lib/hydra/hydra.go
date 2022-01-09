@@ -175,3 +175,7 @@ func (c *Cracker) OutWatchDog() {
 	}
 	close(c.Out)
 }
+
+func (c *Cracker) Length() int {
+	return len(c.authList.Password) + len(c.authList.Username) + len(c.authList.Special)
+}
