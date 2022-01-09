@@ -24,7 +24,11 @@ type kscan struct {
 	result *queue.Queue
 	config app.Config
 	pool   struct {
-		host      *pool.Pool
+		host struct {
+			icmp *pool.Pool
+			tcp  *pool.Pool
+			Out  chan interface{}
+		}
 		port      *pool.Pool
 		tcpBanner *pool.Pool
 		appBanner *pool.Pool
@@ -58,7 +62,9 @@ func New(config app.Config) *kscan {
 	k.pool.appBanner = pool.NewPool(config.Threads)
 	k.pool.tcpBanner = pool.NewPool(config.Threads)
 	k.pool.port = pool.NewPool(config.Threads)
-	k.pool.host = pool.NewPool(hostThreads)
+	k.pool.host.icmp = pool.NewPool(hostThreads)
+	k.pool.host.tcp = pool.NewPool(hostThreads)
+	k.pool.host.Out = make(chan interface{})
 
 	k.pool.appBanner.Interval = time.Microsecond * 500
 	k.pool.tcpBanner.Interval = time.Microsecond * 500
@@ -75,45 +81,73 @@ func New(config app.Config) *kscan {
 	return k
 }
 
-//func (k *kscan) Push(i interface{}) {
-//	k.target.Push(i)
-//}
-//
-//func (k *kscan) PushAll(iArr []string) {
-//	for _, i := range iArr {
-//		k.Push(i)
-//	}
-//}
-
-//func (k *kscan) PushUrl(iArr []string) {
-//	k.PushAll(k.PORT, iArr)
-//}
-
 func (k *kscan) HostDiscovery(hostArr []string, open bool) {
-	k.pool.host.Function = func(i interface{}) interface{} {
+	k.pool.host.icmp.Function = func(i interface{}) interface{} {
 		ip := i.(string)
 		//如果关闭存活性检测，则默认所有IP存活
 		if open == true {
 			return ip
 		}
 		//经过存活性检测未存活的IP不会进行下一步测试
-		if gonmap.HostDiscovery(ip) {
+		if gonmap.HostDiscoveryForIcmp(ip) {
+			return ip
+		}
+		k.pool.host.tcp.In <- ip
+		return nil
+	}
+	k.pool.host.tcp.Function = func(i interface{}) interface{} {
+		ip := i.(string)
+		//如果关闭存活性检测，则默认所有IP存活
+		if open == true {
+			return ip
+		}
+		//经过存活性检测未存活的IP不会进行下一步测试
+		if gonmap.HostDiscoveryForTcp(ip) {
 			return ip
 		}
 		return nil
 	}
+	//开启主机存活性探测输出调度器
+	go func() {
+		//ICMP输出调度器
+		wg := &sync.WaitGroup{}
+		wg.Add(2)
+		go func() {
+			for out := range k.pool.host.icmp.Out {
+				if out != nil {
+					k.pool.host.Out <- out
+				}
+			}
+			wg.Done()
+		}()
+		//TCP输出调度器
+		go func() {
+			for out := range k.pool.host.tcp.Out {
+				if out != nil {
+					k.pool.host.Out <- out
+				}
+			}
+			wg.Done()
+		}()
+		wg.Wait()
+		close(k.pool.host.Out)
+	}()
 
-	//启用主机存活性探测任务下发器
+	//启用ICMP主机存活性探测任务下发器
 	go func() {
 		for _, host := range hostArr {
-			k.pool.host.In <- host
+			k.pool.host.icmp.In <- host
 		}
 		//关闭主机存活性探测下发信道
 		slog.Info("主机存活性探测任务下发完毕")
-		k.pool.host.InDone()
+		k.pool.host.icmp.InDone()
 	}()
+
 	//开始执行主机存活性探测任务
-	k.pool.host.Run()
+	k.pool.host.tcp.RunBack()
+	k.pool.host.icmp.Run()
+	k.pool.host.tcp.InDone()
+	k.pool.host.tcp.Wait()
 	slog.Warning("主机存活性探测任务完成")
 }
 
@@ -322,22 +356,22 @@ func (k *kscan) WatchDog() {
 		for true {
 			time.Sleep(59 * time.Second)
 			if k.watchDog.trigger == false {
-				if num := k.pool.host.JobsList.Length(); num > 0 {
-					i := k.pool.host.JobsList.Peek()
-					info := i.(string)
-					slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
-					continue
-				}
+				//if num := k.pool.host.JobsList.Length(); num > 0 {
+				//	i := k.pool.host.JobsList.Peek()
+				//	info := i.(string)
+				//	slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+				//	continue
+				//}
 				if num := k.pool.port.JobsList.Length(); num > 0 {
 					i := k.pool.port.JobsList.Peek()
 					info := i.(string)
-					slog.Warningf("当前端口存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					slog.Warningf("正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
 				}
 				if num := k.pool.tcpBanner.JobsList.Length(); num > 0 {
 					i := k.pool.tcpBanner.JobsList.Peek()
 					info := i.(string)
-					slog.Warningf("当前TCP层指纹识别任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					slog.Warningf("正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
 				}
 				if num := k.pool.appBanner.JobsList.Length(); num > 0 {
@@ -353,7 +387,7 @@ func (k *kscan) WatchDog() {
 						}
 						info = tcpBanner.Target.URI()
 					}
-					slog.Warningf("当前应用层指纹检测并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					slog.Warningf("正在进行应用层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
 				}
 			}
@@ -394,7 +428,7 @@ func (k *kscan) Hydra() {
 		//适配爆破模块
 		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
 		crack := hydra.NewCracker(authInfo, app.Setting.HydraUpdate, 10)
-		slog.Infof("[hydra]->开始对%v:%v[%v]进行暴力破解，用户名：%v,密码：%v", banner.IPAddr, banner.Port, banner.Protocol, len(hydra.DefaultAuthMap[authInfo.Protocol].Username), len(hydra.DefaultAuthMap[authInfo.Protocol].Password))
+		slog.Infof("[hydra]->开始对%v:%v[%v]进行暴力破解，字典长度为：%d", banner.IPAddr, banner.Port, banner.Protocol, crack.Length())
 		go crack.Run()
 		//爆破结果获取
 		var out hydra.AuthInfo
