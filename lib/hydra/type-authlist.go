@@ -1,6 +1,8 @@
 package hydra
 
-import "kscan/lib/misc"
+import (
+	"kscan/lib/misc"
+)
 
 type AuthList struct {
 	Username []string
@@ -15,7 +17,7 @@ func NewAuthList() *AuthList {
 }
 
 func (a *AuthList) IsEmpty() bool {
-	if len(a.Username) > 0 && len(a.Password) > 0 {
+	if len(a.Username) > 0 || len(a.Password) > 0 {
 		return false
 	}
 	return true
@@ -30,9 +32,20 @@ func (a *AuthList) Merge(list *AuthList) {
 }
 
 func (a *AuthList) Replace(list *AuthList) {
-	a.Username = list.Username
-	a.Password = list.Password
+	if len(list.Username) > 0 {
+		a.Username = list.Username
+	}
+	if len(list.Password) > 0 {
+		a.Password = list.Password
+	}
 	a.Special = list.Special
 	a.Username = misc.RemoveDuplicateElement(a.Username)
 	a.Password = misc.RemoveDuplicateElement(a.Password)
+}
+
+func (a *AuthList) Length() int {
+	if len(a.Username) == 0 {
+		return len(a.Password) + len(a.Special)
+	}
+	return (len(a.Password) * len(a.Username)) + len(a.Special)
 }

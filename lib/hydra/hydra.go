@@ -145,8 +145,8 @@ func InitDefaultAuthMap() {
 
 func InitCustomAuthMap(user, pass []string) {
 	CustomAuthMap = NewAuthList()
-	CustomAuthMap.Password = user
-	CustomAuthMap.Username = pass
+	CustomAuthMap.Username = user
+	CustomAuthMap.Password = pass
 }
 
 func Ok(protocol string) bool {
@@ -177,5 +177,5 @@ func (c *Cracker) OutWatchDog() {
 }
 
 func (c *Cracker) Length() int {
-	return len(c.authList.Password) + len(c.authList.Username) + len(c.authList.Special)
+	return c.authList.Length()
 }
