@@ -49,3 +49,14 @@ func (a *AuthList) Length() int {
 	}
 	return (len(a.Password) * len(a.Username)) + len(a.Special)
 }
+
+func (a *AuthList) Dict(onlyPassword bool) []Auth {
+	var dict []Auth
+	dict = append(dict, a.Special...)
+	if onlyPassword {
+		dict = append(dict, NewAuthFromPasswords(a.Password)...)
+	} else {
+		dict = append(dict, NewAuthFromUsernameAndPassword(a.Username, a.Password)...)
+	}
+	return dict
+}

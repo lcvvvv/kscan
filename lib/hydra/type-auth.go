@@ -12,6 +12,30 @@ func NewAuth() Auth {
 	return a
 }
 
+func NewAuthFromPasswords(passwords []string) []Auth {
+	var auths []Auth
+	for _, password := range passwords {
+		auths = append(auths, Auth{
+			Username: "",
+			Password: password,
+		})
+	}
+	return auths
+}
+
+func NewAuthFromUsernameAndPassword(usernames, passwords []string) []Auth {
+	var auths []Auth
+	for _, password := range passwords {
+		for _, username := range usernames {
+			auths = append(auths, Auth{
+				Username: username,
+				Password: password,
+			})
+		}
+	}
+	return auths
+}
+
 func NewSpecialAuth(username, password string) Auth {
 	a := Auth{
 		Username: username,

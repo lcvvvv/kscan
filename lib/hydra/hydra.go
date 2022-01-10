@@ -7,10 +7,11 @@ import (
 )
 
 type Cracker struct {
-	Pool     *pool.Pool
-	authList *AuthList
-	authInfo *AuthInfo
-	Out      chan AuthInfo
+	Pool         *pool.Pool
+	authList     *AuthList
+	authInfo     *AuthInfo
+	Out          chan AuthInfo
+	onlyPassword bool
 }
 
 var (
@@ -33,10 +34,20 @@ var (
 
 func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 	c := &Cracker{}
+
+	if info.Protocol == "redis" {
+		c.onlyPassword = true
+	} else {
+		c.onlyPassword = false
+	}
+
 	c.Pool = pool.NewPool(threads)
 	c.authInfo = info
 	c.authList = func() *AuthList {
 		list := DefaultAuthMap[c.authInfo.Protocol]
+		if c.onlyPassword {
+			CustomAuthMap.Username = []string{}
+		}
 		if isAuthUpdate {
 			list.Merge(CustomAuthMap)
 			return list
@@ -49,6 +60,7 @@ func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 	}()
 	c.Out = make(chan AuthInfo)
 	c.Pool.Interval = time.Second * 1
+
 	return c
 }
 
@@ -58,20 +70,7 @@ func (c *Cracker) Run() {
 
 	//go 任务下发器
 	go func() {
-		for _, password := range c.authList.Password {
-			for _, username := range c.authList.Username {
-				if c.Pool.Done {
-					c.Pool.InDone()
-					return
-				}
-				a := NewAuth()
-				a.Password = password
-				a.Username = username
-				c.authInfo.Auth = a
-				c.Pool.In <- *c.authInfo
-			}
-		}
-		for _, a := range c.authList.Special {
+		for _, a := range c.authList.Dict(c.onlyPassword) {
 			if c.Pool.Done {
 				c.Pool.InDone()
 				return
