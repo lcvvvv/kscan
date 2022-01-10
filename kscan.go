@@ -24,7 +24,7 @@ const logo = `
     |##|   |#|___  |#|      /###\  |##\|#|
     |#.#\   \#####\|#|     /#/_\#\ |#.#.#|
     |#|\#\ /\___|#||#|____/#/###\#\|#|\##|
-    |#| \#\\#####/ \#####/#/ v1.60#\#| \#|
+    |#| \#\\#####/ \#####/#/ v1.61#\#| \#|
 
 `
 
@@ -143,6 +143,8 @@ func main() {
 	}
 	//touch模块启动
 	if app.Setting.Touch != "None" {
+		_ = gonmap.Init(9, app.Setting.Timeout)
+
 		r := touch.Touch(app.Setting.Touch)
 		slog.Info("Netloc：", app.Setting.Touch)
 		slog.Info("Status：", r.Status)
