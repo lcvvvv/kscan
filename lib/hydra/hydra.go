@@ -67,21 +67,7 @@ func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 func (c *Cracker) Run() {
 	//开启输出监测
 	go c.OutWatchDog()
-
-	//go 任务下发器
-	go func() {
-		for _, a := range c.authList.Dict(c.onlyPassword) {
-			if c.Pool.Done {
-				c.Pool.InDone()
-				return
-			}
-			c.authInfo.Auth = a
-			c.Pool.In <- *c.authInfo
-		}
-		//关闭信道
-		c.Pool.InDone()
-	}()
-
+	//选择暴力破解函数
 	switch c.authInfo.Protocol {
 	case "rdp":
 		c.Pool.Function = rdpCracker(c.authInfo.IPAddr, c.authInfo.Port)
@@ -90,7 +76,12 @@ func (c *Cracker) Run() {
 	case "mssql":
 		c.Pool.Function = mssqlCracker
 	case "oracle":
-		c.Pool.Function = oracleCracker
+		c.Pool.Function = oracleCracker(c.authInfo.IPAddr, c.authInfo.Port)
+		//若SID未知，则不进行后续暴力破解
+		if c.Pool.Function == nil {
+			c.Pool.OutDone()
+			return
+		}
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "ldap":
@@ -107,6 +98,19 @@ func (c *Cracker) Run() {
 	case "smb":
 		c.Pool.Function = smbCracker
 	}
+	//go 任务下发器
+	go func() {
+		for _, a := range c.authList.Dict(c.onlyPassword) {
+			if c.Pool.Done {
+				c.Pool.InDone()
+				return
+			}
+			c.authInfo.Auth = a
+			c.Pool.In <- *c.authInfo
+		}
+		//关闭信道
+		c.Pool.InDone()
+	}()
 	//开始暴力破解
 	c.Pool.Run()
 }
