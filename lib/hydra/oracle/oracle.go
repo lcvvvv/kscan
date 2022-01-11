@@ -2,8 +2,10 @@ package oracle
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	_ "github.com/sijms/go-ora/v2"
+	"kscan/lib/slog"
 	"strings"
 	"time"
 )
@@ -102,8 +104,15 @@ func CheckSID(sid, Host string, Port int) bool {
 	if err != nil {
 		return false
 	}
-	db.SetConnMaxLifetime(5 * time.Second)
+	db.SetConnMaxLifetime(3 * time.Second)
 	db.SetMaxIdleConns(0)
+	defer func() {
+		if e := recover(); e != nil {
+			err = errors.New(fmt.Sprint("sid check failed: ", Host, e))
+			slog.Debug(err, e)
+		}
+	}()
+
 	err = db.Ping()
 	if err == nil {
 		db.Close()
@@ -122,4 +131,20 @@ func CheckSID(sid, Host string, Port int) bool {
 		return false
 	}
 	return true
+}
+
+func CheckProtocol(Host string, Port int) bool {
+	dataSourceName := fmt.Sprintf("oracle://sid:sid@%s:%d/orcl", Host, Port)
+	db, err := sql.Open("oracle", dataSourceName)
+	if err != nil {
+		return false
+	}
+	db.SetConnMaxLifetime(3 * time.Second)
+	db.SetMaxIdleConns(0)
+	err = db.Ping()
+	if err == nil {
+		db.Close()
+		return true
+	}
+	return strings.Contains(err.Error(), "ORA-")
 }

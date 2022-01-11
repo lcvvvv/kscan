@@ -19,7 +19,7 @@ import (
 func rdpCracker(IPAddr string, port int) func(interface{}) interface{} {
 	target := fmt.Sprintf("%s:%d", IPAddr, port)
 	protocol := grdp.VerifyProtocol(target)
-	slog.Debug("rdp protocol is :", protocol)
+	//slog.Debug("rdp protocol is :", protocol)
 	return func(i interface{}) interface{} {
 		info := i.(AuthInfo)
 		info.Auth.MakePassword()
@@ -152,12 +152,12 @@ func postgresqlCracker(i interface{}) interface{} {
 func oracleCracker(IPAddr string, port int) func(interface{}) interface{} {
 	sid := oracle.GetSID(IPAddr, port, oracle.ServiceName)
 	if sid == "" {
-		slog.Debug(sid)
 		return nil
 	}
 	return func(i interface{}) interface{} {
 		info := i.(AuthInfo)
 		info.Auth.MakePassword()
+		info.Auth.Other["SID"] = sid
 		if ok, err := oracle.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port, sid); ok {
 			if err != nil {
 				slog.Debugf("oracle://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
@@ -169,6 +169,7 @@ func oracleCracker(IPAddr string, port int) func(interface{}) interface{} {
 		return nil
 	}
 }
+
 func mongodbCracker(i interface{}) interface{} {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()

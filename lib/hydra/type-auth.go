@@ -5,20 +5,22 @@ import "strings"
 type Auth struct {
 	Username string
 	Password string
+	Other    map[string]string
 }
 
 func NewAuth() Auth {
-	a := Auth{}
+	a := Auth{
+		Username: "",
+		Password: "",
+		Other:    make(map[string]string),
+	}
 	return a
 }
 
 func NewAuthFromPasswords(passwords []string) []Auth {
 	var auths []Auth
 	for _, password := range passwords {
-		auths = append(auths, Auth{
-			Username: "",
-			Password: password,
-		})
+		auths = append(auths, NewSpecialAuth("", password))
 	}
 	return auths
 }
@@ -27,20 +29,16 @@ func NewAuthFromUsernameAndPassword(usernames, passwords []string) []Auth {
 	var auths []Auth
 	for _, password := range passwords {
 		for _, username := range usernames {
-			auths = append(auths, Auth{
-				Username: username,
-				Password: password,
-			})
+			auths = append(auths, NewSpecialAuth(username, password))
 		}
 	}
 	return auths
 }
 
 func NewSpecialAuth(username, password string) Auth {
-	a := Auth{
-		Username: username,
-		Password: password,
-	}
+	a := NewAuth()
+	a.Username = username
+	a.Password = password
 	return a
 }
 

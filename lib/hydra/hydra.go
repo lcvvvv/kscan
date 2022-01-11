@@ -1,6 +1,7 @@
 package hydra
 
 import (
+	"kscan/lib/hydra/oracle"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"time"
@@ -65,18 +66,24 @@ func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 }
 
 func (c *Cracker) Run() {
+	ip := c.authInfo.IPAddr
+	port := c.authInfo.Port
 	//开启输出监测
 	go c.OutWatchDog()
 	//选择暴力破解函数
 	switch c.authInfo.Protocol {
 	case "rdp":
-		c.Pool.Function = rdpCracker(c.authInfo.IPAddr, c.authInfo.Port)
+		c.Pool.Function = rdpCracker(ip, port)
 	case "mysql":
 		c.Pool.Function = mysqlCracker
 	case "mssql":
 		c.Pool.Function = mssqlCracker
 	case "oracle":
-		c.Pool.Function = oracleCracker(c.authInfo.IPAddr, c.authInfo.Port)
+		if oracle.CheckProtocol(ip, port) == false {
+			c.Pool.OutDone()
+			return
+		}
+		c.Pool.Function = oracleCracker(ip, port)
 		//若SID未知，则不进行后续暴力破解
 		if c.Pool.Function == nil {
 			c.Pool.OutDone()
@@ -85,6 +92,7 @@ func (c *Cracker) Run() {
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "ldap":
+
 	case "ssh":
 		c.Pool.Function = sshCracker
 	case "telnet":
@@ -170,10 +178,10 @@ func (c *Cracker) OutWatchDog() {
 		count += 1
 		info = out
 	}
-	if count > 3 {
+	if count > 5 {
 		//slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
-	if count > 0 && count <= 3 {
+	if count > 0 && count <= 5 {
 		c.Out <- info.(AuthInfo)
 	}
 	close(c.Out)
