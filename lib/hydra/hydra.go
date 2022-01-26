@@ -1,6 +1,7 @@
 package hydra
 
 import (
+	"kscan/lib/gotelnet"
 	"kscan/lib/hydra/oracle"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
@@ -19,7 +20,7 @@ var (
 	DefaultAuthMap map[string]*AuthList
 	CustomAuthMap  *AuthList
 	ProtocolList   = []string{
-		"ssh", "rdp", "ftp", "smb",
+		"ssh", "rdp", "ftp", "smb", "telnet",
 		"mysql", "mssql", "oracle", "postgresql", "mongodb", "redis",
 		//110:   "pop3",
 		//995:   "pop3",
@@ -85,10 +86,6 @@ func (c *Cracker) Run() {
 		}
 		c.Pool.Function = oracleCracker(ip, port)
 		//若SID未知，则不进行后续暴力破解
-		if c.Pool.Function == nil {
-			c.Pool.OutDone()
-			return
-		}
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "ldap":
@@ -96,7 +93,17 @@ func (c *Cracker) Run() {
 	case "ssh":
 		c.Pool.Function = sshCracker
 	case "telnet":
-		c.Pool.Function = telnetCracker
+		serverType := getTelnetServerType(ip, port)
+		if serverType == gotelnet.UnauthorizedAccess {
+			c.authInfo.Auth.Password = ""
+			c.authInfo.Auth.Username = ""
+			c.authInfo.Auth.Other["Status"] = "UnauthorizedAccess"
+			c.authInfo.Status = true
+			c.Pool.Out <- *c.authInfo
+			c.Pool.OutDone()
+			return
+		}
+		c.Pool.Function = telnetCracker(serverType)
 	case "ftp":
 		c.Pool.Function = ftpCracker
 	case "mongodb":
@@ -105,6 +112,10 @@ func (c *Cracker) Run() {
 		c.Pool.Function = redisCracker
 	case "smb":
 		c.Pool.Function = smbCracker
+	}
+	if c.Pool.Function == nil {
+		c.Pool.OutDone()
+		return
 	}
 	//go 任务下发器
 	go func() {

@@ -2,6 +2,7 @@ package hydra
 
 import (
 	"fmt"
+	"kscan/lib/gotelnet"
 	"kscan/lib/grdp"
 	"kscan/lib/hydra/ftp"
 	"kscan/lib/hydra/mongodb"
@@ -13,6 +14,7 @@ import (
 	"kscan/lib/hydra/redis"
 	"kscan/lib/hydra/smb"
 	"kscan/lib/hydra/ssh"
+	"kscan/lib/hydra/telnet"
 	"kscan/lib/slog"
 )
 
@@ -65,19 +67,30 @@ func sshCracker(i interface{}) interface{} {
 	return nil
 }
 
-func telnetCracker(i interface{}) interface{} {
-	//todo
-	//info := i.(AuthInfo)
-	//info.Auth.MakePassword()
-	//if ok, err := telnet.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
-	//	if err != nil {
-	//		slog.Debugf("telnet://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
-	//		return nil
-	//	}
-	//	info.Status = true
-	//	return info
-	//}
-	return nil
+func telnetCracker(serverType int) func(interface{}) interface{} {
+	return func(i interface{}) interface{} {
+		info := i.(AuthInfo)
+		info.Auth.MakePassword()
+		if ok, err := telnet.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port, serverType); ok {
+			if err != nil {
+				slog.Debugf("telnet://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
+				return nil
+			}
+			info.Status = true
+			return info
+		}
+		return nil
+	}
+}
+
+func getTelnetServerType(ip string, port int) int {
+	client := gotelnet.New(ip, port)
+	err := client.Connect()
+	if err != nil {
+		return gotelnet.Closed
+	}
+	defer client.Close()
+	return client.MakeServerType()
 }
 
 func mysqlCracker(i interface{}) interface{} {
