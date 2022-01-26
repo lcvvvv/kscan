@@ -84,6 +84,9 @@ func Check(Host, Username, Password string, Port int, SID string) (bool, error) 
 	db.SetMaxIdleConns(0)
 	err = db.Ping()
 	if err != nil {
+		if strings.Contains(err.Error(), "ORA-28009") {
+			return true, nil
+		}
 		return false, err
 	}
 	return true, nil
