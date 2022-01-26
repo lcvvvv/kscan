@@ -27,14 +27,17 @@ func NewAuthInfo(IPAddr string, Port int, Protocol string) *AuthInfo {
 func (a *AuthInfo) Display() string {
 	URL := fmt.Sprintf("%s://%s:%d", a.Protocol, a.IPAddr, a.Port)
 	authChar := ""
-	if a.Auth.Username == "" {
-		authChar = fmt.Sprintf("Password:%s", a.Auth.Password)
-	} else {
-		authChar = fmt.Sprintf("Username:%s、Password:%s", a.Auth.Username, a.Auth.Password)
+	outMap := a.Auth.Other
+	if a.Auth.Username != "" {
+		outMap["Username"] = a.Auth.Username
 	}
-	for key, value := range a.Auth.Other {
-		authChar += fmt.Sprintf("、%s:%s", key, value)
+	if a.Auth.Password != "" {
+		outMap["Password"] = a.Auth.Password
 	}
+	for key, value := range outMap {
+		authChar += fmt.Sprintf("%s:%s、", key, value)
+	}
+	authChar = authChar[:len(authChar)-3]
 	var s string
 	s = fmt.Sprintf("%-30v %-26v %v", URL, "Success", authChar)
 	s = color.Red(s)
