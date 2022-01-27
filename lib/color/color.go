@@ -12,8 +12,10 @@ import (
 var (
 	mod      = 0
 	colorMap = map[string]int{
-		"white":  30,
-		"red":    31,
+		//varyImportant
+		"white": 30,
+		"red":   31,
+		//Important
 		"green":  32,
 		"yellow": 33,
 		"blue":   34,
@@ -188,11 +190,11 @@ func Random(s string) string {
 }
 
 func RandomImportant(s string) string {
-	r := rand.Intn(len(colorMap)) + 30
+	r := rand.Intn(len(colorMap)-2) + 32
 	return convANSI(s, r, r, []int{7})
 }
 
-func StrMapRandomColor(m map[string]string, printKey bool, importantKey []string) string {
+func StrMapRandomColor(m map[string]string, printKey bool, importantKey []string, varyImportantKey []string) string {
 	var s string
 	if len(m) == 0 {
 		return ""
@@ -206,6 +208,8 @@ func StrMapRandomColor(m map[string]string, printKey bool, importantKey []string
 
 		if isInStrArr(importantKey, key) {
 			cell = RandomImportant(cell)
+		} else if isInStrArr(varyImportantKey, key) {
+			cell = Red(Overturn(cell))
 		} else {
 			cell = Random(cell)
 
