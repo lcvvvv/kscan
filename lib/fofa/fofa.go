@@ -38,7 +38,7 @@ func New(email, key string) *Fofa {
 	f := &Fofa{
 		email:      email,
 		key:        key,
-		baseUrl:    "https://fofa.so",
+		baseUrl:    "https://fofa.info",
 		searchPath: "/api/v1/search/all",
 		loginPath:  "/api/v1/info/my",
 		fieldList: []string{
@@ -104,7 +104,8 @@ func (f *Fofa) Search(keyword string) {
 		line := fmt.Sprintf("%-30v %-"+strconv.Itoa(misc.AutoWidth(row.Title, 26))+"v %v\n",
 			row.Host,
 			row.Title,
-			color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}))
+			color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}, []string{}),
+		)
 		slog.Data(line)
 	}
 	slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", responseJson.Size, len(responseJson.Results))
