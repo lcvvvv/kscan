@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"kscan/app"
-	"kscan/lib/IP"
+	"kscan/lib/color"
 	"kscan/lib/gonmap"
 	"kscan/lib/hydra"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/lib/queue"
 	"kscan/lib/slog"
+	"kscan/lib/smap"
 	"kscan/lib/urlparse"
 	"os"
 	"path"
-	"strings"
 	"sync"
 	"time"
 )
@@ -29,7 +29,10 @@ type kscan struct {
 			tcp  *pool.Pool
 			Out  chan interface{}
 		}
-		port      *pool.Pool
+		port struct {
+			tcp *pool.Pool
+			Out chan interface{}
+		}
 		tcpBanner *pool.Pool
 		appBanner *pool.Pool
 	}
@@ -61,14 +64,16 @@ func New(config app.Config) *kscan {
 
 	k.pool.appBanner = pool.NewPool(config.Threads)
 	k.pool.tcpBanner = pool.NewPool(config.Threads)
-	k.pool.port = pool.NewPool(config.Threads)
+	k.pool.port.tcp = pool.NewPool(config.Threads)
+	k.pool.port.Out = make(chan interface{})
+
 	k.pool.host.icmp = pool.NewPool(hostThreads)
 	k.pool.host.tcp = pool.NewPool(hostThreads)
 	k.pool.host.Out = make(chan interface{})
 
 	k.pool.appBanner.Interval = time.Microsecond * 500
 	k.pool.tcpBanner.Interval = time.Microsecond * 500
-	k.pool.port.Interval = time.Microsecond * 500
+	k.pool.port.tcp.Interval = time.Microsecond * 500
 
 	k.watchDog.hydra = make(chan interface{})
 	k.watchDog.output = make(chan interface{})
@@ -84,28 +89,27 @@ func New(config app.Config) *kscan {
 func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	k.pool.host.icmp.Function = func(i interface{}) interface{} {
 		ip := i.(string)
+		host := NewHost(ip)
 		//如果关闭存活性检测，则默认所有IP存活
 		if open == true {
-			return ip
+			return host.Up()
 		}
 		//经过存活性检测未存活的IP不会进行下一步测试
-		if gonmap.HostDiscoveryForIcmp(ip) {
-			return ip
+		if gonmap.HostDiscoveryForIcmp(ip) == true {
+			return host.Up()
 		}
+		//ICMP检测不存活的主机，将发送至TCP存活性检测
 		k.pool.host.tcp.In <- ip
-		return nil
+		return host.Down()
 	}
 	k.pool.host.tcp.Function = func(i interface{}) interface{} {
 		ip := i.(string)
-		//如果关闭存活性检测，则默认所有IP存活
-		if open == true {
-			return ip
-		}
+		host := NewHost(ip)
 		//经过存活性检测未存活的IP不会进行下一步测试
-		if gonmap.HostDiscoveryForTcp(ip) {
-			return ip
+		if gonmap.HostDiscoveryForTcp(ip) == true {
+			return host.Up()
 		}
-		return nil
+		return host.Down()
 	}
 	//开启主机存活性探测输出调度器
 	go func() {
@@ -114,7 +118,8 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		wg.Add(2)
 		go func() {
 			for out := range k.pool.host.icmp.Out {
-				if out != nil {
+				host := out.(*Host)
+				if host.status == Up {
 					k.pool.host.Out <- out
 				}
 			}
@@ -123,7 +128,8 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		//TCP输出调度器
 		go func() {
 			for out := range k.pool.host.tcp.Out {
-				if out != nil {
+				host := out.(*Host)
+				if host.status == Up {
 					k.pool.host.Out <- out
 				}
 			}
@@ -152,51 +158,82 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 }
 
 func (k *kscan) PortDiscovery() {
-	k.pool.port.Function = func(i interface{}) interface{} {
-		netloc := i.(string)
-		protocol := "tcp"
-		if port := strings.Split(netloc, ":")[1]; port == "161" || port == "137" {
-			return netloc
-		}
-		if gonmap.PortScan(protocol, netloc, k.config.Timeout) {
-			slog.Debug(netloc, " is open")
-			return netloc
-		}
-		return nil
-	}
-
+	var upHosts = smap.New()
 	//启用端口存活性探测任务下发器
 	go func() {
 		for out := range k.pool.host.Out {
+			host := out.(*Host)
+			slog.Debug(host.addr, " is alive")
+			upHosts.Set(host.addr, host)
 			for _, port := range k.config.Port {
-				if port == 161 {
-					//如果是公网IP且使用默认端口扫描策略，则不会扫描161端口
-					if IP.IsPrivateIPAddr(out.(string)) == false && len(app.Setting.Port) == 400 {
-						continue
-					}
-				}
-				netloc := fmt.Sprintf("%s:%d", out, port)
-				k.pool.port.In <- netloc
+				//if port == 161 {
+				//	//如果是公网IP且使用默认端口扫描策略，则不会扫描161端口
+				//	if IP.IsPrivateIPAddr(out.(string)) == false && len(app.Setting.Port) == 400 {
+				//		continue
+				//	}
+				//}
+				netloc := NewPort(host.addr, port)
+				k.pool.port.tcp.In <- netloc
 			}
 		}
 		slog.Info("端口存活性探测任务下发完毕")
-		k.pool.port.InDone()
+		k.pool.port.tcp.InDone()
 	}()
+	//启用端口存活性探测结果接受器
+	go func() {
+		for out := range k.pool.port.tcp.Out {
+			netloc := out.(*Port)
+			if value, ok := upHosts.Get(netloc.addr); ok {
+				host := value.(*Host)
+				host.SetPort(netloc.port, netloc.status)
+				if netloc.status == Open {
+					k.pool.port.Out <- netloc
+					host.Up()
+				}
+				if host.IsOpenPort() == false && host.Length() == len(k.config.Port) {
+					url := fmt.Sprintf("icmp://%s", host.addr)
+					description := color.Red(color.Overturn("Not Open Any Port"))
+					output := fmt.Sprintf("%-30v %-26v %s", url, "Up", description)
+					k.watchDog.output <- output
+				}
+				upHosts.Set(host.addr, host)
+			}
+
+		}
+		close(k.pool.port.Out)
+	}()
+
+	//定义端口存活性检测函数
+	k.pool.port.tcp.Function = func(i interface{}) interface{} {
+		netloc := i.(*Port)
+		if netloc.port == 161 || netloc.port == 137 {
+			return netloc.Unknown()
+		}
+		if gonmap.PortScan("tcp", netloc.UnParse(), k.config.Timeout) {
+			//slog.Debug(netloc, " is open")
+			return netloc.Open()
+		}
+		return netloc.Close()
+	}
 	//开始执行端口存活性探测任务
-	k.pool.port.Run()
+	k.pool.port.tcp.Run()
 	slog.Warning("端口存活性探测任务完成")
 }
 
 func (k *kscan) GetTcpBanner() {
 	k.pool.tcpBanner.Function = func(i interface{}) interface{} {
-		netloc := i.(string)
-		r := gonmap.GetTcpBanner(netloc, gonmap.New(), k.config.Timeout*20)
+		netloc := i.(*Port)
+		r := gonmap.GetTcpBanner(netloc.UnParse(), gonmap.New(), k.config.Timeout*20)
 		return r
 	}
 
 	//启用TCP层面协议识别任务下发器
 	go func() {
 		for out := range k.pool.port.Out {
+			netloc := out.(*Port)
+			if netloc.status == Close {
+				continue
+			}
 			k.pool.tcpBanner.In <- out
 		}
 		slog.Info("TCP层协议识别任务下发完毕")
@@ -319,6 +356,10 @@ func (k *kscan) Output() {
 			}
 			write = info.Output()
 			disp = info.Display()
+		case string:
+			outString := out.(string)
+			write = outString
+			disp = outString
 		}
 		slog.Data(disp)
 		if k.config.Output != nil {
@@ -362,8 +403,8 @@ func (k *kscan) WatchDog() {
 				//	slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 				//	continue
 				//}
-				if num := k.pool.port.JobsList.Length(); num > 0 {
-					i := k.pool.port.JobsList.Peek()
+				if num := k.pool.port.tcp.JobsList.Length(); num > 0 {
+					i := k.pool.port.tcp.JobsList.Peek()
 					info := i.(string)
 					slog.Warningf("正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
