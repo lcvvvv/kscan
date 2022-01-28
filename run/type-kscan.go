@@ -190,7 +190,7 @@ func (k *kscan) PortDiscovery() {
 					k.pool.port.Out <- netloc
 					host.Up()
 				}
-				if host.IsOpenPort() == false && host.Length() == len(k.config.Port) {
+				if host.IsOpenPort() == false && host.Length() == len(k.config.Port) && k.config.ClosePing == false {
 					url := fmt.Sprintf("icmp://%s", host.addr)
 					description := color.Red(color.Overturn("Not Open Any Port"))
 					output := fmt.Sprintf("%-30v %-26v %s", url, "Up", description)
