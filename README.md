@@ -126,6 +126,8 @@ fofa options:
 
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG996.png)
 
+![WechatIMG996](assets/Kscan_v1.6/WechatIMG1018.png)
+
 ## 6 特别感谢
 
 - [EdgeSecurityTeam](https://github.com/EdgeSecurityTeam)
