@@ -405,13 +405,13 @@ func (k *kscan) WatchDog() {
 				//}
 				if num := k.pool.port.tcp.JobsList.Length(); num > 0 {
 					i := k.pool.port.tcp.JobsList.Peek()
-					info := i.(string)
-					slog.Warningf("正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					info := i.(*Port)
+					slog.Warningf("正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
 					continue
 				}
 				if num := k.pool.tcpBanner.JobsList.Length(); num > 0 {
 					i := k.pool.tcpBanner.JobsList.Peek()
-					info := i.(string)
+					info := i.(*Port)
 					slog.Warningf("正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
 				}
@@ -419,8 +419,8 @@ func (k *kscan) WatchDog() {
 					i := k.pool.appBanner.JobsList.Peek()
 					var info string
 					switch i.(type) {
-					case string:
-						info = i.(string)
+					case *Port:
+						info = i.(*Port).UnParse()
 					case *gonmap.TcpBanner:
 						tcpBanner := i.(*gonmap.TcpBanner)
 						if tcpBanner == nil {
