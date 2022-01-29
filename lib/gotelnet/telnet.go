@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"kscan/lib/chinese"
-	"kscan/lib/slog"
 	"net"
 	"regexp"
 	"strings"
@@ -461,11 +460,11 @@ func (c *Client) isLoginSucceed(responseString string) bool {
 	responseStringArray := strings.Split(responseString, "\n")
 	lastLine := responseStringArray[len(responseStringArray)-1]
 	if regexp.MustCompile("^[#$].*").MatchString(lastLine) {
-		slog.Warning("1|", c.IPAddr, c.Port, lastLine)
+		//slog.Warning("1|", c.IPAddr, c.Port, lastLine)
 		return true
 	}
 	if regexp.MustCompile("^<[a-zA-Z0-9_]+>.*").MatchString(lastLine) {
-		slog.Warning("2|", c.IPAddr, c.Port, lastLine)
+		//slog.Warning("2|", c.IPAddr, c.Port, lastLine)
 		return true
 	}
 
@@ -474,11 +473,11 @@ func (c *Client) isLoginSucceed(responseString string) bool {
 	time.Sleep(time.Second * 3)
 	responseString = c.ReadContext()
 	if strings.Count(responseString, "\n") > 6 {
-		slog.Warning("3|", c.IPAddr, c.Port, responseString)
+		//slog.Warning("3|", c.IPAddr, c.Port, responseString)
 		return true
 	}
 	if len([]rune(responseString)) > 100 {
-		slog.Warning("4|", c.IPAddr, c.Port, responseString)
+		//slog.Warning("4|", c.IPAddr, c.Port, responseString)
 		return true
 	}
 	return false
