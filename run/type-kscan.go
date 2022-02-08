@@ -33,7 +33,10 @@ type kscan struct {
 			tcp *pool.Pool
 			Out chan interface{}
 		}
-		tcpBanner *pool.Pool
+		tcpBanner struct {
+			tcp *pool.Pool
+			Out chan interface{}
+		}
 		appBanner *pool.Pool
 	}
 	watchDog struct {
@@ -63,7 +66,10 @@ func New(config app.Config) *kscan {
 	}
 
 	k.pool.appBanner = pool.NewPool(config.Threads)
-	k.pool.tcpBanner = pool.NewPool(config.Threads)
+
+	k.pool.tcpBanner.tcp = pool.NewPool(config.Threads)
+	k.pool.tcpBanner.Out = make(chan interface{})
+
 	k.pool.port.tcp = pool.NewPool(config.Threads)
 	k.pool.port.Out = make(chan interface{})
 
@@ -72,7 +78,8 @@ func New(config app.Config) *kscan {
 	k.pool.host.Out = make(chan interface{})
 
 	k.pool.appBanner.Interval = time.Microsecond * 500
-	k.pool.tcpBanner.Interval = time.Microsecond * 500
+
+	k.pool.tcpBanner.tcp.Interval = time.Microsecond * 500
 	k.pool.port.tcp.Interval = time.Microsecond * 500
 
 	k.watchDog.hydra = make(chan interface{})
@@ -96,6 +103,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		}
 		//经过存活性检测未存活的IP不会进行下一步测试
 		if gonmap.HostDiscoveryForIcmp(ip) == true {
+			slog.Debug(host.addr, " is alive")
 			return host.Up()
 		}
 		//ICMP检测不存活的主机，将发送至TCP存活性检测
@@ -107,6 +115,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		host := NewHost(ip)
 		//经过存活性检测未存活的IP不会进行下一步测试
 		if gonmap.HostDiscoveryForTcp(ip) == true {
+			slog.Debug(host.addr, " is alive")
 			return host.Up()
 		}
 		return host.Down()
@@ -145,7 +154,9 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 			k.pool.host.icmp.In <- host
 		}
 		//关闭主机存活性探测下发信道
-		slog.Info("主机存活性探测任务下发完毕")
+		if k.config.ClosePing == false {
+			slog.Info("主机存活性探测任务下发完毕")
+		}
 		k.pool.host.icmp.InDone()
 	}()
 
@@ -154,7 +165,9 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	k.pool.host.icmp.Run()
 	k.pool.host.tcp.InDone()
 	k.pool.host.tcp.Wait()
-	slog.Warning("主机存活性探测任务完成")
+	if k.config.ClosePing == false {
+		slog.Warning("主机存活性探测任务完成")
+	}
 }
 
 func (k *kscan) PortDiscovery() {
@@ -163,7 +176,6 @@ func (k *kscan) PortDiscovery() {
 	go func() {
 		for out := range k.pool.host.Out {
 			host := out.(*Host)
-			slog.Debug(host.addr, " is alive")
 			upHosts.Set(host.addr, host)
 			for _, port := range k.config.Port {
 				//if port == 161 {
@@ -198,7 +210,6 @@ func (k *kscan) PortDiscovery() {
 				}
 				upHosts.Set(host.addr, host)
 			}
-
 		}
 		close(k.pool.port.Out)
 	}()
@@ -210,7 +221,7 @@ func (k *kscan) PortDiscovery() {
 			return netloc.Unknown()
 		}
 		if gonmap.PortScan("tcp", netloc.UnParse(), k.config.Timeout) {
-			//slog.Debug(netloc, " is open")
+			slog.Debug(netloc, " is open")
 			return netloc.Open()
 		}
 		return netloc.Close()
@@ -221,7 +232,8 @@ func (k *kscan) PortDiscovery() {
 }
 
 func (k *kscan) GetTcpBanner() {
-	k.pool.tcpBanner.Function = func(i interface{}) interface{} {
+
+	k.pool.tcpBanner.tcp.Function = func(i interface{}) interface{} {
 		netloc := i.(*Port)
 		r := gonmap.GetTcpBanner(netloc.UnParse(), gonmap.New(), k.config.Timeout*20)
 		return r
@@ -234,14 +246,27 @@ func (k *kscan) GetTcpBanner() {
 			if netloc.status == Close {
 				continue
 			}
-			k.pool.tcpBanner.In <- out
+			k.pool.tcpBanner.tcp.In <- out
 		}
 		slog.Info("TCP层协议识别任务下发完毕")
-		k.pool.tcpBanner.InDone()
+		k.pool.tcpBanner.tcp.InDone()
+	}()
+
+	//启用TCP层指纹探测结果接受器
+	go func() {
+		for out := range k.pool.tcpBanner.tcp.Out {
+			if out == nil {
+				continue
+			}
+			tcpBanner := out.(*gonmap.TcpBanner)
+			slog.Debugf("%s %s %s", tcpBanner.Target.URI(), tcpBanner.Status(), tcpBanner.TcpFinger.Service)
+			k.pool.tcpBanner.Out <- out
+		}
+		close(k.pool.tcpBanner.Out)
 	}()
 
 	//开始执行TCP层面协议识别任务
-	k.pool.tcpBanner.Run()
+	k.pool.tcpBanner.tcp.Run()
 	slog.Warning("TCP层协议识别任务完成")
 
 }
@@ -409,8 +434,8 @@ func (k *kscan) WatchDog() {
 					slog.Warningf("正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
 					continue
 				}
-				if num := k.pool.tcpBanner.JobsList.Length(); num > 0 {
-					i := k.pool.tcpBanner.JobsList.Peek()
+				if num := k.pool.tcpBanner.tcp.JobsList.Length(); num > 0 {
+					i := k.pool.tcpBanner.tcp.JobsList.Peek()
 					info := i.(*Port)
 					slog.Warningf("正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
