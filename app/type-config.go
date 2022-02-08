@@ -59,7 +59,7 @@ func ConfigInit() {
 	Setting.Threads = args.Threads
 	Setting.Encoding = args.Encoding
 	Setting.OutputJson = args.OutputJson
-	Setting.CloseColor = args.CloseColor
+	//Setting.CloseColor = args.CloseColor
 	//hydra模块
 	Setting.Hydra = args.Hydra
 	Setting.HydraUpdate = args.HydraUpdate
@@ -150,6 +150,7 @@ func (c *Config) loadOutput() {
 func (c *Config) loadScanPing() {
 	if len(c.Port) < 10 {
 		c.ClosePing = true
+		slog.Info("由于扫描端口数量小于10，已自动关闭主机存活性检测功能")
 	} else {
 		c.ClosePing = Args.ClosePing
 	}

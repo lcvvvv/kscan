@@ -168,10 +168,10 @@ func Init() {
 	//日志初始化
 	slog.SetEncoding(app.Args.Encoding)
 	slog.SetPrintDebug(app.Args.Debug)
+	//color包初始化
+	app.Setting.CloseColor = color.Init(app.Args.CloseColor)
 	//配置文件初始化
 	app.ConfigInit()
-	//color包初始化
-	app.Setting.CloseColor = color.Init(app.Setting.CloseColor)
 	slog.Info("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
 	if runtime.GOOS == "windows" && app.Setting.CloseColor == true {
 		slog.Info("在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
