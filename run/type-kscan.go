@@ -259,7 +259,11 @@ func (k *kscan) GetTcpBanner() {
 				continue
 			}
 			tcpBanner := out.(*gonmap.TcpBanner)
-			slog.Debugf("%s %s %s", tcpBanner.Target.URI(), tcpBanner.Status(), tcpBanner.TcpFinger.Service)
+
+			uri := tcpBanner.Target.URI()
+			status := tcpBanner.Status()
+			service := tcpBanner.TcpFinger.Service
+			slog.Debugf("%s %s %s", uri, status, service)
 			k.pool.tcpBanner.Out <- out
 		}
 		close(k.pool.tcpBanner.Out)
