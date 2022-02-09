@@ -6,6 +6,7 @@ import (
 	"kscan/app"
 	"kscan/lib/color"
 	"kscan/lib/gonmap"
+	"kscan/lib/httpfinger"
 	"kscan/lib/hydra"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
@@ -15,6 +16,7 @@ import (
 	"kscan/lib/urlparse"
 	"os"
 	"path"
+	"strings"
 	"sync"
 	"time"
 )
@@ -259,6 +261,9 @@ func (k *kscan) GetTcpBanner() {
 				continue
 			}
 			tcpBanner := out.(*gonmap.TcpBanner)
+			if tcpBanner == nil {
+				continue
+			}
 
 			uri := tcpBanner.Target.URI()
 			status := tcpBanner.Status()
@@ -409,6 +414,16 @@ func (k *kscan) Output() {
 			slog.Warning("输出Json失败！错误信息：", err.Error())
 		}
 	}
+
+	if len(httpfinger.NewKeywords) > 0 {
+		newKeywords := misc.RemoveDuplicateElement(httpfinger.NewKeywords)
+		slog.Warning("为了使kscan变得更好，请将finger.txt文件，提交到作者的Github")
+		dir, _ := os.Getwd()
+		slog.Warningf("发现新的http指纹[%d]条:%s/%s", len(newKeywords), dir, "finger.txt")
+		data := strings.Join(newKeywords, "\r\n")
+		_ = misc.WriteLine("finger.txt", []byte(data))
+	}
+
 }
 
 func (k *kscan) WatchDog() {
