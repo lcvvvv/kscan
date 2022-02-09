@@ -1,47 +1,153 @@
 package httpfinger
 
 import (
+	"regexp"
 	"strings"
 )
 
-type keywordFinger []struct {
+var NewKeywords []string
+
+type keywordFinger []fingerPrint
+
+type fingerPrint struct {
 	Cms   string `json:"cms"`
-	Rules []struct {
-		Type    string `json:"type"`
-		Keyword string `json:"keyword"`
-	} `json:"rules"`
+	Rules []Rule `json:"rules"`
+}
+
+func (p fingerPrint) match(header string, title string, body string) bool {
+	for _, rule := range p.Rules {
+		var s string
+		if rule.Type == "body" {
+			s = body
+		}
+		if rule.Type == "header" {
+			s = header
+		}
+		if rule.Type == "title" {
+			s = title
+		}
+		if rule.match(s) == false {
+			return false
+		}
+	}
+	return true
+}
+
+type Rule struct {
+	Type    string `json:"type"`
+	Keyword string `json:"keyword"`
+}
+
+func (r Rule) match(s string) bool {
+	s = strings.ToLower(s)
+	keyword := strings.ToLower(r.Keyword)
+	if keyword[:1] == "~" {
+		return regexp.MustCompile(keyword[1:]).MatchString(s)
+	} else {
+		return strings.Contains(s, keyword)
+	}
 }
 
 var KeywordFinger keywordFinger
 
+var (
+	serverRegx      = regexp.MustCompile(`\n(?i)(server: .*)`)
+	xPoweredByRegx  = regexp.MustCompile(`\n(?i)(X-Powered-By: .*)`)
+	xRedirectByRegx = regexp.MustCompile(`\n(?i)(X-Redirect-By: .*)`)
+)
+
 func (k keywordFinger) Match(header string, title string, body string) string {
+	var cmsSlice []string
+
 	for _, kSub := range k {
-		var b = true
-		for _, rule := range kSub.Rules {
-			var s string
-			if rule.Type == "body" {
-				s = body
-			}
-			if rule.Type == "header" {
-				s = header
-			}
-			if rule.Type == "title" {
-				s = title
-			}
-			if strings.Contains(s, rule.Keyword) == false {
-				b = false
-			}
+		if kSub.match(header, title, body) {
+			cmsSlice = append(cmsSlice, kSub.Cms)
 		}
-		if b == false {
+	}
+
+	keywordSlice := getHeaderDigest(header)
+
+	for _, value := range keywordSlice {
+		if isOldKeyword(value) == false {
+			NewKeywords = append(NewKeywords, value)
+		}
+	}
+
+	return strings.Join(cmsSlice, ",")
+}
+
+func getHeaderDigest(header string) []string {
+	var digest []string
+
+	if serverRegx.MatchString(header) {
+		digest = append(digest, serverRegx.FindStringSubmatch(header)[1])
+	}
+
+	if xPoweredByRegx.MatchString(header) {
+		digest = append(digest, xPoweredByRegx.FindStringSubmatch(header)[1])
+	}
+
+	if xRedirectByRegx.MatchString(header) {
+		digest = append(digest, xRedirectByRegx.FindStringSubmatch(header)[1])
+	}
+
+	return digest
+}
+
+func isOldKeyword(value string) bool {
+	for _, keyword := range keywordServerSlice {
+		value = strings.ToLower(value)
+		keyword = "server: " + strings.ToLower(keyword)
+		if len(value) < len(keyword) {
 			continue
 		}
-		return kSub.Cms
+		if value[:len(keyword)] == keyword {
+			return true
+		}
 	}
-	return ""
+	for _, keyword := range keywordXPoweredBySlice {
+		value = strings.ToLower(value)
+		keyword = "x-powered-by: " + strings.ToLower(keyword)
+		if len(value) < len(keyword) {
+			continue
+		}
+		if value[:len(keyword)] == keyword {
+			return true
+		}
+	}
+	return false
 }
 
 var keywordFingerSourceByte = []byte(`
 [
+	{
+		"cms": "ASP.NET",
+		"rules": [{
+			"type": "header",
+			"keyword": "X-Powered-By: ASP.NET"
+		}]
+	},
+	{
+		"cms": "天融信",
+		"rules": [{
+			"type": "header",
+			"keyword": "X-Powered-By: topsec"
+		}]
+	},
+	{
+		"cms": "PHP",
+		"rules": [{
+			"type": "header",
+			"keyword": "X-Powered-By: PHP"
+		}]
+	},
+	{
+		"cms": "ThinkPHP",
+		"rules": [{
+			"type": "header",
+			"keyword": "X-Powered-By: ThinkPHP"
+		}]
+	},
 	{
 		"cms": "seeyon",
 		"rules": [{
@@ -9488,3 +9594,115 @@ var keywordFingerFofaByte = []byte(`
 	}
 ]
 `)
+
+var keywordServerSlice = []string{"MochiWeb", "webfs", "WebCam2000", "WebSite", "Statistics Server",
+	"Virata", "RemotelyAnywhere", "Ipswitch", "IMail", "Ipswitch Web Calendaring",
+	"Check Point SVN foundation", "HP", "Allegro", "dhttpd", "Snap Appliance",
+	"Zeus", "IP", "PRINT", "DHost", "3ware",
+	"Cherokee", "WindWeb", "SimpleServer", "Xitami", "Resin",
+	"linuxconf", "TinyWeb", "WebSitePro", "Lucent Security Management Admin Server", "thttpd",
+	"kpf", "dwhttpd", "LispWeb", "WDaemon", "Oracle XML DB",
+	"Oracle9iAS", "ALT", "Apt", "Sun", "SunONE WebServer",
+	"IBM", "Embedded HTTP Server", "Embedded HTTP Server v", "Embedded HTTP Server USR", "PSIWBL",
+	"WhatsUp", "Roxen", "SAMBAR", "15:38", "WebLogic",
+	"WebLogic Server", "icecast", "HP Web Jetadmin", "Tomcat Web Server", "Apache",
+	"publicfile", "Apache Tomcat", "Stronghold", "nginx", "CommuniGatePro",
+	"DSS", "QTSS", "Fnord", "MiniServ", "NetWare HTTP Stack",
+	"HTTPd", "Lotus", "Domino", "Insight Manager", "Netscape",
+	"NCSA", "Oracle HTTP Server Powered by Apache", "cisco", "NetApp", "Boa",
+	"Jetty", "MortBay", "WebSphere Application Server", "JRun Web Server", "RomPager",
+	"IDSL MailGate", "Anti", "BaseHTTP", "InterMapper", "ZOT",
+	"Lasso", "fwlogwatch", "GNUMP3d", "Gatling", "Viavideo",
+	"IBM HTTP Server", "SAlive", "Abyss", "LseriesWeb", "AOLserver",
+	"Orion", "Agent", "RMC Webserver", "TwistedWeb", "Twisted",
+	"Azureus", "Microsoft", "DManager", "IDS", "Indy",
+	"FrontPage", "TSM", "ADSM", "EPSON", "Monkey",
+	"Monkey Server", "wr", "FSPMS", "RapidLogic", "TUX",
+	"2Wire", "2wire Gateway", "Oracle Application Server Containers for J2EE", "Oracle Application Server Containers for J2EE 10g", "Oracle",
+	"OracleAS", "Oracle Containers for J2EE", "Askey Software", "WN", "GST",
+	"LANCOM", "BrowseAmp", "Thy", "FileMakerPro", "AdSubtract",
+	"bozohttpd", "Null httpd", "Dune", "Meredydd Luff", "zawhttpd",
+	"NeepHttpd", "SHS", "cpaneld", "cpsrvd", "CERN",
+	"Savant", "TiVo Server", "WebTopia", "Microsoft ASP", "GWS",
+	"GFE", "Ubicom", "Boche", "libwww", "MACOS",
+	"Sinclair ZX", "WWW File Share Pro", "HP Apache", "Internet Firewall", "swcd",
+	"LiveStats Reporting Server", "Embedded HTTPD v", "Spyglass", "Tcl", "ListManagerWeb",
+	"4D", "Caudium", "JC", "GeoHttpServer", "ATR",
+	"PortWise mVPN", "WYM", "WatchGuard Firewall", "NetPort Software", "OmniHTTPd",
+	"OmniSecure", "MirandaWeb", "Mirapoint", "Unknown", "LabVIEW",
+	"Groove", "Agranat", "WebSnmp Server Httpd", "Plan9", "IceWarp WebSrv",
+	"IceWarp", "BBIagent", "Web", "Rapid Logic", "OpenLink",
+	"Embperl", "SiteScope", "SilverStream Server", "PicoWebServer", "tivo",
+	"Dahlia", "WEBrick", "Mathopd", "ml", "fhttpd",
+	"MyServer", "Quantum Corporation", "Simple java", "Micro", "Mono",
+	"SimpleHTTP", "Cougar", "Footprint", "LogMeIn Web Gateway", "ArGoSoft Mail Server Freeware",
+	"Fastream NETFile Web Server", "WebServer", "HDS Hi", "WebTrends HTTP Server", "Desktop On",
+	"OCServer", "ENI", "JavaWebServer", "whostmgr", "BBC",
+	"Servertec", "DirectUpdate", "CCS", "VisiBroker", "Compaq Insight Manager XE",
+	"ISS", "Jigsaw", "gnump3d2", "SpyBot", "WWW",
+	"Ares", "Paws", "monit", "Red Carpet Daemon", "CL",
+	"SAP", "JTALKServer", "iSoft Commerce Suite Server", "MS", "BSE",
+	"WebMail", "PRTG", "SmarterTools", "Project Engine Server", "McAfee",
+	"HoneydHTTP", "MultiSync Plugin", "C4D", "Sun Java System Application Server Platform Edition", "Sun Java System Application Server",
+	"AltaVista Avhttpd", "Servage", "Nucleus WebServ", "Thunderstone", "NETID",
+	"MailEnable", "Kerio Embedded WebServer", "and", "Kerio MailServer", "KHAPI",
+	"Mediasurface", "SQ", "BeOS", "Grandstream", "LiteServe",
+	"YAZ", "svea", "BRS", "eSoft", "Tandberg Television Web server",
+	"Novell", "Intoto", "httrack", "GeneWeb", "jabberd",
+	"VB150", "iGuard Embedded Web Server", "NetworkActiv", "ATEN HTTP Server", "CPWS",
+	"Niagara Web Server", "The Knopflerfish HTTP Server", "HTTP", "Nanox WebServer", "ipMonitor",
+	"Tarantella", "Web Crossing", "Kannel", "ZyXEL", "DIONIS",
+	"VOMwebserver v", "AKCP Embedded Web Server", "SWS", "Sensorsoft", "Meridian Data",
+	"IPCheck", "glass", "Spinnaker", "GoAhead", "SAP Web Application Server",
+	"SentinelKeysServer", "Techno Vision Security System Ver", "webcamXP", "Apple Embedded Web Server", "iPrism",
+	"XOS", "Systinet Server for Java", "tracd", "Sametime Server", "OCaml HTTP Daemon",
+	"Anapod Manager", "IISGuard", "DesktopAuthority", "LogMeIn", "MacroMaker",
+	"Siemens Gigaset C450 IP", "nhttpd", "aidex", "Polycom SoundPoint IP Telephone HTTPd", "David",
+	"PeopleSoft RENSRV", "HFS", "Ultraseek", "Web Server", "Henry",
+	"Freechal P2P", "Httpinfo olsrd plugin", "DirectAdmin Daemon v", "WebSEAL", "VCS",
+	"DVSS", "pcastd", "BigFixHTTPServer", "Quick", "SentinelProtectionServer",
+	"PowerSchool", "Intrinsyc deviceWEB v", "Hitachi Web Server", "FreeBrowser", "GG",
+	"Easy File Sharing Web Server v", "darkstat", "Rumpus", "Medusa", "Sphere V",
+	"BlueDragon Server", "vdradmind", "NetEVI", "Java", "LiteSpeed",
+	"Tornado", "Web Transaction Server For ClearPath MCP", "AnomicHTTPD", "SnapStream", "Yaws",
+	"Centile Embedded HTTPSd server", "PWLib", "ICONAG web server", "KTorrent", "Wildcat",
+	"Mongrel", "ChatSpace", "IntellipoolHTTPD", "MX4J", "Vistabox",
+	"alevtd", "CosminexusComponentContainer", "JAGeX", "BarracudaHTTP", "SAP Internet Graphics Server",
+	"SAP Message Server", "SCO I2O Dialogue Daemon", "Cpanel", "NessusWWW", "TIB",
+	"Snug", "Grandstream GXP2000", "D", "FM Web Publishing", "Snakelets",
+	"GroupWise MTA", "GroupWise POA", "GroupWise GWIA", "Messenger", "Hunchentoot",
+	"AllegroServe", "Hop", "Minix httpd", "Eye", "PWS",
+	"BCReport", "FTGate", "Comanche", "MediabolicMWEB", "UltiDev Cassini",
+	"Swazoo", "RAID HTTPServer", "Axigen", "lighttpd", "Nano HTTPD library",
+	"Enigma2 WebInterface Server", "Winstone Servlet Engine v", "LuCId", "GlassFish", "GlassFish Server Open Source Edition",
+	"Sun GlassFish Enterprise Server v", "Sun GlassFish Communications Server", "llink", "OctoWebSvr", "CompaqHTTPServer",
+	"BAIDA", "IWeb", "Serv", "ASSP", "ZNC ZNC",
+	"ZNC", "Kerio Connect", "IdeaWebServer", "TreeNeWS", "CANON HTTP Server",
+	"AVGADMINSERVER", "AVGADMINSERVER64", "Texis", "Linux", "Httpd v",
+	"Firefly", "HTTP Server", "Zervit", "NGAMS", "Embedthis",
+	"EWS", "CubeCoders", "cc", "klhttpd", "Monitorix HTTP Server",
+	"YTS", "alphapd", "NG", "Avaya Push Agent Ver x", "NSC",
+	"Cosminexus HTTP Server", "Intel", "DrWebServer", "WebIOPi", "Hikvision",
+	"switch", "akstreamer", "Netgem", "User Agent Web Server", "tr069 http server",
+	"WSTL CPE 1", "DVRDVS", "Ericom Access Server x64", "Ericom Access Server", "xxxxxxxx",
+	"RealTimes Desktop Service", "EgdLws", "darkhttpd", "ESTOS WebServer", "Axence nVision WebAccess HTTP Server",
+	"ADB Broadband HTTP Server", "ZTE Web Server", "Network", "lwIP", "ghs",
+	"ATCOM", "WatchGuard", "calibre", "Mbedthis", "Tntnet",
+	"PasteWSGIServer", "FlashCom", "thin", "Conexant", "CherryPy",
+	"NetBox Version", "OmikronHTTPOrigin", "Zope", "Optenet Web Server", "uClinux",
+	"uc", "Perl Dancer", "Perl Dancer2", "Hiawatha v", "TornadoServer",
+	"Pegasus", "Werkzeug", "Webduino", "Restlet", "node",
+	"corehttp", "ECS", "cloudflare", "GateOne", "Warp",
+	"Vorlon SR", "Rocket", "Debian Apt", "mini", "Splunkd",
+	"BarracudaServer", "kolibri", "Karrigell", "WSGIServer", "ExtremeWare",
+	"ngx", "openresty", "IntelliJ IDEA", "Cowboy", "Xavante",
+	"BBVS", "CE", "Play", "IBM Mobile Connect", "Wave World Wide Web Server",
+	"MQX HTTPSRV", "MQX HTTP", "Devline Linia Server", "esp8266", "Mojolicious",
+	"Caddy", "KS", "Content Gateway Manager", "bfe", "360wzws",
+	"instart", "Tengine", "0W", "NetData Embedded HTTP Server", "Digiweb",
+	"Wakanda", "Clearswift", "KFWebServer", "Huawei", "Seattle Lab HTTP Server",
+	"WindRiver", "Cassini", "ZK Web Server", "WildFly", "Icinga",
+	"Motion", "Simple", "Vidat V7", "PowerStudio v", "servX",
+	"JREntServer", "Prime", "WebSTAR"}
+
+var keywordXPoweredBySlice = []string{"PHP", "ASP.NET", "ThinkPHP", "topsec"}
