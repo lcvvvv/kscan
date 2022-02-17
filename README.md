@@ -33,8 +33,11 @@ kscan是一款资产测绘工具，可针对指定资产进行端口扫描以及
 
 ![kscan逻辑图.drawio](assets/kscan逻辑图.drawio.png)
 
+## 3 编译手册
 
-## 3 开始吧
+[编译手册](https://github.com/lcvvvv/kscan/wiki/%E7%BC%96%E8%AF%91)
+
+## 4 开始吧
 
 Kscan目前具备3种输入目标的方式
 
@@ -61,7 +64,7 @@ IP地址：将对指定IP地址所在B段进行探测
 fofa搜索关键字：将直接返回fofa搜索结果
 ```
 
-## 4、使用方法
+## 5 使用方法
 
 ```
 usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
@@ -108,27 +111,27 @@ fofa options:
 
 功能不复杂，其他的自行探索
 
-## 5 演示
+## 6 演示
 
-### 5.1 端口扫描模式
+### 6.1 端口扫描模式
 
 ![WechatIMG986](assets/Kscan_v1.6/WechatIMG986.png)
 
-### 5.2 存活网段探测
+### 6.2 存活网段探测
 
 ![WechatIMG988](assets/Kscan_v1.6/WechatIMG988.png)
 
-### 5.3 Fofa结果检索
+### 6.3 Fofa结果检索
 
 ![WechatIMG989](assets/Kscan_v1.6/WechatIMG989.png)
 
-### 5.3 暴力破解
+### 6.3 暴力破解
 
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG996.png)
 
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG1018.png)
 
-## 6 特别感谢
+## 7 特别感谢
 
 - [EdgeSecurityTeam](https://github.com/EdgeSecurityTeam)
 
@@ -142,6 +145,6 @@ fofa options:
 
 - [fscan](https://github.com/shadow1ng/fscan)
 
-## 7 文末
+## 8 文末
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
