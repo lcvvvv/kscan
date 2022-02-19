@@ -116,6 +116,9 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 			c.HostTarget = append(c.HostTarget, url.Netloc)
 			return
 		} else {
+			if IP.IsIP(expr) == false {
+				c.UrlTarget = append(c.UrlTarget, url.UnParse())
+			}
 			c.HostTarget = append(c.HostTarget, url.Netloc)
 			return
 		}

@@ -56,6 +56,13 @@ func FormatCheck(ipExpr string) bool {
 	return false
 }
 
+func IsIP(s string) bool {
+	if regxIsIP.MatchString(s) {
+		return AddrCheck(s)
+	}
+	return false
+}
+
 func GetGatewayList(ip string, t string) []string {
 	var gatewayArr []string
 	if FormatCheck(ip) == false {
