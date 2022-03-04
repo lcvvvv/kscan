@@ -80,8 +80,8 @@ func (i *URL) UnParse() string {
 	if i.Scheme == "http" && i.Port == 80 {
 		return fmt.Sprintf("http://%s%s", i.Netloc, i.Path)
 	}
-	if i.Scheme == "" {
-		return fmt.Sprintf("%s%s", i.Netloc, i.Path)
+	if i.Scheme == "" && i.Port != 0 {
+		return fmt.Sprintf("%s:%d%s", i.Netloc, i.Port, i.Path)
 	}
 	return fmt.Sprintf("%s://%s:%d%s", i.Scheme, i.Netloc, i.Port, i.Path)
 }
