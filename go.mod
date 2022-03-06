@@ -5,7 +5,6 @@ go 1.16
 require (
 	github.com/PuerkitoBio/goquery v1.6.1
 	github.com/denisenkom/go-mssqldb v0.10.0
-	github.com/go-ping/ping v0.0.0-20210407214646-e4e642a95741
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huin/asn1ber v0.0.0-20120622192748-af09f62e6358
 	github.com/icodeface/tls v0.0.0-20190904083142-17aec93c60e5
