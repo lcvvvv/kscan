@@ -222,7 +222,7 @@ func (k *kscan) PortDiscovery() {
 		if netloc.port == 161 || netloc.port == 137 {
 			return netloc.Unknown()
 		}
-		if gonmap.PortScan("tcp", netloc.UnParse(), k.config.Timeout) {
+		if gonmap.PortScan("tcp", netloc.addr, netloc.port, k.config.Timeout) {
 			slog.Debug(netloc, " is open")
 			return netloc.Open()
 		}
