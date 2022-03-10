@@ -101,6 +101,12 @@ func (f *Fofa) Search(keyword string) {
 		m["Port"] = ""
 		m["Country_name"] = ""
 		m = misc.FixMap(m)
+
+		if m["Banner"] != "" {
+			m["Banner"] = misc.FixLine(m["Banner"])
+			m["Banner"] = misc.StrRandomCut(m["Banner"], 20)
+		}
+
 		line := fmt.Sprintf("%-30v %-"+strconv.Itoa(misc.AutoWidth(row.Title, 26))+"v %v\n",
 			row.Host,
 			row.Title,

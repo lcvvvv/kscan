@@ -22,10 +22,6 @@ func (r *Result) Fix() {
 	if regexp.MustCompile("http([s]?)://.*").MatchString(r.Host) == false && r.Protocol == "" {
 		r.Host = "http://" + r.Host
 	}
-	if r.Banner != "" {
-		r.Banner = misc.FixLine(r.Banner)
-		r.Banner = misc.StrRandomCut(r.Banner, 20)
-	}
 	if r.Title == "" && r.Protocol != "" {
 		r.Title = strings.ToUpper(r.Protocol)
 	}
