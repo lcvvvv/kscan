@@ -56,6 +56,7 @@ optional arguments:
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
+  --match         对资产返回banner进行检索，存在关键字的，才会显示，否则不会显示
   --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
 hydra options:
    --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt

@@ -36,6 +36,8 @@ type Config struct {
 	Scan           bool
 	//touch
 	Touch string
+	//输出修饰
+	Match string
 }
 
 var Setting = New()
@@ -71,6 +73,8 @@ func ConfigInit() {
 	Setting.FofaSize = args.FofaSize
 	Setting.FofaFixKeyword = args.FofaFixKeyword
 	Setting.Scan = args.Scan
+	//输出修饰
+	Setting.Match = args.Match
 }
 
 func (c *Config) loadTarget(expr string, recursion bool) {
