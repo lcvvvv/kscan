@@ -11,6 +11,7 @@ type args struct {
 	USAGE, HELP, LOGO, SYNTAX string
 
 	Help, Debug, ClosePing, Check, CloseColor, Scan   bool
+	ScanVersion                                       bool
 	Target, Port, Output, Proxy, Path, Host, Encoding string
 	OutputJson                                        string
 	Spy, Touch                                        string
@@ -79,6 +80,7 @@ func (o *args) define() {
 	sflag.IntVar(&o.Timeout, "timeout", 3)
 	sflag.BoolVar(&o.ClosePing, "Pn", false)
 	sflag.BoolVar(&o.Check, "check", false)
+	sflag.BoolVar(&o.ScanVersion, "sV", false)
 	//输出模块
 	sflag.StringVar(&o.Encoding, "encoding", "utf-8")
 	sflag.StringVar(&o.Match, "match", "")

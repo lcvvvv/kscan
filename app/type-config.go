@@ -25,6 +25,7 @@ type Config struct {
 	Threads                      int
 	Timeout                      time.Duration
 	ClosePing, Check, CloseColor bool
+	ScanVersion                  bool
 	Spy                          string
 	//hydra
 	Hydra, HydraUpdate             bool
@@ -61,6 +62,7 @@ func ConfigInit() {
 	Setting.Threads = args.Threads
 	Setting.Encoding = args.Encoding
 	Setting.OutputJson = args.OutputJson
+	Setting.ScanVersion = args.ScanVersion
 	//Setting.CloseColor = args.CloseColor
 	//hydra模块
 	Setting.Hydra = args.Hydra
