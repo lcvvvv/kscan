@@ -49,6 +49,7 @@ optional arguments:
   -oJ             将扫描结果使用json格式保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   -Cn             使用此参数后，控制台输出结果将不会带颜色。
+  -sV             使用此参数后，将对所有端口进行全探针探测，此参数极度影响效率，慎用！
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP400
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程100,最大值为2048
@@ -145,7 +146,8 @@ func main() {
 	//touch模块启动
 	if app.Setting.Touch != "None" {
 		_ = gonmap.Init(9, app.Setting.Timeout)
-
+		//开启全探针模式
+		gonmap.SetScanVersion()
 		r := touch.Touch(app.Setting.Touch)
 		slog.Info("Netloc：", app.Setting.Touch)
 		slog.Info("Status：", r.Status)
@@ -193,6 +195,11 @@ func InitKscan() {
 	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
 	//gonmap应用层指纹识别初始化
 	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
+	//-sV参数配置
+	if app.Setting.ScanVersion == true {
+		gonmap.SetScanVersion()
+		app.Setting.Timeout = time.Second * 120
+	}
 }
 
 func InitFofa() {
