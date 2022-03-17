@@ -204,6 +204,9 @@ func (k *kscan) PortDiscovery() {
 					k.pool.port.Out <- netloc
 					host.Up()
 				}
+				//if netloc.status == Unknown {
+				//	k.pool.port.Out <- netloc
+				//}
 				if host.IsOpenPort() == false && host.Length() == len(k.config.Port) && k.config.ClosePing == false {
 					url := fmt.Sprintf("icmp://%s", host.addr)
 					description := color.Red(color.Overturn("Not Open Any Port"))
@@ -378,6 +381,9 @@ func (k *kscan) Output() {
 		case *gonmap.AppBanner:
 			banner := out.(*gonmap.AppBanner)
 			if banner == nil {
+				continue
+			}
+			if app.Setting.Match != "" && strings.Contains(banner.Response, app.Setting.Match) == false {
 				continue
 			}
 			bannerMapArr = append(bannerMapArr, banner.Map())
