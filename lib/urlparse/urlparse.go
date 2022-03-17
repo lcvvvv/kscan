@@ -46,7 +46,14 @@ func Load(s string) (*URL, error) {
 			return r.Scheme
 		}(),
 		Netloc: r.Hostname(),
-		Path:   r.Path,
+		Path: func() string {
+			if r.Path != "" {
+				if r.Path[:1] != "/" {
+					return "/" + r.Path
+				}
+			}
+			return r.Path
+		}(),
 		Port: func() int {
 			if r.Opaque != "" {
 				if p, err := strconv.Atoi(r.Opaque); err == nil {
@@ -69,11 +76,6 @@ func Load(s string) (*URL, error) {
 }
 
 func (i *URL) UnParse() string {
-	if i.Path != "" {
-		if i.Path[:1] != "/" {
-			i.Path = "/" + i.Path
-		}
-	}
 	if i.Scheme == "https" && i.Port == 443 {
 		return fmt.Sprintf("https://%s%s", i.Netloc, i.Path)
 	}
