@@ -1,96 +1,72 @@
 package fofa
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"kscan/app"
 	"kscan/core/slog"
 	"kscan/lib/color"
+	"kscan/lib/fofa"
 	"kscan/lib/misc"
-	"net/http"
-	"reflect"
 	"strconv"
 	"strings"
 )
 
-type Fofa struct {
-	email, key                     string
-	baseUrl, loginPath, searchPath string
-	fieldList                      []string
+var this *fofa.Fofa
+var keywordSlice []string
 
-	keywordArr []string
-	size       int
-
-	results []Result
+func Init(email, key string) {
+	//设置日志输出器
+	fofa.SetLogger(slog.DebugLogger())
+	//初始化fofa模块
+	this = fofa.New(email, key)
+	this.SetSize(app.Setting.FofaSize)
+	//获取所有关键字
+	keywordSlice = makeKeywordSlice()
 }
 
-type ResponseJson struct {
-	Error   bool       `json:"error"`
-	Mode    string     `json:"mode"`
-	Page    int        `json:"page"`
-	Query   string     `json:"query"`
-	Results [][]string `json:"results"`
-	Size    int        `json:"size"`
-}
-
-func New(email, key string) *Fofa {
-	f := &Fofa{
-		email:      email,
-		key:        key,
-		baseUrl:    "https://fofa.info",
-		searchPath: "/api/v1/search/all",
-		loginPath:  "/api/v1/info/my",
-		fieldList: []string{
-			"host", "title", "ip", "domain", "port", "country", "province",
-			"city", "country_name", "header", "server", "protocol", "banner",
-			"cert", "isp", "as_organization",
-		},
-	}
-	return f
-}
-
-func (f *Fofa) LoadArgs() {
-	f.loadKeywordArr()
-	f.size = app.Setting.FofaSize
-}
-
-func (f *Fofa) SearchAll() {
-	for _, keyword := range f.keywordArr {
+func Run() {
+	//对每个关键字进行查询
+	for _, keyword := range keywordSlice {
 		slog.Warningf("本次搜索关键字为：%v", keyword)
-
-		f.Search(keyword)
+		size, results := this.Search(keyword)
+		displayResponse(results)
+		slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", size, len(results))
 	}
 }
 
-func (f *Fofa) Search(keyword string) *ResponseJson {
-	url := f.baseUrl + f.searchPath
-	req, _ := http.NewRequest(http.MethodGet, url, nil)
-	q := req.URL.Query()
-	q.Add("qbase64", misc.Base64Encode(keyword))
-	q.Add("email", f.email)
-	q.Add("key", f.key)
-	q.Add("page", "1")
-	q.Add("fields", strings.Join(f.fieldList, ","))
-	q.Add("size", strconv.Itoa(f.size))
-	q.Add("full", "false")
-	req.URL.RawQuery = q.Encode()
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		slog.Error(err)
+func makeKeywordSlice() []string {
+	var keywordSlice []string
+	if app.Setting.FofaFixKeyword == "" {
+		keywordSlice = app.Setting.Fofa
+	} else {
+		for _, keyword := range app.Setting.Fofa {
+			keyword = strings.ReplaceAll(app.Setting.FofaFixKeyword, "{}", keyword)
+			keywordSlice = append(keywordSlice, keyword)
+		}
 	}
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		slog.Error(err)
+	return keywordSlice
+}
+
+func GetUrlTarget() []string {
+	var strSlice []string
+	for _, result := range this.Results() {
+		strSlice = append(strSlice, result.Host)
 	}
-	var responseJson ResponseJson
-	if err = json.Unmarshal(body, &responseJson); err != nil {
-		slog.Error(body, err)
+	strSlice = misc.RemoveDuplicateElement(strSlice)
+	return strSlice
+}
+
+func GetHostTarget() []string {
+	var strSlice []string
+	for _, result := range this.Results() {
+		strSlice = append(strSlice, result.Ip)
 	}
-	r := f.makeResult(responseJson)
-	f.results = append(f.results, r...)
-	//输出扫描结果
-	for _, row := range r {
+	strSlice = misc.RemoveDuplicateElement(strSlice)
+	return strSlice
+}
+
+func displayResponse(results []fofa.Result) {
+	for _, row := range results {
 		m := row.Map()
 		m["Header"] = ""
 		m["Cert"] = ""
@@ -114,54 +90,4 @@ func (f *Fofa) Search(keyword string) *ResponseJson {
 		)
 		slog.Data(line)
 	}
-	slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", responseJson.Size, len(responseJson.Results))
-	return &responseJson
-}
-
-func (f *Fofa) makeResult(responseJson ResponseJson) []Result {
-	var results []Result
-	var result Result
-
-	for _, row := range responseJson.Results {
-		m := reflect.ValueOf(&result).Elem()
-		for index, f := range f.fieldList {
-			f = misc.First2Upper(f)
-			m.FieldByName(f).SetString(row[index])
-		}
-		result.Fix()
-		results = append(results, result)
-	}
-	return results
-}
-
-func (f *Fofa) loadKeywordArr() {
-	if app.Setting.FofaFixKeyword == "" {
-		f.keywordArr = app.Setting.Fofa
-	} else {
-		for _, keyword := range app.Setting.Fofa {
-			keyword = strings.ReplaceAll(app.Setting.FofaFixKeyword, "{}", keyword)
-			f.keywordArr = append(f.keywordArr, keyword)
-		}
-	}
-}
-
-func (f *Fofa) Check() {
-	var strArr []string
-	for _, result := range f.results {
-		strArr = append(strArr, result.Host)
-	}
-	app.Setting.UrlTarget = strArr
-}
-
-func (f *Fofa) Scan() {
-	var ipArr []string
-	var hostArr []string
-	for _, result := range f.results {
-		ipArr = append(ipArr, result.Ip)
-		hostArr = append(hostArr, result.Host)
-	}
-	ipArr = misc.RemoveDuplicateElement(ipArr)
-	hostArr = misc.RemoveDuplicateElement(hostArr)
-	app.Setting.HostTarget = ipArr
-	app.Setting.UrlTarget = hostArr
 }

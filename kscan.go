@@ -212,19 +212,19 @@ func InitFofa() {
 		slog.Warning("使用-f/-fofa参数前请先配置环境变量：FOFA_EMAIL、FOFA_KEY")
 		slog.Error("如果你是想从文件导入端口扫描任务，请使用-t file:/path/to/file")
 	}
-	f := fofa.New(email, key)
-	f.LoadArgs()
-	f.SearchAll()
+	fofa.Init(email, key)
+	fofa.Run()
 	if app.Setting.Check == false && app.Setting.Scan == false {
 		slog.Warning("可以使用--check参数对fofa扫描结果进行存活性及指纹探测，也可以使用--scan参数对fofa扫描结果进行端口扫描")
 	}
 	if app.Setting.Check == true {
+		app.Setting.UrlTarget = fofa.GetUrlTarget()
 		slog.Warning("check参数已启用，现在将对fofa扫描结果进行存活性及指纹探测")
-		f.Check()
 	}
 	if app.Setting.Scan == true {
+		app.Setting.UrlTarget = fofa.GetUrlTarget()
+		app.Setting.HostTarget = fofa.GetHostTarget()
 		slog.Warning("scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
-		f.Scan()
 	}
 }
 

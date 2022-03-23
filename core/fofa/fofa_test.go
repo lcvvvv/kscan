@@ -2,6 +2,7 @@ package fofa
 
 import (
 	"fmt"
+	"kscan/lib/fofa"
 	"kscan/lib/misc"
 	"os"
 	"strconv"
@@ -12,12 +13,12 @@ import (
 func TestGetPortMap(t *testing.T) {
 	email := os.Getenv("FOFA_EMAIL")
 	key := os.Getenv("FOFA_KEY")
-	f := New(email, key)
+	f := fofa.New(email, key)
 	var fileSlice []string
 	for i := 1; i <= 65535; i++ {
 		keyword := "port=" + strconv.Itoa(i)
-		responseJson := f.Search(keyword)
-		row := fmt.Sprintf("%d\t%d", i, responseJson.Size)
+		size, _ := f.Search(keyword)
+		row := fmt.Sprintf("%d\t%d", i, size)
 		fmt.Println(row)
 		fileSlice = append(fileSlice, row)
 	}
