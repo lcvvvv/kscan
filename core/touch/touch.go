@@ -2,7 +2,7 @@ package touch
 
 import (
 	"fmt"
-	"kscan/lib/gonmap/simplenet"
+	"kscan/core/gonmap/simplenet"
 	"strconv"
 	"time"
 )

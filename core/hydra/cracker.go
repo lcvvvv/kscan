@@ -2,20 +2,20 @@ package hydra
 
 import (
 	"fmt"
+	"kscan/core/hydra/ftp"
+	"kscan/core/hydra/mongodb"
+	"kscan/core/hydra/mssql"
+	"kscan/core/hydra/mysql"
+	"kscan/core/hydra/oracle"
+	"kscan/core/hydra/postgresql"
+	"kscan/core/hydra/rdp"
+	"kscan/core/hydra/redis"
+	"kscan/core/hydra/smb"
+	"kscan/core/hydra/ssh"
+	"kscan/core/hydra/telnet"
+	"kscan/core/slog"
 	"kscan/lib/gotelnet"
 	"kscan/lib/grdp"
-	"kscan/lib/hydra/ftp"
-	"kscan/lib/hydra/mongodb"
-	"kscan/lib/hydra/mssql"
-	"kscan/lib/hydra/mysql"
-	"kscan/lib/hydra/oracle"
-	"kscan/lib/hydra/postgresql"
-	"kscan/lib/hydra/rdp"
-	"kscan/lib/hydra/redis"
-	"kscan/lib/hydra/smb"
-	"kscan/lib/hydra/ssh"
-	"kscan/lib/hydra/telnet"
-	"kscan/lib/slog"
 )
 
 func rdpCracker(IPAddr string, port int) func(interface{}) interface{} {

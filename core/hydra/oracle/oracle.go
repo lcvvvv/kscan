@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	_ "github.com/sijms/go-ora/v2"
-	"kscan/lib/slog"
+	"kscan/core/slog"
 	"strings"
 	"time"
 )

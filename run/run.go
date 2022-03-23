@@ -2,7 +2,7 @@ package run
 
 import (
 	"kscan/app"
-	"kscan/lib/slog"
+	"kscan/core/slog"
 	"time"
 )
 

@@ -2,11 +2,11 @@ package spy
 
 import (
 	"fmt"
+	"kscan/core/gonmap"
+	"kscan/core/slog"
 	"kscan/lib/IP"
-	"kscan/lib/gonmap"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
-	"kscan/lib/slog"
 	"net"
 	"strings"
 )

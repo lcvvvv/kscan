@@ -190,3 +190,7 @@ func debugFilter(s string) bool {
 	//}
 	return false
 }
+
+func DebugLogger() *log.Logger {
+	return this.debug
+}

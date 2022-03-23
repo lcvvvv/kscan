@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"kscan/lib/chinese"
-	"kscan/lib/slog"
 	"math/rand"
 	"os"
 	"strconv"
@@ -36,17 +34,13 @@ func Str2Int(str string) int {
 	return intValue
 }
 
-//func IntArr2StrArr(intArr []int) []string {
-//	var strArr []string
-//	for _, value := range intArr {
-//		strValue := strconv.Itoa(value)
-//		strArr = append(strArr, strValue)
-//	}
-//	return strArr
-//}
-
-func Int2Str(Int int) string {
-	return strconv.Itoa(Int)
+func IntArr2StrArr(intArr []int) []string {
+	var strArr []string
+	for _, value := range intArr {
+		strValue := strconv.Itoa(value)
+		strArr = append(strArr, strValue)
+	}
+	return strArr
 }
 
 func IsInStrArr(slice []string, val string) bool {
@@ -198,10 +192,6 @@ func StrMap2Str(stringMap map[string]string, keyPrint bool) string {
 			rArr = append(rArr, value)
 		}
 	}
-
-	for index, value := range rArr {
-		rArr[index] = chinese.ToUTF8(value)
-	}
 	return strings.Join(rArr, "、")
 }
 
@@ -286,13 +276,9 @@ func Base64Encode(keyword string) string {
 	return encodeString
 }
 
-func Base64Decode(encodeString string) string {
+func Base64Decode(encodeString string) (string, error) {
 	decodeBytes, err := base64.StdEncoding.DecodeString(encodeString)
-	if err != nil {
-		slog.Debug(err)
-		return ""
-	}
-	return string(decodeBytes)
+	return string(decodeBytes), err
 }
 
 func CloneStrMap(strMap map[string]string) map[string]string {
@@ -327,24 +313,23 @@ func RandomString(i ...int) string {
 	return str
 }
 
-func ReadAll(r io.Reader, duration time.Duration) []byte {
+func ReadAll(r io.Reader, duration time.Duration) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), duration)
 	defer cancel()
 	BufChan := make(chan []byte)
+
+	var err error
 
 	go func() {
 		var Buf []byte
 		defer func() {
 			if err := recover(); err != nil {
 				if len(Buf) != 0 {
-					slog.Debug(err, ",reader response is :", StrRandomCut(string(Buf), 20))
+					err = "reader response is :" + StrRandomCut(string(Buf), 20)
 				}
 			}
 		}()
-		Buf, err := ioutil.ReadAll(r)
-		if err != nil {
-			slog.Debug(err.Error())
-		}
+		Buf, err = ioutil.ReadAll(r)
 		BufChan <- Buf
 	}()
 
@@ -353,10 +338,10 @@ func ReadAll(r io.Reader, duration time.Duration) []byte {
 		select {
 		case <-ctx.Done():
 			close(BufChan)
-			return Buf
+			return Buf, err
 		case Buf = <-BufChan:
 			close(BufChan)
-			return Buf
+			return Buf, err
 		}
 	}
 

@@ -2,8 +2,8 @@ package update
 
 import (
 	"bufio"
+	"kscan/core/slog"
 	"kscan/lib/misc"
-	"kscan/lib/slog"
 	"os"
 	"strings"
 )

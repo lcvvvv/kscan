@@ -3,12 +3,15 @@ package pool
 import (
 	"errors"
 	"fmt"
+	"io"
 	"kscan/lib/misc"
-	"kscan/lib/slog"
 	"kscan/lib/smap"
+	"log"
 	"sync"
 	"time"
 )
+
+var logger = log.New(io.Discard, "", log.Ldate|log.Ltime)
 
 //创建worker，每一个worker抽象成一个可以执行任务的函数
 type Worker struct {
@@ -22,7 +25,7 @@ func NewWorker(f func(interface{}) interface{}) *Worker {
 			defer func() {
 				if e := recover(); e != nil {
 					err = errors.New(fmt.Sprint("param: ", in, e))
-					slog.Debug(err, e)
+					logger.Println(err)
 				}
 			}()
 			out = f(in)
@@ -145,4 +148,8 @@ func (p *Pool) Stop() {
 //生成工作票据
 func (p *Pool) NewTick() string {
 	return misc.RandomString()
+}
+
+func SetLogger(log *log.Logger) {
+	logger = log
 }

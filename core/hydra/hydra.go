@@ -1,8 +1,8 @@
 package hydra
 
 import (
+	"kscan/core/hydra/oracle"
 	"kscan/lib/gotelnet"
-	"kscan/lib/hydra/oracle"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"time"

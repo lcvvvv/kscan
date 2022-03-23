@@ -2,13 +2,14 @@ package main
 
 import (
 	"kscan/app"
+	"kscan/core/fofa"
+	"kscan/core/gonmap"
+	"kscan/core/slog"
+	"kscan/core/spy"
+	"kscan/core/touch"
 	"kscan/lib/color"
-	"kscan/lib/fofa"
-	"kscan/lib/gonmap"
 	"kscan/lib/httpfinger"
-	"kscan/lib/slog"
-	"kscan/lib/spy"
-	"kscan/lib/touch"
+	"kscan/lib/pool"
 	"kscan/run"
 	"os"
 	"runtime"
@@ -173,6 +174,8 @@ func Init() {
 	slog.SetPrintDebug(app.Args.Debug)
 	//color包初始化
 	app.Setting.CloseColor = color.Init(app.Args.CloseColor)
+	//pool包初始化
+	pool.SetLogger(slog.DebugLogger())
 	//配置文件初始化
 	app.ConfigInit()
 	slog.Info("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)

@@ -1,11 +1,11 @@
 package app
 
 import (
+	"kscan/core/hydra"
+	"kscan/core/slog"
 	"kscan/lib/IP"
 	"kscan/lib/chinese"
-	"kscan/lib/hydra"
 	"kscan/lib/misc"
-	"kscan/lib/slog"
 	"kscan/lib/urlparse"
 	"os"
 	"regexp"

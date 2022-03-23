@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"kscan/app"
+	"kscan/core/slog"
 	"kscan/lib/color"
 	"kscan/lib/misc"
-	"kscan/lib/slog"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -63,7 +63,7 @@ func (f *Fofa) SearchAll() {
 	}
 }
 
-func (f *Fofa) Search(keyword string) {
+func (f *Fofa) Search(keyword string) *ResponseJson {
 	url := f.baseUrl + f.searchPath
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	q := req.URL.Query()
@@ -72,7 +72,7 @@ func (f *Fofa) Search(keyword string) {
 	q.Add("key", f.key)
 	q.Add("page", "1")
 	q.Add("fields", strings.Join(f.fieldList, ","))
-	q.Add("size", misc.Int2Str(f.size))
+	q.Add("size", strconv.Itoa(f.size))
 	q.Add("full", "false")
 	req.URL.RawQuery = q.Encode()
 	resp, err := http.DefaultClient.Do(req)
@@ -115,10 +115,7 @@ func (f *Fofa) Search(keyword string) {
 		slog.Data(line)
 	}
 	slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", responseJson.Size, len(responseJson.Results))
-
-	//table.SetPrintColumns(misc.First2UpperForSlice(f.field))
-	//t := table.Table(r)
-	//fmt.Println(t)
+	return &responseJson
 }
 
 func (f *Fofa) makeResult(responseJson ResponseJson) []Result {
