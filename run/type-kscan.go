@@ -204,9 +204,9 @@ func (k *kscan) PortDiscovery() {
 					k.pool.port.Out <- netloc
 					host.Up()
 				}
-				//if netloc.status == Unknown {
-				//	k.pool.port.Out <- netloc
-				//}
+				if netloc.status == Unknown {
+					k.pool.port.Out <- netloc
+				}
 				if host.IsOpenPort() == false && host.Length() == len(k.config.Port) && k.config.ClosePing == false {
 					url := fmt.Sprintf("icmp://%s", host.addr)
 					description := color.Red(color.Overturn("Not Open Any Port"))
@@ -267,7 +267,6 @@ func (k *kscan) GetTcpBanner() {
 			if tcpBanner == nil {
 				continue
 			}
-
 			uri := tcpBanner.Target.URI()
 			status := tcpBanner.Status()
 			service := tcpBanner.TcpFinger.Service
