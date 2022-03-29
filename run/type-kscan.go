@@ -267,6 +267,9 @@ func (k *kscan) GetTcpBanner() {
 			if tcpBanner == nil {
 				continue
 			}
+			if (tcpBanner.Target.Port() == 161 || tcpBanner.Target.Port() == 137) && tcpBanner.Response.Length() == 0 {
+				continue
+			}
 			uri := tcpBanner.Target.URI()
 			status := tcpBanner.Status()
 			service := tcpBanner.TcpFinger.Service
