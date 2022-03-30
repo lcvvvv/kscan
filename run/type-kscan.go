@@ -449,12 +449,12 @@ func (k *kscan) WatchDog() {
 		for true {
 			time.Sleep(59 * time.Second)
 			if k.watchDog.trigger == false {
-				//if num := k.pool.host.JobsList.Length(); num > 0 {
-				//	i := k.pool.host.JobsList.Peek()
-				//	info := i.(string)
-				//	slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
-				//	continue
-				//}
+				if num := k.pool.host.icmp.JobsList.Length(); num > 0 {
+					i := k.pool.host.icmp.JobsList.Peek()
+					info := i.(string)
+					slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					continue
+				}
 				if num := k.pool.port.tcp.JobsList.Length(); num > 0 {
 					i := k.pool.port.tcp.JobsList.Peek()
 					info := i.(*Port)
@@ -464,7 +464,7 @@ func (k *kscan) WatchDog() {
 				if num := k.pool.tcpBanner.tcp.JobsList.Length(); num > 0 {
 					i := k.pool.tcpBanner.tcp.JobsList.Peek()
 					info := i.(*Port)
-					slog.Warningf("正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					slog.Warningf("正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
 					continue
 				}
 				if num := k.pool.appBanner.JobsList.Length(); num > 0 {
