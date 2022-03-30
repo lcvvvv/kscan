@@ -176,19 +176,29 @@ func (k *kscan) PortDiscovery() {
 	var upHosts = smap.New()
 	//启用端口存活性探测任务下发器
 	go func() {
+		var wg = 0
+		var threads = k.config.Threads
+
 		for out := range k.pool.host.Out {
 			host := out.(*Host)
 			upHosts.Set(host.addr, host)
-			for _, port := range k.config.Port {
-				//if port == 161 {
-				//	//如果是公网IP且使用默认端口扫描策略，则不会扫描161端口
-				//	if IP.IsPrivateIPAddr(out.(string)) == false && len(app.Setting.Port) == 400 {
-				//		continue
-				//	}
-				//}
-				netloc := NewPort(host.addr, port)
-				k.pool.port.tcp.In <- netloc
+
+			wg++
+
+			go func() {
+				for _, port := range k.config.Port {
+					netloc := NewPort(host.addr, port)
+					k.pool.port.tcp.In <- netloc
+				}
+				wg--
+			}()
+
+			for wg >= threads {
+				time.Sleep(3 * time.Second)
 			}
+		}
+		for wg > 0 {
+			time.Sleep(3 * time.Second)
 		}
 		slog.Info("端口存活性探测任务下发完毕")
 		k.pool.port.tcp.InDone()
@@ -218,7 +228,6 @@ func (k *kscan) PortDiscovery() {
 		}
 		close(k.pool.port.Out)
 	}()
-
 	//定义端口存活性检测函数
 	k.pool.port.tcp.Function = func(i interface{}) interface{} {
 		netloc := i.(*Port)
