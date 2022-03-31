@@ -153,6 +153,10 @@ func main() {
 		tcpBanner := touch.Touch(app.Setting.Touch)
 		slog.Info("Netloc：", tcpBanner.Target.URI())
 		slog.Info("Status：", tcpBanner.StatusDisplay())
+		if tcpBanner.Status() == gonmap.Matched {
+			slog.Info("ProbesName：", tcpBanner.TcpFinger.ProbeName)
+			slog.Info("MatchedRegex：", tcpBanner.TcpFinger.MatchRegexString)
+		}
 		slog.Info("Length：", tcpBanner.Response.Length())
 		slog.Info("Response：")
 		quoteResponse := strconv.Quote(tcpBanner.Response.Value())
