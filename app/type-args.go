@@ -110,21 +110,26 @@ func (o *args) SetHelp(help string) {
 func (o *args) checkArgs() {
 	//判断必须的参数是否存在
 	if o.Target == "" && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" {
-		fmt.Print("至少有target、fofa、spy、touch参数中的一个")
+		fmt.Print("至少有--target、--fofa、--spy、--touch参数中的一个")
 		os.Exit(0)
 	}
 	//判断冲突参数
 	if o.Target != "" && o.Fofa != "" && o.Spy != "None" && o.Touch == "None" {
-		fmt.Print("target、fofa、spy、touch不能同时使用")
+		fmt.Print("--target、--fofa、--spy、--touch不能同时使用")
 		os.Exit(0)
 	}
 	if o.Port != "" && o.Top != 400 {
-		fmt.Print("port、top参数不能同时使用")
+		fmt.Print("--port、--top参数不能同时使用")
 		os.Exit(0)
 	}
 	//判断内容
+	if o.Touch != "" && sflag.NetlocVerification(o.Touch) == false {
+		fmt.Print("--touch参数输入错误,其格式应为host:port")
+		os.Exit(0)
+
+	}
 	if o.Port != "" && sflag.MultipleIntVerification(o.Port) == false {
-		fmt.Print("PORT参数输入错误,其格式应为80，8080，8081-8090")
+		fmt.Print("--port参数输入错误,其格式应为80，8080，8081-8090")
 		os.Exit(0)
 	}
 	if o.Top != 0 && (o.Top > 1000 || o.Top < 1) {
@@ -132,13 +137,13 @@ func (o *args) checkArgs() {
 		os.Exit(0)
 	}
 	if o.Proxy != "" && sflag.ProxyStrVerification(o.Proxy) {
-		fmt.Print("PROXY参数输入错误，其格式应为：http://ip:port，支持socks5/4")
+		fmt.Print("--proxy参数输入错误，其格式应为：http://ip:port，支持socks5/4")
 	}
 	if o.Path != "" && sflag.MultipleStrVerification(o.Path) {
-		fmt.Print("PATH参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
+		fmt.Print("--path参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
 	}
 	if o.Threads != 0 && o.Threads > 2048 {
-		fmt.Print("Threads参数最大值为2048")
+		fmt.Print("--threads参数最大值为2048")
 		os.Exit(0)
 	}
 }
