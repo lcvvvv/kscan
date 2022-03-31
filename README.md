@@ -81,7 +81,7 @@ fofa搜索关键字：将直接返回fofa搜索结果
 ## 5 使用方法
 
 ```
-usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
+usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
 
 
 optional arguments:
@@ -103,6 +103,7 @@ optional arguments:
   -oJ             将扫描结果使用json格式保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   -Cn             使用此参数后，控制台输出结果将不会带颜色。
+  -sV             使用此参数后，将对所有端口进行全探针探测，此参数极度影响效率，慎用！
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP400
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
   --threads       线程参数,默认线程100,最大值为2048
@@ -110,6 +111,7 @@ optional arguments:
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
+  --match         对资产返回banner进行检索，存在关键字的，才会显示，否则不会显示
   --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
 hydra options:
    --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt

@@ -13,6 +13,7 @@ import (
 	"kscan/run"
 	"os"
 	"runtime"
+	"strconv"
 	"time"
 )
 
@@ -72,7 +73,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [--check] [--encoding] [--hydra] [hydra options] [fofa options]\n\n"
+const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]\n\n"
 
 const syntax = `title="beijing"			从标题中搜索"北京"			-
 header="elastic"		从http头中搜索"elastic"			-
@@ -149,12 +150,13 @@ func main() {
 		_ = gonmap.Init(9, app.Setting.Timeout)
 		//开启全探针模式
 		gonmap.SetScanVersion()
-		r := touch.Touch(app.Setting.Touch)
-		slog.Info("Netloc：", app.Setting.Touch)
-		slog.Info("Status：", r.Status)
-		slog.Info("Length：", r.Length)
+		tcpBanner := touch.Touch(app.Setting.Touch)
+		slog.Info("Netloc：", tcpBanner.Target.URI())
+		slog.Info("Status：", tcpBanner.StatusDisplay())
+		slog.Info("Length：", tcpBanner.Response.Length())
 		slog.Info("Response：")
-		slog.Data(r.Text)
+		quoteResponse := strconv.Quote(tcpBanner.Response.Value())
+		slog.Data(quoteResponse[1 : len(quoteResponse)-1])
 	}
 	//计算程序运行时间
 	elapsed := time.Since(startTime)

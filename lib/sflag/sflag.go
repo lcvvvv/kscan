@@ -13,6 +13,7 @@ var (
 	multipleIntRegx = regexp.MustCompile("^((?:[0-9]+)(?:-[0-9]+)?)(?:,(?:[0-9]+)(?:-[0-9]+)?)*$")
 	multipleStrRegx = regexp.MustCompile("^([.A-Za-z0-9/]+)(,[.A-Za-z0-9/])*$")
 	proxyStrRegx    = regexp.MustCompile("^(http|https|socks5|socks4)://[0-9.]+:[0-9]+$")
+	NetlocRegx      = regexp.MustCompile("^([.A-Za-z0-9-]+):\\d+$")
 )
 
 func BoolVar(p *bool, name string, value bool) {
@@ -50,6 +51,10 @@ func MultipleIntVerification(s string) bool {
 func MultipleStrVerification(s string) bool {
 	return multipleStrRegx.MatchString(s)
 
+}
+
+func NetlocVerification(s string) bool {
+	return NetlocRegx.MatchString(s)
 }
 
 func ProxyStrVerification(s string) bool {

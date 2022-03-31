@@ -1,9 +1,9 @@
 package touch
 
 import (
-	"fmt"
-	"kscan/core/gonmap/simplenet"
+	"kscan/core/gonmap"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -13,25 +13,10 @@ type Response struct {
 	Length int
 }
 
-func Touch(netloc string) Response {
-	response, err := simplenet.Send("tcp", netloc, "", time.Second*3, 2048)
-	if err != nil {
-		fmt.Println(err)
-		return Response{false, err.Error(), 0}
-	}
-	responseBuf := []byte(response)
-	printStr := ""
-	for _, charBuf := range responseBuf {
-		if strconv.IsPrint(rune(charBuf)) {
-			if charBuf > 0x7f {
-				printStr += "?"
-			} else {
-				printStr += string(charBuf)
-			}
-			continue
-		}
-		printStr += fmt.Sprintf("\\x%x", string(charBuf))
-	}
-	return Response{true, printStr, len(response)}
-
+func Touch(netloc string) *gonmap.TcpBanner {
+	s := strings.Split(netloc, ":")
+	host := s[0]
+	port, _ := strconv.Atoi(s[1])
+	tcpBanner := gonmap.GetTcpBanner(host, port, gonmap.New(), 3*time.Minute)
+	return tcpBanner
 }
