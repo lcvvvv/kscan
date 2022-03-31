@@ -194,6 +194,15 @@ func RandomImportant(s string) string {
 	return convANSI(s, r, r, []int{7})
 }
 
+func StrSliceRandomColor(strSlice []string) string {
+	var s string
+	for _, value := range strSlice {
+		s += RandomImportant(value)
+		s += ", "
+	}
+	return s[:len(s)-2]
+}
+
 func StrMapRandomColor(m map[string]string, printKey bool, importantKey []string, varyImportantKey []string) string {
 	var s string
 	if len(m) == 0 {
