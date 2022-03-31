@@ -123,7 +123,7 @@ func (o *args) checkArgs() {
 		os.Exit(0)
 	}
 	//判断内容
-	if o.Touch != "" && sflag.NetlocVerification(o.Touch) == false {
+	if o.Touch != "None" && sflag.NetlocVerification(o.Touch) == false {
 		fmt.Print("--touch参数输入错误,其格式应为host:port")
 		os.Exit(0)
 
