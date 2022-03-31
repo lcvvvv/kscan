@@ -16,10 +16,6 @@ func NewPort(addr string, port int) *Port {
 	}
 }
 
-func (p *Port) SetStatus(i int) {
-	p.status = i
-}
-
 func (p *Port) Status() int {
 	return p.status
 }
