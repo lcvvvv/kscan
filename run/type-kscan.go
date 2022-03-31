@@ -224,8 +224,9 @@ func (k *kscan) PortDiscovery() {
 				//所有端口检测完，表示该主机端口存活性检测已结束
 				host.FinishPortScan()
 				//发送收尾端口，避免结束后无法出发tcp结尾任务
-				port.status = Close
-				k.pool.port.Out <- port
+				p := *port
+				p.status = Close
+				k.pool.port.Out <- &p
 				host.Length.Tcp++
 				//输出没有开放任何端口的主机
 				if host.IsOpenPort() == false && k.config.ClosePing == false {
@@ -248,7 +249,7 @@ func (k *kscan) PortDiscovery() {
 			return netloc.Unknown()
 		}
 		if gonmap.PortScan("tcp", netloc.addr, netloc.port, k.config.Timeout) {
-			slog.Debug(netloc, " is open")
+			slog.Debug(netloc.UnParse(), " is open")
 			return netloc.Open()
 		}
 		return netloc.Close()
@@ -259,10 +260,10 @@ func (k *kscan) PortDiscovery() {
 }
 
 func (k *kscan) GetTcpBanner() {
-
 	k.pool.tcpBanner.tcp.Function = func(i interface{}) interface{} {
 		port := i.(*Port)
 		var r = gonmap.NewTcpBanner(port.addr, port.port)
+		//slog.Debug(port.UnParse(),port.Status())
 		if port.status == Close {
 			return r.CLOSED()
 		}
