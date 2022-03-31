@@ -96,7 +96,7 @@ func (h *Host) FinishPortScan() {
 		}
 		return true
 	})
-	h.Length.Port = length
+	h.Length.Tcp = length
 }
 
 func (h *Host) PortScanIsFinish() bool {
