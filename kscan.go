@@ -147,7 +147,8 @@ func main() {
 	}
 	//touch模块启动
 	if app.Setting.Touch != "None" {
-		_ = gonmap.Init(9, app.Setting.Timeout)
+		gonmap.Init(9)
+		gonmap.SetTimeout(app.Setting.Timeout)
 		//开启全探针模式
 		gonmap.SetScanVersion()
 		tcpBanner := touch.Touch(app.Setting.Touch)
@@ -204,16 +205,18 @@ func InitKscan() {
 	r := httpfinger.Init()
 	slog.Printf(slog.INFO, "成功加载favicon指纹:[%d]条，keyword指纹:[%d]条", r["FaviconHash"], r["KeywordFinger"])
 	//gonmap探针/指纹库初始化
-	r = gonmap.Init(9, app.Setting.Timeout)
-	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
-	//gonmap应用层指纹识别初始化
-	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
-	//-sV参数配置
+	gonmap.Init(9)
+	//超时及日志配置
+	gonmap.SetTimeout(app.Setting.Timeout)
 	gonmap.SetLogger(slog.Debug())
+	//-sV参数配置
 	if app.Setting.ScanVersion == true {
 		gonmap.SetScanVersion()
 		app.Setting.Timeout = time.Second * 120
 	}
+	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条", gonmap.UsedProbesCount, gonmap.UsedMatchCount)
+	//gonmap应用层指纹识别初始化
+	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
 }
 
 func InitFofa() {
