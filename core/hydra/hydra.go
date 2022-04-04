@@ -190,7 +190,7 @@ func (c *Cracker) OutWatchDog() {
 		info = out
 	}
 	if count > 5 {
-		//slog.Debugf("%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
+		//slog.Printf(slog.DEBUG, "%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
 	if count > 0 && count <= 5 {
 		c.Out <- info.(AuthInfo)

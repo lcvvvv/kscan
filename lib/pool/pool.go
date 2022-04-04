@@ -11,7 +11,12 @@ import (
 	"time"
 )
 
-var logger = log.New(io.Discard, "", log.Ldate|log.Ltime)
+var logger = Logger(log.New(io.Discard, "", log.Ldate|log.Ltime))
+
+type Logger interface {
+	Println(...interface{})
+	Printf(string, ...interface{})
+}
 
 //创建worker，每一个worker抽象成一个可以执行任务的函数
 type Worker struct {
@@ -150,6 +155,6 @@ func (p *Pool) NewTick() string {
 	return misc.RandomString()
 }
 
-func SetLogger(log *log.Logger) {
+func SetLogger(log Logger) {
 	logger = log
 }

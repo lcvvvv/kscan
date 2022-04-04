@@ -42,20 +42,3 @@ func TestStr(t *testing.T) {
 	}
 	fmt.Print(a)
 }
-
-func TestStrMapRandomColor(t *testing.T) {
-	mod = 1
-	m := map[string]string{
-		"test":   "ok",
-		"finger": "finger",
-		"server": "apache",
-		"ser":    "asdf",
-		"ver":    "cda",
-		"aer":    "basd",
-		"der":    "era",
-	}
-	fmt.Println(StrMapRandomColor(m, false, []string{"server"}))
-	fmt.Println(StrMapRandomColor(m, false, []string{"server"}))
-	fmt.Println(StrMapRandomColor(m, true, []string{"server"}))
-	fmt.Println(StrMapRandomColor(m, true, []string{"server"}))
-}

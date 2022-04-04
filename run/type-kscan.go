@@ -109,7 +109,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		}
 		//经过存活性检测未存活的IP不会进行下一步测试
 		if gonmap.HostDiscoveryForIcmp(ip) == true {
-			slog.Debug(host.addr, " is alive")
+			slog.Println(slog.DEBUG, host.addr, " is alive")
 			return host.Up()
 		}
 		//ICMP检测不存活的主机，将发送至TCP存活性检测
@@ -121,7 +121,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		host := NewHost(ip, len(k.config.Port))
 		//经过存活性检测未存活的IP不会进行下一步测试
 		if gonmap.HostDiscoveryForTcp(ip) == true {
-			slog.Debug(host.addr, " is alive")
+			slog.Println(slog.DEBUG, host.addr, " is alive")
 			return host.Up()
 		}
 		return host.Down()
@@ -161,7 +161,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		}
 		//关闭主机存活性探测下发信道
 		if k.config.ClosePing == false {
-			slog.Info("主机存活性探测任务下发完毕")
+			slog.Println(slog.INFO, "主机存活性探测任务下发完毕")
 		}
 		k.pool.host.icmp.InDone()
 	}()
@@ -172,7 +172,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	k.pool.host.tcp.InDone()
 	k.pool.host.tcp.Wait()
 	if k.config.ClosePing == false {
-		slog.Warning("主机存活性探测任务完成")
+		slog.Println(slog.WARN, "主机存活性探测任务完成")
 	}
 }
 
@@ -202,7 +202,7 @@ func (k *kscan) PortDiscovery() {
 		for wg > 0 {
 			time.Sleep(3 * time.Second)
 		}
-		slog.Info("端口存活性探测任务下发完毕")
+		slog.Println(slog.INFO, "端口存活性探测任务下发完毕")
 		k.pool.port.tcp.InDone()
 	}()
 	//启用端口存活性探测结果接受器
@@ -249,21 +249,21 @@ func (k *kscan) PortDiscovery() {
 			return netloc.Unknown()
 		}
 		if gonmap.PortScan("tcp", netloc.addr, netloc.port, k.config.Timeout) {
-			slog.Debug(netloc.UnParse(), " is open")
+			slog.Println(slog.DEBUG, netloc.UnParse(), " is open")
 			return netloc.Open()
 		}
 		return netloc.Close()
 	}
 	//开始执行端口存活性探测任务
 	k.pool.port.tcp.Run()
-	slog.Warning("端口存活性探测任务完成")
+	slog.Println(slog.WARN, "端口存活性探测任务完成")
 }
 
 func (k *kscan) GetTcpBanner() {
 	k.pool.tcpBanner.tcp.Function = func(i interface{}) interface{} {
 		port := i.(*Port)
 		var r = gonmap.NewTcpBanner(port.addr, port.port)
-		//slog.Debug(port.UnParse(),port.Status())
+		//slog.Println(slog.DEBUG, port.UnParse(),port.Status())
 		if port.status == Close {
 			return r.CLOSED()
 		}
@@ -275,7 +275,7 @@ func (k *kscan) GetTcpBanner() {
 		for out := range k.pool.port.Out {
 			k.pool.tcpBanner.tcp.In <- out
 		}
-		slog.Info("TCP层协议识别任务下发完毕")
+		slog.Println(slog.INFO, "TCP层协议识别任务下发完毕")
 		k.pool.tcpBanner.tcp.InDone()
 	}()
 
@@ -303,13 +303,13 @@ func (k *kscan) GetTcpBanner() {
 			host := value.(*Host)
 
 			if tcpBanner.Status() == gonmap.Matched {
-				slog.Debugf("%s:%d %s %s", addr, port, status, service)
+				slog.Printf(slog.DEBUG, "%s:%d %s %s", addr, port, status, service)
 				k.pool.tcpBanner.Out <- tcpBanner
 			} else {
 				if (tcpBanner.Target.Port() == 161 || tcpBanner.Target.Port() == 137) && tcpBanner.Response.Length() == 0 {
 					tcpBanner.CLOSED()
 				}
-				//slog.Warning(tcpBanner.Target.URI(), tcpBanner.StatusDisplay())
+				//slog.Println(slog.WARN, tcpBanner.Target.URI(), tcpBanner.StatusDisplay())
 			}
 			host.Map.Tcp.Set(port, tcpBanner)
 
@@ -326,7 +326,7 @@ func (k *kscan) GetTcpBanner() {
 
 	//开始执行TCP层面协议识别任务
 	k.pool.tcpBanner.tcp.Run()
-	slog.Warning("TCP层协议识别任务完成")
+	slog.Println(slog.WARN, "TCP层协议识别任务完成")
 
 }
 
@@ -358,7 +358,7 @@ func (k *kscan) GetAppBanner() {
 			}
 		}
 		k.pool.appBanner.InDone()
-		slog.Info("应用层协议识别任务下发完毕")
+		slog.Println(slog.INFO, "应用层协议识别任务下发完毕")
 	}()
 
 	//指定Url任务下发器
@@ -367,7 +367,7 @@ func (k *kscan) GetAppBanner() {
 			k.pool.appBanner.In <- url
 		}
 		isDone <- true
-		//slog.Info("自定义应用层协议识别任务下发完毕")
+		//slog.Println(slog.INFO, "自定义应用层协议识别任务下发完毕")
 	}()
 
 	//启用App层面协议识别任务下发器
@@ -380,12 +380,12 @@ func (k *kscan) GetAppBanner() {
 			k.pool.appBanner.In <- out
 		}
 		isDone <- true
-		//slog.Info("开放端口应用层协议识别任务下发完毕")
+		//slog.Println(slog.INFO, "开放端口应用层协议识别任务下发完毕")
 	}()
 
 	//开始执行App层面协议识别任务
 	k.pool.appBanner.Run()
-	slog.Warning("应用层协议识别任务完成")
+	slog.Println(slog.WARN, "应用层协议识别任务完成")
 }
 
 func (k *kscan) GetAppBannerFromCheck() {
@@ -408,12 +408,12 @@ func (k *kscan) GetAppBannerFromCheck() {
 			k.pool.appBanner.In <- url
 		}
 		k.pool.appBanner.InDone()
-		slog.Info("应用层协议识别任务下发完毕")
+		slog.Println(slog.INFO, "应用层协议识别任务下发完毕")
 	}()
 
 	//开始执行App层面协议识别任务
 	k.pool.appBanner.Run()
-	slog.Warning("应用层协议识别任务完成")
+	slog.Println(slog.WARN, "应用层协议识别任务完成")
 }
 
 func (k *kscan) Output() {
@@ -452,7 +452,7 @@ func (k *kscan) Output() {
 			write = outString
 			disp = outString
 		}
-		slog.Data(disp)
+		slog.Println(slog.DATA, disp)
 		if k.config.Output != nil {
 			k.config.WriteLine(write)
 		}
@@ -466,17 +466,17 @@ func (k *kscan) Output() {
 		bytes, _ := json.Marshal(bannerMapArr)
 		err := misc.WriteLine(fileName, bytes)
 		if err == nil {
-			slog.Infof("扫描完成，Json文件已输出至：", fileName)
+			slog.Printf(slog.INFO, "扫描完成，Json文件已输出至：", fileName)
 		} else {
-			slog.Warning("输出Json失败！错误信息：", err.Error())
+			slog.Println(slog.WARN, "输出Json失败！错误信息：", err.Error())
 		}
 	}
 
 	if len(httpfinger.NewKeywords) > 0 {
 		newKeywords := misc.RemoveDuplicateElement(httpfinger.NewKeywords)
-		slog.Warning("为了使kscan变得更好，请将finger.txt文件，提交到作者的Github")
+		slog.Println(slog.WARN, "为了使kscan变得更好，请将finger.txt文件，提交到作者的Github")
 		dir, _ := os.Getwd()
-		slog.Warningf("发现新的http指纹[%d]条:%s/%s", len(newKeywords), dir, "finger.txt")
+		slog.Printf(slog.WARN, "发现新的http指纹[%d]条:%s/%s", len(newKeywords), dir, "finger.txt")
 		data := strings.Join(newKeywords, "\r\n")
 		_ = misc.WriteLine("finger.txt", []byte(data))
 	}
@@ -501,19 +501,19 @@ func (k *kscan) WatchDog() {
 				if num := k.pool.host.icmp.JobsList.Length(); num > 0 {
 					i := k.pool.host.icmp.JobsList.Peek()
 					info := i.(string)
-					slog.Warningf("当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					slog.Printf(slog.WARN, "当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
 				}
 				if num := k.pool.port.tcp.JobsList.Length(); num > 0 {
 					i := k.pool.port.tcp.JobsList.Peek()
 					info := i.(*Port)
-					slog.Warningf("正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
+					slog.Printf(slog.WARN, "正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
 					continue
 				}
 				if num := k.pool.tcpBanner.tcp.JobsList.Length(); num > 0 {
 					i := k.pool.tcpBanner.tcp.JobsList.Peek()
 					info := i.(*Port)
-					slog.Warningf("正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
+					slog.Printf(slog.WARN, "正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
 					continue
 				}
 				if num := k.pool.appBanner.JobsList.Length(); num > 0 {
@@ -529,7 +529,7 @@ func (k *kscan) WatchDog() {
 						}
 						info = tcpBanner.Target.URI()
 					}
-					slog.Warningf("正在进行应用层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
+					slog.Printf(slog.WARN, "正在进行应用层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
 					continue
 				}
 			}
@@ -555,8 +555,8 @@ func (k *kscan) WatchDog() {
 }
 
 func (k *kscan) Hydra() {
-	slog.Info("hydra模块已开启，开始监听暴力破解任务")
-	slog.Warning("当前已开启的hydra模块为：", misc.Intersection(hydra.ProtocolList, app.Setting.HydraMod))
+	slog.Println(slog.INFO, "hydra模块已开启，开始监听暴力破解任务")
+	slog.Println(slog.WARN, "当前已开启的hydra模块为：", misc.Intersection(hydra.ProtocolList, app.Setting.HydraMod))
 	//初始化默认密码字典
 	hydra.InitDefaultAuthMap()
 	//加载自定义字典
@@ -570,7 +570,7 @@ func (k *kscan) Hydra() {
 		//适配爆破模块
 		authInfo := hydra.NewAuthInfo(banner.IPAddr, banner.Port, banner.Protocol)
 		crack := hydra.NewCracker(authInfo, app.Setting.HydraUpdate, 10)
-		slog.Infof("[hydra]->开始对%v:%v[%v]进行暴力破解，字典长度为：%d", banner.IPAddr, banner.Port, banner.Protocol, crack.Length())
+		slog.Printf(slog.INFO, "[hydra]->开始对%v:%v[%v]进行暴力破解，字典长度为：%d", banner.IPAddr, banner.Port, banner.Protocol, crack.Length())
 		go crack.Run()
 		//爆破结果获取
 		var out hydra.AuthInfo

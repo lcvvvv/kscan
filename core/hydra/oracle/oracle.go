@@ -112,7 +112,7 @@ func CheckSID(sid, Host string, Port int) bool {
 	defer func() {
 		if e := recover(); e != nil {
 			err = errors.New(fmt.Sprint("sid check failed: ", Host, e))
-			slog.Debug(err, e)
+			slog.Println(slog.DEBUG, err, e)
 		}
 	}()
 

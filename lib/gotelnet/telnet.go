@@ -147,7 +147,7 @@ func (c *Client) Connect() error {
 				if strings.Contains(err.Error(), "EOF") {
 					break
 				}
-				//slog.Warningf("%v:%v,telnet read is err:%v,", c.IPAddr, c.Port, err)
+				//slog.Printf(slog.WARN, "%v:%v,telnet read is err:%v,", c.IPAddr, c.Port, err)
 				break
 			}
 			displayBuf, commandList := c.SerializationResponse(buf)
@@ -325,12 +325,12 @@ func (c *Client) read() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	//slog.Debug(buf[:n], "-<<<<<<<<")
+	//slog.Println(slog.DEBUG, buf[:n], "-<<<<<<<<")
 	return buf[:n], nil
 }
 
 func (c *Client) write(buf []byte) error {
-	//slog.Debug(">>>>>>>>>-", buf)
+	//slog.Println(slog.DEBUG, ">>>>>>>>>-", buf)
 	_ = c.conn.SetWriteDeadline(time.Now().Add(time.Second * 3))
 	_, err := c.conn.Write(buf)
 	if err != nil {
@@ -359,11 +359,11 @@ func (c *Client) MakeServerType() int {
 	lastLine := response[len(response)-1]
 	lastLine = strings.ToLower(lastLine)
 	if strings.Contains(lastLine, "user") || strings.Contains(lastLine, "name") || strings.Contains(lastLine, "login") || strings.Contains(lastLine, "account") || strings.Contains(lastLine, "用户名") || strings.Contains(lastLine, "登录") {
-		//slog.Infof("%v:%v,telnet mode is : usernameAndPassword ,response is :%v", c.IPAddr, c.Port, lastLine)
+		//slog.Printf(slog.INFO, "%v:%v,telnet mode is : usernameAndPassword ,response is :%v", c.IPAddr, c.Port, lastLine)
 		return UsernameAndPassword
 	}
 	if strings.Contains(lastLine, "pass") {
-		//slog.Infof("%v:%v,telnet mode is : onlyPassword ,response is :%v", c.IPAddr, c.Port, lastLine)
+		//slog.Printf(slog.INFO, "%v:%v,telnet mode is : onlyPassword ,response is :%v", c.IPAddr, c.Port, lastLine)
 		return OnlyPassword
 	}
 	if regexp.MustCompile(`^/ #.*`).MatchString(lastLine) {
@@ -380,7 +380,7 @@ func (c *Client) MakeServerType() int {
 		return UnauthorizedAccess
 	}
 
-	//slog.Warningf("%v:%v,telnet mode is : unknown ,response is :%v", c.IPAddr, c.Port, lastLine)
+	//slog.Printf(slog.WARN, "%v:%v,telnet mode is : unknown ,response is :%v", c.IPAddr, c.Port, lastLine)
 	return Closed
 }
 
@@ -399,7 +399,7 @@ func (c *Client) loginForOnlyPassword() error {
 		return nil
 	}
 
-	//slog.Warning(c.IPAddr, c.Port, "|", responseString)
+	//slog.Println(slog.WARN, c.IPAddr, c.Port, "|", responseString)
 	return errors.New("login failed")
 
 }
@@ -418,7 +418,7 @@ func (c *Client) loginForUsernameAndPassword() error {
 	if c.isLoginSucceed(responseString) {
 		return nil
 	}
-	//slog.Warning(c.IPAddr, c.Port, "|", responseString)
+	//slog.Println(slog.WARN, c.IPAddr, c.Port, "|", responseString)
 	return errors.New("login failed")
 }
 
@@ -460,11 +460,11 @@ func (c *Client) isLoginSucceed(responseString string) bool {
 	responseStringArray := strings.Split(responseString, "\n")
 	lastLine := responseStringArray[len(responseStringArray)-1]
 	if regexp.MustCompile("^[#$].*").MatchString(lastLine) {
-		//slog.Warning("1|", c.IPAddr, c.Port, lastLine)
+		//slog.Println(slog.WARN, "1|", c.IPAddr, c.Port, lastLine)
 		return true
 	}
 	if regexp.MustCompile("^<[a-zA-Z0-9_]+>.*").MatchString(lastLine) {
-		//slog.Warning("2|", c.IPAddr, c.Port, lastLine)
+		//slog.Println(slog.WARN, "2|", c.IPAddr, c.Port, lastLine)
 		return true
 	}
 
@@ -473,11 +473,11 @@ func (c *Client) isLoginSucceed(responseString string) bool {
 	time.Sleep(time.Second * 3)
 	responseString = c.ReadContext()
 	if strings.Count(responseString, "\n") > 6 {
-		//slog.Warning("3|", c.IPAddr, c.Port, responseString)
+		//slog.Println(slog.WARN, "3|", c.IPAddr, c.Port, responseString)
 		return true
 	}
 	if len([]rune(responseString)) > 100 {
-		//slog.Warning("4|", c.IPAddr, c.Port, responseString)
+		//slog.Println(slog.WARN, "4|", c.IPAddr, c.Port, responseString)
 		return true
 	}
 	return false

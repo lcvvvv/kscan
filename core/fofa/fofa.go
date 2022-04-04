@@ -16,7 +16,7 @@ var keywordSlice []string
 
 func Init(email, key string) {
 	//设置日志输出器
-	fofa.SetLogger(slog.DebugLogger())
+	fofa.SetLogger(slog.Debug())
 	//初始化fofa模块
 	this = fofa.New(email, key)
 	this.SetSize(app.Setting.FofaSize)
@@ -27,10 +27,10 @@ func Init(email, key string) {
 func Run() {
 	//对每个关键字进行查询
 	for _, keyword := range keywordSlice {
-		slog.Warningf("本次搜索关键字为：%v", keyword)
+		slog.Printf(slog.WARN, "本次搜索关键字为：%v", keyword)
 		size, results := this.Search(keyword)
 		displayResponse(results)
-		slog.Infof("本次搜索，返回结果总条数为：%d，此次返回条数为：%d", size, len(results))
+		slog.Printf(slog.INFO, "本次搜索，返回结果总条数为：%d，此次返回条数为：%d", size, len(results))
 	}
 }
 
@@ -88,6 +88,6 @@ func displayResponse(results []fofa.Result) {
 			row.Title,
 			color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}, []string{}),
 		)
-		slog.Data(line)
+		slog.Println(slog.DATA, line)
 	}
 }

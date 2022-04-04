@@ -25,13 +25,14 @@ func Check(Host, Username, Password string, Port int) (bool, error) {
 	return true, nil
 	//session, err := client.NewSession()
 	//if err != nil {
-	//	slog.Debug(err)
+	//	slog.Println(
+	//	slog.DEBUG, err)
 	//	return false, err
 	//}
 	//defer session.Close()
 	//_, err = session.CombinedOutput("id")
 	//if err != nil {
-	//	slog.Debug(err)
+	//	slog.Println(slog.DEBUG, err)
 	//	return false, err
 	//}
 	//return true, nil

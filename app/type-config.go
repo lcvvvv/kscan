@@ -95,9 +95,9 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		err := misc.ReadLine(expr, c.loadTarget)
 		if err != nil {
 			if recursion == true {
-				slog.Debug(expr + err.Error())
+				slog.Println(slog.DEBUG, expr+err.Error())
 			} else {
-				slog.Error(expr + err.Error())
+				slog.Println(slog.ERROR, expr+err.Error())
 			}
 		}
 		c.HostTarget = misc.RemoveDuplicateElement(c.HostTarget)
@@ -112,9 +112,9 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 	//判断target字符串是否为类URL
 	if url, err := urlparse.Load(expr); err != nil {
 		if recursion == true {
-			slog.Debug(expr + err.Error())
+			slog.Println(slog.DEBUG, expr+err.Error())
 		} else {
-			slog.Error(expr + err.Error())
+			slog.Println(slog.ERROR, expr+err.Error())
 		}
 	} else {
 		if url.Scheme != "" {
@@ -150,7 +150,7 @@ func (c *Config) loadOutput() {
 	}
 	f, err := os.OpenFile(expr, os.O_CREATE+os.O_RDWR, 0764)
 	if err != nil {
-		slog.Error(err.Error())
+		slog.Println(slog.ERROR, err.Error())
 	} else {
 		c.Output = f
 	}
@@ -159,7 +159,7 @@ func (c *Config) loadOutput() {
 func (c *Config) loadScanPing() {
 	if len(c.Port) < 10 {
 		c.ClosePing = true
-		slog.Info("由于扫描端口数量小于10，已自动关闭主机存活性检测功能")
+		slog.Println(slog.INFO, "由于扫描端口数量小于10，已自动关闭主机存活性检测功能")
 	} else {
 		c.ClosePing = Args.ClosePing
 	}
@@ -261,12 +261,12 @@ func intParam2IntArr(expr string) []int {
 		if strings.Contains(v, "-") {
 			iArr := strings.Split(v, "-")
 			if len(iArr) != 2 {
-				slog.Error("参数输入错误！！！")
+				slog.Println(slog.ERROR, "参数输入错误！！！")
 			} else {
 				smallNum := misc.Str2Int(iArr[0])
 				bigNum := misc.Str2Int(iArr[1])
 				if smallNum >= bigNum {
-					slog.Error("参数输入错误！！！")
+					slog.Println(slog.ERROR, "参数输入错误！！！")
 				}
 				vvArr = append(vvArr, misc.Xrange(smallNum, bigNum)...)
 			}

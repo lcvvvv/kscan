@@ -2,16 +2,13 @@ package misc
 
 import (
 	"bufio"
-	"context"
 	"encoding/base64"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func StrArr2IntArr(strArr []string) ([]int, error) {
@@ -311,40 +308,6 @@ func RandomString(i ...int) string {
 		str += Char[j : j+1]
 	}
 	return str
-}
-
-func ReadAll(r io.Reader, duration time.Duration) ([]byte, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), duration)
-	defer cancel()
-	BufChan := make(chan []byte)
-
-	var err error
-
-	go func() {
-		var Buf []byte
-		defer func() {
-			if err := recover(); err != nil {
-				if len(Buf) != 0 {
-					err = "reader response is :" + StrRandomCut(string(Buf), 20)
-				}
-			}
-		}()
-		Buf, err = ioutil.ReadAll(r)
-		BufChan <- Buf
-	}()
-
-	var Buf []byte
-	for {
-		select {
-		case <-ctx.Done():
-			close(BufChan)
-			return Buf, err
-		case Buf = <-BufChan:
-			close(BufChan)
-			return Buf, err
-		}
-	}
-
 }
 
 func Intersection(a []string, b []string) (inter []string) {

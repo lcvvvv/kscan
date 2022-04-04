@@ -14,8 +14,8 @@ func Check(ip, domain, login, password string, port int, protocol string) (bool,
 		err = grdp.LoginForRDP(target, domain, login, password)
 	}
 	//err = grdp.Login(target, domain, login, password)
-	//slog.Info(target, domain, login, password)
-	//slog.Info(err)
+	//slog.Println(slog.INFO, target, domain, login, password)
+	//slog.Println(slog.INFO, err)
 	if err != nil {
 		return false, err
 	}

@@ -18,14 +18,14 @@ var (
 )
 
 func Start() {
-	slog.Info("将开始自动化存活网段探测，请注意，该模式会发送大量数据包，极易被风控感知，请慎用")
-	slog.Info("现在开始进行自动网络环境探测")
+	slog.Println(slog.INFO, "将开始自动化存活网段探测，请注意，该模式会发送大量数据包，极易被风控感知，请慎用")
+	slog.Println(slog.INFO, "现在开始进行自动网络环境探测")
 	internet := internetTesting()
 	_ = dnsTesting()
 	var gatewayArr, All []string
 	//若spy参数格式为IP地址，则将对指定的IP地址进行B段存活网关探测
 	if IP.FormatCheck(Keyword) {
-		slog.Infof("现在开始指定网段：%s，B段存活网关探测", Keyword)
+		slog.Printf(slog.INFO, "现在开始指定网段：%s，B段存活网关探测", Keyword)
 		gatewayArr = IP.GetGatewayList(Keyword, "b")
 		HostDiscoveryIcmpPool(gatewayArr)
 		return
@@ -33,32 +33,32 @@ func Start() {
 	//依据情况判断是否进行172B段存活网关探测
 	if Keyword == "all" || Keyword == "172" {
 		//探测172段，B段存活网关
-		slog.Infof("当前spy参数值为%s，将开始172段，大B段存活网关探测，此探测时间较长，请耐心等待", Keyword)
+		slog.Printf(slog.INFO, "当前spy参数值为%s，将开始172段，大B段存活网关探测，此探测时间较长，请耐心等待", Keyword)
 		gatewayArr = []string{}
 		for i := 16; i <= 31; i++ {
-			slog.Infof("现在开始枚举常见网段172.%d.0.0", i)
+			slog.Printf(slog.INFO, "现在开始枚举常见网段172.%d.0.0", i)
 			gatewayArr = IP.GetGatewayList(fmt.Sprintf("172.%d.0.0", i), "b")
 			gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
 			if len(gatewayArr) > 0 {
 				HostDiscoveryIcmpPool(gatewayArr)
 				All = append(All, gatewayArr...)
 			} else {
-				slog.Info("该网段在之前已经枚举，此处不将不再重复枚举")
+				slog.Println(slog.INFO, "该网段在之前已经枚举，此处不将不再重复枚举")
 			}
 		}
 	}
 	//依据情况判断是否进行10A段存活网关探测
 	if Keyword == "all" || Keyword == "10" {
 		//探测10段，A段存活网关
-		slog.Infof("当前spy参数值为%s，将开始10段，A段存活网关探测，此探测时间较长，请耐心等待", Keyword)
-		slog.Info("现在开始枚举常见网段10.0.0.0")
+		slog.Printf(slog.INFO, "当前spy参数值为%s，将开始10段，A段存活网关探测，此探测时间较长，请耐心等待", Keyword)
+		slog.Println(slog.INFO, "现在开始枚举常见网段10.0.0.0")
 		gatewayArr = IP.GetGatewayList("10.0.0.1", "a")
 		HostDiscoveryIcmpPool(gatewayArr)
 	}
 	//依据情况判断是否进行常规探测
 	if Keyword == "all" || Keyword == "" {
 		//探测网卡所在网段
-		slog.Info("现在开始当前所在网段的B段网关存活性探测")
+		slog.Println(slog.INFO, "现在开始当前所在网段的B段网关存活性探测")
 		gatewayArr = makeInterfaceGatwayList()
 		gatewayArr = misc.RemoveDuplicateElement(gatewayArr)
 		//探测当前所在网段B段网关
@@ -67,11 +67,11 @@ func Start() {
 			HostDiscoveryIcmpPool(gatewayArr)
 			All = append(All, gatewayArr...)
 		} else {
-			slog.Info("该网段在之前已经枚举，此处不将不再重复枚举")
+			slog.Println(slog.INFO, "该网段在之前已经枚举，此处不将不再重复枚举")
 		}
 		//探测存在特殊规律的网段
 		if internet == false {
-			slog.Info("现在开始枚举特殊网段1.1.1.0-255.255.255.0")
+			slog.Println(slog.INFO, "现在开始枚举特殊网段1.1.1.0-255.255.255.0")
 			gatewayArr = append(IP.GetGatewayList("1.1.1.1", "s"))
 			HostDiscoveryIcmpPool(gatewayArr)
 		}
@@ -80,18 +80,18 @@ func Start() {
 	//依据情况判断是否进行192B段存活网关探测
 	if Keyword == "all" || Keyword == "" || Keyword == "192" {
 		//探测常见网段192段，B段存活网关
-		slog.Info("现在开始枚举常见网段192.168.0.0")
+		slog.Println(slog.INFO, "现在开始枚举常见网段192.168.0.0")
 		gatewayArr = IP.GetGatewayList("192.168.0.1", "b")
 		gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
 		if len(gatewayArr) > 0 {
 			HostDiscoveryIcmpPool(gatewayArr)
 			All = append(All, gatewayArr...)
 		} else {
-			slog.Info("该网段在之前已经枚举，此处不将不再重复枚举")
+			slog.Println(slog.INFO, "该网段在之前已经枚举，此处不将不再重复枚举")
 		}
 	}
-	slog.Info("自动化存活网段探测结束")
-	slog.Info("小提示：若需要对指定某一b段探测，可设置spy参数值为该段任意IP地址")
+	slog.Println(slog.INFO, "自动化存活网段探测结束")
+	slog.Println(slog.INFO, "小提示：若需要对指定某一b段探测，可设置spy参数值为该段任意IP地址")
 }
 
 func makeInterfaceGatwayList() []string {
@@ -114,10 +114,10 @@ func makeInterfaceGatwayList() []string {
 
 func internetTesting() bool {
 	if gonmap.HostDiscoveryForIcmp("114.114.114.114") {
-		slog.Data("Internet--------[√]")
+		slog.Println(slog.DATA, "Internet--------[√]")
 		return true
 	} else {
-		slog.Data("Internet--------[×]")
+		slog.Println(slog.DATA, "Internet--------[×]")
 		return false
 	}
 }
@@ -125,10 +125,10 @@ func internetTesting() bool {
 func dnsTesting() bool {
 	_, err := net.ResolveIPAddr("ip", "www.baidu.com")
 	if err != nil {
-		slog.Data("DNS-------------[×]")
+		slog.Println(slog.DATA, "DNS-------------[×]")
 		return false
 	}
-	slog.Data("DNS-------------[√]")
+	slog.Println(slog.DATA, "DNS-------------[√]")
 	return true
 }
 
@@ -180,7 +180,7 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 			continue
 		}
 		ip := out.(string)
-		slog.Data(ip)
+		slog.Println(slog.DATA, ip)
 		if Scan == false {
 			continue
 		}

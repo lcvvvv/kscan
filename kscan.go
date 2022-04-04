@@ -151,21 +151,21 @@ func main() {
 		//开启全探针模式
 		gonmap.SetScanVersion()
 		tcpBanner := touch.Touch(app.Setting.Touch)
-		slog.Info("Netloc：", tcpBanner.Target.URI())
-		slog.Info("Status：", tcpBanner.StatusDisplay())
+		slog.Println(slog.INFO, "Netloc：", tcpBanner.Target.URI())
+		slog.Println(slog.INFO, "Status：", tcpBanner.StatusDisplay())
 		if tcpBanner.Status() == gonmap.Matched {
-			slog.Info("ProbesName：", tcpBanner.TcpFinger.ProbeName)
-			slog.Info("MatchedRegex：", tcpBanner.TcpFinger.MatchRegexString)
+			slog.Println(slog.INFO, "ProbesName：", tcpBanner.TcpFinger.ProbeName)
+			slog.Println(slog.INFO, "MatchedRegex：", tcpBanner.TcpFinger.MatchRegexString)
 		}
-		slog.Info("Length：", tcpBanner.Response.Length())
-		slog.Info("Response：")
+		slog.Println(slog.INFO, "Length：", tcpBanner.Response.Length())
+		slog.Println(slog.INFO, "Response：")
 		quoteResponse := strconv.Quote(tcpBanner.Response.Value())
-		slog.Data(quoteResponse[1 : len(quoteResponse)-1])
+		slog.Println(slog.DATA, quoteResponse[1:len(quoteResponse)-1])
 	}
 	//计算程序运行时间
 	elapsed := time.Since(startTime)
-	slog.Infof("程序执行总时长为：[%s]", elapsed.String())
-	slog.Info("若有问题欢迎来我的Github提交Bug[https://github.com/lcvvvv/kscan/]")
+	slog.Printf(slog.INFO, "程序执行总时长为：[%s]", elapsed.String())
+	slog.Println(slog.INFO, "若有问题欢迎来我的Github提交Bug[https://github.com/lcvvvv/kscan/]")
 }
 
 func Init() {
@@ -177,34 +177,39 @@ func Init() {
 	app.Args.Parse()
 	//日志初始化
 	slog.SetEncoding(app.Args.Encoding)
-	slog.SetPrintDebug(app.Args.Debug)
+	if app.Args.Debug {
+		slog.SetLogger(slog.DEBUG)
+	} else {
+		slog.SetLogger(slog.INFO)
+	}
 	//color包初始化
 	app.Setting.CloseColor = color.Init(app.Args.CloseColor)
 	//pool包初始化
-	pool.SetLogger(slog.DebugLogger())
+	pool.SetLogger(slog.Debug())
 	//配置文件初始化
 	app.ConfigInit()
-	slog.Info("当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
+	slog.Println(slog.INFO, "当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
 	if runtime.GOOS == "windows" && app.Setting.CloseColor == true {
-		slog.Info("在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
+		slog.Println(slog.INFO, "在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
 	}
 }
 
 func InitKscan() {
-	//slog.Warning("开始读取扫描对象...")
-	slog.Infof("成功读取URL地址:[%d]个", len(app.Setting.UrlTarget))
+	//slog.Println(slog.WARN, "开始读取扫描对象...")
+	slog.Printf(slog.INFO, "成功读取URL地址:[%d]个", len(app.Setting.UrlTarget))
 	if app.Setting.Check == false {
-		slog.Infof("成功读取主机地址:[%d]个，待检测端口:[%d]个", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
+		slog.Printf(slog.INFO, "成功读取主机地址:[%d]个，待检测端口:[%d]个", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
 	}
 	//HTTP指纹库初始化
 	r := httpfinger.Init()
-	slog.Infof("成功加载favicon指纹:[%d]条，keyword指纹:[%d]条", r["FaviconHash"], r["KeywordFinger"])
+	slog.Printf(slog.INFO, "成功加载favicon指纹:[%d]条，keyword指纹:[%d]条", r["FaviconHash"], r["KeywordFinger"])
 	//gonmap探针/指纹库初始化
 	r = gonmap.Init(9, app.Setting.Timeout)
-	slog.Infof("成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
+	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条", r["PROBE"], r["MATCH"])
 	//gonmap应用层指纹识别初始化
 	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
 	//-sV参数配置
+	gonmap.SetLogger(slog.Debug())
 	if app.Setting.ScanVersion == true {
 		gonmap.SetScanVersion()
 		app.Setting.Timeout = time.Second * 120
@@ -215,23 +220,24 @@ func InitFofa() {
 	email := os.Getenv("FOFA_EMAIL")
 	key := os.Getenv("FOFA_KEY")
 	if email == "" || key == "" {
-		slog.Warning("使用-f/-fofa参数前请先配置环境变量：FOFA_EMAIL、FOFA_KEY")
-		slog.Error("如果你是想从文件导入端口扫描任务，请使用-t file:/path/to/file")
+		slog.Println(slog.WARN, "使用-f/-fofa参数前请先配置环境变量：FOFA_EMAIL、FOFA_KEY")
+		slog.Println(slog.ERROR, "如果你是想从文件导入端口扫描任务，请使用-t file:/path/to/file")
 	}
 	fofa.Init(email, key)
 	fofa.Run()
 	if app.Setting.Check == false && app.Setting.Scan == false {
-		slog.Warning("可以使用--check参数对fofa扫描结果进行存活性及指纹探测，也可以使用--scan参数对fofa扫描结果进行端口扫描")
+		slog.Println(slog.WARN, "可以使用--check参数对fofa扫描结果进行存活性及指纹探测，也可以使用--scan参数对fofa扫描结果进行端口扫描")
 	}
 	if app.Setting.Check == true {
 		app.Setting.UrlTarget = fofa.GetUrlTarget()
-		slog.Warning("check参数已启用，现在将对fofa扫描结果进行存活性及指纹探测")
+		slog.Println(slog.WARN, "check参数已启用，现在将对fofa扫描结果进行存活性及指纹探测")
 	}
 	if app.Setting.Scan == true {
 		app.Setting.UrlTarget = fofa.GetUrlTarget()
 		app.Setting.HostTarget = fofa.GetHostTarget()
-		slog.Warning("scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
+		slog.Println(slog.WARN, "scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
 	}
+	slog.Println(slog.DEBUG)
 }
 
 func InitSpy() {
