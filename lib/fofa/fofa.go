@@ -12,7 +12,12 @@ import (
 	"strings"
 )
 
-var logger = log.New(io.Discard, "", log.Ldate|log.Ltime)
+var logger = Logger(log.New(io.Discard, "", log.Ldate|log.Ltime))
+
+type Logger interface {
+	Println(...interface{})
+	Printf(string, ...interface{})
+}
 
 type Fofa struct {
 	email, key                     string
@@ -41,8 +46,11 @@ func New(email, key string) *Fofa {
 		searchPath: "/api/v1/search/all",
 		loginPath:  "/api/v1/info/my",
 		fieldList: []string{
-			"host", "title", "ip", "domain", "port", "country", "province",
-			"city", "country_name", "header", "server", "protocol", "banner",
+			"host",
+			//"title",
+			//"banner",
+			"ip", "domain", "port", "country", "province",
+			"city", "country_name", "header", "server", "protocol",
 			"cert", "isp", "as_organization",
 		},
 	}
@@ -102,6 +110,6 @@ func (f *Fofa) Results() []Result {
 	return f.results
 }
 
-func SetLogger(log *log.Logger) {
+func SetLogger(log Logger) {
 	logger = log
 }
