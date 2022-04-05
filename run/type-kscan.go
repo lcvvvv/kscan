@@ -7,6 +7,7 @@ import (
 	"kscan/core/gonmap"
 	"kscan/core/hydra"
 	"kscan/core/slog"
+	"kscan/lib/chinese"
 	"kscan/lib/color"
 	"kscan/lib/httpfinger"
 	"kscan/lib/misc"
@@ -16,6 +17,7 @@ import (
 	"kscan/lib/urlparse"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -438,8 +440,8 @@ func (k *kscan) Output() {
 				continue
 			}
 			bannerMapArr = append(bannerMapArr, banner.Map())
-			write = banner.Output(app.Setting.CloseColor)
-			disp = banner.Display(app.Setting.CloseColor)
+			write = outputTcpBanner(banner, app.Setting.CloseColor)
+			disp = displayTcpBanner(banner, app.Setting.CloseColor)
 		case hydra.AuthInfo:
 			info := out.(hydra.AuthInfo)
 			if info.Status == false {
@@ -646,4 +648,22 @@ func (k *kscan) Hydra() {
 	}()
 
 	k.hydra.pool.Run()
+}
+
+func displayTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
+	m := misc.FixMap(appBanner.FingerPrint())
+	fingerPrint := color.StrMapRandomColor(m, keyPrint, []string{"ProductName", "Hostname", "DeviceType"}, []string{"ApplicationComponent"})
+	fingerPrint = misc.FixLine(fingerPrint)
+	appBanner.AppDigest = chinese.ToUTF8(appBanner.AppDigest)
+	format := "%-30v %-" + strconv.Itoa(misc.AutoWidth(appBanner.AppDigest, 26)) + "v %s"
+	s := fmt.Sprintf(format, appBanner.URL(), appBanner.AppDigest, fingerPrint)
+	return s
+}
+
+func outputTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
+	fingerPrint := misc.StrMap2Str(appBanner.FingerPrint(), keyPrint)
+	fingerPrint = misc.FixLine(fingerPrint)
+	appBanner.AppDigest = chinese.ToUTF8(appBanner.AppDigest)
+	s := fmt.Sprintf("%s\t%d\t%s\t%s", appBanner.URL(), appBanner.StatusCode, appBanner.AppDigest, fingerPrint)
+	return s
 }

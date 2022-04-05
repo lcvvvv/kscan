@@ -83,7 +83,7 @@ func displayResponse(results []fofa.Result) {
 			m["Banner"] = misc.StrRandomCut(m["Banner"], 20)
 		}
 
-		line := fmt.Sprintf("%-30v %-"+strconv.Itoa(misc.AutoWidth(row.Title, 26))+"v %v\n",
+		line := fmt.Sprintf("%-30v %-"+strconv.Itoa(misc.AutoWidth(row.Title, 26))+"v %v",
 			row.Host,
 			row.Title,
 			color.StrMapRandomColor(m, app.Setting.CloseColor, []string{"Server"}, []string{}),
