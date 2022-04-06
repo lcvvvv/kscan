@@ -2,9 +2,9 @@ package slog
 
 import (
 	"fmt"
+	"github.com/lcvvvv/gonmap/lib/chinese"
 	"io"
 	"io/ioutil"
-	"kscan/lib/chinese"
 	"kscan/lib/color"
 	"log"
 	"os"

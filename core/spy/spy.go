@@ -2,7 +2,7 @@ package spy
 
 import (
 	"fmt"
-	"kscan/core/gonmap"
+	"github.com/lcvvvv/gonmap"
 	"kscan/core/slog"
 	"kscan/lib/IP"
 	"kscan/lib/misc"

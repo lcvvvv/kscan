@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/lcvvvv/gonmap"
+	"github.com/lcvvvv/gonmap/lib/httpfinger"
 	"kscan/app"
 	"kscan/core/fofa"
-	"kscan/core/gonmap"
 	"kscan/core/slog"
 	"kscan/core/spy"
 	"kscan/core/touch"
 	"kscan/lib/color"
-	"kscan/lib/httpfinger"
 	"kscan/lib/pool"
 	"kscan/run"
 	"os"

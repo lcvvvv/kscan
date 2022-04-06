@@ -2,7 +2,7 @@ package run
 
 import (
 	"fmt"
-	"kscan/core/gonmap"
+	"github.com/lcvvvv/gonmap"
 	"kscan/lib/color"
 	"kscan/lib/smap"
 )

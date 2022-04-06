@@ -1,7 +1,7 @@
 package touch
 
 import (
-	"kscan/core/gonmap"
+	"github.com/lcvvvv/gonmap"
 	"strconv"
 	"strings"
 	"time"

@@ -1,12 +1,12 @@
 package app
 
 import (
+	"github.com/lcvvvv/gonmap/lib/chinese"
+	"github.com/lcvvvv/gonmap/lib/urlparse"
 	"kscan/core/hydra"
 	"kscan/core/slog"
 	"kscan/lib/IP"
-	"kscan/lib/chinese"
 	"kscan/lib/misc"
-	"kscan/lib/urlparse"
 	"os"
 	"regexp"
 	"runtime"

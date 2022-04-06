@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"kscan/lib/chinese"
+	"github.com/lcvvvv/gonmap/lib/chinese"
 	"net"
 	"regexp"
 	"strings"
