@@ -9,7 +9,6 @@ require (
 	github.com/huin/asn1ber v0.0.0-20120622192748-af09f62e6358
 	github.com/icodeface/tls v0.0.0-20190904083142-17aec93c60e5
 	github.com/jlaffaye/ftp v0.0.0-20210307004419-5d4190119067
-	github.com/lcvvvv/gonmap v0.1.18-0.20220406060341-c7d316487fd4
 	github.com/lib/pq v1.10.2
 
 	//grdp
@@ -25,6 +24,5 @@ require (
 	golang.org/x/text v0.3.6
 
 	//gonmap
-	github.com/lcvvvv/gonmap v0.0.0-master
+	github.com/lcvvvv/gonmap v0.1.18-0.20220406060341-c7d316487fd4
 )
-
