@@ -98,14 +98,13 @@ func (p *Pool) work() {
 		f := NewWorker(p.Function)
 		//开始工作，输出工作结果
 		out, err := f.Run(param)
+		//输出工作结果
+		p.Out <- out
 		//工作结束，删除工作清单
 		p.JobsList.Delete(Tick)
-		if err == nil && out != nil {
-			p.Out <- out
+		if err != nil {
+			logger.Println(err)
 		}
-		//if err != nil {
-		//	panic(err)
-		//}
 	}
 }
 
@@ -153,6 +152,11 @@ func (p *Pool) Stop() {
 //生成工作票据
 func (p *Pool) NewTick() string {
 	return misc.RandomString()
+}
+
+//获取线程数
+func (p *Pool) Threads() int {
+	return p.threads
 }
 
 func SetLogger(log Logger) {
