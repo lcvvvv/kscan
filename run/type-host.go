@@ -15,7 +15,7 @@ type Host struct {
 		open bool
 		//扫描状态
 		portScan bool
-		//tcpScan  bool
+		tcpScan  bool
 		//appScan  bool
 	}
 

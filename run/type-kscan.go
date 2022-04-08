@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/lcvvvv/gonmap"
-	"github.com/lcvvvv/gonmap/lib/chinese"
 	"github.com/lcvvvv/gonmap/lib/httpfinger"
 	"github.com/lcvvvv/gonmap/lib/urlparse"
 	"kscan/app"
@@ -66,7 +65,7 @@ func New(config app.Config) *kscan {
 	}
 
 	hostThreads := len(k.config.HostTarget)
-	hostThreads = hostThreads/10 + 1
+	hostThreads = hostThreads/5 + 1
 	if hostThreads > 400 {
 		hostThreads = 400
 	}
@@ -76,7 +75,7 @@ func New(config app.Config) *kscan {
 	k.pool.tcpBanner.tcp = pool.NewPool(config.Threads)
 	k.pool.tcpBanner.Out = make(chan interface{})
 
-	k.pool.port.tcp = pool.NewPool(config.Threads)
+	k.pool.port.tcp = pool.NewPool(config.Threads * 4)
 	k.pool.port.Out = make(chan interface{})
 
 	k.pool.host.icmp = pool.NewPool(hostThreads)
@@ -225,11 +224,7 @@ func (k *kscan) PortDiscovery() {
 			if host.Map.Port.Length() == host.Length.Port {
 				//所有端口检测完，表示该主机端口存活性检测已结束
 				host.FinishPortScan()
-				//发送收尾端口，避免结束后无法出发tcp结尾任务
-				p := *port
-				p.status = Close
-				k.pool.port.Out <- &p
-				host.Length.Tcp++
+
 				//输出没有开放任何端口的主机
 				if host.IsOpenPort() == false && k.config.ClosePing == false {
 					url := fmt.Sprintf("icmp://%s", host.addr)
@@ -238,7 +233,6 @@ func (k *kscan) PortDiscovery() {
 					k.watchDog.output <- output
 				}
 			}
-
 			k.portScanMap.Set(port.addr, host)
 
 		}
@@ -250,7 +244,7 @@ func (k *kscan) PortDiscovery() {
 		if netloc.port == 161 || netloc.port == 137 {
 			return netloc.Unknown()
 		}
-		if gonmap.PortScan("tcp", netloc.addr, netloc.port, k.config.Timeout) {
+		if gonmap.PortScan("tcp", netloc.addr, netloc.port, 1*time.Second) {
 			slog.Println(slog.DEBUG, netloc.UnParse(), " is open")
 			return netloc.Open()
 		}
@@ -298,14 +292,12 @@ func (k *kscan) GetTcpBanner() {
 
 			port := tcpBanner.Target.Port()
 			addr := tcpBanner.Target.Addr()
-			status := tcpBanner.StatusDisplay()
-			service := tcpBanner.TcpFinger.Service
 
 			value, _ := k.portScanMap.Get(addr)
 			host := value.(*Host)
 
 			if tcpBanner.Status() == gonmap.Matched {
-				slog.Printf(slog.DEBUG, "%s:%d %s %s", addr, port, status, service)
+				//slog.Printf(slog.DEBUG, "%s:%d %s %s", addr, port, status, service)
 				k.pool.tcpBanner.Out <- tcpBanner
 			} else {
 				if (tcpBanner.Target.Port() == 161 || tcpBanner.Target.Port() == 137) && tcpBanner.Response.Length() == 0 {
@@ -320,9 +312,22 @@ func (k *kscan) GetTcpBanner() {
 				continue
 			}
 			if host.Map.Tcp.Length() == host.Length.Tcp && host.CountUnknownPorts() > 0 {
+				host.status.tcpScan = true
 				k.watchDog.output <- host.DisplayUnknownPorts()
 			}
 		}
+		k.portScanMap.Range(
+			func(key, value interface{}) bool {
+				host := value.(*Host)
+				if host.CountUnknownPorts() == 0 {
+					return true
+				}
+				if host.status.tcpScan == false {
+					k.watchDog.output <- host.DisplayUnknownPorts()
+				}
+				return true
+			},
+		)
 		close(k.pool.tcpBanner.Out)
 	}()
 
@@ -488,53 +493,29 @@ func (k *kscan) Output() {
 func (k *kscan) WatchDog() {
 
 	k.watchDog.wg.Add(1)
-	//触发器校准，每隔60秒会将触发器关闭
-	go func() {
-		for true {
-			time.Sleep(60 * time.Second)
-			k.watchDog.trigger = false
-		}
-	}()
+	//触发器轮询时间
+	waitTime := 20 * time.Second
 	//轮询触发器，每隔一段时间会检测触发器是否打开
 	go func() {
 		for true {
-			time.Sleep(59 * time.Second)
+			time.Sleep(waitTime)
 			if k.watchDog.trigger == false {
-				if num := k.pool.host.icmp.JobsList.Length(); num > 0 {
-					i := k.pool.host.icmp.JobsList.Peek()
-					info := i.(string)
-					slog.Printf(slog.WARN, "当前主机存活性检测任务未完成，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
-					continue
-				}
-				if num := k.pool.port.tcp.JobsList.Length(); num > 0 {
-					i := k.pool.port.tcp.JobsList.Peek()
-					info := i.(*Port)
-					slog.Printf(slog.WARN, "正在进行端口存活性检测，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
-					continue
-				}
-				if num := k.pool.tcpBanner.tcp.JobsList.Length(); num > 0 {
-					i := k.pool.tcpBanner.tcp.JobsList.Peek()
-					info := i.(*Port)
-					slog.Printf(slog.WARN, "正在进行TCP层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info.UnParse())
-					continue
-				}
-				if num := k.pool.appBanner.JobsList.Length(); num > 0 {
-					i := k.pool.appBanner.JobsList.Peek()
-					var info string
-					switch i.(type) {
-					case *Port:
-						info = i.(*Port).UnParse()
-					case *gonmap.TcpBanner:
-						tcpBanner := i.(*gonmap.TcpBanner)
-						if tcpBanner == nil {
-							continue
-						}
-						info = tcpBanner.Target.URI()
-					}
-					slog.Printf(slog.WARN, "正在进行应用层指纹识别，其并发协程数为：%d，具体其中的一个协程信息为：%s", num, info)
-					continue
-				}
+				slog.Printf(slog.WARN,
+					"当前运行情况为:主机存活性检测并发【%d】个,端口存活性检测并发【%d】个,TCP层检测并发【%d】个,APP层检测并发【%d】个",
+					k.pool.host.icmp.JobsList.Length()+k.pool.host.tcp.JobsList.Length(),
+					k.pool.port.tcp.JobsList.Length(),
+					k.pool.tcpBanner.tcp.JobsList.Length(),
+					k.pool.appBanner.JobsList.Length(),
+				)
 			}
+		}
+	}()
+	time.Sleep(time.Millisecond * 500)
+	//触发器校准，每隔一段时间将触发器关闭
+	go func() {
+		for true {
+			time.Sleep(waitTime)
+			k.watchDog.trigger = false
 		}
 	}()
 	//Hydra模块
@@ -654,7 +635,6 @@ func displayTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
 	m := misc.FixMap(appBanner.FingerPrint())
 	fingerPrint := color.StrMapRandomColor(m, keyPrint, []string{"ProductName", "Hostname", "DeviceType"}, []string{"ApplicationComponent"})
 	fingerPrint = misc.FixLine(fingerPrint)
-	appBanner.AppDigest = chinese.ToUTF8(appBanner.AppDigest)
 	format := "%-30v %-" + strconv.Itoa(misc.AutoWidth(appBanner.AppDigest, 26)) + "v %s"
 	s := fmt.Sprintf(format, appBanner.URL(), appBanner.AppDigest, fingerPrint)
 	return s
@@ -663,7 +643,6 @@ func displayTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
 func outputTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
 	fingerPrint := misc.StrMap2Str(appBanner.FingerPrint(), keyPrint)
 	fingerPrint = misc.FixLine(fingerPrint)
-	appBanner.AppDigest = chinese.ToUTF8(appBanner.AppDigest)
 	s := fmt.Sprintf("%s\t%d\t%s\t%s", appBanner.URL(), appBanner.StatusCode, appBanner.AppDigest, fingerPrint)
 	return s
 }
