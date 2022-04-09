@@ -19,6 +19,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -180,28 +181,26 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 func (k *kscan) PortDiscovery() {
 	//启用端口存活性探测任务下发器
 	go func() {
-		var wg = 0
+		var wg int32 = 0
 		var threads = k.config.Threads
 
 		for out := range k.pool.host.Out {
 			host := out.(*Host)
 			k.portScanMap.Set(host.addr, host)
-			wg++
-
+			atomic.AddInt32(&wg, 1)
 			go func() {
+				defer func() { atomic.AddInt32(&wg, -1) }()
 				for _, port := range k.config.Port {
 					netloc := NewPort(host.addr, port)
 					k.pool.port.tcp.In <- netloc
 				}
-				wg--
 			}()
-
-			for wg >= threads {
-				time.Sleep(3 * time.Second)
+			for int(wg) >= threads {
+				time.Sleep(1 * time.Second)
 			}
 		}
 		for wg > 0 {
-			time.Sleep(3 * time.Second)
+			time.Sleep(1 * time.Second)
 		}
 		slog.Println(slog.INFO, "端口存活性探测任务下发完毕")
 		k.pool.port.tcp.InDone()
@@ -224,7 +223,6 @@ func (k *kscan) PortDiscovery() {
 			if host.Map.Port.Length() == host.Length.Port {
 				//所有端口检测完，表示该主机端口存活性检测已结束
 				host.FinishPortScan()
-
 				//输出没有开放任何端口的主机
 				if host.IsOpenPort() == false && k.config.ClosePing == false {
 					url := fmt.Sprintf("icmp://%s", host.addr)
@@ -374,7 +372,6 @@ func (k *kscan) GetAppBanner() {
 			k.pool.appBanner.In <- url
 		}
 		isDone <- true
-		//slog.Println(slog.INFO, "自定义应用层协议识别任务下发完毕")
 	}()
 
 	//启用App层面协议识别任务下发器
@@ -387,7 +384,6 @@ func (k *kscan) GetAppBanner() {
 			k.pool.appBanner.In <- out
 		}
 		isDone <- true
-		//slog.Println(slog.INFO, "开放端口应用层协议识别任务下发完毕")
 	}()
 
 	//开始执行App层面协议识别任务
@@ -491,7 +487,6 @@ func (k *kscan) Output() {
 }
 
 func (k *kscan) WatchDog() {
-
 	k.watchDog.wg.Add(1)
 	//触发器轮询时间
 	waitTime := 20 * time.Second
