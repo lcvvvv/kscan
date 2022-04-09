@@ -149,6 +149,7 @@ func main() {
 	if app.Setting.Touch != "None" {
 		gonmap.Init(9)
 		gonmap.SetTimeout(app.Setting.Timeout)
+		gonmap.SetLogger(slog.Debug())
 		//开启全探针模式
 		gonmap.SetScanVersion()
 		tcpBanner := touch.Touch(app.Setting.Touch)
@@ -157,6 +158,7 @@ func main() {
 		if tcpBanner.Status() == gonmap.Matched {
 			slog.Println(slog.INFO, "ProbesName：", tcpBanner.TcpFinger.ProbeName)
 			slog.Println(slog.INFO, "MatchedRegex：", tcpBanner.TcpFinger.MatchRegexString)
+			slog.Println(slog.INFO, "Protocol：", tcpBanner.TcpFinger.Service)
 		}
 		slog.Println(slog.INFO, "Length：", tcpBanner.Response.Length())
 		slog.Println(slog.INFO, "Response：")
