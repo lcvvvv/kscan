@@ -1,11 +1,13 @@
 package queue
 
+import "sync/atomic"
+
 type (
 	//Queue 队列
 	Queue struct {
 		top    *node
 		rear   *node
-		length int
+		length int64
 	}
 	//双向链表节点
 	node struct {
@@ -21,48 +23,48 @@ func New() *Queue {
 }
 
 //获取队列长度
-func (this *Queue) Len() int {
-	return this.length
+func (q *Queue) Len() int64 {
+	return q.length
 }
 
 //返回队列顶端元素
-func (this *Queue) Peek() interface{} {
-	if this.top == nil {
+func (q *Queue) Peek() interface{} {
+	if q.top == nil {
 		return nil
 	}
-	return this.top.value
+	return q.top.value
 }
 
 //入队操作
-func (this *Queue) Push(v interface{}) {
+func (q *Queue) Push(v interface{}) {
 	n := &node{nil, nil, v}
-	if this.length == 0 {
-		this.top = n
-		this.rear = this.top
+	if q.length == 0 {
+		q.top = n
+		q.rear = q.top
 	} else {
-		n.pre = this.rear
-		this.rear.next = n
-		this.rear = n
+		n.pre = q.rear
+		q.rear.next = n
+		q.rear = n
 	}
-	this.length++
+	atomic.AddInt64(&q.length, 1)
 }
 
 //出队操作
-func (this *Queue) Pop() interface{} {
-	if this.length == 0 {
+func (q *Queue) Pop() interface{} {
+	if q.length == 0 {
 		return nil
 	}
-	n := this.top
-	if this.top != nil {
-		if this.top.next == nil {
-			this.top = nil
+	n := q.top
+	if q.top != nil {
+		if q.top.next == nil {
+			q.top = nil
 		} else {
-			this.top = this.top.next
-			//this.top.pre.next = nil
-			this.top.pre = nil
+			q.top = q.top.next
+			//q.top.pre.next = nil
+			q.top.pre = nil
 		}
 	}
-	this.length--
+	atomic.AddInt64(&q.length, -1)
 	if n != nil {
 		return n.value
 	} else {
