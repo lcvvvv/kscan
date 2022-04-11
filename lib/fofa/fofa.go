@@ -100,7 +100,6 @@ func (f *Fofa) makeResult(responseJson ResponseJson) []Result {
 			f = misc.First2Upper(f)
 			m.FieldByName(f).SetString(row[index])
 		}
-		result.Fix()
 		results = append(results, result)
 	}
 	return results

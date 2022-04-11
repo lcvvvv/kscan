@@ -1,11 +1,7 @@
 package fofa
 
 import (
-	"fmt"
-	"kscan/lib/misc"
 	"reflect"
-	"regexp"
-	"strings"
 )
 
 type Result struct {
@@ -13,21 +9,6 @@ type Result struct {
 	Province, City, Country_name, Protocol string
 	Server, Banner, Isp, As_organization   string
 	Header, Cert                           string
-}
-
-func (r *Result) Fix() {
-	if r.Protocol != "" {
-		r.Host = fmt.Sprintf("%s://%s:%s", r.Protocol, r.Ip, r.Port)
-	}
-	if regexp.MustCompile("http([s]?)://.*").MatchString(r.Host) == false && r.Protocol == "" {
-		r.Host = "http://" + r.Host
-	}
-	if r.Title == "" && r.Protocol != "" {
-		r.Title = strings.ToUpper(r.Protocol)
-	}
-
-	r.Title = misc.FixLine(r.Title)
-
 }
 
 func (r Result) Map() map[string]string {
