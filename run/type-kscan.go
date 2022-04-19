@@ -489,7 +489,7 @@ func (k *kscan) Output() {
 func (k *kscan) WatchDog() {
 	k.watchDog.wg.Add(1)
 	//触发器轮询时间
-	waitTime := 20 * time.Second
+	waitTime := 30 * time.Second
 	//轮询触发器，每隔一段时间会检测触发器是否打开
 	go func() {
 		for true {
