@@ -1,4 +1,4 @@
-# Kscan - Simple Asset Mapping Tool
+# Kscan-简单的资产测绘工具
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/golang-1.6+-9cf"></a>
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.70-ff69b4"></a>
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/LICENSE-GPL-important"></a>
@@ -6,25 +6,29 @@
 ![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
 ![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
-## 0 Disclaimer (~~The author did not participate in the XX action, don't trace it~~)
+[[中文 Readme]](https://github.com/lcvvvv/kscan/blob/master/README.md)
+|
+[[English Readme]](https://github.com/lcvvvv/kscan/blob/master/README_ENG.md)  
 
-- This tool is only for legally authorized enterprise security construction behaviors and personal learning behaviors. If you need to test the usability of this tool, please build a target drone environment by yourself.
+## 0 免责声明（~~作者没有参加XX行动，别溯了~~）
 
-- When using this tool for testing, you should ensure that the behavior complies with local laws and regulations and has obtained sufficient authorization. Do not scan unauthorized targets.
+- 本工具仅面向合法授权的企业安全建设行为与个人学习行为，如您需要测试本工具的可用性，请自行搭建靶机环境。
 
-We reserve the right to pursue your legal responsibility if the above prohibited behavior is found.
+- 在使用本工具进行检测时，您应确保该行为符合当地的法律法规，并且已经取得了足够的授权。请勿对非授权目标进行扫描。
 
-If you have any illegal behavior in the process of using this tool, you shall bear the corresponding consequences by yourself, and we will not bear any legal and joint responsibility.
+如果发现上述禁止行为，我们将保留追究您法律责任的权利。
 
-Before installing and using this tool, please be sure to carefully read and fully understand the terms and conditions.
+如您在使用本工具的过程中存在任何非法行为，您需自行承担相应后果，我们将不承担任何法律及连带责任。
 
-Unless you have fully read, fully understood and accepted all the terms of this agreement, please do not install and use this tool. Your use behavior or your acceptance of this Agreement in any other express or implied manner shall be deemed that you have read and agreed to be bound by this Agreement.
+在安装并使用本工具前，请您务必审慎阅读、充分理解各条款内容。
 
-## 1 Introduction
+除非您已充分阅读、完全理解并接受本协议所有条款，否则，请您不要安装并使用本工具。您的使用行为或者您以其他任何明示或者默示方式表示接受本协议的，即视为您已阅读并同意本协议的约束。
+
+## 1 简介
 
 ```
  _   __
-|#| /#/ Lightweight Asset Mapping Tool by: kv2	
+|#| /#/    轻量级资产测绘工具 by：kv2	
 |#|/#/   _____  _____     *     _   _
 |#.#/   /Edge/ /Forum|   /#\   |#\ |#|
 |##|   |#|___  |#|      /###\  |##\|#|
@@ -33,52 +37,52 @@ Unless you have fully read, fully understood and accepted all the terms of this 
 |#| \#\\#####/ \#####/#/     \#\#| \#|
 ```
 
-kscan is an asset mapping tool that can perform port scanning, TCP fingerprinting and banner capture for specified assets, and obtain as much port information as possible without sending more packets. It can perform automatic brute force cracking on scan results, and is the first open source RDP brute force cracking tool on the go platform.
+kscan是一款资产测绘工具，可针对指定资产进行端口扫描以及TCP指纹识别和Banner抓取，在不发送更多的数据包的情况下尽可能的获取端口更多信息。并能够针对扫描结果进行自动化暴力破解，且是go平台首款开源的RDP暴力破解工具。 
 
-## 2 is written in front
+## 2 写在前面
 
-At present, there are actually many tools for asset scanning, fingerprint identification, and vulnerability detection, and there are many great tools, but Kscan actually has many different ideas.
+目前类似的资产扫描、指纹识别、漏洞检测的工具其实已经非常多了，也不乏有很棒的工具，但是Kscan其实有很多不同的想法。
 
-- Kscan hopes to accept a variety of input formats, and there is no need to classify the scanned objects before use, such as IP, or URL address, etc. This is undoubtedly an unnecessary workload for users, and all entries can be normal Input and identification. If it is a URL address, the path will be reserved for detection. If it is only IP:PORT, the port will be prioritized for protocol identification. Currently Kscan supports three input methods (-t,--target|-f,--fofa|--spy).
+- Kscan希望能够接受多种输入格式，无需在使用之前对扫描对象进行分类，比如区分为IP，还是URL地址等，这对于使用者来说无疑是徒增工作量，所有的条目，均能正常输入和识别，若是URL地址，则会保留路径进行检测，若只是IP:PORT，则会优先对该端口进行协议识别。目前Kscan支持三种输入方式（-t,--target|-f,--fofa|--spy）。
 
-- Kscan does not seek efficiency by comparing port numbers with common protocols to confirm port protocols, nor does it only detect WEB assets. In this regard, Kscan pays more attention to accuracy and comprehensiveness, and only high-accuracy protocol identification , in order to provide good detection conditions for subsequent application layer identification.
+- Kscan没有为了追求效率，而根据端口号与常见协议进行比对来确认端口协议，也不是只检测WEB资产，在这方面，Kscan则更加看重准确性和全面性，只有高准确性的协议识别，才能为后续的应用层识别，提供良好的检测条件。
 
-- Kscan does not use a modular approach to do pure function stacking, such as a module obtains the title separately, a module obtains SMB information separately, etc., runs independently, and outputs independently, but outputs asset information in units of ports, such as ports If the protocol is HTTP, subsequent fingerprinting and title acquisition will be performed automatically. If the port protocol is RPC, it will try to obtain the host name, etc.
+- Kscan不是采用模块化的方式做单纯的功能堆叠，比如某个模块单独获取标题，某个模块单独获取SMB信息等等，独立运行，独立输出，而是以端口为单位输出资产信息，比如端口协议为HTTP，则会自动化进行后续的指纹识别、标题获取，端口协议为RPC，则会尝试获取主机名等等。
 
-![kscan logic diagram.drawio](assets/kscan logic diagram.drawio.png)
+![kscan逻辑图.drawio](assets/kscan逻辑图.drawio.png)
 
-## 3 Compilation Manual
+## 3 编译手册
 
-[Compiler Manual](https://github.com/lcvvvv/kscan/wiki/%E7%BC%96%E8%AF%91)
+[编译手册](https://github.com/lcvvvv/kscan/wiki/%E7%BC%96%E8%AF%91)
 
-## 4 Let's get started
+## 4 开始吧
 
-Kscan currently has 3 ways to input targets
+Kscan目前具备3种输入目标的方式
 
-- -t/--target can add the --check parameter to fingerprint only the specified target port, otherwise the target will be port scanned and fingerprinted
-
-```
-IP address: 114.114.114.114
-IP address range: 114.114.114.114-115.115.115.115
-URL address: https://www.baidu.com
-File address: file:/tmp/target.txt
-```
-
-- --spy can add the --scan parameter to perform port scanning and fingerprinting on the surviving C segment, otherwise only the surviving network segment will be detected
+- -t/--target 可添加--check参数，只对指定的目标端口进行指纹识别，否则将对目标进行端口扫描和指纹识别
 
 ```
-[Empty]: will detect the IP address of the local machine and detect the B segment where the local IP is located
-[all]: All private network addresses (192.168/172.32/10, etc.) will be probed
-IP address: will detect the B segment where the specified IP address is located
+IP地址：114.114.114.114
+IP地址段：114.114.114.114-115.115.115.115
+URL地址：https://www.baidu.com
+文件地址：file:/tmp/target.txt
+```
+
+- --spy 可添加--scan参数可对存活C段进行端口扫描和指纹识别，否则将只检测存活的网段
+
+```
+[空]：将检测本机IP地址，对本机IP所在B段进行探测
+[all]：将对所有私网地址（192.168/172.32/10等）进行探测
+IP地址：将对指定IP地址所在B段进行探测
 ```
 
 
-- -f/--fofa can add --check to verify the survivability of the retrieval results, and add the --scan parameter to perform port scanning and fingerprint identification on the retrieval results, otherwise only the fofa retrieval results will be returned
+- -f/--fofa 可添加--check将对检索结果进行存活性验证，添加--scan参数将对检索结果进行端口扫描和指纹识别，否则将只返回fofa检索结果
 ```
-fofa search keywords: will directly return fofa search results
+fofa搜索关键字：将直接返回fofa搜索结果
 ```
 
-## 5 How to use
+## 5 使用方法
 
 ```
 usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
@@ -86,74 +90,74 @@ usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p
 
 optional arguments:
   -h , --help     show this help message and exit
-  -f , --fofa Get the detection object from fofa, you need to configure the environment variables in advance: FOFA_EMAIL, FOFA_TOKEN
-  -t , --target Specify the detection target:
-                  IP address: 114.114.114.114
-                  IP address segment: 114.114.114.114/24, subnet mask less than 12 is not recommended
-                  IP address range: 114.114.114.114-115.115.115.115
-                  URL address: https://www.baidu.com
-                  File address: file:/tmp/target.txt
-  --spy network segment detection mode, in this mode, the internal network segment reachable by the host will be automatically detected. The acceptable parameters are:
-                  (empty), 192, 10, 172, all, specified IP address (the IP address B segment will be detected as the surviving gateway)
-  --check Fingerprinting the target address, only port detection will not be performed
-  --scan will perform port scanning and fingerprinting on the target objects provided by --fofa and --spy
-  --touch Get the return package of the specified port, you can use this parameter to get the return package and improve the fingerprint library, the format is: IP:PORT
-  -p , --port scan the specified port, TOP400 will be scanned by default, support: 80, 8080, 8088-8090
-  -o , --output save scan results to file
-  -oJ save the scan results to a file in json format
-  -Pn After using this parameter, intelligent survivability detection will not be performed. Now intelligent survivability detection is enabled by default to improve efficiency.
-  -Cn With this parameter, the console output will not be colored.
-  -sV After using this parameter, all ports will be probed with full probes. This parameter greatly affects the efficiency, so use it with caution!
-  --top Scan the filtered common ports TopX, up to 1000, the default is TOP400
-  --proxy set proxy (socks5|socks4|https|http)://IP:Port
-  --threads thread parameter, the default thread is 100, the maximum value is 2048
-  --path specifies the directory to request access, only a single directory is supported
-  --host specifies the header Host value for all requests
-  --timeout set timeout
-  --encoding Set the terminal output encoding, which can be specified as: gb2312, utf-8
-  --match returns the banner to the asset for retrieval. If there is a keyword, it will be displayed, otherwise it will not be displayed
-  --hydra automatic blasting support protocol: ssh, rdp, ftp, smb, mysql, mssql, oracle, postgresql, mongodb, redis, all are enabled by default
+  -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_TOKEN
+  -t , --target   指定探测对象：
+                  IP地址：114.114.114.114
+                  IP地址段：114.114.114.114/24,不建议子网掩码小于12
+                  IP地址段：114.114.114.114-115.115.115.115
+                  URL地址：https://www.baidu.com
+                  文件地址：file:/tmp/target.txt
+  --spy           网段探测模式，此模式下将自动探测主机可达的内网网段可接收参数为：
+                  (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
+  --check         针对目标地址做指纹识别，仅不会进行端口探测
+  --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
+  --touch         获取指定端口返回包，可以使用此次参数获取返回包，完善指纹库，格式为：IP:PORT
+  -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
+  -o , --output   将扫描结果保存到文件
+  -oJ             将扫描结果使用json格式保存到文件
+  -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
+  -Cn             使用此参数后，控制台输出结果将不会带颜色。
+  -sV             使用此参数后，将对所有端口进行全探针探测，此参数极度影响效率，慎用！
+  --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP400
+  --proxy         设置代理(socks5|socks4|https|http)://IP:Port
+  --threads       线程参数,默认线程100,最大值为2048
+  --path          指定请求访问的目录，只支持单个目录
+  --host          指定所有请求的头部Host值
+  --timeout       设置超时时间
+  --encoding      设置终端输出编码，可指定为：gb2312、utf-8
+  --match         对资产返回banner进行检索，存在关键字的，才会显示，否则不会显示
+  --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
 hydra options:
-   --hydra-user custom hydra blasting username: username or user1,user2 or file:username.txt
-   --hydra-pass Custom hydra blasting password: password or pass1,pass2 or file:password.txt
-                  If there is a comma in the password, use \, to escape, other symbols do not need to be escaped
-   --hydra-update Customize the user name and password mode. If this parameter is carried, it is a new mode, and the user name and password will be added to the default dictionary. Otherwise the default dictionary will be replaced.
-   --hydra-mod specifies the automatic brute force cracking module: rdp or rdp, ssh, smb
+   --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt
+   --hydra-pass   自定义hydra爆破密码:password or pass1,pass2 or file:password.txt
+                  若密码中存在使用逗号的情况，则使用\,进行转义，其他符号无需转义
+   --hydra-update 自定义用户名、密码模式，若携带此参数，则为新增模式，会将用户名和密码补充在默认字典后面。否则将替换默认字典。
+   --hydra-mod    指定自动化暴力破解模块:rdp or rdp,ssh,smb
 fofa options:
-   --fofa-syntax will get fofa search syntax description
-   --fofa-size will set the number of entries returned by fofa, the default is 100
-   --fofa-fix-keyword Modifies the keyword, and the {} in this parameter will eventually be replaced with the value of the -f parameter
+   --fofa-syntax  将获取fofa搜索语法说明
+   --fofa-size    将设置fofa返回条目数，默认100条
+   --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 ```
 
-The function is not complicated, the others are explored by themselves
+功能不复杂，其他的自行探索
 
-## 6 Demo
+## 6 演示
 
-### 6.1 Port Scan Mode
+### 6.1 端口扫描模式
 
 ![WechatIMG986](assets/Kscan_v1.6/WechatIMG986.png)
 
-### 6.2 Survival network segment detection
+### 6.2 存活网段探测
 
 ![WechatIMG988](assets/Kscan_v1.6/WechatIMG988.png)
 
-### 6.3 Fofa result retrieval
+### 6.3 Fofa结果检索
 
 ![WechatIMG989](assets/Kscan_v1.6/WechatIMG989.png)
 
-### 6.3 Brute-force cracking
+### 6.3 暴力破解
 
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG996.png)
 
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG1018.png)
 
-## 7 Special thanks
+## 7 特别感谢
 
 - [EdgeSecurityTeam](https://github.com/EdgeSecurityTeam)
 
 - [bufferfly](https://github.com/dr0op/bufferfly)
 
-- [EHole(Edge Hole)](https://github.com/EdgeSecurityTeam/EHole)
+- [EHole(棱洞)](https://github.com/EdgeSecurityTeam/EHole)
 
 - [NMAP](https://github.com/nmap/nmap/)
 
@@ -163,6 +167,6 @@ The function is not complicated, the others are explored by themselves
 
 - [dismap](https://github.com/zhzyker/dismap)
 
-## 8 End of article
+## 8 文末
 
-Github project address (bugs, requirements, rules are welcome to submit): https://github.com/lcvvvv/kscan
+Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
