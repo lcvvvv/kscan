@@ -171,7 +171,7 @@ func main() {
 	slog.Println(slog.INFO, "If you have any questions, please come to my Github to submit a bug[https://github.com/lcvvvv/kscan/]")
 }
 
-funcInit() {
+func Init() {
 	app.Args.SetLogo(logo)
 	app.Args.SetUsage(usage)
 	app.Args.SetHelp(help)
@@ -201,7 +201,7 @@ func InitKscan() {
 	//slog.Println(slog.WARN, "Start reading scan object...")
 	slog.Printf(slog.INFO, "Successfully read URL addresses: [%d]", len(app.Setting.UrlTarget))
 	if app.Setting.Check == false {
-		slog.Printf(slog.INFO, "Successfully read host addresses: [%d], ports to be detected: [%d]", len(app.Setting.HostTarget), len(app.Setting.HostTarget)* len(app.Setting.Port))
+		slog.Printf(slog.INFO, "Successfully read host addresses: [%d], ports to be detected: [%d]", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
 	}
 	//Initialize HTTP fingerprint library
 	r := httpfinger.Init()
