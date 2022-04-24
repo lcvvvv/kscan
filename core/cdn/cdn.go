@@ -3,15 +3,18 @@ package cdn
 import (
 	"kscan/core/slog"
 	"kscan/lib/qqwry"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
 var database *qqwry.QQwry
 
-const filename = "./qqwry.dat"
+var filename = "qqwry.dat"
+var path = getRealPath()
 
 func Init() {
-	d, err := qqwry.NewQQwry(filename)
+	d, err := qqwry.NewQQwry(GetPath())
 	if err != nil {
 		slog.Println(slog.WARN, "qqwry init err:", err)
 		return
@@ -19,8 +22,12 @@ func Init() {
 	database = d
 }
 
+func GetPath() string {
+	return path + "/" + filename
+}
+
 func DownloadQQWry() error {
-	return qqwry.Download(filename)
+	return qqwry.Download(GetPath())
 }
 
 func FindCDN(query string) (bool, string, error) {
@@ -37,4 +44,10 @@ func Find(query string) (string, error) {
 		return "", err
 	}
 	return result.String(), err
+}
+
+func getRealPath() string {
+	dir, _ := os.Executable()
+	path := filepath.Dir(dir)
+	return path
 }
