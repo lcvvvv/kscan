@@ -24,5 +24,6 @@ require (
 	golang.org/x/text v0.3.6
 
 	//gonmap
-    github.com/lcvvvv/gonmap v1.1.1
+    github.com/lcvvvv/gonmap v1.1.6
 )
+

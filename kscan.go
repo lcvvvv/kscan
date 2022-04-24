@@ -29,7 +29,7 @@ const logo = `
     |##|   |#|___  |#|      /###\  |##\|#|
     |#.#\   \#####\|#|     /#/_\#\ |#.#.#|
     |#|\#\ /\___|#||#|____/#/###\#\|#|\##|
-    |#| \#\\#####/ \#####/#/ v1.71#\#| \#|
+    |#| \#\\#####/ \#####/#/ v1.72#\#| \#|
 
 `
 
@@ -265,7 +265,6 @@ func InitFofa() {
 		slog.Println(slog.WARN, "check参数已启用，现在将对fofa扫描结果进行存活性及指纹探测")
 	}
 	if app.Setting.Scan == true {
-		app.Setting.UrlTarget = fofa.GetUrlTarget()
 		app.Setting.HostTarget = fofa.GetHostTarget()
 		slog.Println(slog.WARN, "scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
 	}
