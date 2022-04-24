@@ -149,7 +149,7 @@ func debugModifier(s string) string {
 func debugFilter(s string) bool {
 	//Debug 过滤器
 	if strings.Contains(s, "too many open") { //发现存在线程过高错误
-		fmt.Println("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制,MAC系统可能还需要执行：\"launchctl limit maxfiles 50000 50000\"")
+		fmt.Println("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制")
 		os.Exit(0)
 	}
 	//if strings.Contains(s, "STEP1:CONNECT") {

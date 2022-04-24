@@ -43,6 +43,9 @@ func Find(query string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if strings.Contains(result.String(), "对方和您在同一内部网") {
+		return "", err
+	}
 	return result.String(), err
 }
 
