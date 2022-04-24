@@ -4,11 +4,14 @@ import (
 	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/gonmap/lib/httpfinger"
 	"kscan/app"
+	"kscan/core/cdn"
 	"kscan/core/fofa"
 	"kscan/core/slog"
 	"kscan/core/spy"
+	"kscan/core/tips"
 	"kscan/core/touch"
 	"kscan/lib/color"
+	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/run"
 	"os"
@@ -26,7 +29,7 @@ const logo = `
     |##|   |#|___  |#|      /###\  |##\|#|
     |#.#\   \#####\|#|     /#/_\#\ |#.#.#|
     |#|\#\ /\___|#||#|____/#/###\#\|#|\##|
-    |#| \#\\#####/ \#####/#/ v1.70#\#| \#|
+    |#| \#\\#####/ \#####/#/ v1.71#\#| \#|
 
 `
 
@@ -127,6 +130,20 @@ func main() {
 
 	//校验升级情况
 	//app.CheckUpdate()
+	//下载qqwry
+	if app.Setting.DownloadQQwry == true {
+		slog.Println(slog.INFO, "现在开始下载最新qqwry，请耐心等待！")
+		err := cdn.DownloadQQWry()
+		if err != nil {
+			slog.Println(slog.WARN, "纯真IP库下载失败，请手动下载解压后保存到kscan同一目录")
+			slog.Println(slog.WARN, "下载链接： https://qqwry.mirror.noc.one/qqwry.rar")
+			slog.Println(slog.WARN, err)
+		}
+		slog.Println(slog.INFO, "qqwry.dat下载成功！")
+		os.Exit(0)
+	}
+
+	//spy模块启动
 	if app.Setting.Spy != "None" {
 		InitSpy()
 		spy.Start()
@@ -191,6 +208,7 @@ func Init() {
 	pool.SetLogger(slog.Debug())
 	//配置文件初始化
 	app.ConfigInit()
+	slog.Println(slog.DATA, "Tips:", tips.GetTips(), "\n")
 	slog.Println(slog.INFO, "当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
 	if runtime.GOOS == "windows" && app.Setting.CloseColor == true {
 		slog.Println(slog.INFO, "在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
@@ -198,14 +216,13 @@ func Init() {
 }
 
 func InitKscan() {
-	//slog.Println(slog.WARN, "开始读取扫描对象...")
-	slog.Printf(slog.INFO, "成功读取URL地址:[%d]个", len(app.Setting.UrlTarget))
-	if app.Setting.Check == false {
-		slog.Printf(slog.INFO, "成功读取主机地址:[%d]个，待检测端口:[%d]个", len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
+	if app.Setting.Check == true {
+		slog.Printf(slog.INFO, "成功读取URL地址:[%d]个", len(app.Setting.UrlTarget))
+	} else {
+		slog.Printf(slog.INFO, "成功读取URL地址:[%d]个,成功读取主机地址:[%d]个，待检测端口:[%d]个", len(app.Setting.UrlTarget), len(app.Setting.HostTarget), len(app.Setting.HostTarget)*len(app.Setting.Port))
 	}
 	//HTTP指纹库初始化
-	r := httpfinger.Init()
-	slog.Printf(slog.INFO, "成功加载favicon指纹:[%d]条，keyword指纹:[%d]条", r["FaviconHash"], r["KeywordFinger"])
+	httpfinger.Init()
 	//gonmap探针/指纹库初始化
 	gonmap.Init(9)
 	//超时及日志配置
@@ -216,9 +233,19 @@ func InitKscan() {
 		gonmap.SetScanVersion()
 		app.Setting.Timeout = time.Second * 120
 	}
-	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条", gonmap.UsedProbesCount, gonmap.UsedMatchCount)
+	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条,favicon指纹:[%d]条，keyword指纹:[%d]条", gonmap.UsedProbesCount, gonmap.UsedMatchCount, httpfinger.CountFaviconHash, httpfinger.CountKeywordFinger)
 	//gonmap应用层指纹识别初始化
 	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
+	//CDN检测初始化
+	if app.Setting.CloseCDN == false {
+		if misc.FileIsExist("./qqwry.dat") == false {
+			slog.Printf(slog.WARN, "未检测到qqwry.dat,将关闭CDN检测功能，如需开启，请执行kscan --download-qqwry下载该文件")
+			app.Setting.CloseCDN = true
+		} else {
+			slog.Printf(slog.INFO, "检测到qqwry.dat,将自动启动CDN检测功能，可使用-Dn参数关闭该功能")
+			cdn.Init()
+		}
+	}
 }
 
 func InitFofa() {
@@ -242,7 +269,6 @@ func InitFofa() {
 		app.Setting.HostTarget = fofa.GetHostTarget()
 		slog.Println(slog.WARN, "scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
 	}
-	slog.Println(slog.DEBUG)
 }
 
 func InitSpy() {

@@ -7,6 +7,7 @@ import (
 	"github.com/lcvvvv/gonmap/lib/httpfinger"
 	"github.com/lcvvvv/gonmap/lib/urlparse"
 	"kscan/app"
+	"kscan/core/cdn"
 	"kscan/core/hydra"
 	"kscan/core/slog"
 	"kscan/lib/color"
@@ -159,6 +160,18 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	//启用ICMP主机存活性探测任务下发器
 	go func() {
 		for _, host := range hostArr {
+			if app.Setting.CloseCDN == false {
+				ok, result, err := cdn.FindCDN(host)
+				if ok && result != "" {
+					url := fmt.Sprintf("cdn://%s", host)
+					output := fmt.Sprintf("%-30v %-26v %s", url, "IsCDN", color.RandomImportant(result))
+					k.watchDog.output <- output
+					continue
+				}
+				if err != nil {
+					slog.Println(slog.DEBUG)
+				}
+			}
 			k.pool.host.icmp.In <- host
 		}
 		//关闭主机存活性探测下发信道
@@ -441,6 +454,13 @@ func (k *kscan) Output() {
 				continue
 			}
 			bannerMapArr = append(bannerMapArr, banner.Map())
+			if app.Setting.CloseCDN == false {
+				result, _ := cdn.Find(banner.IPAddr)
+				if result != "" {
+					banner.AddFingerPrint("Attribution", result)
+
+				}
+			}
 			write = outputTcpBanner(banner, app.Setting.CloseColor)
 			disp = displayTcpBanner(banner, app.Setting.CloseColor)
 		case hydra.AuthInfo:

@@ -11,7 +11,7 @@ type args struct {
 	USAGE, HELP, LOGO, SYNTAX string
 
 	Help, Debug, ClosePing, Check, CloseColor, Scan   bool
-	ScanVersion                                       bool
+	ScanVersion, DownloadQQwry, CloseCDN              bool
 	Target, Port, Output, Proxy, Path, Host, Encoding string
 	OutputJson                                        string
 	Spy, Touch                                        string
@@ -81,6 +81,10 @@ func (o *args) define() {
 	sflag.BoolVar(&o.ClosePing, "Pn", false)
 	sflag.BoolVar(&o.Check, "check", false)
 	sflag.BoolVar(&o.ScanVersion, "sV", false)
+	//CDN检测
+	sflag.BoolVar(&o.CloseCDN, "Dn", false)
+	sflag.BoolVar(&o.DownloadQQwry, "download-qqwry", false)
+
 	//输出模块
 	sflag.StringVar(&o.Encoding, "encoding", "utf-8")
 	sflag.StringVar(&o.Match, "match", "")
@@ -109,7 +113,7 @@ func (o *args) SetHelp(help string) {
 //校验参数真实性
 func (o *args) checkArgs() {
 	//判断必须的参数是否存在
-	if o.Target == "" && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" {
+	if o.Target == "" && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" && o.DownloadQQwry == false {
 		fmt.Print("至少有--target、--fofa、--spy、--touch参数中的一个")
 		os.Exit(0)
 	}

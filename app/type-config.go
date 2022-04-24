@@ -37,6 +37,9 @@ type Config struct {
 	Scan           bool
 	//touch
 	Touch string
+	//CDN检测模块
+	DownloadQQwry bool
+	CloseCDN      bool
 	//输出修饰
 	Match string
 }
@@ -75,6 +78,9 @@ func ConfigInit() {
 	Setting.FofaSize = args.FofaSize
 	Setting.FofaFixKeyword = args.FofaFixKeyword
 	Setting.Scan = args.Scan
+	//CDN检测模块
+	Setting.DownloadQQwry = args.DownloadQQwry
+	Setting.CloseCDN = args.CloseCDN
 	//输出修饰
 	Setting.Match = args.Match
 }
@@ -90,7 +96,7 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		return
 	}
 	//判断target字符串是否为文件
-	if regexp.MustCompile("^file:.+$").MatchString(expr) {
+	if regexp.MustCompile("^file:.+$").MatchString(expr) || misc.FileIsExist(expr) == true {
 		expr = strings.Replace(expr, "file:", "", 1)
 		err := misc.ReadLine(expr, c.loadTarget)
 		if err != nil {
