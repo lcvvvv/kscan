@@ -106,7 +106,8 @@ optional arguments:
   -o , --output   将扫描结果保存到文件
   -oJ             将扫描结果使用json格式保存到文件
   -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
-  -Cn             使用此参数后，控制台输出结果将不会带颜色。
+  -Cn             使用此参数后，控制台输出结果将不会带颜色
+  -Dn             使用此参数后，将关闭CDN识别功能
   -sV             使用此参数后，将对所有端口进行全探针探测，此参数极度影响效率，慎用！
   --top           扫描经过筛选处理的常见端口TopX，最高支持1000个，默认为TOP400
   --proxy         设置代理(socks5|socks4|https|http)://IP:Port
@@ -150,6 +151,10 @@ fofa options:
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG996.png)
 
 ![WechatIMG996](assets/Kscan_v1.6/WechatIMG1018.png)
+
+### 6.4 CDN检测、归属地识别
+
+![iShot2022-04-24_18.23.41](assets/kscan_v1.7/iShot2022-04-24_18.23.41.png)
 
 ## 7 特别感谢
 
