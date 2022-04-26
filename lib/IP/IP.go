@@ -68,6 +68,9 @@ func IsInSameSegment(ips []string) bool {
 		return false
 	}
 	networkSegment := ExprToList(ips[0] + "/24")
+	if len(networkSegment) == 0 {
+		return false
+	}
 	start := StringIpToInt(networkSegment[0])
 	end := StringIpToInt(networkSegment[len(networkSegment)-1])
 	for _, ip := range ips {

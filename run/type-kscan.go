@@ -166,7 +166,8 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 				var ok bool
 				var result string
 				var err error
-				if IP.IsIP(host) {
+				var isIP = IP.IsIP(host)
+				if isIP {
 					ok, result, err = cdn.FindWithIP(host)
 				} else {
 					ok, result, err = cdn.FindWithDomain(host)
@@ -180,15 +181,17 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 				if err != nil {
 					slog.Println(slog.DEBUG, err)
 				}
-			}
-			r, err := cdn.Resolution(host)
-			if err != nil {
-				slog.Println(slog.DEBUG, err)
-				continue
-			}
-			ip = r
-			if misc.IsInStrArr(k.config.HostTarget, ip) == true {
-				continue
+				if isIP == false {
+					r, err := cdn.Resolution(host)
+					if err != nil {
+						slog.Println(slog.DEBUG, err)
+						continue
+					}
+					ip = r
+					if misc.IsInStrArr(k.config.HostTarget, ip) == true {
+						continue
+					}
+				}
 			}
 			k.pool.host.icmp.In <- ip
 		}
