@@ -9,10 +9,14 @@ require (
 	github.com/huin/asn1ber v0.0.0-20120622192748-af09f62e6358
 	github.com/icodeface/tls v0.0.0-20190904083142-17aec93c60e5
 	github.com/jlaffaye/ftp v0.0.0-20210307004419-5d4190119067
+
+	//gonmap
+	github.com/lcvvvv/gonmap v1.1.6
 	github.com/lib/pq v1.10.2
 
 	//grdp
 	github.com/lunixbochs/struc v0.0.0-20200707160740-784aaebc1d40
+	github.com/miekg/dns v1.1.48
 	github.com/sijms/go-ora/v2 v2.2.15
 
 	//protocol
@@ -22,8 +26,5 @@ require (
 
 	//chinese
 	golang.org/x/text v0.3.6
-
-	//gonmap
-    github.com/lcvvvv/gonmap v1.1.6
 )
 
