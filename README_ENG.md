@@ -86,7 +86,7 @@ usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p
 
 optional arguments:
   -h , --help     show this help message and exit
-  -f , --fofa Get the detection object from fofa, you need to configure the environment variables in advance: FOFA_EMAIL, FOFA_TOKEN
+  -f , --fofa Get the detection object from fofa, you need to configure the environment variables in advance: FOFA_EMAIL, FOFA_KEY
   -t , --target Specify the detection target:
                   IP address: 114.114.114.114
                   IP address segment: 114.114.114.114/24, subnet mask less than 12 is not recommended

@@ -90,7 +90,7 @@ usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p
 
 optional arguments:
   -h , --help     show this help message and exit
-  -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_TOKEN
+  -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_KEY
   -t , --target   指定探测对象：
                   IP地址：114.114.114.114
                   IP地址段：114.114.114.114/24,不建议子网掩码小于12
