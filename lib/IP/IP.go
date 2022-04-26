@@ -63,6 +63,22 @@ func IsIP(s string) bool {
 	return false
 }
 
+func IsInSameSegment(ips []string) bool {
+	if len(ips) == 0 {
+		return false
+	}
+	networkSegment := ExprToList(ips[0] + "/24")
+	start := StringIpToInt(networkSegment[0])
+	end := StringIpToInt(networkSegment[len(networkSegment)-1])
+	for _, ip := range ips {
+		ipInt := StringIpToInt(ip)
+		if ipInt > end || ipInt < start {
+			return false
+		}
+	}
+	return true
+}
+
 func GetGatewayList(ip string, t string) []string {
 	var gatewayArr []string
 	if FormatCheck(ip) == false {
@@ -92,14 +108,14 @@ func GetGatewayList(ip string, t string) []string {
 	return gatewayArr
 }
 
-func IsPrivateIPAddr(ip string) bool {
-	for _, regxPrivateIP := range regxPrivateIPArr {
-		if regxPrivateIP.MatchString(ip) {
-			return true
-		}
-	}
-	return false
-}
+//func IsPrivateIPAddr(ip string) bool {
+//	for _, regxPrivateIP := range regxPrivateIPArr {
+//		if regxPrivateIP.MatchString(ip) {
+//			return true
+//		}
+//	}
+//	return false
+//}
 
 func ExprToList(ipExpr string) []string {
 	var r []string
@@ -197,4 +213,17 @@ func maskCheck(mask string) bool {
 		return false
 	}
 	return true
+}
+
+func StringIpToInt(ipstring string) int {
+	ipSegs := strings.Split(ipstring, ".")
+	var ipInt = 0
+	var pos uint = 24
+	for _, ipSeg := range ipSegs {
+		tempInt, _ := strconv.Atoi(ipSeg)
+		tempInt = tempInt << pos
+		ipInt = ipInt | tempInt
+		pos -= 8
+	}
+	return ipInt
 }

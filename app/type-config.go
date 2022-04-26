@@ -53,6 +53,8 @@ func ConfigInit() {
 	Setting.Spy = args.Spy
 	if args.Spy == "None" {
 		Setting.loadTarget(args.Target, false)
+		Setting.UrlTarget = misc.RemoveDuplicateElement(Setting.UrlTarget)
+		Setting.HostTarget = misc.RemoveDuplicateElement(Setting.HostTarget)
 	}
 	Setting.loadPort()
 	Setting.loadOutput()
@@ -106,8 +108,6 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 				slog.Println(slog.ERROR, expr+err.Error())
 			}
 		}
-		c.HostTarget = misc.RemoveDuplicateElement(c.HostTarget)
-		c.UrlTarget = misc.RemoveDuplicateElement(c.UrlTarget)
 		return
 	}
 	//判断target字符串是否为类IP/MASK
@@ -116,25 +116,18 @@ func (c *Config) loadTarget(expr string, recursion bool) {
 		return
 	}
 	//判断target字符串是否为类URL
-	if url, err := urlparse.Load(expr); err != nil {
+	url, err := urlparse.Load(expr)
+	if err != nil {
 		if recursion == true {
 			slog.Println(slog.DEBUG, expr+err.Error())
 		} else {
 			slog.Println(slog.ERROR, expr+err.Error())
 		}
-	} else {
-		if url.Scheme != "" {
-			c.UrlTarget = append(c.UrlTarget, expr)
-			c.HostTarget = append(c.HostTarget, url.Netloc)
-			return
-		} else {
-			if IP.IsIP(expr) == false {
-				c.UrlTarget = append(c.UrlTarget, url.UnParse())
-			}
-			c.HostTarget = append(c.HostTarget, url.Netloc)
-			return
-		}
+		return
 	}
+	//属于类URL，将会对其进行针对性检测，添加至URL待扫描清单
+	c.UrlTarget = append(c.UrlTarget, expr)
+	c.HostTarget = append(c.HostTarget, url.Netloc)
 }
 
 func (c *Config) loadPort() {

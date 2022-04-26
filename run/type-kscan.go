@@ -10,6 +10,7 @@ import (
 	"kscan/core/cdn"
 	"kscan/core/hydra"
 	"kscan/core/slog"
+	"kscan/lib/IP"
 	"kscan/lib/color"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
@@ -160,19 +161,36 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 	//启用ICMP主机存活性探测任务下发器
 	go func() {
 		for _, host := range hostArr {
+			var ip = host
 			if app.Setting.CloseCDN == false {
-				ok, result, err := cdn.FindCDN(host)
-				if ok && result != "" {
+				var ok bool
+				var result string
+				var err error
+				if IP.IsIP(host) {
+					ok, result, err = cdn.FindWithIP(host)
+				} else {
+					ok, result, err = cdn.FindWithDomain(host)
+				}
+				if ok == true {
 					url := fmt.Sprintf("cdn://%s", host)
 					output := fmt.Sprintf("%-30v %-26v %s", url, "IsCDN", color.RandomImportant(result))
 					k.watchDog.output <- output
 					continue
 				}
 				if err != nil {
-					slog.Println(slog.DEBUG)
+					slog.Println(slog.DEBUG, err)
 				}
 			}
-			k.pool.host.icmp.In <- host
+			r, err := cdn.Resolution(host)
+			if err != nil {
+				slog.Println(slog.DEBUG, err)
+				continue
+			}
+			ip = r
+			if misc.IsInStrArr(k.config.HostTarget, ip) == true {
+				continue
+			}
+			k.pool.host.icmp.In <- ip
 		}
 		//关闭主机存活性探测下发信道
 		if k.config.ClosePing == false {
