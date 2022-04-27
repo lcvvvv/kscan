@@ -49,8 +49,11 @@ func New(email, key string) *Fofa {
 			"host",
 			//"title",
 			//"banner",
+			//"header",
 			"ip", "domain", "port", "country", "province",
-			"city", "country_name", "header", "server", "protocol",
+			"city", "country_name",
+			"server",
+			"protocol",
 			"cert", "isp", "as_organization",
 		},
 	}
