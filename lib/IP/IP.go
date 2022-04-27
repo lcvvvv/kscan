@@ -3,6 +3,7 @@ package IP
 import (
 	"bytes"
 	"fmt"
+	"kscan/lib/misc"
 	"regexp"
 	"strconv"
 	"strings"
@@ -15,6 +16,7 @@ import (
 var regxIsIP = regexp.MustCompile("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$")
 var regxIsIPMask = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})/(\\d{1,2})$")
 var regxIsIPRange = regexp.MustCompile("^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})-(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})$")
+var regxIsIPRange2 = regexp.MustCompile("^(\\d{1,3}-\\d{1,3}|\\d{1,3})\\.(\\d{1,3}-\\d{1,3}|\\d{1,3})\\.(\\d{1,3}-\\d{1,3}|\\d{1,3})\\.(\\d{1,3}-\\d{1,3}|\\d{1,3})$")
 
 var regxPrivateIPArr = []*regexp.Regexp{
 	regexp.MustCompile("^10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$"),
@@ -50,6 +52,23 @@ func FormatCheck(ipExpr string) bool {
 		lastInt := addrStrToInt(last)
 		if firstInt > lastInt {
 			return false
+		}
+		return true
+	} else if regxIsIPRange2.MatchString(ipExpr) {
+		submatch := regxIsIPRange2.FindStringSubmatch(ipExpr)
+		if len(submatch) != 5 {
+			return false
+		}
+		for i := 1; i < 5; i++ {
+			if strings.Contains(submatch[i], "-") {
+				subIpInt := strings.Split(submatch[i], "-")
+				if len(subIpInt) != 2 {
+					return false
+				}
+				if misc.Str2Int(subIpInt[0]) > misc.Str2Int(subIpInt[1]) {
+					return false
+				}
+			}
 		}
 		return true
 	}
@@ -148,6 +167,30 @@ func ExprToList(ipExpr string) []string {
 		startInt := addrStrToInt(start)
 		endInt := addrStrToInt(end)
 		return RangeToList(uint32(startInt), uint32(endInt))
+	} else if regxIsIPRange2.MatchString(ipExpr) {
+		submatch := regxIsIPRange2.FindStringSubmatch(ipExpr)
+		var subIps [][]string
+		for i := 1; i < 5; i++ {
+			if strings.Contains(submatch[i], "-") {
+				subIpInt := strings.Split(submatch[i], "-")
+				subStart, _ := strconv.Atoi(subIpInt[0])
+				subEnd, _ := strconv.Atoi(subIpInt[1])
+				subIps = append(subIps, misc.IntArr2StrArr(misc.Xrange(subStart, subEnd)))
+			} else {
+				subIps = append(subIps, []string{submatch[i]})
+			}
+		}
+		for _, ip0 := range subIps[0] {
+			for _, ip1 := range subIps[1] {
+				for _, ip2 := range subIps[2] {
+					for _, ip3 := range subIps[3] {
+						ipStr := fmt.Sprintf("%s.%s.%s.%s", ip0, ip1, ip2, ip3)
+						r = append(r, ipStr)
+					}
+				}
+			}
+		}
+		r = misc.RemoveDuplicateElement(r)
 	}
 	return r
 }
