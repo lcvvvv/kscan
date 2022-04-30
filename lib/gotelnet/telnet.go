@@ -460,14 +460,14 @@ func (c *Client) isLoginSucceed(responseString string) bool {
 	responseStringArray := strings.Split(responseString, "\n")
 	lastLine := responseStringArray[len(responseStringArray)-1]
 	if regexp.MustCompile("^[#$].*").MatchString(lastLine) {
-		//slog.Println(slog.WARN, "1|", c.IPAddr, c.Port, lastLine)
 		return true
 	}
 	if regexp.MustCompile("^<[a-zA-Z0-9_]+>.*").MatchString(lastLine) {
-		//slog.Println(slog.WARN, "2|", c.IPAddr, c.Port, lastLine)
 		return true
 	}
-
+	if regexp.MustCompile("(?:s)last login").MatchString(responseString) {
+		return true
+	}
 	c.Clear()
 	c.WriteContext("?")
 	time.Sleep(time.Second * 3)
