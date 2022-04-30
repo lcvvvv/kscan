@@ -51,6 +51,7 @@ func makeKeywordSlice() []string {
 func GetUrlTarget() []string {
 	var strSlice []string
 	for _, result := range this.Results() {
+		Fix(&result)
 		strSlice = append(strSlice, result.Host)
 	}
 	strSlice = misc.RemoveDuplicateElement(strSlice)
