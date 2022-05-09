@@ -1,12 +1,12 @@
 # Kscan-简单的资产测绘工具
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/golang-1.6+-9cf"></a>
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.74-ff69b4"></a>
+<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.75-ff69b4"></a>
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/LICENSE-GPL-important"></a>
 ![GitHub Repo stars](https://img.shields.io/github/stars/lcvvvv/kscan?color=success)
 ![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
 ![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
-[[中文 Readme]](https://github.com/lcvvvv/kscan/blob/master/README.md)
+[[中文 Readme]](https://github.com/lc~~~~vvvv/kscan/blob/master/README.md)
 |
 [[English Readme]](https://github.com/lcvvvv/kscan/blob/master/README_ENG.md)  
 
