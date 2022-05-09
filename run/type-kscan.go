@@ -510,7 +510,7 @@ func (k *kscan) Output() {
 		bytes, _ := json.Marshal(bannerMapArr)
 		err := misc.WriteLine(fileName, bytes)
 		if err == nil {
-			slog.Printf(slog.INFO, "扫描完成，Json文件已输出至：", fileName)
+			slog.Printf(slog.INFO, "扫描完成，Json文件已输出至：%s", fileName)
 		} else {
 			slog.Println(slog.WARN, "输出Json失败！错误信息：", err.Error())
 		}
