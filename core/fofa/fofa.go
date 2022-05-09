@@ -74,7 +74,7 @@ func displayResponse(results []fofa.Result) {
 		m := row.Map()
 		m["Header"] = ""
 		m["Cert"] = ""
-		m["Title"] = ""
+		m["Title"] = row.Title
 		m["Host"] = ""
 		m["As_organization"] = ""
 		m["Ip"] = ""

@@ -47,9 +47,9 @@ func New(email, key string) *Fofa {
 		loginPath:  "/api/v1/info/my",
 		fieldList: []string{
 			"host",
-			//"title",
-			//"banner",
-			//"header",
+			"title",
+			"banner",
+			"header",
 			"ip", "domain", "port", "country", "province",
 			"city", "country_name",
 			"server",
