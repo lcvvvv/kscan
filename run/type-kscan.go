@@ -474,12 +474,13 @@ func (k *kscan) Output() {
 			if app.Setting.Match != "" && strings.Contains(banner.Response, app.Setting.Match) == false {
 				continue
 			}
-			bannerMapArr = append(bannerMapArr, banner.Map())
+			if app.Setting.OutputJson != "" {
+				bannerMapArr = append(bannerMapArr, banner.Map())
+			}
 			if app.Setting.CloseCDN == false {
 				result, _ := cdn.Find(banner.IPAddr)
 				if result != "" {
 					banner.AddFingerPrint("Attribution", result)
-
 				}
 			}
 			write = outputTcpBanner(banner, app.Setting.CloseColor)
