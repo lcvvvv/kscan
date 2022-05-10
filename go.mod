@@ -11,7 +11,7 @@ require (
 	github.com/jlaffaye/ftp v0.0.0-20210307004419-5d4190119067
 
 	//gonmap
-	github.com/lcvvvv/gonmap v1.1.7
+	github.com/lcvvvv/gonmap v1.1.8
 	github.com/lib/pq v1.10.2
 
 	//grdp
