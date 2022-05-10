@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/gonmap/lib/httpfinger"
-	"github.com/lcvvvv/gonmap/lib/urlparse"
 	"kscan/app"
 	"kscan/core/cdn"
 	"kscan/core/hydra"
@@ -374,8 +373,7 @@ func (k *kscan) GetAppBanner() {
 		var r *gonmap.AppBanner
 		switch i.(type) {
 		case string:
-			url, _ := urlparse.Load(i.(string))
-			r = gonmap.GetAppBannerFromUrl(url)
+			r = gonmap.GetAppBannerFromUrlString(i.(string))
 		case *gonmap.TcpBanner:
 			tcpBanner := i.(*gonmap.TcpBanner)
 			if tcpBanner == nil {
@@ -430,8 +428,7 @@ func (k *kscan) GetAppBannerFromCheck() {
 		var r *gonmap.AppBanner
 		switch i.(type) {
 		case string:
-			url, _ := urlparse.Load(i.(string))
-			r = gonmap.GetAppBannerFromUrl(url)
+			r = gonmap.GetAppBannerFromUrlString(i.(string))
 		case *gonmap.TcpBanner:
 			tcpBanner := i.(*gonmap.TcpBanner)
 			r = gonmap.GetAppBannerFromTcpBanner(tcpBanner)
