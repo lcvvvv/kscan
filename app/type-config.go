@@ -228,7 +228,7 @@ func New() Config {
 		Output:     nil,
 		Proxy:      "",
 		Host:       "",
-		Threads:    100,
+		Threads:    800,
 		Timeout:    0,
 		Encoding:   "utf-8",
 		OSEncoding: getOSEncoding(),

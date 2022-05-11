@@ -76,7 +76,7 @@ func (o *args) define() {
 	sflag.StringVar(&o.Path, "path", "")
 	sflag.StringVar(&o.Host, "host", "")
 	sflag.IntVar(&o.Top, "top", 400)
-	sflag.IntVar(&o.Threads, "threads", 100)
+	sflag.IntVar(&o.Threads, "threads", 800)
 	sflag.IntVar(&o.Timeout, "timeout", 3)
 	sflag.BoolVar(&o.ClosePing, "Pn", false)
 	sflag.BoolVar(&o.Check, "check", false)
