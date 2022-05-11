@@ -232,7 +232,6 @@ func InitKscan() {
 	//-sV参数配置
 	if app.Setting.ScanVersion == true {
 		gonmap.SetScanVersion()
-		app.Setting.Timeout = time.Second * 120
 	}
 	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条,favicon指纹:[%d]条，keyword指纹:[%d]条", gonmap.UsedProbesCount, gonmap.UsedMatchCount, httpfinger.CountFaviconHash, httpfinger.CountKeywordFinger)
 	//gonmap应用层指纹识别初始化
