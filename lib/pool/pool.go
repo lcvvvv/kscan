@@ -94,7 +94,7 @@ func (p *Pool) work() {
 		Tick := p.NewTick()
 		//压入工作任务到工作清单
 		p.JobsList.Set(Tick, param)
-		//开始工作
+		//设置工作内容
 		f := NewWorker(p.Function)
 		//开始工作，输出工作结果
 		out, err := f.Run(param)
