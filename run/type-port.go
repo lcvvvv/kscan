@@ -2,47 +2,38 @@ package run
 
 import "fmt"
 
+type PortStatus int
+
 type Port struct {
-	addr   string
-	port   int
-	status int
+	Addr   string
+	Port   int
+	Status PortStatus
 }
 
 func NewPort(addr string, port int) *Port {
 	return &Port{
-		addr:   addr,
-		port:   port,
-		status: Close,
+		Addr:   addr,
+		Port:   port,
+		Status: Unknown,
 	}
 }
 
-func (p *Port) Status() int {
-	return p.status
-}
+const (
+	Close   PortStatus = 0x00001a
+	Open               = 0x00002b
+	Unknown            = 0x00003c
+)
 
-func (p *Port) UnParse() string {
-	return fmt.Sprintf("%s:%d", p.addr, p.port)
-}
-
-func (p *Port) Port() int {
-	return p.port
-}
-
-func (p *Port) Addr() string {
-	return p.addr
+func (p *Port) String() string {
+	return fmt.Sprintf("%s:%d", p.Addr, p.Port)
 }
 
 func (p *Port) Open() *Port {
-	p.status = Open
+	p.Status = Open
 	return p
 }
 
 func (p *Port) Close() *Port {
-	p.status = Close
-	return p
-}
-
-func (p *Port) Unknown() *Port {
-	p.status = Unknown
+	p.Status = Close
 	return p
 }

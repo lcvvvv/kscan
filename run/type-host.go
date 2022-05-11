@@ -8,31 +8,22 @@ import (
 )
 
 type Host struct {
-	status struct {
-		//主机是否存活
-		alive bool
-		//是否存在开放端口
-		open bool
-		//扫描状态
-		portScan bool
-		tcpScan  bool
-		//appScan  bool
-	}
+	icmp     bool
+	tcp      bool
+	portScan bool
 
-	Length struct {
-		//需要进行端口扫描的端口数量
-		Port int
-		//需要进行tcp协议识别的端口数量
-		Tcp int
-		//需要进行应用层识别的端口数量
-		//app  int
-	}
+	PortNum int
+
+	TcpBannerCount        int
+	TcpBannerUnknownCount int
+	TcpBannerScanned      bool
+
+	TcpCount     int
+	OpenTcpCount int
 
 	Map struct {
-		//Map[string]*Port
-		Port *smap.SMap
 		//Map[string]*gonmap.TcpBanner
-		Tcp *smap.SMap
+		TcpBanner *smap.SMap
 		//Map[string]*gonmap.AppBanner
 		//App *smap.SMap
 	}
@@ -40,82 +31,54 @@ type Host struct {
 	addr string
 }
 
-const (
-	Close   = 0x00001a
-	Open    = 0x00002b
-	Unknown = 0x00003c
-)
-
 func NewHost(addr string, length int) *Host {
 	host := &Host{}
-
 	host.addr = addr
 
-	host.status.alive = false
-	host.status.open = false
-	host.status.portScan = false
-	//host.status.tcpScan = false
-	//host.status.appScan = false
+	host.icmp = false
 
-	host.Length.Port = length
-	host.Length.Tcp = 0
-	//host.Length.App = 0
+	host.tcp = false
+	host.PortNum = length
 
-	host.Map.Port = smap.New()
-	host.Map.Tcp = smap.New()
+	host.Map.TcpBanner = smap.New()
 	//host.Map.App = smap.New()
 
 	return host
 }
 
 func (h *Host) Up() *Host {
-	h.status.alive = true
+	h.icmp = true
 	return h
 }
 
 func (h *Host) Down() *Host {
-	h.status.alive = false
+	h.icmp = false
 	return h
 }
 
-func (h *Host) SetAlivePort(port, status int) {
-	h.Map.Port.Set(port, status)
-	if status == Open {
-		h.status.alive = true
-		h.status.open = true
-	}
-}
-
-func (h *Host) FinishPortScan() {
-	h.status.portScan = true
-	length := 0
-	h.Map.Port.Range(func(key, value interface{}) bool {
-		status := value.(int)
-		if status != Close {
-			length++
-		}
+func (h *Host) Alive() bool {
+	if h.icmp == true {
 		return true
-	})
-	h.Length.Tcp = length
+	}
+	if h.tcp == true {
+		return true
+	}
+	return false
 }
 
-func (h *Host) PortScanIsFinish() bool {
-	return h.status.portScan
-}
-
-func (h *Host) IsAlive() bool {
-	return h.status.alive
-}
-
-func (h *Host) IsOpenPort() bool {
-	return h.status.open
+func (h *Host) AddPort(port *Port) {
+	h.TcpCount++
+	if port.Status == Open {
+		h.OpenTcpCount++
+		h.tcp = true
+	}
 }
 
 func (h *Host) DisplayUnknownPorts() string {
 	var portSlice []int
 	var dispSlice []string
 
-	h.Map.Tcp.Range(func(key, value interface{}) bool {
+	h.Map.TcpBanner.Range(func(key, value interface{}) bool {
 		tcpBanner := value.(*gonmap.TcpBanner)
 		if tcpBanner.Status() == gonmap.Open || tcpBanner.Status() == gonmap.Unknown {
 			portSlice = append(portSlice, tcpBanner.Target.Port())
@@ -132,16 +95,4 @@ func (h *Host) DisplayUnknownPorts() string {
 		"ThesePortsAreUnknownProtocols: ",
 		color.StrSliceRandomColor(dispSlice))
 	return output
-}
-
-func (h *Host) CountUnknownPorts() int {
-	i := 0
-	h.Map.Tcp.Range(func(key, value interface{}) bool {
-		tcpBanner := value.(*gonmap.TcpBanner)
-		if tcpBanner.Status() == gonmap.Open || tcpBanner.Status() == gonmap.Unknown {
-			i++
-		}
-		return true
-	})
-	return i
 }

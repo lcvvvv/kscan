@@ -56,7 +56,7 @@ type kscan struct {
 		done  bool
 	}
 
-	portScanMap *smap.SMap
+	Map *smap.SMap
 }
 
 func New(config app.Config) *kscan {
@@ -72,12 +72,12 @@ func New(config app.Config) *kscan {
 		hostThreads = 400
 	}
 
-	k.pool.appBanner = pool.NewPool(config.Threads)
+	k.pool.appBanner = pool.NewPool(config.Threads / 4)
 
-	k.pool.tcpBanner.tcp = pool.NewPool(config.Threads)
+	k.pool.tcpBanner.tcp = pool.NewPool(config.Threads / 4)
 	k.pool.tcpBanner.Out = make(chan interface{})
 
-	k.pool.port.tcp = pool.NewPool(config.Threads * 4)
+	k.pool.port.tcp = pool.NewPool(config.Threads)
 	k.pool.port.Out = make(chan interface{})
 
 	k.pool.host.icmp = pool.NewPool(hostThreads)
@@ -98,7 +98,7 @@ func New(config app.Config) *kscan {
 	k.hydra.queue = queue.New()
 	k.hydra.done = false
 
-	k.portScanMap = smap.New()
+	k.Map = smap.New()
 	return k
 }
 
@@ -137,7 +137,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		go func() {
 			for out := range k.pool.host.icmp.Out {
 				host := out.(*Host)
-				if host.IsAlive() {
+				if host.Alive() == true {
 					k.pool.host.Out <- out
 				}
 			}
@@ -147,7 +147,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 		go func() {
 			for out := range k.pool.host.tcp.Out {
 				host := out.(*Host)
-				if host.IsAlive() {
+				if host.Alive() == true {
 					k.pool.host.Out <- out
 				}
 			}
@@ -215,11 +215,9 @@ func (k *kscan) PortDiscovery() {
 	//启用端口存活性探测任务下发器
 	go func() {
 		var wg int32 = 0
-		var threads = k.config.Threads
-
 		for out := range k.pool.host.Out {
 			host := out.(*Host)
-			k.portScanMap.Set(host.addr, host)
+			k.Map.Set(host.addr, host)
 			atomic.AddInt32(&wg, 1)
 			go func() {
 				defer func() { atomic.AddInt32(&wg, -1) }()
@@ -228,7 +226,7 @@ func (k *kscan) PortDiscovery() {
 					k.pool.port.tcp.In <- netloc
 				}
 			}()
-			for int(wg) >= threads {
+			for int(wg) >= k.config.Threads {
 				time.Sleep(1 * time.Second)
 			}
 		}
@@ -242,44 +240,49 @@ func (k *kscan) PortDiscovery() {
 	go func() {
 		for out := range k.pool.port.tcp.Out {
 			port := out.(*Port)
-			value, _ := k.portScanMap.Get(port.addr)
+			value, _ := k.Map.Get(port.Addr)
 			host := value.(*Host)
-			host.SetAlivePort(port.port, port.status)
+			host.AddPort(port)
 
-			if port.status == Open {
-				k.pool.port.Out <- port
-				host.Up()
-			}
-			if port.status == Unknown {
-				k.pool.port.Out <- port
-			}
-			if host.Map.Port.Length() == host.Length.Port {
-				//所有端口检测完，表示该主机端口存活性检测已结束
-				host.FinishPortScan()
-				//输出没有开放任何端口的主机
-				if host.IsOpenPort() == false && k.config.ClosePing == false {
-					url := fmt.Sprintf("icmp://%s", host.addr)
-					description := color.Red(color.Overturn("Not Open Any Port"))
-					output := fmt.Sprintf("%-30v %-26v %s", url, "Up", description)
-					k.watchDog.output <- output
-				}
-			}
-			k.portScanMap.Set(port.addr, host)
+			k.pool.port.Out <- port
 
+			//下面开始筛选ICMP存活，但未开放任何端口的主机
+			if host.Alive() == false {
+				//主机不存活
+				continue
+			}
+			if k.config.ClosePing == true {
+				//所有主机默认存活
+				continue
+			}
+			if host.TcpCount < host.PortNum {
+				//主机还未扫描完
+				continue
+			}
+			if host.OpenTcpCount > 0 {
+				//主机存在开放端口
+				continue
+			}
+			url := fmt.Sprintf("icmp://%s", host.addr)
+			description := color.Red(color.Overturn("Not Open Any Port"))
+			output := fmt.Sprintf("%-30v %-26v %s", url, "Up", description)
+			k.watchDog.output <- output
+			//保存结果
+			k.Map.Set(port.Addr, host)
 		}
 		close(k.pool.port.Out)
 	}()
 	//定义端口存活性检测函数
 	k.pool.port.tcp.Function = func(i interface{}) interface{} {
-		netloc := i.(*Port)
-		if netloc.port == 161 || netloc.port == 137 {
-			return netloc.Unknown()
+		port := i.(*Port)
+		if port.Port == 161 || port.Port == 137 {
+			return port
 		}
-		if gonmap.PortScan("tcp", netloc.addr, netloc.port, 1*time.Second) {
-			slog.Println(slog.DEBUG, netloc.UnParse(), " is open")
-			return netloc.Open()
+		if gonmap.PortScan("tcp", port.Addr, port.Port, k.config.Timeout) {
+			slog.Println(slog.DEBUG, port.String(), " is open")
+			return port.Open()
 		}
-		return netloc.Close()
+		return port.Close()
 	}
 	//开始执行端口存活性探测任务
 	k.pool.port.tcp.Run()
@@ -289,12 +292,11 @@ func (k *kscan) PortDiscovery() {
 func (k *kscan) GetTcpBanner() {
 	k.pool.tcpBanner.tcp.Function = func(i interface{}) interface{} {
 		port := i.(*Port)
-		var r = gonmap.NewTcpBanner(port.addr, port.port)
-		//slog.Println(slog.DEBUG, port.UnParse(),port.Status())
-		if port.status == Close {
+		if port.Status == Close {
+			r := gonmap.NewTcpBanner(port.Addr, port.Port)
 			return r.CLOSED()
 		}
-		return gonmap.GetTcpBanner(port.addr, port.port, gonmap.New(), k.config.Timeout*20)
+		return gonmap.GetTcpBanner(port.Addr, port.Port, gonmap.New(), k.config.Timeout*20)
 	}
 
 	//启用TCP层面协议识别任务下发器
@@ -309,26 +311,15 @@ func (k *kscan) GetTcpBanner() {
 	//启用TCP层指纹探测结果接受器
 	go func() {
 		for out := range k.pool.tcpBanner.tcp.Out {
-			//应该不存在此返回项
-			if out == nil {
-				continue
-			}
 			tcpBanner := out.(*gonmap.TcpBanner)
-			//应该不存在此返回项
-			if tcpBanner == nil {
-				continue
-			}
 
 			//此处开始，正式开始对输出结果进行处理
-
 			port := tcpBanner.Target.Port()
 			addr := tcpBanner.Target.Addr()
 
-			value, _ := k.portScanMap.Get(addr)
+			value, _ := k.Map.Get(addr)
 			host := value.(*Host)
-
-			if tcpBanner.Status() == gonmap.Matched {
-				//slog.Printf(slog.DEBUG, "%s:%d %s %s", addr, port, status, service)
+			if tcpBanner.Status() == gonmap.Matched || (tcpBanner.Status() == gonmap.Open && tcpBanner.Response.Value() != "") {
 				k.pool.tcpBanner.Out <- tcpBanner
 			} else {
 				if (tcpBanner.Target.Port() == 161 || tcpBanner.Target.Port() == 137) && tcpBanner.Response.Length() == 0 {
@@ -336,24 +327,36 @@ func (k *kscan) GetTcpBanner() {
 				}
 				//slog.Println(slog.WARN, tcpBanner.Target.URI(), tcpBanner.StatusDisplay())
 			}
-			host.Map.Tcp.Set(port, tcpBanner)
-
-			k.portScanMap.Set(addr, host)
-			if host.PortScanIsFinish() == false {
+			//新增统计数据
+			host.TcpBannerCount++
+			if tcpBanner.Status() == gonmap.Unknown {
+				fmt.Println(tcpBanner.Target.URI())
+				host.TcpBannerUnknownCount++
+			}
+			//保存结果
+			host.Map.TcpBanner.Set(port, tcpBanner)
+			k.Map.Set(addr, host)
+			if host.TcpCount != host.PortNum {
+				//如果端口存活性扫描还未结束，则跳过
 				continue
 			}
-			if host.Map.Tcp.Length() == host.Length.Tcp && host.CountUnknownPorts() > 0 {
-				host.status.tcpScan = true
-				k.watchDog.output <- host.DisplayUnknownPorts()
+			if host.TcpBannerCount < host.PortNum {
+				//如果tcp指纹识别还未结束，则跳过
+				continue
 			}
+			if host.TcpBannerUnknownCount == 0 {
+				//如果没有无法识别协议的端口，则跳过
+				continue
+			}
+			host.TcpBannerScanned = true
+			k.Map.Set(addr, host)
+			k.watchDog.output <- host.DisplayUnknownPorts()
 		}
-		k.portScanMap.Range(
+		//收尾输出未打印的未识别端口
+		k.Map.Range(
 			func(key, value interface{}) bool {
 				host := value.(*Host)
-				if host.CountUnknownPorts() == 0 {
-					return true
-				}
-				if host.status.tcpScan == false {
+				if host.TcpBannerScanned == false && host.TcpBannerUnknownCount > 0 {
 					k.watchDog.output <- host.DisplayUnknownPorts()
 				}
 				return true
@@ -361,7 +364,6 @@ func (k *kscan) GetTcpBanner() {
 		)
 		close(k.pool.tcpBanner.Out)
 	}()
-
 	//开始执行TCP层面协议识别任务
 	k.pool.tcpBanner.tcp.Run()
 	slog.Println(slog.WARN, "TCP层协议识别任务完成")
@@ -409,10 +411,6 @@ func (k *kscan) GetAppBanner() {
 	//启用App层面协议识别任务下发器
 	go func() {
 		for out := range k.pool.tcpBanner.Out {
-			tcpBanner := out.(*gonmap.TcpBanner)
-			if tcpBanner.Status() != gonmap.Matched {
-				continue
-			}
 			k.pool.appBanner.In <- out
 		}
 		isDone <- true
