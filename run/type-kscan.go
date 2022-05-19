@@ -25,8 +25,6 @@ import (
 )
 
 type kscan struct {
-	target *queue.Queue
-	result *queue.Queue
 	config app.Config
 	pool   struct {
 		host struct {
@@ -61,9 +59,7 @@ type kscan struct {
 
 func New(config app.Config) *kscan {
 	k := &kscan{
-		target: queue.New(),
 		config: config,
-		result: queue.New(),
 	}
 
 	hostThreads := len(k.config.HostTarget)
@@ -78,6 +74,7 @@ func New(config app.Config) *kscan {
 	k.pool.tcpBanner.Out = make(chan interface{})
 
 	k.pool.port.tcp = pool.NewPool(config.Threads)
+	k.pool.port.tcp.Interval = time.Millisecond * 200
 	k.pool.port.Out = make(chan interface{})
 
 	k.pool.host.icmp = pool.NewPool(hostThreads)
