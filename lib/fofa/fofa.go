@@ -79,14 +79,17 @@ func (f *Fofa) Search(keyword string) (int, []Result) {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		logger.Println(err)
+		return 0, nil
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		logger.Println(err)
+		return 0, nil
 	}
 	var responseJson ResponseJson
 	if err = json.Unmarshal(body, &responseJson); err != nil {
 		logger.Println(body, err)
+		return 0, nil
 	}
 	r := f.makeResult(responseJson)
 	f.results = append(f.results, r...)
