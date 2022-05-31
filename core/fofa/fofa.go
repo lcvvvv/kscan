@@ -61,7 +61,11 @@ func GetUrlTarget() []string {
 func GetHostTarget() []string {
 	var strSlice []string
 	for _, result := range this.Results() {
-		strSlice = append(strSlice, result.Ip)
+		if result.Domain != "" {
+			strSlice = append(strSlice, result.Domain)
+		} else {
+			strSlice = append(strSlice, result.Ip)
+		}
 	}
 	strSlice = misc.RemoveDuplicateElement(strSlice)
 	return strSlice
