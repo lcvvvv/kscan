@@ -90,6 +90,8 @@ func Println(level Level, s ...interface{}) {
 	logStr := fmt.Sprint(s...)
 	if encoding == "gb2312" {
 		logStr = chinese.ToGBK(logStr)
+	} else if encoding == "gbk" {
+		logStr = chinese.ToGBK(logStr)
 	} else {
 		logStr = chinese.ToUTF8(logStr)
 	}
