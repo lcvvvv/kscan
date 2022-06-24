@@ -187,6 +187,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 					if misc.IsInStrArr(k.config.HostTarget, ip) == true {
 						continue
 					}
+					k.config.HostTarget = append(k.config.HostTarget, ip)
 				}
 			}
 			k.pool.host.icmp.In <- ip
