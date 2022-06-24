@@ -61,11 +61,7 @@ func GetUrlTarget() []string {
 func GetHostTarget() []string {
 	var strSlice []string
 	for _, result := range this.Results() {
-		if result.Domain != "" {
-			strSlice = append(strSlice, result.Domain)
-		} else {
-			strSlice = append(strSlice, result.Ip)
-		}
+		strSlice = append(strSlice, result.Ip)
 	}
 	strSlice = misc.RemoveDuplicateElement(strSlice)
 	return strSlice
@@ -80,7 +76,9 @@ func displayResponse(results []fofa.Result) {
 		m["Title"] = row.Title
 		m["Host"] = ""
 		m["As_organization"] = ""
-		m["Ip"] = ""
+		if m["Domain"] == "" {
+			m["Ip"] = ""
+		}
 		m["Port"] = ""
 		m["Country_name"] = ""
 		m = misc.FixMap(m)
