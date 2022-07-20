@@ -11,7 +11,7 @@ require (
 	github.com/jlaffaye/ftp v0.0.0-20220630165035-11536801d1ff
 
 	//gonmap
-	github.com/lcvvvv/gonmap v1.1.8
+	github.com/lcvvvv/gonmap v1.2.1
 	github.com/lib/pq v1.10.2
 
 	//grdp
@@ -27,5 +27,3 @@ require (
 	//chinese
 	golang.org/x/text v0.3.6
 )
-
-replace github.com/lcvvvv/gonmap => ../gonmap
