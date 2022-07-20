@@ -8,7 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huin/asn1ber v0.0.0-20120622192748-af09f62e6358
 	github.com/icodeface/tls v0.0.0-20190904083142-17aec93c60e5
-	github.com/jlaffaye/ftp v0.0.0-20210307004419-5d4190119067
+	github.com/jlaffaye/ftp v0.0.0-20220630165035-11536801d1ff
 
 	//gonmap
 	github.com/lcvvvv/gonmap v1.1.8
@@ -27,3 +27,5 @@ require (
 	//chinese
 	golang.org/x/text v0.3.6
 )
+
+replace github.com/lcvvvv/gonmap => ../gonmap
