@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net"
@@ -19,7 +18,7 @@ type QQwry struct {
 	IPDB
 }
 
-var logger = Logger(log.New(io.Discard, "", log.Ldate|log.Ltime))
+var logger = Logger(log.New(os.Stderr, "[qqwry]", log.Ldate|log.Ltime))
 
 type Logger interface {
 	Println(...interface{})
