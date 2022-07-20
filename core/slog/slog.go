@@ -2,9 +2,9 @@ package slog
 
 import (
 	"fmt"
-	"github.com/lcvvvv/gonmap/lib/chinese"
 	"io"
 	"io/ioutil"
+	"kscan/core/stdio"
 	"kscan/lib/color"
 	"log"
 	"os"
@@ -46,32 +46,26 @@ func (l *logger) Println(s ...interface{}) {
 }
 
 var info = Logger(&logger{
-	log.New(os.Stdout, "\r[+]", log.Ldate|log.Ltime),
+	log.New(stdio.Out, "\r[+]", log.Ldate|log.Ltime),
 	color.Green,
 	nil,
 })
 var warn = Logger(&logger{
-	log.New(os.Stdout, "\r[*]", log.Ldate|log.Ltime),
+	log.New(stdio.Out, "\r[*]", log.Ldate|log.Ltime),
 	color.Red,
 	nil,
 })
 var err = Logger(&logger{
-	log.New(io.MultiWriter(os.Stderr), "\rError:", 0),
+	log.New(io.MultiWriter(stdio.Err), "\rError:", 0),
 	nil,
 	nil,
 })
 var dbg = Logger(&logger{
-	log.New(os.Stdout, "\r[-]", log.Ldate|log.Ltime),
+	log.New(stdio.Out, "\r[-]", log.Ldate|log.Ltime),
 	debugModifier,
 	debugFilter,
 })
-var data = Logger(log.New(os.Stdout, "\r", 0))
-
-func SetEncoding(v string) {
-	encoding = v
-}
-
-var encoding = "utf-8"
+var data = Logger(log.New(stdio.Out, "\r", 0))
 
 const (
 	DEBUG Level = 0x0000a1
@@ -88,14 +82,6 @@ func Printf(level Level, format string, s ...interface{}) {
 
 func Println(level Level, s ...interface{}) {
 	logStr := fmt.Sprint(s...)
-	if encoding == "gb2312" {
-		logStr = chinese.ToGBK(logStr)
-	} else if encoding == "gbk" {
-		logStr = chinese.ToGBK(logStr)
-	} else {
-		logStr = chinese.ToUTF8(logStr)
-	}
-
 	switch level {
 	case DEBUG:
 		dbg.Println(logStr)

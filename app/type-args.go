@@ -39,8 +39,6 @@ func (o *args) Parse() {
 	sflag.Parse()
 	//输出LOGO
 	o.printBanner()
-	//参数值合法性校验
-	o.checkArgs()
 }
 
 //定义参数
@@ -111,7 +109,7 @@ func (o *args) SetHelp(help string) {
 }
 
 //校验参数真实性
-func (o *args) checkArgs() {
+func (o *args) CheckArgs() {
 	//判断必须的参数是否存在
 	if o.Target == "" && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" && o.DownloadQQwry == false {
 		fmt.Print("至少有--target、--fofa、--spy、--touch参数中的一个")
