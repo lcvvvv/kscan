@@ -11,10 +11,10 @@ func Check(Host, Username, Password string, Port int) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	defer conn.Logout()
 	err = conn.Login(Username, Password)
 	if err != nil {
 		return false, err
 	}
-	err = conn.Logout()
-	return true, err
+	return true, nil
 }
