@@ -8,6 +8,7 @@ import (
 	"kscan/core/fofa"
 	"kscan/core/slog"
 	"kscan/core/spy"
+	"kscan/core/stdio"
 	"kscan/core/tips"
 	"kscan/core/touch"
 	"kscan/lib/color"
@@ -23,13 +24,13 @@ import (
 //logo信息
 const logo = `
      _   __
-    |#| /#/    轻量级资产测绘工具	
+    /#| /#/ 
     |#|/#/   _____  _____     *     _   _
-    |#.#/   /Edge/ /Forum|   /#\   |#\ |#|
+    |#.#/   /Edge/ /Forum|   /#\   |#\ |#\
     |##|   |#|____ |#|      /kv2\  |##\|#|
     |#.#\   \r0cky\|#|     /#/_\#\ |#.#.#|
     |#|\#\ /\___|#||#|____/#/###\#\|#|\##|
-    |#| \#\\lcvvvv/ \aels/#/ v1.76#\#| \#|
+    \#| \#\\lcvvvv/ \aels/#/ v1.76#\#| \#/
 
 `
 
@@ -196,8 +197,11 @@ func Init() {
 	app.Args.SetSyntax(syntax)
 	//参数初始化
 	app.Args.Parse()
+	//基础输出初始化
+	stdio.SetEncoding(app.Args.Encoding)
+	//参数合法性校验
+	app.Args.CheckArgs()
 	//日志初始化
-	slog.SetEncoding(app.Args.Encoding)
 	if app.Args.Debug {
 		slog.SetLogger(slog.DEBUG)
 	} else {
