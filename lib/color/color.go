@@ -3,14 +3,13 @@ package color
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"runtime"
 	"strconv"
 	"strings"
 )
 
 var (
-	mod      = 0
+	disabled = false
 	colorMap = map[string]int{
 		//varyImportant
 		"white": 30,
@@ -43,24 +42,22 @@ var (
 
 //mod = 0 则为不输出颜色;
 //mod = 1 则依据ANSI转义序列输出颜色体系;
-func Init(b bool) bool {
-	if b == true {
-		mod = 0
-		return true
-	}
+func init() {
 	if runtime.GOOS != "windows" {
-		mod = 1
-		return false
+		disabled = true
 	}
-	if os.Getenv("KSCAN_COLOR") == "TRUE" {
-		return false
-	}
-	mod = 0
-	return true
+}
+
+func Enabled() {
+	disabled = false
+}
+
+func Disabled() {
+	disabled = true
 }
 
 func convANSI(s string, color int, background int, format []int) string {
-	if mod == 0 {
+	if disabled == true {
 		return s
 	}
 	var formatStrArr []string

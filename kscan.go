@@ -208,7 +208,12 @@ func Init() {
 		slog.SetLogger(slog.INFO)
 	}
 	//color包初始化
-	app.Setting.CloseColor = color.Init(app.Args.CloseColor)
+	if os.Getenv("KSCAN_COLOR") == "TRUE" {
+		color.Enabled()
+	}
+	if app.Args.CloseColor == true {
+		color.Disabled()
+	}
 	//pool包初始化
 	pool.SetLogger(slog.Debug())
 	//配置文件初始化
