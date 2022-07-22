@@ -2,31 +2,32 @@ package fofa
 
 import (
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"kscan/lib/misc"
 	"log"
 	"net/http"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
 )
 
-var logger = Logger(log.New(io.Discard, "", log.Ldate|log.Ltime))
+var logger = Logger(log.New(os.Stdout, "[fofa]", log.Ldate|log.Ltime))
 
 type Logger interface {
 	Println(...interface{})
 	Printf(string, ...interface{})
 }
 
-type Fofa struct {
-	email, key                     string
-	baseUrl, loginPath, searchPath string
-	fieldList                      []string
+func SetLogger(log Logger) {
+	logger = log
+}
 
-	size int
-
-	results []Result
+type Client struct {
+	email, key          string
+	baseUrl, searchPath string
+	fieldList           []string
+	size                int
 }
 
 type ResponseJson struct {
@@ -38,13 +39,18 @@ type ResponseJson struct {
 	Size    int        `json:"size"`
 }
 
-func New(email, key string) *Fofa {
-	f := &Fofa{
+const (
+	baseURL    = "https://fofa.info"
+	searchPath = "/api/v1/search/all"
+	//loginPath  = "/api/v1/info/my"
+)
+
+func New(email, key string) *Client {
+	f := &Client{
 		email:      email,
 		key:        key,
-		baseUrl:    "https://fofa.info",
-		searchPath: "/api/v1/search/all",
-		loginPath:  "/api/v1/info/my",
+		baseUrl:    baseURL,
+		searchPath: searchPath,
 		fieldList: []string{
 			"host",
 			"title",
@@ -60,11 +66,11 @@ func New(email, key string) *Fofa {
 	return f
 }
 
-func (f *Fofa) SetSize(i int) {
+func (f *Client) SetSize(i int) {
 	f.size = i
 }
 
-func (f *Fofa) Search(keyword string) (int, []Result) {
+func (f *Client) Search(keyword string) (int, []Result) {
 	url := f.baseUrl + f.searchPath
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	q := req.URL.Query()
@@ -92,29 +98,19 @@ func (f *Fofa) Search(keyword string) (int, []Result) {
 		return 0, nil
 	}
 	r := f.makeResult(responseJson)
-	f.results = append(f.results, r...)
 	return responseJson.Size, r
 }
 
-func (f *Fofa) makeResult(responseJson ResponseJson) []Result {
-	var results []Result
-	var result Result
-
+func (f *Client) makeResult(responseJson ResponseJson) (results []Result) {
 	for _, row := range responseJson.Results {
+		var result Result
 		m := reflect.ValueOf(&result).Elem()
 		for index, f := range f.fieldList {
-			f = misc.First2Upper(f)
+			//首字母大写
+			f = strings.ToUpper(f[:1]) + f[1:]
 			m.FieldByName(f).SetString(row[index])
 		}
 		results = append(results, result)
 	}
 	return results
-}
-
-func (f *Fofa) Results() []Result {
-	return f.results
-}
-
-func SetLogger(log Logger) {
-	logger = log
 }
