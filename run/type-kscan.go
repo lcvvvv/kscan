@@ -454,7 +454,6 @@ func (k *kscan) Output() {
 			continue
 		}
 		var disp string
-		var write string
 		//打开触发器,若长时间无输出，触发器会输出进度
 		k.watchDog.trigger = true
 		//输出结果
@@ -476,24 +475,18 @@ func (k *kscan) Output() {
 					banner.AddFingerPrint("Attribution", result)
 				}
 			}
-			write = outputTcpBanner(banner, app.Setting.CloseColor)
 			disp = displayTcpBanner(banner, app.Setting.CloseColor)
 		case hydra.AuthInfo:
 			info := out.(hydra.AuthInfo)
 			if info.Status == false {
 				continue
 			}
-			write = info.Output()
 			disp = info.Display()
 		case string:
 			outString := out.(string)
-			write = outString
 			disp = outString
 		}
 		slog.Println(slog.DATA, disp)
-		if k.config.Output != nil {
-			k.config.WriteLine(write)
-		}
 	}
 	//输出json
 	if app.Setting.OutputJson != "" {
@@ -667,12 +660,5 @@ func displayTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
 	fingerPrint = misc.FixLine(fingerPrint)
 	format := "%-30v %-" + strconv.Itoa(misc.AutoWidth(appBanner.AppDigest, 26)) + "v %s"
 	s := fmt.Sprintf(format, appBanner.URL(), appBanner.AppDigest, fingerPrint)
-	return s
-}
-
-func outputTcpBanner(appBanner *gonmap.AppBanner, keyPrint bool) string {
-	fingerPrint := misc.StrMap2Str(appBanner.FingerPrint(), keyPrint)
-	fingerPrint = misc.FixLine(fingerPrint)
-	s := fmt.Sprintf("%s\t%d\t%s\t%s", appBanner.URL(), appBanner.StatusCode, appBanner.AppDigest, fingerPrint)
 	return s
 }

@@ -44,19 +44,3 @@ func (a *AuthInfo) Display() string {
 	s = color.Overturn(s)
 	return s
 }
-
-func (a *AuthInfo) Output() string {
-	URL := fmt.Sprintf("%s://%s:%d", a.Protocol, a.IPAddr, a.Port)
-	authChar := ""
-	if a.Auth.Username == "" {
-		authChar = fmt.Sprintf("Password:%s", a.Auth.Password)
-	} else {
-		authChar = fmt.Sprintf("Username:%s、Password:%s", a.Auth.Username, a.Auth.Password)
-	}
-	for key, value := range a.Auth.Other {
-		authChar += fmt.Sprintf("、%s:%s", key, value)
-	}
-	var s string
-	s = fmt.Sprintf("%-30v %-26v %v", URL, "Success", authChar)
-	return s
-}
