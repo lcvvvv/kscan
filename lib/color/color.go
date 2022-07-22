@@ -184,6 +184,36 @@ func Random(s string) string {
 	return convANSI(s, rand.Intn(len(colorMap))+30, 0, []int{})
 }
 
+//"\x1b[%sm%s\x1b[0m"
+func Clear(s string) string {
+	var rBuf []byte
+	buf := []byte(s)
+	length := len(buf)
+
+	for i := 0; i < length; i++ {
+		if buf[i] != '\x1b' {
+			rBuf = append(rBuf, buf[i])
+			continue
+		}
+		if buf[i+1] != '[' {
+			rBuf = append(rBuf, buf[i])
+			continue
+		}
+		if i+1 > length {
+			continue
+		}
+		var index = 1
+		for {
+			if buf[i+index] == 'm' {
+				break
+			}
+			index++
+		}
+		i = i + index
+	}
+	return string(rBuf)
+}
+
 func RandomImportant(s string) string {
 	r := rand.Intn(len(colorMap)-2) + 32
 	return convANSI(s, r, r, []int{7})
