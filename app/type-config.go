@@ -1,7 +1,6 @@
 package app
 
 import (
-	"github.com/lcvvvv/gonmap/lib/chinese"
 	"github.com/lcvvvv/gonmap/lib/urlparse"
 	"kscan/core/hydra"
 	"kscan/core/slog"
@@ -48,7 +47,6 @@ var Setting = New()
 
 func ConfigInit() {
 	args := Args
-
 	Setting.Touch = args.Touch
 	Setting.Spy = args.Spy
 	if args.Spy == "None" {
@@ -207,16 +205,6 @@ func (c *Config) loadFofaField(expr string) []string {
 		return []string{expr}
 	}
 	return []string{}
-}
-
-func (c *Config) WriteLine(s string) {
-	if c.OSEncoding == "utf-8" {
-		s = chinese.ToUTF8(s)
-	} else {
-		s = chinese.ToGBK(s)
-	}
-	s = s + c.NewLine
-	_, _ = c.Output.WriteString(s)
 }
 
 func New() Config {
