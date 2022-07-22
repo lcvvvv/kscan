@@ -12,8 +12,9 @@ import (
 	"strings"
 )
 
-var this *fofa.Fofa
+var this *fofa.Client
 var keywordSlice []string
+var results []fofa.Result
 
 func Init(email, key string) {
 	//设置日志输出器
@@ -29,9 +30,10 @@ func Run() {
 	//对每个关键字进行查询
 	for _, keyword := range keywordSlice {
 		slog.Printf(slog.WARN, "本次搜索关键字为：%v", keyword)
-		size, results := this.Search(keyword)
-		displayResponse(results)
-		slog.Printf(slog.INFO, "本次搜索，返回结果总条数为：%d，此次返回条数为：%d", size, len(results))
+		size, r := this.Search(keyword)
+		displayResponse(r)
+		slog.Printf(slog.INFO, "本次搜索，返回结果总条数为：%d，此次返回条数为：%d", size, len(r))
+		results = append(results, r...)
 	}
 }
 
@@ -50,9 +52,9 @@ func makeKeywordSlice() []string {
 
 func GetUrlTarget() []string {
 	var strSlice []string
-	for _, result := range this.Results() {
-		Fix(&result)
-		strSlice = append(strSlice, result.Host)
+	for _, r := range results {
+		Fix(&r)
+		strSlice = append(strSlice, r.Host)
 	}
 	strSlice = misc.RemoveDuplicateElement(strSlice)
 	return strSlice
@@ -60,15 +62,15 @@ func GetUrlTarget() []string {
 
 func GetHostTarget() []string {
 	var strSlice []string
-	for _, result := range this.Results() {
-		strSlice = append(strSlice, result.Ip)
+	for _, r := range results {
+		strSlice = append(strSlice, r.Ip)
 	}
 	strSlice = misc.RemoveDuplicateElement(strSlice)
 	return strSlice
 }
 
-func displayResponse(results []fofa.Result) {
-	for _, row := range results {
+func displayResponse(r []fofa.Result) {
+	for _, row := range r {
 		Fix(&row)
 		m := row.Map()
 		m["Header"] = ""
