@@ -43,7 +43,7 @@ var (
 //mod = 0 则为不输出颜色;
 //mod = 1 则依据ANSI转义序列输出颜色体系;
 func init() {
-	if runtime.GOOS != "windows" {
+	if runtime.GOOS == "windows" {
 		disabled = true
 	}
 }
