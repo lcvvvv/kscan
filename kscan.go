@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/gonmap/lib/httpfinger"
 	"kscan/app"
@@ -203,9 +204,9 @@ func Init() {
 	app.Args.CheckArgs()
 	//日志初始化
 	if app.Args.Debug {
-		slog.SetLogger(slog.DEBUG)
+		slog.SetLevel(slog.DEBUG)
 	} else {
-		slog.SetLogger(slog.INFO)
+		slog.SetLevel(slog.INFO)
 	}
 	//color包初始化
 	if os.Getenv("KSCAN_COLOR") == "TRUE" {
@@ -218,7 +219,11 @@ func Init() {
 	pool.SetLogger(slog.Debug())
 	//配置文件初始化
 	app.ConfigInit()
-	slog.Println(slog.DATA, "Tips:", tips.GetTips(), "\n")
+	//Output初始化
+	if app.Setting.Output != nil {
+		slog.SetOutput(app.Setting.Output)
+	}
+	fmt.Println("Tips:", tips.GetTips())
 	slog.Println(slog.INFO, "当前环境为：", runtime.GOOS, ", 输出编码为：", app.Setting.Encoding)
 	if runtime.GOOS == "windows" && app.Setting.CloseColor == true {
 		slog.Println(slog.INFO, "在Windows系统下，默认不会开启颜色展示，可以通过添加环境变量开启哦：KSCAN_COLOR=TRUE")
