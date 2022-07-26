@@ -2,23 +2,24 @@ package app
 
 import (
 	"fmt"
-	"os"
-
 	"kscan/lib/sflag"
+	"os"
 )
 
 type args struct {
 	USAGE, HELP, LOGO, SYNTAX string
 
-	Help, Debug, ClosePing, Check, CloseColor, Scan   bool
-	ScanVersion, DownloadQQwry, CloseCDN              bool
-	Target, Port, Output, Proxy, Path, Host, Encoding string
-	OutputJson                                        string
-	Spy, Touch                                        string
-	Top, Threads, Timeout                             int
+	Help, Debug, ClosePing, Check, CloseColor, Scan bool
+	ScanVersion, DownloadQQwry, CloseCDN            bool
+	Output, Proxy, Encoding                         string
+	Port                                            []int
+	Path, Host, Target                              []string
+	OutputJson                                      string
+	Spy, Touch                                      string
+	Top, Threads, Timeout                           int
 	//hydra模块
 	Hydra, HydraUpdate             bool
-	HydraUser, HydraPass, HydraMod string
+	HydraUser, HydraPass, HydraMod []string
 	//fofa模块
 	Fofa, FofaField, FofaFixKeyword string
 	FofaSize                        int
@@ -54,9 +55,9 @@ func (o *args) define() {
 	//hydra模块
 	sflag.BoolVar(&o.Hydra, "hydra", false)
 	sflag.BoolVar(&o.HydraUpdate, "hydra-update", false)
-	sflag.StringVar(&o.HydraUser, "hydra-user", "")
-	sflag.StringVar(&o.HydraPass, "hydra-pass", "")
-	sflag.StringVar(&o.HydraMod, "hydra-mod", "")
+	sflag.StringSpliceVar(&o.HydraUser, "hydra-user")
+	sflag.StringSpliceVar(&o.HydraPass, "hydra-pass")
+	sflag.StringSpliceVar(&o.HydraMod, "hydra-mod")
 	//fofa模块
 	sflag.StringVar(&o.Fofa, "fofa", "")
 	sflag.StringVar(&o.Fofa, "f", "")
@@ -66,13 +67,13 @@ func (o *args) define() {
 	sflag.BoolVar(&o.FofaSyntax, "fofa-syntax", false)
 	sflag.BoolVar(&o.Scan, "scan", false)
 	//kscan模块
-	sflag.StringVar(&o.Target, "target", "")
-	sflag.StringVar(&o.Target, "t", "")
-	sflag.StringVar(&o.Port, "p", "")
-	sflag.StringVar(&o.Port, "port", "")
+	sflag.StringSpliceVar(&o.Target, "target")
+	sflag.StringSpliceVar(&o.Target, "t")
+	sflag.IntSpliceVar(&o.Port, "port")
+	sflag.IntSpliceVar(&o.Port, "p")
+	sflag.StringSpliceVar(&o.Path, "path")
+	sflag.StringSpliceVar(&o.Host, "host")
 	sflag.StringVar(&o.Proxy, "proxy", "")
-	sflag.StringVar(&o.Path, "path", "")
-	sflag.StringVar(&o.Host, "host", "")
 	sflag.IntVar(&o.Top, "top", 400)
 	sflag.IntVar(&o.Threads, "threads", 800)
 	sflag.IntVar(&o.Timeout, "timeout", 3)
@@ -111,27 +112,22 @@ func (o *args) SetHelp(help string) {
 //校验参数真实性
 func (o *args) CheckArgs() {
 	//判断必须的参数是否存在
-	if o.Target == "" && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" && o.DownloadQQwry == false {
+	if len(o.Target) == 0 && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" && o.DownloadQQwry == false {
 		fmt.Print("至少有--target、--fofa、--spy、--touch参数中的一个")
 		os.Exit(0)
 	}
 	//判断冲突参数
-	if o.Target != "" && o.Fofa != "" && o.Spy != "None" && o.Touch == "None" {
+	if len(o.Target) > 0 && o.Fofa != "" && o.Spy != "None" && o.Touch == "None" {
 		fmt.Print("--target、--fofa、--spy、--touch不能同时使用")
 		os.Exit(0)
 	}
-	if o.Port != "" && o.Top != 400 {
+	if len(o.Port) > 0 && o.Top != 400 {
 		fmt.Print("--port、--top参数不能同时使用")
 		os.Exit(0)
 	}
 	//判断内容
 	if o.Touch != "None" && sflag.NetlocVerification(o.Touch) == false {
 		fmt.Print("--touch参数输入错误,其格式应为host:port")
-		os.Exit(0)
-
-	}
-	if o.Port != "" && sflag.MultipleIntVerification(o.Port) == false {
-		fmt.Print("--port参数输入错误,其格式应为80，8080，8081-8090")
 		os.Exit(0)
 	}
 	if o.Top != 0 && (o.Top > 1000 || o.Top < 1) {
@@ -140,9 +136,6 @@ func (o *args) CheckArgs() {
 	}
 	if o.Proxy != "" && sflag.ProxyStrVerification(o.Proxy) {
 		fmt.Print("--proxy参数输入错误，其格式应为：http://ip:port，支持socks5/4")
-	}
-	if o.Path != "" && sflag.MultipleStrVerification(o.Path) {
-		fmt.Print("--path参数输入错误，其格式应为：/asdfasdf，可使用逗号输入多个路径")
 	}
 	if o.Threads != 0 && o.Threads > 2048 {
 		fmt.Print("--threads参数最大值为2048")

@@ -8,7 +8,6 @@ import (
 	"kscan/lib/misc"
 	"os"
 	"regexp"
-	"runtime"
 	"strings"
 	"time"
 )
@@ -18,8 +17,8 @@ type Config struct {
 	UrlTarget                    []string
 	Port                         []int
 	Output                       *os.File
-	Proxy, Host, Path, Encoding  string
-	OSEncoding, NewLine          string
+	Proxy, Encoding              string
+	Path, Host                   []string
 	OutputJson                   string
 	Threads                      int
 	Timeout                      time.Duration
@@ -50,7 +49,7 @@ func ConfigInit() {
 	Setting.Touch = args.Touch
 	Setting.Spy = args.Spy
 	if args.Spy == "None" {
-		Setting.loadTarget(args.Target, false)
+		Setting.loadTarget(args.Target)
 		Setting.UrlTarget = misc.RemoveDuplicateElement(Setting.UrlTarget)
 		Setting.HostTarget = misc.RemoveDuplicateElement(Setting.HostTarget)
 	}
@@ -70,8 +69,8 @@ func ConfigInit() {
 	//hydra模块
 	Setting.Hydra = args.Hydra
 	Setting.HydraUpdate = args.HydraUpdate
-	Setting.HydraUser = strParam2StrArr(args.HydraUser)
-	Setting.HydraPass = strParam2StrArr(args.HydraPass)
+	Setting.HydraUser = args.HydraUser
+	Setting.HydraPass = args.HydraPass
 	Setting.loadHydraMod(args.HydraMod)
 	//fofa模块
 	Setting.Fofa = Setting.loadFofa(args.Fofa)
@@ -85,52 +84,28 @@ func ConfigInit() {
 	Setting.Match = args.Match
 }
 
-func (c *Config) loadTarget(expr string, recursion bool) {
-	if expr == "" {
-		return
-	}
-	if strings.Contains(expr, ",") {
-		for _, s := range strings.Split(expr, ",") {
-			c.loadTarget(s, true)
+func (c *Config) loadTarget(targets []string) {
+	for _, expr := range targets {
+		//判断target字符串是否为类IP/MASK
+		if ok := IP.FormatCheck(expr); ok {
+			c.HostTarget = append(c.HostTarget, IP.ExprToList(expr)...)
+			continue
 		}
-		return
-	}
-	//判断target字符串是否为文件
-	if regexp.MustCompile("^file:.+$").MatchString(expr) || misc.FileIsExist(expr) == true {
-		expr = strings.Replace(expr, "file:", "", 1)
-		err := misc.ReadLine(expr, c.loadTarget)
+		//判断target字符串是否为类URL
+		url, err := urlparse.Load(expr)
 		if err != nil {
-			if recursion == true {
-				slog.Println(slog.DEBUG, expr+err.Error())
-			} else {
-				slog.Println(slog.ERROR, expr+err.Error())
-			}
-		}
-		return
-	}
-	//判断target字符串是否为类IP/MASK
-	if ok := IP.FormatCheck(expr); ok {
-		c.HostTarget = append(c.HostTarget, IP.ExprToList(expr)...)
-		return
-	}
-	//判断target字符串是否为类URL
-	url, err := urlparse.Load(expr)
-	if err != nil {
-		if recursion == true {
-			slog.Println(slog.DEBUG, expr+err.Error())
-		} else {
 			slog.Println(slog.ERROR, expr+err.Error())
+			continue
 		}
-		return
+		//属于类URL，将会对其进行针对性检测，添加至URL待扫描清单
+		c.UrlTarget = append(c.UrlTarget, expr)
+		c.HostTarget = append(c.HostTarget, url.Netloc)
 	}
-	//属于类URL，将会对其进行针对性检测，添加至URL待扫描清单
-	c.UrlTarget = append(c.UrlTarget, expr)
-	c.HostTarget = append(c.HostTarget, url.Netloc)
 }
 
 func (c *Config) loadPort() {
-	if Args.Port != "" {
-		c.Port = append(c.Port, intParam2IntArr(Args.Port)...)
+	if len(Args.Port) > 0 {
+		c.Port = append(c.Port, Args.Port...)
 	}
 	if Args.Top != 400 {
 		c.Port = append(c.Port, TOP_1000[:Args.Top]...)
@@ -162,12 +137,16 @@ func (c *Config) loadScanPing() {
 	}
 }
 
-func (c *Config) loadHydraMod(expr string) {
-	if expr == "" || expr == "all" {
+func (c *Config) loadHydraMod(splice []string) {
+	if len(splice) == 0 {
 		c.HydraMod = hydra.ProtocolList
 		return
 	}
-	c.HydraMod = strParam2StrArr(expr)
+	if splice[0] == "all" {
+		c.HydraMod = hydra.ProtocolList
+		return
+	}
+	c.HydraMod = splice
 }
 
 func (c *Config) loadFofa(expr string) []string {
@@ -211,79 +190,15 @@ func New() Config {
 	return Config{
 		HostTarget: []string{},
 		UrlTarget:  []string{},
-		Path:       "/",
+		Path:       []string{"/"},
 		Port:       []int{},
 		Output:     nil,
 		Proxy:      "",
-		Host:       "",
+		Host:       []string{},
 		Threads:    800,
 		Timeout:    0,
 		Encoding:   "utf-8",
-		OSEncoding: getOSEncoding(),
-		NewLine:    getNewline(),
 	}
-}
-
-func getNewline() string {
-	if runtime.GOOS == "windows" {
-		return "\r\n"
-	} else {
-		return "\n"
-	}
-}
-
-func getOSEncoding() string {
-	if runtime.GOOS == "windows" {
-		return "gb2312"
-	} else {
-		return "utf-8"
-	}
-}
-
-func intParam2IntArr(expr string) []int {
-	var res []int
-	vArr := strings.Split(expr, ",")
-	for _, v := range vArr {
-		var vvArr []int
-		if strings.Contains(v, "-") {
-			iArr := strings.Split(v, "-")
-			if len(iArr) != 2 {
-				slog.Println(slog.ERROR, "参数输入错误！！！")
-			} else {
-				smallNum := misc.Str2Int(iArr[0])
-				bigNum := misc.Str2Int(iArr[1])
-				if smallNum >= bigNum {
-					slog.Println(slog.ERROR, "参数输入错误！！！")
-				}
-				vvArr = append(vvArr, misc.Xrange(smallNum, bigNum)...)
-			}
-		} else {
-			vvArr = append(vvArr, misc.Str2Int(v))
-		}
-		res = append(res, vvArr...)
-	}
-	return res
-}
-
-func strParam2StrArr(expr string) []string {
-	//判断对象是否为文件
-	if regexp.MustCompile("^file:.+$").MatchString(expr) {
-		path := strings.Replace(expr, "file:", "", 1)
-		return misc.ReadLineAll(path)
-	}
-	//判断对象是否为多个
-	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
-		var userArr []string
-		for _, str := range strings.Split(strArr, ",") {
-			userArr = append(userArr, strings.ReplaceAll(str, "[DouHao]", ","))
-		}
-		return userArr
-	}
-	//对象为单个且不为空时直接返回
-	if expr != "" {
-		return []string{expr}
-	}
-	return []string{}
 }
 
 var TOP_1000 = []int{21, 22, 23, 25, 53, 69, 80, 81, 88, 89, 110, 135, 161, 445, 139, 137,
