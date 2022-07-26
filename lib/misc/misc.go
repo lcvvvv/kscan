@@ -118,11 +118,6 @@ func UniStrAppend(slice []string, elems ...string) []string {
 	return slice
 }
 
-func FileIsExist(path string) bool {
-	_, err := os.Lstat(path)
-	return !os.IsNotExist(err)
-}
-
 func Xrange(args ...int) []int {
 	var start, stop int
 	var step = 1
