@@ -9,12 +9,11 @@ import (
 	"kscan/core/fofa"
 	"kscan/core/slog"
 	"kscan/core/spy"
-	"kscan/core/stdio"
 	"kscan/core/tips"
 	"kscan/core/touch"
 	"kscan/lib/color"
-	"kscan/lib/misc"
 	"kscan/lib/pool"
+	"kscan/lib/stdio"
 	"kscan/run"
 	"os"
 	"runtime"
@@ -252,7 +251,7 @@ func InitKscan() {
 	gonmap.InitAppBannerDiscernConfig(app.Setting.Host, app.Setting.Path, app.Setting.Proxy, app.Setting.Timeout)
 	//CDN检测初始化
 	if app.Setting.CloseCDN == false {
-		if misc.FileIsExist(cdn.GetPath()) == false {
+		if _, err := os.Lstat(cdn.GetPath()); os.IsNotExist(err) == true {
 			slog.Printf(slog.WARN, "未检测到qqwry.dat,将关闭CDN检测功能，如需开启，请执行kscan --download-qqwry下载该文件")
 			app.Setting.CloseCDN = true
 		} else {
