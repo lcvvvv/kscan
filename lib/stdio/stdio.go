@@ -1,7 +1,7 @@
 package stdio
 
 import (
-	"github.com/lcvvvv/gonmap/lib/chinese"
+	"kscan/lib/chinese"
 	"os"
 	"runtime"
 )
