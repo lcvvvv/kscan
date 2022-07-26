@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"golang.org/x/text/encoding/simplifiedchinese"
 	"net"
 	"testing"
 	"time"
@@ -23,18 +22,6 @@ func TestName(t *testing.T) {
 	//}
 	//stats := pinger
 	//fmt.Println(stats.PacketsRecv)
-
-	utf8Str := "编码转换内容内容"
-	utf8Buf := []byte(utf8Str)
-
-	gbkBuf, _ := simplifiedchinese.GBK.NewEncoder().Bytes(utf8Buf)
-	gbkStr := string(gbkBuf)
-	fmt.Println(gbkBuf) //byte
-	fmt.Println(gbkStr) //打印为乱码
-	utf8Buf, _ = simplifiedchinese.GBK.NewDecoder().Bytes(gbkBuf)
-	utf8Str = string(utf8Buf)
-	fmt.Println(utf8Buf) //byte
-	fmt.Println(utf8Str) //打印为乱码
 }
 
 type AppBanner struct {
