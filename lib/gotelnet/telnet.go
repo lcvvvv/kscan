@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/lcvvvv/gonmap/lib/chinese"
 	"net"
 	"regexp"
 	"strings"
@@ -176,7 +175,7 @@ func (c *Client) ReadContext() string {
 	}
 	c.LastResponse = strings.ReplaceAll(c.LastResponse, "\x0d\x00", "")
 	c.LastResponse = strings.ReplaceAll(c.LastResponse, "\x0d\x0a", "\n")
-	c.LastResponse = chinese.ToUTF8(c.LastResponse)
+	//c.LastResponse = chinese.ToUTF8(c.LastResponse)
 	return c.LastResponse
 }
 
