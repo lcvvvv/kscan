@@ -9,12 +9,12 @@ import (
 	"kscan/core/cdn"
 	"kscan/core/hydra"
 	"kscan/core/slog"
-	"kscan/lib/IP"
 	"kscan/lib/color"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
 	"kscan/lib/queue"
 	"kscan/lib/smap"
+	"kscan/lib/uri"
 	"os"
 	"path"
 	"strconv"
@@ -162,7 +162,7 @@ func (k *kscan) HostDiscovery(hostArr []string, open bool) {
 				var ok bool
 				var result string
 				var err error
-				var isIP = IP.IsIP(host)
+				var isIP = uri.IsIP(host)
 				if isIP {
 					ok, result, err = cdn.FindWithIP(host)
 				} else {

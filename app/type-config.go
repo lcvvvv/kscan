@@ -1,11 +1,10 @@
 package app
 
 import (
-	"github.com/lcvvvv/gonmap/lib/urlparse"
 	"kscan/core/hydra"
 	"kscan/core/slog"
-	"kscan/lib/IP"
 	"kscan/lib/misc"
+	"kscan/lib/uri"
 	"os"
 	"regexp"
 	"strings"
@@ -50,8 +49,6 @@ func ConfigInit() {
 	Setting.Spy = args.Spy
 	if args.Spy == "None" {
 		Setting.loadTarget(args.Target)
-		Setting.UrlTarget = misc.RemoveDuplicateElement(Setting.UrlTarget)
-		Setting.HostTarget = misc.RemoveDuplicateElement(Setting.HostTarget)
 	}
 	Setting.loadPort()
 	Setting.loadOutput()
@@ -86,21 +83,46 @@ func ConfigInit() {
 
 func (c *Config) loadTarget(targets []string) {
 	for _, expr := range targets {
-		//判断target字符串是否为类IP/MASK
-		if ok := IP.FormatCheck(expr); ok {
-			c.HostTarget = append(c.HostTarget, IP.ExprToList(expr)...)
+		if expr == "" {
 			continue
 		}
-		//判断target字符串是否为类URL
-		url, err := urlparse.Load(expr)
-		if err != nil {
-			slog.Println(slog.ERROR, expr+err.Error())
+		if uri.IsIP(expr) {
+			c.HostTarget = append(c.HostTarget, expr)
 			continue
 		}
-		//属于类URL，将会对其进行针对性检测，添加至URL待扫描清单
-		c.UrlTarget = append(c.UrlTarget, expr)
-		c.HostTarget = append(c.HostTarget, url.Netloc)
+		if uri.IsCIDR(expr) {
+			c.HostTarget = append(c.HostTarget, uri.CIDRToIP(expr)...)
+			continue
+		}
+		if uri.IsIPRanger(expr) {
+			c.HostTarget = append(c.HostTarget, uri.RangerToIP(expr)...)
+			continue
+		}
+		if uri.IsDomain(expr) {
+			c.HostTarget = append(c.HostTarget, expr)
+			c.UrlTarget = append(c.UrlTarget, expr)
+			continue
+		}
+		if uri.IsNetlocPort(expr) {
+			c.HostTarget = append(c.HostTarget, uri.GetNetlocWithNetlocPort(expr))
+			c.UrlTarget = append(c.UrlTarget, expr)
+			continue
+		}
+		if uri.IsHostPath(expr) {
+			c.HostTarget = append(c.HostTarget, uri.GetNetlocWithNetlocPort(expr))
+			c.UrlTarget = append(c.UrlTarget, "https://"+expr)
+			c.UrlTarget = append(c.UrlTarget, "http://"+expr)
+			continue
+		}
+		if uri.IsURL(expr) {
+			c.HostTarget = append(c.HostTarget, uri.GetNetlocWithURL(expr))
+			c.UrlTarget = append(c.UrlTarget, expr)
+			continue
+		}
+		slog.Println(slog.WARN, "无法识别的Target字符串:", expr)
 	}
+	Setting.UrlTarget = misc.RemoveDuplicateElement(Setting.UrlTarget)
+	Setting.HostTarget = misc.RemoveDuplicateElement(Setting.HostTarget)
 }
 
 func (c *Config) loadPort() {
