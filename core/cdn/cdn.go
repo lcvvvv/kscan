@@ -2,9 +2,9 @@ package cdn
 
 import (
 	"kscan/core/slog"
-	"kscan/lib/IP"
 	"kscan/lib/dns"
 	"kscan/lib/qqwry"
+	"kscan/lib/uri"
 	"os"
 	"path/filepath"
 	"strings"
@@ -69,7 +69,7 @@ func FindWithDomain(domain string) (bool, string, error) {
 		slog.Println(slog.DEBUG, domain, "lookupIP err :", err)
 		return false, "", err
 	}
-	if IP.IsInSameSegment(IPs) == false {
+	if uri.SameSegment(IPs...) == false {
 		return true, "域名指向多个IP地址，且不在同一网段，该域名可能使用了CDN技术", nil
 	}
 

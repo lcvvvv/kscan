@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/lcvvvv/gonmap"
 	"kscan/core/slog"
-	"kscan/lib/IP"
 	"kscan/lib/misc"
 	"kscan/lib/pool"
+	"kscan/lib/uri"
 	"net"
 	"strings"
 )
@@ -24,9 +24,9 @@ func Start() {
 	_ = dnsTesting()
 	var gatewayArr, All []string
 	//若spy参数格式为IP地址，则将对指定的IP地址进行B段存活网关探测
-	if IP.FormatCheck(Keyword) {
+	if uri.IsIP(Keyword) {
 		slog.Printf(slog.INFO, "现在开始指定网段：%s，B段存活网关探测", Keyword)
-		gatewayArr = IP.GetGatewayList(Keyword, "b")
+		gatewayArr = uri.GetGatewayList(Keyword, "b")
 		HostDiscoveryIcmpPool(gatewayArr)
 		return
 	}
@@ -37,7 +37,7 @@ func Start() {
 		gatewayArr = []string{}
 		for i := 16; i <= 31; i++ {
 			slog.Printf(slog.INFO, "现在开始枚举常见网段172.%d.0.0", i)
-			gatewayArr = IP.GetGatewayList(fmt.Sprintf("172.%d.0.0", i), "b")
+			gatewayArr = uri.GetGatewayList(fmt.Sprintf("172.%d.0.0", i), "b")
 			gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
 			if len(gatewayArr) > 0 {
 				HostDiscoveryIcmpPool(gatewayArr)
@@ -52,7 +52,7 @@ func Start() {
 		//探测10段，A段存活网关
 		slog.Printf(slog.INFO, "当前spy参数值为%s，将开始10段，A段存活网关探测，此探测时间较长，请耐心等待", Keyword)
 		slog.Println(slog.INFO, "现在开始枚举常见网段10.0.0.0")
-		gatewayArr = IP.GetGatewayList("10.0.0.1", "a")
+		gatewayArr = uri.GetGatewayList("10.0.0.1", "a")
 		HostDiscoveryIcmpPool(gatewayArr)
 	}
 	//依据情况判断是否进行常规探测
@@ -72,7 +72,7 @@ func Start() {
 		//探测存在特殊规律的网段
 		if internet == false {
 			slog.Println(slog.INFO, "现在开始枚举特殊网段1.1.1.0-255.255.255.0")
-			gatewayArr = append(IP.GetGatewayList("1.1.1.1", "s"))
+			gatewayArr = append(uri.GetGatewayList("1.1.1.1", "s"))
 			HostDiscoveryIcmpPool(gatewayArr)
 		}
 	}
@@ -81,7 +81,7 @@ func Start() {
 	if Keyword == "all" || Keyword == "" || Keyword == "192" {
 		//探测常见网段192段，B段存活网关
 		slog.Println(slog.INFO, "现在开始枚举常见网段192.168.0.0")
-		gatewayArr = IP.GetGatewayList("192.168.0.1", "b")
+		gatewayArr = uri.GetGatewayList("192.168.0.1", "b")
 		gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
 		if len(gatewayArr) > 0 {
 			HostDiscoveryIcmpPool(gatewayArr)
@@ -101,13 +101,13 @@ func makeInterfaceGatwayList() []string {
 		if strings.Contains(ip, "169.254") {
 			continue
 		}
-		gatewayArr = append(gatewayArr, IP.GetGatewayList(ip, "b")...)
+		gatewayArr = append(gatewayArr, uri.GetGatewayList(ip, "b")...)
 	}
 	for _, ip := range down {
 		if strings.Contains(ip, "169.254") {
 			continue
 		}
-		gatewayArr = append(gatewayArr, IP.GetGatewayList(ip, "b")...)
+		gatewayArr = append(gatewayArr, uri.GetGatewayList(ip, "b")...)
 	}
 	return gatewayArr
 }
@@ -184,7 +184,7 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 		if Scan == false {
 			continue
 		}
-		ipArr := IP.ExprToList(fmt.Sprintf("%s/24", ip))
+		ipArr := uri.CIDRToIP(fmt.Sprintf("%s/24", ip))
 		Target = append(Target, ipArr...)
 	}
 	if Scan == true {
