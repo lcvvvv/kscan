@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"net"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
@@ -190,19 +191,21 @@ func GetNetlocWithHostPath(str string) string {
 }
 
 func GetNetlocWithHost(str string) string {
-	return GetNetlocWithNetlocPort(str)
-}
-
-func GetNetlocWithNetlocPort(str string) string {
 	return strings.Split(str, ":")[0]
 }
 
-func RangerToIP(ranger string) (IPs []string) {
+func SplitWithNetlocPort(str string) (netloc string, port int) {
+	foo := strings.Split(str, ":")
+	port, _ = strconv.Atoi(foo[1])
+	return foo[0], port
+}
+
+func RangerToIP(ranger string) (IPs []net.IP) {
 	first, last := parseIPPairs(ranger)
 	return pairsToIP(first, last)
 }
 
-func CIDRToIP(cidr string) (IPs []string) {
+func CIDRToIP(cidr string) (IPs []net.IP) {
 	_, network, _ := net.ParseCIDR(cidr)
 	first := FirstIP(network)
 	last := LastIP(network)
@@ -270,11 +273,11 @@ func parseIPPairs(str string) (ip1 net.IP, ip2 net.IP) {
 	return ip1, ip2
 }
 
-func pairsToIP(ip1, ip2 net.IP) (IPs []string) {
+func pairsToIP(ip1, ip2 net.IP) (IPs []net.IP) {
 	start := toInt(ip1)
 	end := toInt(ip2)
 	for i := start; i <= end; i++ {
-		IPs = append(IPs, toIP(i))
+		IPs = append(IPs, net.ParseIP(toIP(i)))
 	}
 	return IPs
 }
@@ -334,4 +337,9 @@ func stringContainsCTLByte(s string) bool {
 		}
 	}
 	return false
+}
+
+func URLParse(URLRaw string) *url.URL {
+	URL, _ := url.Parse(URLRaw)
+	return URL
 }
