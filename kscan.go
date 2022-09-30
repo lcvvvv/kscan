@@ -47,6 +47,7 @@ optional arguments:
                   IP地址段：114.114.114.114-115.115.115.115
                   URL地址：https://www.baidu.com
                   文件地址：file:/tmp/target.txt
+                  剪切板: parse or clipboard
   --spy           网段探测模式，此模式下将自动探测主机可达的内网网段可接收参数为：
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
 options:

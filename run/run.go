@@ -2,6 +2,7 @@ package run
 
 import (
 	"fmt"
+	"github.com/atotto/clipboard"
 	"github.com/lcvvvv/appfinger"
 	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/simplehttp"
@@ -16,6 +17,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -43,6 +45,17 @@ func Start() {
 
 func pushTarget(expr string) {
 	if expr == "" {
+		return
+	}
+	if expr == "parse" || expr == "clipboard" {
+		if clipboard.Unsupported == true {
+			slog.Println(slog.ERROR, runtime.GOOS, "clipboard unsupported")
+		}
+		clipboardStr, _ := clipboard.ReadAll()
+		for _, line := range strings.Split(clipboardStr, "\n") {
+			line = strings.ReplaceAll(line, "\r", "")
+			pushTarget(line)
+		}
 		return
 	}
 	if uri.IsIP(expr) {
@@ -286,17 +299,25 @@ func outputUnknownResponse(addr net.IP, port int, response string) {
 }
 
 func responseFilter(strArgs ...string) bool {
-	if app.Setting.Match == "" {
-		return false
+	var match = app.Setting.Match
+	var notMatch = app.Setting.NotMatch
+
+	if match != "" {
+		for _, str := range strArgs {
+			//主要结果中包含关键则，则会显示
+			if strings.Contains(str, app.Setting.Match) == true {
+				return false
+			}
+		}
 	}
 
-	for _, str := range strArgs {
-		if strings.Contains(str, app.Setting.Match) == false {
-			return true
+	if notMatch != "" {
+		for _, str := range strArgs {
+			//主要结果中包含关键则，则会显示
+			if strings.Contains(str, app.Setting.NotMatch) == true {
+				return true
+			}
 		}
-		//if strings.Contains(str, app.Setting.NotMatch) == true {
-		//	return true
-		//}
 	}
 	return false
 }
