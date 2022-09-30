@@ -221,7 +221,7 @@ func GetCertRaw(TLS *tls.ConnectionState) string {
 }
 
 func SplitHeaderAndBody(response string) (header, body string) {
-	index := strings.Index(response, "\r\n")
+	index := strings.Index(response, "\r\n\r\n")
 	if index == -1 {
 		header = response
 	} else {
