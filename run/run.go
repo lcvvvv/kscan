@@ -47,7 +47,7 @@ func pushTarget(expr string) {
 	if expr == "" {
 		return
 	}
-	if expr == "parse" || expr == "clipboard" {
+	if expr == "paste" || expr == "clipboard" {
 		if clipboard.Unsupported == true {
 			slog.Println(slog.ERROR, runtime.GOOS, "clipboard unsupported")
 		}
