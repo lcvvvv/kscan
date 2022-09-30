@@ -33,18 +33,11 @@ const (
 )
 
 // NewQQwry new database from path
-func NewQQwry(filePath string) (*QQwry, error) {
+func NewQQwryFS(fs *os.File) (qqwry *QQwry, err error) {
 	var fileData []byte
 	var fileInfo FileData
 
-	_, err := os.Stat(filePath)
-	if err != nil {
-		return nil, err
-	}
-	fileInfo.FileBase, err = os.OpenFile(filePath, os.O_RDONLY, 0400)
-	if err != nil {
-		return nil, err
-	}
+	fileInfo.FileBase = fs
 	defer fileInfo.FileBase.Close()
 
 	fileData, err = ioutil.ReadAll(fileInfo.FileBase)
