@@ -9,9 +9,13 @@ require (
 	github.com/huin/asn1ber v0.0.0-20120622192748-af09f62e6358
 	github.com/icodeface/tls v0.0.0-20190904083142-17aec93c60e5
 	github.com/jlaffaye/ftp v0.0.0-20220630165035-11536801d1ff
+	github.com/lcvvvv/appfinger v0.0.0-00010101000000-000000000000
 
 	//gonmap
-	github.com/lcvvvv/gonmap v1.2.1
+	github.com/lcvvvv/gonmap v1.3.1
+	github.com/lcvvvv/pool v0.0.0-00010101000000-000000000000
+	github.com/lcvvvv/simplehttp v0.0.0-00010101000000-000000000000 // indirect
+	github.com/lcvvvv/stdio v0.0.0-00010101000000-000000000000
 	github.com/lib/pq v1.10.2
 
 	//grdp
@@ -25,5 +29,13 @@ require (
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 
 	//chinese
-	golang.org/x/text v0.3.6
+	golang.org/x/text v0.3.7
 )
+
+replace github.com/lcvvvv/appfinger => ./lib/appfinger
+
+replace github.com/lcvvvv/simplehttp => ./lib/simplehttp
+
+replace github.com/lcvvvv/stdio => ./lib/stdio
+
+replace github.com/lcvvvv/pool => ./lib/pool

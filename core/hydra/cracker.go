@@ -18,11 +18,11 @@ import (
 	"kscan/lib/grdp"
 )
 
-func rdpCracker(IPAddr string, port int) func(interface{}) interface{} {
+func rdpCracker(IPAddr string, port int) func(interface{}) *AuthInfo {
 	target := fmt.Sprintf("%s:%d", IPAddr, port)
 	protocol := grdp.VerifyProtocol(target)
 	//slog.Println(slog.DEBUG, "rdp protocol is :", protocol)
-	return func(i interface{}) interface{} {
+	return func(i interface{}) *AuthInfo {
 		info := i.(AuthInfo)
 		info.Auth.MakePassword()
 		domain := ""
@@ -32,13 +32,13 @@ func rdpCracker(IPAddr string, port int) func(interface{}) interface{} {
 				return nil
 			}
 			info.Status = true
-			return info
+			return &info
 		}
 		return nil
 	}
 }
 
-func smbCracker(i interface{}) interface{} {
+func smbCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	domain := ""
@@ -48,12 +48,12 @@ func smbCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func sshCracker(i interface{}) interface{} {
+func sshCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := ssh.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
@@ -62,13 +62,13 @@ func sshCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func telnetCracker(serverType int) func(interface{}) interface{} {
-	return func(i interface{}) interface{} {
+func telnetCracker(serverType int) func(interface{}) *AuthInfo {
+	return func(i interface{}) *AuthInfo {
 		info := i.(AuthInfo)
 		info.Auth.MakePassword()
 		if ok, err := telnet.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port, serverType); ok {
@@ -77,7 +77,7 @@ func telnetCracker(serverType int) func(interface{}) interface{} {
 				return nil
 			}
 			info.Status = true
-			return info
+			return &info
 		}
 		return nil
 	}
@@ -93,7 +93,7 @@ func getTelnetServerType(ip string, port int) int {
 	return client.MakeServerType()
 }
 
-func mysqlCracker(i interface{}) interface{} {
+func mysqlCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := mysql.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
@@ -102,12 +102,12 @@ func mysqlCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func mssqlCracker(i interface{}) interface{} {
+func mssqlCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := mssql.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
@@ -116,12 +116,12 @@ func mssqlCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func redisCracker(i interface{}) interface{} {
+func redisCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := redis.Check(info.IPAddr, info.Auth.Password, info.Port); ok {
@@ -130,12 +130,12 @@ func redisCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func ftpCracker(i interface{}) interface{} {
+func ftpCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := ftp.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
@@ -143,12 +143,12 @@ func ftpCracker(i interface{}) interface{} {
 			slog.Printf(slog.DEBUG, "ftp://%s:%s@%s:%d:%s", info.Auth.Username, info.Auth.Password, info.IPAddr, info.Port, err)
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func postgresqlCracker(i interface{}) interface{} {
+func postgresqlCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := postgresql.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
@@ -157,17 +157,17 @@ func postgresqlCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }
 
-func oracleCracker(IPAddr string, port int) func(interface{}) interface{} {
+func oracleCracker(IPAddr string, port int) func(interface{}) *AuthInfo {
 	sid := oracle.GetSID(IPAddr, port, oracle.ServiceName)
 	if sid == "" {
 		return nil
 	}
-	return func(i interface{}) interface{} {
+	return func(i interface{}) *AuthInfo {
 		info := i.(AuthInfo)
 		info.Auth.MakePassword()
 		info.Auth.Other["SID"] = sid
@@ -177,13 +177,13 @@ func oracleCracker(IPAddr string, port int) func(interface{}) interface{} {
 				return nil
 			}
 			info.Status = true
-			return info
+			return &info
 		}
 		return nil
 	}
 }
 
-func mongodbCracker(i interface{}) interface{} {
+func mongodbCracker(i interface{}) *AuthInfo {
 	info := i.(AuthInfo)
 	info.Auth.MakePassword()
 	if ok, err := mongodb.Check(info.IPAddr, info.Auth.Username, info.Auth.Password, info.Port); ok {
@@ -192,7 +192,7 @@ func mongodbCracker(i interface{}) interface{} {
 			return nil
 		}
 		info.Status = true
-		return info
+		return &info
 	}
 	return nil
 }

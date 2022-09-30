@@ -50,8 +50,6 @@ func (o *args) define() {
 	sflag.BoolVar(&o.Debug, "d", false)
 	//spy模块
 	sflag.AutoVarString(&o.Spy, "spy", "None")
-	//touch模块
-	sflag.StringVar(&o.Touch, "touch", "None")
 	//hydra模块
 	sflag.BoolVar(&o.Hydra, "hydra", false)
 	sflag.BoolVar(&o.HydraUpdate, "hydra-update", false)
@@ -112,13 +110,13 @@ func (o *args) SetHelp(help string) {
 //校验参数真实性
 func (o *args) CheckArgs() {
 	//判断必须的参数是否存在
-	if len(o.Target) == 0 && o.Fofa == "" && o.Spy == "None" && o.Touch == "None" && o.DownloadQQwry == false {
-		fmt.Print("至少有--target、--fofa、--spy、--touch参数中的一个")
+	if len(o.Target) == 0 && o.Fofa == "" && o.Spy == "None" && o.DownloadQQwry == false {
+		fmt.Print("至少有--target、--fofa、--spy参数中的一个")
 		os.Exit(0)
 	}
 	//判断冲突参数
 	if len(o.Target) > 0 && o.Fofa != "" && o.Spy != "None" && o.Touch == "None" {
-		fmt.Print("--target、--fofa、--spy、--touch不能同时使用")
+		fmt.Print("--target、--fofa、--spy不能同时使用")
 		os.Exit(0)
 	}
 	if len(o.Port) > 0 && o.Top != 400 {
@@ -126,10 +124,6 @@ func (o *args) CheckArgs() {
 		os.Exit(0)
 	}
 	//判断内容
-	if o.Touch != "None" && sflag.NetlocVerification(o.Touch) == false {
-		fmt.Print("--touch参数输入错误,其格式应为host:port")
-		os.Exit(0)
-	}
 	if o.Top != 0 && (o.Top > 1000 || o.Top < 1) {
 		fmt.Print("TOP参数输入错误,TOP参数应为1-1000之间的整数。")
 		os.Exit(0)

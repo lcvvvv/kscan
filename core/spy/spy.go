@@ -2,10 +2,10 @@ package spy
 
 import (
 	"fmt"
-	"github.com/lcvvvv/gonmap"
+	"github.com/lcvvvv/pool"
 	"kscan/core/slog"
 	"kscan/lib/misc"
-	"kscan/lib/pool"
+	"kscan/lib/osping"
 	"kscan/lib/uri"
 	"net"
 	"strings"
@@ -113,7 +113,7 @@ func makeInterfaceGatwayList() []string {
 }
 
 func internetTesting() bool {
-	if gonmap.HostDiscoveryForIcmp("114.114.114.114") {
+	if osping.Ping("114.114.114.114") {
 		slog.Println(slog.DATA, "Internet--------[√]")
 		return true
 	} else {
@@ -155,14 +155,13 @@ func getInterfaces() (up []string, down []string) {
 }
 
 func HostDiscoveryIcmpPool(gatewayArr []string) {
-	spyPool := pool.NewPool(200)
-	spyPool.Function = func(i interface{}) interface{} {
+	spyPool := pool.New(200)
+	spyPool.Function = func(i interface{}) {
 		ip := i.(string)
 		//经过存活性检测未存活的IP不会进行下一步测试
-		if gonmap.HostDiscoveryForIcmp(ip) {
-			return ip
+		if osping.Ping(ip) {
+			pushTarget(ip)
 		}
-		return nil
 	}
 	//启用ICMP存活性探测任务下发器
 	go func() {
@@ -170,25 +169,21 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 			spyPool.In <- ip
 		}
 		//关闭ICMP存活性探测下发信道
-		spyPool.InDone()
+		spyPool.Stop()
 	}()
 	//开始执行主机存活性探测任务
-	go spyPool.Run()
-	//开始监测输出结果
-	for out := range spyPool.Out {
-		if out == nil {
-			continue
-		}
-		ip := out.(string)
-		slog.Println(slog.DATA, ip)
-		if Scan == false {
-			continue
-		}
-		ipArr := uri.CIDRToIP(fmt.Sprintf("%s/24", ip))
-		Target = append(Target, ipArr...)
-	}
+	spyPool.Run()
+
 	if Scan == true {
 		Target = misc.RemoveDuplicateElement(Target)
 	}
+}
 
+func pushTarget(ip string) {
+	//开始监测输出结果
+	slog.Println(slog.DATA, ip)
+	ipArr := uri.CIDRToIP(fmt.Sprintf("%s/24", ip))
+	for _, ip := range ipArr {
+		Target = append(Target, ip.String())
+	}
 }

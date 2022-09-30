@@ -85,7 +85,7 @@ fofa搜索关键字：将直接返回fofa搜索结果
 ## 5 使用方法
 
 ```
-usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
+usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
 
 
 optional arguments:
@@ -101,7 +101,6 @@ optional arguments:
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
-  --touch         获取指定端口返回包，可以使用此次参数获取返回包，完善指纹库，格式为：IP:PORT
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
   -oJ             将扫描结果使用json格式保存到文件

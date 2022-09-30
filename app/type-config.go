@@ -1,10 +1,10 @@
 package app
 
 import (
+	"encoding/json"
 	"kscan/core/hydra"
 	"kscan/core/slog"
 	"kscan/lib/misc"
-	"kscan/lib/uri"
 	"os"
 	"regexp"
 	"strings"
@@ -12,13 +12,12 @@ import (
 )
 
 type Config struct {
-	HostTarget                   []string
-	UrlTarget                    []string
+	Target                       []string
 	Port                         []int
 	Output                       *os.File
 	Proxy, Encoding              string
 	Path, Host                   []string
-	OutputJson                   string
+	OutputJson                   *JSONWriter
 	Threads                      int
 	Timeout                      time.Duration
 	ClosePing, Check, CloseColor bool
@@ -32,8 +31,6 @@ type Config struct {
 	FofaFixKeyword string
 	FofaSize       int
 	Scan           bool
-	//touch
-	Touch string
 	//CDN检测模块
 	DownloadQQwry bool
 	CloseCDN      bool
@@ -41,26 +38,46 @@ type Config struct {
 	Match string
 }
 
+type JSONWriter struct {
+	f *os.File
+}
+
+func (jw *JSONWriter) Push(m map[string]string) {
+	stat, err := jw.f.Stat()
+	if err != nil {
+		slog.Println(slog.ERROR, err)
+	}
+	jw.f.Seek(stat.Size()-1, 0)
+	jsonBuf, _ := json.Marshal(m)
+	jsonBuf = append(jsonBuf, []byte("]")...)
+	if stat.Size() != 2 {
+		jsonBuf = append([]byte(","), jsonBuf...)
+	}
+	jw.f.Write(jsonBuf)
+}
+
 var Setting = New()
 
 func ConfigInit() {
 	args := Args
-	Setting.Touch = args.Touch
 	Setting.Spy = args.Spy
 	if args.Spy == "None" {
-		Setting.loadTarget(args.Target)
+		Setting.Target = args.Target
 	}
 	Setting.loadPort()
 	Setting.loadOutput()
 	Setting.loadScanPing()
 	Setting.Timeout = time.Duration(args.Timeout) * time.Second
 	Setting.Check = args.Check
+	if Setting.Check == true {
+		Setting.Port = []int{}
+	}
 	Setting.Path = args.Path
 	Setting.Proxy = args.Proxy
 	Setting.Host = args.Host
 	Setting.Threads = args.Threads
 	Setting.Encoding = args.Encoding
-	Setting.OutputJson = args.OutputJson
+	Setting.OutputJson = loadOutputJSON(args.OutputJson)
 	Setting.ScanVersion = args.ScanVersion
 	//Setting.CloseColor = args.CloseColor
 	//hydra模块
@@ -81,48 +98,21 @@ func ConfigInit() {
 	Setting.Match = args.Match
 }
 
-func (c *Config) loadTarget(targets []string) {
-	for _, expr := range targets {
-		if expr == "" {
-			continue
-		}
-		if uri.IsIP(expr) {
-			c.HostTarget = append(c.HostTarget, expr)
-			continue
-		}
-		if uri.IsCIDR(expr) {
-			c.HostTarget = append(c.HostTarget, uri.CIDRToIP(expr)...)
-			continue
-		}
-		if uri.IsIPRanger(expr) {
-			c.HostTarget = append(c.HostTarget, uri.RangerToIP(expr)...)
-			continue
-		}
-		if uri.IsDomain(expr) {
-			c.HostTarget = append(c.HostTarget, expr)
-			c.UrlTarget = append(c.UrlTarget, expr)
-			continue
-		}
-		if uri.IsNetlocPort(expr) {
-			c.HostTarget = append(c.HostTarget, uri.GetNetlocWithNetlocPort(expr))
-			c.UrlTarget = append(c.UrlTarget, expr)
-			continue
-		}
-		if uri.IsHostPath(expr) {
-			c.HostTarget = append(c.HostTarget, uri.GetNetlocWithNetlocPort(expr))
-			c.UrlTarget = append(c.UrlTarget, "https://"+expr)
-			c.UrlTarget = append(c.UrlTarget, "http://"+expr)
-			continue
-		}
-		if uri.IsURL(expr) {
-			c.HostTarget = append(c.HostTarget, uri.GetNetlocWithURL(expr))
-			c.UrlTarget = append(c.UrlTarget, expr)
-			continue
-		}
-		slog.Println(slog.WARN, "无法识别的Target字符串:", expr)
+func loadOutputJSON(path string) *JSONWriter {
+	if path == "" {
+		return nil
 	}
-	Setting.UrlTarget = misc.RemoveDuplicateElement(Setting.UrlTarget)
-	Setting.HostTarget = misc.RemoveDuplicateElement(Setting.HostTarget)
+	f, err := os.OpenFile(path, os.O_CREATE+os.O_RDWR, 0764)
+	if err != nil {
+		slog.Println(slog.ERROR, err)
+	}
+	jw := &JSONWriter{f}
+	jw.f.Seek(0, 0)
+	_, err = jw.f.WriteString(`[]`)
+	if err != nil {
+		slog.Println(slog.ERROR, err)
+	}
+	return &JSONWriter{f}
 }
 
 func (c *Config) loadPort() {
@@ -210,16 +200,15 @@ func (c *Config) loadFofaField(expr string) []string {
 
 func New() Config {
 	return Config{
-		HostTarget: []string{},
-		UrlTarget:  []string{},
-		Path:       []string{"/"},
-		Port:       []int{},
-		Output:     nil,
-		Proxy:      "",
-		Host:       []string{},
-		Threads:    800,
-		Timeout:    0,
-		Encoding:   "utf-8",
+		Target:   []string{},
+		Path:     []string{"/"},
+		Port:     []int{},
+		Output:   nil,
+		Proxy:    "",
+		Host:     []string{},
+		Threads:  800,
+		Timeout:  0,
+		Encoding: "utf-8",
 	}
 }
 

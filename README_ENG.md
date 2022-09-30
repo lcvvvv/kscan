@@ -81,7 +81,7 @@ fofa search keywords: will directly return fofa search results
 ## 5 How to use
 
 ```
-usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
+usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
 
 
 optional arguments:
@@ -97,7 +97,6 @@ optional arguments:
                   (empty), 192, 10, 172, all, specified IP address (the IP address B segment will be detected as the surviving gateway)
   --check Fingerprinting the target address, only port detection will not be performed
   --scan will perform port scanning and fingerprinting on the target objects provided by --fofa and --spy
-  --touch Get the return package of the specified port, you can use this parameter to get the return package and improve the fingerprint library, the format is: IP:PORT
   -p , --port scan the specified port, TOP400 will be scanned by default, support: 80, 8080, 8088-8090
   -o , --output save scan results to file
   -oJ save the scan results to a file in json format

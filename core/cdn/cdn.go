@@ -12,11 +12,13 @@ import (
 
 var database *qqwry.QQwry
 
-var filename = "qqwry.dat"
-var path = getRealPath()
-
-func Init() {
-	d, err := qqwry.NewQQwry(GetPath())
+func Init(path string) {
+	fs, err := os.OpenFile(path, os.O_RDONLY, 0400)
+	if err != nil {
+		slog.Println(slog.WARN, "qqwry open err:", err)
+		return
+	}
+	d, err := qqwry.NewQQwryFS(fs)
 	if err != nil {
 		slog.Println(slog.WARN, "qqwry init err:", err)
 		return
@@ -24,12 +26,8 @@ func Init() {
 	database = d
 }
 
-func GetPath() string {
-	return path + "/" + filename
-}
-
 func DownloadQQWry() error {
-	return qqwry.Download(GetPath())
+	return qqwry.Download("./qqwry.dat")
 }
 
 func FindWithIP(query string) (bool, string, error) {
