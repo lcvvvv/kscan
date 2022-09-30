@@ -310,7 +310,8 @@ var (
 func getHTTPDigest(s string) string {
 	var length = 24
 	var digestBuf []rune
-	for _, r := range []rune(s) {
+	_, body := simplehttp.SplitHeaderAndBody(s)
+	for _, r := range []rune(body) {
 		buf := []byte(string(r))
 		if len(digestBuf) == length {
 			return string(digestBuf)
@@ -319,7 +320,7 @@ func getHTTPDigest(s string) string {
 			digestBuf = append(digestBuf, r)
 		}
 	}
-	return string(digestBuf) + misc.StrRandomCut(s, length-len(digestBuf))
+	return string(digestBuf) + misc.StrRandomCut(body, length-len(digestBuf))
 }
 
 func getRawDigest(s string) string {
