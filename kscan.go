@@ -49,6 +49,7 @@ optional arguments:
                   文件地址：file:/tmp/target.txt
   --spy           网段探测模式，此模式下将自动探测主机可达的内网网段可接收参数为：
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
+options:
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
@@ -65,7 +66,8 @@ optional arguments:
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
-  --match         对资产返回banner进行检索，存在关键字的，才会显示，否则不会显示
+  --match         对资产返回banner进行检索，剔除不存在关键字的结果记录
+  --not-match     对资产返回banner进行检索，剔除存在关键字的结果记录
   --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
 hydra options:
    --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt
@@ -79,7 +81,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--touch) [--spy] [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]\n\n"
+const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy]) [options] [hydra options] [fofa options]\n\n"
 
 const syntax = `title="beijing"			从标题中搜索"北京"			-
 header="elastic"		从http头中搜索"elastic"			-

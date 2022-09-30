@@ -35,7 +35,8 @@ type Config struct {
 	DownloadQQwry bool
 	CloseCDN      bool
 	//输出修饰
-	Match string
+	Match    string
+	NotMatch string
 }
 
 type JSONWriter struct {
@@ -96,6 +97,7 @@ func ConfigInit() {
 	Setting.CloseCDN = args.CloseCDN
 	//输出修饰
 	Setting.Match = args.Match
+	Setting.NotMatch = args.NotMatch
 }
 
 func loadOutputJSON(path string) *JSONWriter {
