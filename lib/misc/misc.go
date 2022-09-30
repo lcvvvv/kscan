@@ -7,6 +7,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -98,7 +99,6 @@ func ReadLineAll(fileName string) []string {
 }
 
 func FixLine(line string) string {
-	line = strings.ReplaceAll(line, "\r", "")
 	line = strings.ReplaceAll(line, "\t", "")
 	line = strings.ReplaceAll(line, "\r", "")
 	line = strings.ReplaceAll(line, "\n", "")
@@ -332,6 +332,14 @@ func FixMap(m map[string]string) map[string]string {
 	return rm
 }
 
+func CloneMap(m map[string]string) map[string]string {
+	var nm = make(map[string]string)
+	for key, value := range m {
+		nm[key] = value
+	}
+	return nm
+}
+
 func AutoWidth(s string, length int) int {
 	length1 := len(s)
 	length2 := len([]rune(s))
@@ -340,4 +348,36 @@ func AutoWidth(s string, length int) int {
 		return length
 	}
 	return length - (length1-length2)/2
+}
+
+func ToMap(param interface{}) map[string]string {
+	t := reflect.TypeOf(param)
+	v := reflect.ValueOf(param)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		v = v.Elem()
+	}
+	m := make(map[string]string)
+	for i := 0; i < t.NumField(); i++ {
+		// 通过interface方法来获取key所对应的值
+		var cell string
+		switch s := v.Field(i).Interface().(type) {
+		case string:
+			cell = s
+		case []string:
+			cell = strings.Join(s, "; ")
+		case int:
+			cell = strconv.Itoa(s)
+		case Stringer:
+			cell = s.String()
+		default:
+			continue
+		}
+		m[t.Field(i).Name] = cell
+	}
+	return m
+}
+
+type Stringer interface {
+	String() string
 }
