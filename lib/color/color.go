@@ -184,6 +184,10 @@ func Random(s string) string {
 	return convANSI(s, rand.Intn(len(colorMap))+30, 0, []int{})
 }
 
+func Count(s string) int {
+	return len(s) - len(Clear(s))
+}
+
 //"\x1b[%sm%s\x1b[0m"
 func Clear(s string) string {
 	var rBuf []byte
