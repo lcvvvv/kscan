@@ -10,7 +10,7 @@ import (
 
 var domainServers = []string{
 	"114.114.114.114:53",
-	"8.8.8.8:53",
+	//"8.8.8.8:53",
 	"223.6.6.6:53",
 }
 
@@ -53,11 +53,13 @@ func LookupIP(domain string) ([]string, error) {
 	var IPs []string
 	var lastErr error
 	for _, resolver := range resolvers {
-		ips, err := resolver.LookupHost(context.Background(), domain)
+		ips, err := resolver.LookupIPAddr(context.Background(), domain)
 		if err != nil {
 			lastErr = err
 		}
-		IPs = append(IPs, ips...)
+		for _, v := range ips {
+			IPs = append(IPs, v.IP.String())
+		}
 	}
 	IPs = misc.RemoveDuplicateElement(IPs)
 	return IPs, lastErr
