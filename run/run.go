@@ -41,6 +41,7 @@ func Start() {
 	}
 	slog.Println(slog.INFO, "所有扫描任务已下发完毕")
 	wg.Wait()
+	stop()
 }
 
 func pushTarget(expr string) {
@@ -387,8 +388,8 @@ func outputHandler(target, keyword string, m map[string]string) {
 	slog.Println(slog.DATA, printStr)
 
 	if jw := app.Setting.OutputJson; jw != nil {
-		m["target"] = target
-		m["keyword"] = keyword
+		sourceMap["target"] = target
+		sourceMap["keyword"] = keyword
 		jw.Push(sourceMap)
 	}
 }
@@ -464,6 +465,5 @@ func watchDog(wg *sync.WaitGroup) {
 		}
 		break
 	}
-	stop()
 	wg.Done()
 }
