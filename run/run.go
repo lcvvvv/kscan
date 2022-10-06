@@ -239,7 +239,8 @@ func generateHydraScanner() *scanner.HydraClient {
 func outputHydraSuccess(addr net.IP, port int, protocol string, auth *hydra.Auth) {
 	var target = fmt.Sprintf("%s://%s:%d", protocol, addr.String(), port)
 	var m = auth.Map()
-	outputHandler(target, color.Important("CrackSuccess"), m)
+	URL, _ := url.Parse(target)
+	outputHandler(URL, color.Important("CrackSuccess"), m)
 }
 
 func outputNmapFinger(URL *url.URL, resp *gonmap.Response) {
@@ -249,12 +250,14 @@ func outputNmapFinger(URL *url.URL, resp *gonmap.Response) {
 	finger := resp.FingerPrint
 	m := misc.ToMap(finger)
 	m["Response"] = resp.Raw
+	m["IP"] = URL.Hostname()
+	m["Port"] = URL.Port()
 	//补充归属地信息
 	if app.Setting.CloseCDN == false {
 		result, _ := cdn.Find(URL.Hostname())
 		m["Addr"] = result
 	}
-	outputHandler(URL.String(), finger.Service, m)
+	outputHandler(URL, finger.Service, m)
 }
 
 func outputAppFinger(URL *url.URL, banner *appfinger.Banner, finger *appfinger.FingerPrint) {
@@ -270,15 +273,27 @@ func outputAppFinger(URL *url.URL, banner *appfinger.Banner, finger *appfinger.F
 	m["Service"] = URL.Scheme
 	m["FoundDomain"] = banner.FoundDomain
 	m["FoundIP"] = banner.FoundIP
-	m["FingerPrint"] = m["ProductName"]
 	m["Response"] = banner.Response
 	m["Cert"] = banner.Cert
 	m["Header"] = banner.Header
 	m["Body"] = banner.Body
 	m["ICP"] = banner.ICP
+	m["FingerPrint"] = m["ProductName"]
 	delete(m, "ProductName")
-	outputHandler(URL.String(), banner.Title, m)
-
+	//增加IP、Domain、Port字段
+	m["Port"] = uri.GetURLPort(URL)
+	if m["Port"] == "" {
+		slog.Println(slog.WARN, "无法获取端口号：", URL)
+	}
+	if hostname := URL.Hostname(); uri.IsIP(hostname) {
+		m["IP"] = hostname
+	} else {
+		m["Domain"] = hostname
+		if v, ok := scanner.DomainDatabase.Load(hostname); ok {
+			m["IP"] = v.(string)
+		}
+	}
+	outputHandler(URL, banner.Title, m)
 }
 
 func outputCDNRecord(domain, info string) {
@@ -286,8 +301,12 @@ func outputCDNRecord(domain, info string) {
 		return
 	}
 	//输出结果
-	domain = fmt.Sprintf("cdn://%s", domain)
-	outputHandler(domain, "CDN资产", map[string]string{"CDNInfo": info})
+	target := fmt.Sprintf("cdn://%s", domain)
+	URL, _ := url.Parse(target)
+	outputHandler(URL, "CDN资产", map[string]string{
+		"CDNInfo": info,
+		"Domain":  domain,
+	})
 }
 
 func outputUnknownResponse(addr net.IP, port int, response string) {
@@ -296,7 +315,12 @@ func outputUnknownResponse(addr net.IP, port int, response string) {
 	}
 	//输出结果
 	target := fmt.Sprintf("unknown://%s:%d", addr.String(), port)
-	outputHandler(target, "无法识别该协议", map[string]string{"Response": response})
+	URL, _ := url.Parse(target)
+	outputHandler(URL, "无法识别该协议", map[string]string{
+		"Response": response,
+		"IP":       URL.Hostname(),
+		"Port":     strconv.Itoa(port),
+	})
 }
 
 func responseFilter(strArgs ...string) bool {
@@ -362,7 +386,7 @@ func getRawDigest(s string) string {
 	return string(digestBuf) + misc.StrRandomCut(s, length-len(digestBuf))
 }
 
-func outputHandler(target, keyword string, m map[string]string) {
+func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 	m = misc.FixMap(m)
 	if respRaw := m["Response"]; respRaw != "" {
 		if m["Service"] == "http" || m["Service"] == "https" {
@@ -384,11 +408,11 @@ func outputHandler(target, keyword string, m map[string]string) {
 	fingerPrint := color.StrMapRandomColor(m, true, importantKey, varyImportantKey)
 	fingerPrint = misc.FixLine(fingerPrint)
 	format := "%-30v %-" + strconv.Itoa(misc.AutoWidth(color.Clear(keyword), 26+color.Count(keyword))) + "v %s"
-	printStr := fmt.Sprintf(format, target, keyword, fingerPrint)
+	printStr := fmt.Sprintf(format, URL.String(), keyword, fingerPrint)
 	slog.Println(slog.DATA, printStr)
 
 	if jw := app.Setting.OutputJson; jw != nil {
-		sourceMap["target"] = target
+		sourceMap["URL"] = URL.String()
 		sourceMap["keyword"] = keyword
 		jw.Push(sourceMap)
 	}
