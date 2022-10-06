@@ -343,3 +343,18 @@ func URLParse(URLRaw string) *url.URL {
 	URL, _ := url.Parse(URLRaw)
 	return URL
 }
+
+func GetURLPort(URL *url.URL) string {
+	if port := URL.Port(); port != "" {
+		return port
+	}
+	switch URL.Scheme {
+	case "http":
+		return "80"
+	case "https":
+		return "443"
+	default:
+		return ""
+	}
+
+}
