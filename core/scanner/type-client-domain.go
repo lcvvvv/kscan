@@ -3,9 +3,12 @@ package scanner
 import (
 	"kscan/core/cdn"
 	"net"
+	"sync"
 )
 
 var CDNCheck = false
+
+var DomainDatabase = sync.Map{}
 
 type DomainClient struct {
 	*client
@@ -30,6 +33,8 @@ func NewDomainScanner(config *Config) *DomainClient {
 			client.HandlerError(domain, err)
 			return
 		}
+		//将DNS解析结果存入数据库
+		DomainDatabase.Store(domain, ip)
 		if CDNCheck == false {
 			client.HandlerRealIP(domain, net.ParseIP(ip))
 			return
