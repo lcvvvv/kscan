@@ -14,7 +14,7 @@ type args struct {
 	Output, Proxy, Encoding                         string
 	Port                                            []int
 	Path, Host, Target                              []string
-	OutputJson                                      string
+	OutputJson, OutputCSV                           string
 	Spy, Touch                                      string
 	Top, Threads, Timeout                           int
 	//hydra模块
@@ -89,6 +89,7 @@ func (o *args) define() {
 	sflag.StringVar(&o.Output, "o", "")
 	sflag.StringVar(&o.Output, "output", "")
 	sflag.StringVar(&o.OutputJson, "oJ", "")
+	sflag.StringVar(&o.OutputCSV, "oC", "")
 	sflag.BoolVar(&o.CloseColor, "Cn", false)
 }
 

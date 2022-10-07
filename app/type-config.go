@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"kscan/core/hydra"
 	"kscan/core/slog"
@@ -18,6 +19,7 @@ type Config struct {
 	Proxy, Encoding              string
 	Path, Host                   []string
 	OutputJson                   *JSONWriter
+	OutputCSV                    *CSVWriter
 	Threads                      int
 	Timeout                      time.Duration
 	ClosePing, Check, CloseColor bool
@@ -57,6 +59,38 @@ func (jw *JSONWriter) Push(m map[string]string) {
 	jw.f.Write(jsonBuf)
 }
 
+type CSVWriter struct {
+	f     *csv.Writer
+	title []string
+}
+
+func (cw *CSVWriter) inTitle(title string) bool {
+	for _, value := range cw.title {
+		if value == title {
+			return true
+		}
+	}
+	return false
+}
+
+func (cw *CSVWriter) Push(m map[string]string) {
+	var cells []string
+	for _, key := range cw.title {
+		if value, ok := m[key]; ok {
+			cells = append(cells, value)
+			delete(m, key)
+		} else {
+			cells = append(cells, "")
+		}
+	}
+	for key, value := range m {
+		cells = append(cells, value)
+		cw.title = append(cw.title, key)
+	}
+	cw.f.Write(cells)
+	cw.f.Flush()
+}
+
 var Setting = New()
 
 func ConfigInit() {
@@ -79,6 +113,7 @@ func ConfigInit() {
 	Setting.Threads = args.Threads
 	Setting.Encoding = args.Encoding
 	Setting.OutputJson = loadOutputJSON(args.OutputJson)
+	Setting.OutputCSV = loadOutputCSV(args.OutputCSV)
 	Setting.ScanVersion = args.ScanVersion
 	//Setting.CloseColor = args.CloseColor
 	//hydra模块
@@ -104,6 +139,12 @@ func loadOutputJSON(path string) *JSONWriter {
 	if path == "" {
 		return nil
 	}
+	if _, err := os.Stat(path); err == nil || os.IsExist(err) {
+		slog.Println(slog.WARN, "检测到JSON输出文件已存在，将自动删除该文件：", path)
+		if err := os.Remove(path); err != nil {
+			slog.Println(slog.ERROR, "删除文件失败，请检查：", err)
+		}
+	}
 	f, err := os.OpenFile(path, os.O_CREATE+os.O_RDWR, 0764)
 	if err != nil {
 		slog.Println(slog.ERROR, err)
@@ -115,6 +156,38 @@ func loadOutputJSON(path string) *JSONWriter {
 		slog.Println(slog.ERROR, err)
 	}
 	return &JSONWriter{f}
+}
+
+func loadOutputCSV(path string) *CSVWriter {
+	if path == "" {
+		return nil
+	}
+
+	if _, err := os.Stat(path); err == nil || os.IsExist(err) {
+		slog.Println(slog.WARN, "检测到CSV输出文件已存在，将自动删除该文件：", path)
+		if err := os.Remove(path); err != nil {
+			slog.Println(slog.ERROR, "删除文件失败，请检查：", err)
+		}
+	}
+
+	f, err := os.OpenFile(path, os.O_CREATE+os.O_RDWR, 0764)
+	if err != nil {
+		slog.Println(slog.ERROR, err)
+	}
+	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM
+	w := csv.NewWriter(f)
+	writer := &CSVWriter{w, []string{
+		"URL", "Keyword", "IP", "Port", "Service",
+		"FingerPrint", "Addr",
+		"Digest", "Info", "Hostname", "OperatingSystem",
+		"DeviceType", "ProductName", "Version",
+		"FoundDomain", "FoundIP", "ICP",
+		"ProbeName", "MatchRegexString",
+		//"Header", "Cert", "Response", "Body",
+	}}
+	writer.f.Write(writer.title)
+	writer.f.Flush()
+	return writer
 }
 
 func (c *Config) loadPort() {

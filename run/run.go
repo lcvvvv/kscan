@@ -6,6 +6,7 @@ import (
 	"github.com/lcvvvv/appfinger"
 	"github.com/lcvvvv/gonmap"
 	"github.com/lcvvvv/simplehttp"
+	"github.com/lcvvvv/stdio/chinese"
 	"kscan/app"
 	"kscan/core/cdn"
 	"kscan/core/hydra"
@@ -348,7 +349,7 @@ func responseFilter(strArgs ...string) bool {
 }
 
 var (
-	disableKey       = []string{"MatchRegexString", "Service", "ProbeName", "Response", "Cert", "Header", "Body"}
+	disableKey       = []string{"MatchRegexString", "Service", "ProbeName", "Response", "Cert", "Header", "Body", "IP"}
 	importantKey     = []string{"ProductName", "DeviceType"}
 	varyImportantKey = []string{"Hostname", "FingerPrint", "ICP"}
 )
@@ -357,6 +358,7 @@ func getHTTPDigest(s string) string {
 	var length = 24
 	var digestBuf []rune
 	_, body := simplehttp.SplitHeaderAndBody(s)
+	body = chinese.ToUTF8(body)
 	for _, r := range []rune(body) {
 		buf := []byte(string(r))
 		if len(digestBuf) == length {
@@ -413,8 +415,18 @@ func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 
 	if jw := app.Setting.OutputJson; jw != nil {
 		sourceMap["URL"] = URL.String()
-		sourceMap["keyword"] = keyword
+		sourceMap["Keyword"] = keyword
 		jw.Push(sourceMap)
+	}
+	if cw := app.Setting.OutputCSV; cw != nil {
+		sourceMap["URL"] = URL.String()
+		sourceMap["Keyword"] = keyword
+		delete(sourceMap, "Header")
+		delete(sourceMap, "Cert")
+		delete(sourceMap, "Response")
+		delete(sourceMap, "Body")
+		sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+		cw.Push(sourceMap)
 	}
 }
 
