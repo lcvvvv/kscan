@@ -87,14 +87,15 @@ func pushTarget(expr string) {
 		return
 	}
 	if uri.IsHostPath(expr) {
-		pushTarget(uri.GetNetlocWithHostPath(expr))
 		pushURLTarget(uri.URLParse("http://"+expr), nil)
 		pushURLTarget(uri.URLParse("https://"+expr), nil)
+		if app.Setting.Check == false {
+			pushTarget(uri.GetNetlocWithHostPath(expr))
+		}
 		return
 	}
 	if uri.IsNetlocPort(expr) {
 		netloc, port := uri.SplitWithNetlocPort(expr)
-		pushTarget(netloc)
 		if uri.IsIP(netloc) {
 			PortScanner.Push(net.ParseIP(netloc), port)
 		}
@@ -102,11 +103,16 @@ func pushTarget(expr string) {
 			pushURLTarget(uri.URLParse("http://"+expr), nil)
 			pushURLTarget(uri.URLParse("https://"+expr), nil)
 		}
+		if app.Setting.Check == false {
+			pushTarget(netloc)
+		}
 		return
 	}
 	if uri.IsURL(expr) {
 		pushURLTarget(uri.URLParse(expr), nil)
-		pushTarget(uri.GetNetlocWithURL(expr))
+		if app.Setting.Check == false {
+			pushTarget(uri.GetNetlocWithURL(expr))
+		}
 		return
 	}
 	slog.Println(slog.WARN, "无法识别的Target字符串:", expr)
@@ -426,6 +432,9 @@ func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 		delete(sourceMap, "Response")
 		delete(sourceMap, "Body")
 		sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+		for key, value := range sourceMap {
+			sourceMap[key] = chinese.ToUTF8(value)
+		}
 		cw.Push(sourceMap)
 	}
 }
