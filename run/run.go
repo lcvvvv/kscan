@@ -178,10 +178,23 @@ func generateIPScanner() *scanner.IPClient {
 	return client
 }
 
+func getTimeout(i int) time.Duration {
+	switch {
+	case i > 10000:
+		return time.Millisecond * 200
+	case i > 5000:
+		return time.Millisecond * 300
+	case i > 1000:
+		return time.Millisecond * 400
+	default:
+		return time.Millisecond * 500
+	}
+}
+
 func generatePortScanner() *scanner.PortClient {
 	PortConfig := scanner.DefaultConfig()
 	PortConfig.Threads = app.Setting.Threads
-	PortConfig.Timeout = time.Millisecond * 500
+	PortConfig.Timeout = getTimeout(len(app.Setting.Port))
 	if app.Setting.ScanVersion == true {
 		PortConfig.DeepInspection = true
 	}
