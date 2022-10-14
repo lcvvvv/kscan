@@ -128,7 +128,11 @@ func (c *Cracker) initJobFunc() bool {
 			c.Pool.Stop()
 			return false
 		}
-		c.Pool.Function = c.generateWorker(oracleCracker(ip, port))
+		sid := oracle.GetSID(ip, port, oracle.ServiceName)
+		if sid == "" {
+			return false
+		}
+		c.Pool.Function = c.generateWorker(oracleCracker(sid))
 	case "postgresql":
 		c.Pool.Function = c.generateWorker(postgresqlCracker)
 	case "ssh":

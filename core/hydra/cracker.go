@@ -162,11 +162,7 @@ func postgresqlCracker(i interface{}) *AuthInfo {
 	return nil
 }
 
-func oracleCracker(IPAddr string, port int) func(interface{}) *AuthInfo {
-	sid := oracle.GetSID(IPAddr, port, oracle.ServiceName)
-	if sid == "" {
-		return nil
-	}
+func oracleCracker(sid string) func(interface{}) *AuthInfo {
 	return func(i interface{}) *AuthInfo {
 		info := i.(AuthInfo)
 		info.Auth.MakePassword()
