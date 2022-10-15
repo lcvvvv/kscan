@@ -83,13 +83,13 @@ func Check(Host, Username, Password string, Port int, SID string) (bool, error) 
 	db.SetConnMaxLifetime(5 * time.Second)
 	db.SetMaxIdleConns(0)
 	err = db.Ping()
-	if err != nil {
-		if strings.Contains(err.Error(), "ORA-28009") {
-			return true, nil
-		}
-		return false, err
+	if err == nil {
+		return true, nil
 	}
-	return true, nil
+	if strings.Contains(err.Error(), "ORA-28009") {
+		return true, nil
+	}
+	return false, err
 }
 
 func GetSID(Host string, Port int, sids []string) string {
