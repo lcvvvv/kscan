@@ -421,7 +421,7 @@ func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 		delete(m, keyword)
 	}
 	for key, value := range m {
-		if key == "FingerPrint" {
+		if key == "FingerPrint" || key == "FoundDomain" {
 			continue
 		}
 		m[key] = misc.StrRandomCut(value, 24)
