@@ -3,7 +3,7 @@ module kscan
 go 1.16
 
 require (
-	github.com/atotto/clipboard v0.1.4 // indirect
+	github.com/atotto/clipboard v0.1.4
 	//database
 	github.com/denisenkom/go-mssqldb v0.10.0
 	github.com/go-sql-driver/mysql v1.6.0
@@ -13,15 +13,15 @@ require (
 	github.com/lcvvvv/appfinger v0.0.0-00010101000000-000000000000
 
 	//gonmap
-	github.com/lcvvvv/gonmap v1.3.1
+	github.com/lcvvvv/gonmap v1.3.2
 	github.com/lcvvvv/pool v0.0.0-00010101000000-000000000000
-	github.com/lcvvvv/simplehttp v0.0.0-00010101000000-000000000000 // indirect
+	github.com/lcvvvv/simplehttp v0.0.0-00010101000000-000000000000
 	github.com/lcvvvv/stdio v0.0.0-00010101000000-000000000000
 	github.com/lib/pq v1.10.2
 
 	//grdp
 	github.com/lunixbochs/struc v0.0.0-20200707160740-784aaebc1d40
-	github.com/miekg/dns v1.1.48
+	github.com/miekg/dns v1.1.50
 	github.com/sijms/go-ora/v2 v2.2.15
 
 	//protocol
@@ -40,3 +40,5 @@ replace github.com/lcvvvv/simplehttp => ./lib/simplehttp
 replace github.com/lcvvvv/stdio => ./lib/stdio
 
 replace github.com/lcvvvv/pool => ./lib/pool
+
+//replace github.com/lcvvvv/gonmap => ../go-github/gonmap
