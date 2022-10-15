@@ -177,7 +177,7 @@ func loadOutputCSV(path string) *CSVWriter {
 	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM
 	w := csv.NewWriter(f)
 	writer := &CSVWriter{w, []string{
-		"URL", "Keyword", "IP", "Port", "Service",
+		"URL", "Keyword", "IP", "Port", "Service", "Length",
 		"FingerPrint", "Addr",
 		"Digest", "Info", "Hostname", "OperatingSystem",
 		"DeviceType", "ProductName", "Version",

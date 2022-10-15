@@ -417,6 +417,7 @@ func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 			m["Digest"] = strconv.Quote(getRawDigest(respRaw))
 		}
 	}
+	m["Length"] = strconv.Itoa(len(m["Response"]))
 	sourceMap := misc.CloneMap(m)
 	for _, keyword := range disableKey {
 		delete(m, keyword)
