@@ -216,12 +216,12 @@ func generatePortScanner() *scanner.PortClient {
 			pushURLTarget(URL, response)
 			return
 		}
+		outputNmapFinger(URL, response)
 		if app.Setting.Hydra == true {
 			if protocol := response.FingerPrint.Service; hydra.Ok(protocol) {
 				HydraScanner.Push(addr, port, protocol)
 			}
 		}
-		outputNmapFinger(URL, response)
 	}
 	client.HandlerError = func(addr net.IP, port int, err error) {
 		slog.Println(slog.DEBUG, "PortScanner Error: ", fmt.Sprintf("%s:%d", addr.String(), port), err)

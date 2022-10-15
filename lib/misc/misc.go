@@ -324,7 +324,9 @@ func FixMap(m map[string]string) map[string]string {
 			continue
 		}
 		if IsInStrArr(arr, value) {
-			continue
+			if key != "Username" && key != "Password" {
+				continue
+			}
 		}
 		arr = append(arr, value)
 		rm[key] = value

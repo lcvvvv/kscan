@@ -55,6 +55,8 @@ func (a *Auth) Map() map[string]string {
 	}
 	if a.Password != "" {
 		m["Password"] = a.Password
+	} else {
+		m["Password"] = "空"
 	}
 	for key, value := range a.Other {
 		if value != "" {
