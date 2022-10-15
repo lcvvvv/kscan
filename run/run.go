@@ -162,6 +162,7 @@ func generateIPScanner() *scanner.IPClient {
 	IPConfig := scanner.DefaultConfig()
 	IPConfig.Threads = 200
 	IPConfig.Timeout = 200 * time.Millisecond
+	IPConfig.HostDiscoverClosed = app.Setting.ClosePing
 	client := scanner.NewIPScanner(IPConfig)
 	client.HandlerDie = func(addr net.IP) {
 		slog.Println(slog.DEBUG, addr.String(), " is die")

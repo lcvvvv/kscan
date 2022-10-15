@@ -23,6 +23,10 @@ func NewIPScanner(config *Config) *IPClient {
 	client.pool.Interval = config.Interval
 	client.pool.Function = func(in interface{}) {
 		ip := in.(net.IP)
+		if client.config.HostDiscoverClosed == true {
+			client.HandlerAlive(ip)
+			return
+		}
 		if osping.Ping(ip.String()) == true {
 			client.HandlerAlive(ip)
 			return
