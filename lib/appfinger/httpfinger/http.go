@@ -91,8 +91,8 @@ var (
 func getIcon(URL url.URL, body string) string {
 	path := getIconPath(body)
 	if regxIconPath.MatchString(path) == true {
-		URL.Path = path
-		return getIconHash(URL.String())
+		URL.Path = ""
+		return getIconHash(URL.String() + path)
 	}
 	if regxIconURL.MatchString(path) == true {
 		return getIconHash(path)
@@ -121,7 +121,8 @@ func getIconHash(URL string) string {
 	if err != nil {
 		return ""
 	}
-	return iconhash.Encode([]byte(resp.Raw.Body))
+	hash := iconhash.Encode([]byte(resp.Raw.Body))
+	return hash
 }
 
 func getTitle(body string) string {
