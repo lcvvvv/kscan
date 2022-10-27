@@ -45,7 +45,7 @@ type Pool struct {
 	//母版函数
 	Function func(interface{})
 	//Pool输入队列
-	In chan interface{}
+	in chan interface{}
 	//size用来表明池的大小，不能超发。
 	threads int
 	//启动协程等待时间
@@ -66,21 +66,32 @@ func New(threads int) *Pool {
 		threads:  threads,
 		JobsList: &sync.Map{},
 		wg:       &sync.WaitGroup{},
-		In:       make(chan interface{}),
+		in:       make(chan interface{}),
 		Function: nil,
-		Done:     false,
+		Done:     true,
 		Interval: time.Duration(0),
 	}
 }
 
 //结束整个工作
+func (p *Pool) Push(i interface{}) {
+	if p.Done {
+		return
+	}
+	p.in <- i
+}
+
+//结束整个工作
 func (p *Pool) Stop() {
-	close(p.In)
+	if p.Done != true {
+		close(p.in)
+	}
 	p.Done = true
 }
 
 //执行工作池当中的任务
 func (p *Pool) Run() {
+	p.Done = false
 	//只启动有限大小的协程，协程的数量不可以超过工作池设定的数量，防止计算资源崩溃
 	for i := 0; i < p.threads; i++ {
 		p.wg.Add(1)
@@ -106,7 +117,7 @@ func (p *Pool) work() {
 		}()
 		p.wg.Done()
 	}()
-	for param = range p.In {
+	for param = range p.in {
 		if p.Done {
 			return
 		}
