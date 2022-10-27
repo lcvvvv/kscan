@@ -53,5 +53,5 @@ func NewPortScanner(config *Config) *PortClient {
 }
 
 func (c *PortClient) Push(ip net.IP, num int) {
-	c.pool.In <- foo1{ip, num}
+	c.pool.Push(foo1{ip, num})
 }

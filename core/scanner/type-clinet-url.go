@@ -68,7 +68,7 @@ func NewURLScanner(config *Config) *URLClient {
 }
 
 func (c *URLClient) Push(URL *url.URL, response *gonmap.Response, req *http.Request, client *http.Client) {
-	c.pool.In <- foo2{URL, response, req, client}
+	c.pool.Push(foo2{URL, response, req, client})
 }
 
 func appendTcpBannerInFinger(finger *appfinger.FingerPrint, gonmapFinger *gonmap.FingerPrint) *appfinger.FingerPrint {

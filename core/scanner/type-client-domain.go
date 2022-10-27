@@ -54,5 +54,5 @@ func NewDomainScanner(config *Config) *DomainClient {
 }
 
 func (c *DomainClient) Push(domain string) {
-	c.pool.In <- domain
+	c.pool.Push(domain)
 }

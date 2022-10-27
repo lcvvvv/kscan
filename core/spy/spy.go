@@ -166,7 +166,7 @@ func HostDiscoveryIcmpPool(gatewayArr []string) {
 	//启用ICMP存活性探测任务下发器
 	go func() {
 		for _, ip := range gatewayArr {
-			spyPool.In <- ip
+			spyPool.Push(ip)
 		}
 		//关闭ICMP存活性探测下发信道
 		spyPool.Stop()

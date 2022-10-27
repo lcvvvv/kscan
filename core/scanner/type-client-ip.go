@@ -42,6 +42,6 @@ func NewIPScanner(config *Config) *IPClient {
 
 func (c *IPClient) Push(ips ...net.IP) {
 	for _, ip := range ips {
-		c.pool.In <- ip
+		c.pool.Push(ip)
 	}
 }

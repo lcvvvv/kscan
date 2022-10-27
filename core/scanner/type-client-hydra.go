@@ -44,5 +44,5 @@ func NewHydraScanner(config *Config) *HydraClient {
 }
 
 func (c *HydraClient) Push(addr net.IP, port int, protocol string) {
-	c.pool.In <- foo3{addr, port, protocol}
+	c.pool.Push(foo3{addr, port, protocol})
 }
