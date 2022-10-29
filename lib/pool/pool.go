@@ -121,11 +121,11 @@ func (p *Pool) work() {
 		if p.Done {
 			return
 		}
+		atomic.AddInt32(&p.length, 1)
 		//获取任务唯一票据
 		Tick = p.generateTick()
 		//压入工作任务到工作清单
 		p.JobsList.Store(Tick, param)
-		atomic.AddInt32(&p.length, 1)
 		//设置工作内容
 		f := generateWorker(p.Function)
 		//开始工作，输出工作结果
