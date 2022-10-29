@@ -169,6 +169,7 @@ func generateIPScanner() *scanner.IPClient {
 	}
 	client.HandlerAlive = func(addr net.IP) {
 		//启用端口存活性探测任务下发器
+		slog.Println(slog.DEBUG, addr.String(), " is alive")
 		for _, port := range app.Setting.Port {
 			PortScanner.Push(addr, port)
 		}
@@ -204,7 +205,7 @@ func generatePortScanner() *scanner.PortClient {
 		//nothing
 	}
 	client.HandlerOpen = func(addr net.IP, port int) {
-		//nothing
+		slog.Printf(slog.DEBUG, "%s:%d is opened", addr.String(), port)
 	}
 	client.HandlerNotMatched = func(addr net.IP, port int, response string) {
 		outputUnknownResponse(addr, port, response)
