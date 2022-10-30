@@ -26,23 +26,26 @@ import (
 )
 
 func Start() {
-	DomainScanner = generateDomainScanner()
-	IPScanner = generateIPScanner()
-	PortScanner = generatePortScanner()
-	URLScanner = generateURLScanner()
-	HydraScanner = generateHydraScanner()
-
-	//扫描器进入监听状态
-	start()
+	//启用看门狗函数定时输出负载情况
+	go watchDog()
 	//下发扫描任务
 	var wg = &sync.WaitGroup{}
-	go watchDog(wg)
+	wg.Add(5)
+	DomainScanner = generateDomainScanner(wg)
+	IPScanner = generateIPScanner(wg)
+	PortScanner = generatePortScanner(wg)
+	URLScanner = generateURLScanner(wg)
+	HydraScanner = generateHydraScanner(wg)
+	//扫描器进入监听状态
+	start()
+	//开始分发扫描任务
 	for _, expr := range app.Setting.Target {
 		pushTarget(expr)
 	}
 	slog.Println(slog.INFO, "所有扫描任务已下发完毕")
+	//根据扫描情况，关闭scanner
+	go stop()
 	wg.Wait()
-	stop()
 }
 
 func pushTarget(expr string) {
@@ -132,17 +135,43 @@ func start() {
 	go PortScanner.Start()
 	go URLScanner.Start()
 	go HydraScanner.Start()
+	time.Sleep(time.Second * 1)
+	slog.Println(slog.INFO, "Domain、IP、Port、URL、Hydra引擎已准备就绪")
 }
 
 func stop() {
-	DomainScanner.Stop()
-	IPScanner.Stop()
-	PortScanner.Stop()
-	URLScanner.Stop()
-	HydraScanner.Stop()
+	for {
+		time.Sleep(time.Second)
+		if DomainScanner.RunningThreads() == 0 && DomainScanner.IsDone() == false {
+			DomainScanner.Stop()
+			slog.Println(slog.DEBUG, "检测到所有Domian检测任务已完成，Domain扫描引擎已停止")
+		}
+		if IPScanner.RunningThreads() == 0 && IPScanner.IsDone() == false {
+			IPScanner.Stop()
+			slog.Println(slog.DEBUG, "检测到所有IP检测任务已完成，IP扫描引擎已停止")
+		}
+		if IPScanner.IsDone() == false {
+			continue
+		}
+		if PortScanner.RunningThreads() == 0 && PortScanner.IsDone() == false {
+			PortScanner.Stop()
+			slog.Println(slog.DEBUG, "检测到所有Port检测任务已完成，Port扫描引擎已停止")
+		}
+		if IPScanner.IsDone() == false {
+			continue
+		}
+		if URLScanner.RunningThreads() == 0 && URLScanner.IsDone() == false {
+			URLScanner.Stop()
+			slog.Println(slog.DEBUG, "检测到所有URL检测任务已完成，URL扫描引擎已停止")
+		}
+		if HydraScanner.RunningThreads() == 0 && HydraScanner.IsDone() == false {
+			HydraScanner.Stop()
+			slog.Println(slog.DEBUG, "检测到所有暴力破解任务已完成，URL扫描引擎已停止")
+		}
+	}
 }
 
-func generateDomainScanner() *scanner.DomainClient {
+func generateDomainScanner(wg *sync.WaitGroup) *scanner.DomainClient {
 	DomainConfig := scanner.DefaultConfig()
 	DomainConfig.Threads = 10
 	client := scanner.NewDomainScanner(DomainConfig)
@@ -155,10 +184,13 @@ func generateDomainScanner() *scanner.DomainClient {
 	client.HandlerError = func(domain string, err error) {
 		slog.Println(slog.DEBUG, "DomainScanner Error: ", domain, err)
 	}
+	client.Defer(func() {
+		wg.Done()
+	})
 	return client
 }
 
-func generateIPScanner() *scanner.IPClient {
+func generateIPScanner(wg *sync.WaitGroup) *scanner.IPClient {
 	IPConfig := scanner.DefaultConfig()
 	IPConfig.Threads = 200
 	IPConfig.Timeout = 200 * time.Millisecond
@@ -177,6 +209,9 @@ func generateIPScanner() *scanner.IPClient {
 	client.HandlerError = func(addr net.IP, err error) {
 		slog.Println(slog.DEBUG, "IPScanner Error: ", addr.String(), err)
 	}
+	client.Defer(func() {
+		wg.Done()
+	})
 	return client
 }
 
@@ -193,7 +228,7 @@ func getTimeout(i int) time.Duration {
 	}
 }
 
-func generatePortScanner() *scanner.PortClient {
+func generatePortScanner(wg *sync.WaitGroup) *scanner.PortClient {
 	PortConfig := scanner.DefaultConfig()
 	PortConfig.Threads = app.Setting.Threads
 	PortConfig.Timeout = getTimeout(len(app.Setting.Port))
@@ -205,7 +240,7 @@ func generatePortScanner() *scanner.PortClient {
 		//nothing
 	}
 	client.HandlerOpen = func(addr net.IP, port int) {
-		slog.Printf(slog.DEBUG, "%s:%d is opened", addr.String(), port)
+		outputOpenResponse(addr, port)
 	}
 	client.HandlerNotMatched = func(addr net.IP, port int, response string) {
 		outputUnknownResponse(addr, port, response)
@@ -227,10 +262,13 @@ func generatePortScanner() *scanner.PortClient {
 	client.HandlerError = func(addr net.IP, port int, err error) {
 		slog.Println(slog.DEBUG, "PortScanner Error: ", fmt.Sprintf("%s:%d", addr.String(), port), err)
 	}
+	client.Defer(func() {
+		wg.Done()
+	})
 	return client
 }
 
-func generateURLScanner() *scanner.URLClient {
+func generateURLScanner(wg *sync.WaitGroup) *scanner.URLClient {
 	URLConfig := scanner.DefaultConfig()
 	URLConfig.Threads = app.Setting.Threads/2 + 1
 
@@ -241,10 +279,13 @@ func generateURLScanner() *scanner.URLClient {
 	client.HandlerError = func(url *url.URL, err error) {
 		slog.Println(slog.DEBUG, "URLScanner Error: ", url.String(), err)
 	}
+	client.Defer(func() {
+		wg.Done()
+	})
 	return client
 }
 
-func generateHydraScanner() *scanner.HydraClient {
+func generateHydraScanner(wg *sync.WaitGroup) *scanner.HydraClient {
 	HydraConfig := scanner.DefaultConfig()
 	HydraConfig.Threads = 10
 
@@ -255,6 +296,9 @@ func generateHydraScanner() *scanner.HydraClient {
 	client.HandlerError = func(addr net.IP, port int, protocol string, err error) {
 		slog.Println(slog.DEBUG, fmt.Sprintf("%s://%s:%d", protocol, addr.String(), port), err)
 	}
+	client.Defer(func() {
+		wg.Done()
+	})
 	return client
 }
 
@@ -342,6 +386,17 @@ func outputUnknownResponse(addr net.IP, port int, response string) {
 		"Response": response,
 		"IP":       URL.Hostname(),
 		"Port":     strconv.Itoa(port),
+	})
+}
+
+func outputOpenResponse(addr net.IP, port int) {
+	//输出结果
+	protocol := gonmap.GuessProtocol(port)
+	target := fmt.Sprintf("%s://%s:%d", protocol, addr.String(), port)
+	URL, _ := url.Parse(target)
+	outputHandler(URL, "response is empty", map[string]string{
+		"IP":   URL.Hostname(),
+		"Port": strconv.Itoa(port),
 	})
 }
 
@@ -493,8 +548,7 @@ func pushURLTarget(URL *url.URL, response *gonmap.Response) {
 	}
 }
 
-func watchDog(wg *sync.WaitGroup) {
-	wg.Add(1)
+func watchDog() {
 	for {
 		time.Sleep(time.Second * 1)
 		var (
@@ -508,23 +562,5 @@ func watchDog(wg *sync.WaitGroup) {
 			warn := fmt.Sprintf("当前存活协程数：Domain：%d 个，IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个", nDomain, nIP, nPort, nURL, nHydra)
 			slog.Println(slog.WARN, warn)
 		}
-		if nDomain != 0 {
-			continue
-		}
-
-		if nIP != 0 {
-			continue
-		}
-		if nPort != 0 {
-			continue
-		}
-		if nURL != 0 {
-			continue
-		}
-		if nHydra != 0 {
-			continue
-		}
-		break
 	}
-	wg.Done()
 }
