@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	_ "github.com/sijms/go-ora/v2"
+	"io"
 	"kscan/core/slog"
 	"strings"
 	"time"
@@ -117,7 +118,7 @@ func CheckSID(sid, Host string, Port int) bool {
 	}()
 
 	err = db.Ping()
-	if err == nil {
+	if err == nil || err == io.EOF {
 		db.Close()
 		return true
 	}
@@ -133,21 +134,8 @@ func CheckSID(sid, Host string, Port int) bool {
 	if strings.Contains(err.Error(), "ORA-12514") {
 		return false
 	}
-	return true
-}
-
-func CheckProtocol(Host string, Port int) bool {
-	dataSourceName := fmt.Sprintf("oracle://sid:sid@%s:%d/orcl", Host, Port)
-	db, err := sql.Open("oracle", dataSourceName)
-	if err != nil {
+	if strings.Contains(err.Error(), "ORA-12564") {
 		return false
 	}
-	db.SetConnMaxLifetime(3 * time.Second)
-	db.SetMaxIdleConns(0)
-	err = db.Ping()
-	if err == nil {
-		db.Close()
-		return true
-	}
-	return strings.Contains(err.Error(), "ORA-")
+	return true
 }
