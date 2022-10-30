@@ -8,6 +8,8 @@ type Auth struct {
 	Other    map[string]string
 }
 
+var UnauthorizedAccessVulnerabilityAuth = NewAuth()
+
 func NewAuth() Auth {
 	a := Auth{
 		Username: "",
