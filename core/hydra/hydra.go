@@ -125,7 +125,6 @@ func (c *Cracker) initJobFunc() bool {
 	case "oracle":
 		//若SID未知，则不进行后续暴力破解
 		if oracle.CheckProtocol(ip, port) == false {
-			c.Pool.Stop()
 			return false
 		}
 		sid := oracle.GetSID(ip, port, oracle.ServiceName)
@@ -143,7 +142,6 @@ func (c *Cracker) initJobFunc() bool {
 			auth := NewAuth()
 			auth.Other["Status"] = "UnauthorizedAccess"
 			c.success(auth)
-			c.Pool.Stop()
 			return false
 		}
 		c.Pool.Function = c.generateWorker(telnetCracker(serverType))
@@ -156,7 +154,6 @@ func (c *Cracker) initJobFunc() bool {
 	case "smb":
 		c.Pool.Function = c.generateWorker(smbCracker)
 	default:
-		c.Pool.Stop()
 		return false
 	}
 	return true
@@ -173,12 +170,12 @@ func (c *Cracker) generateWorker(f func(interface{}) *AuthInfo) func(interface{}
 //分发器
 func (c *Cracker) dispatcher() {
 	for _, auth := range c.authList.Dict(c.onlyPassword) {
-		if c.Pool.Done {
-			return
+		if c.SuccessCount > 0 {
+			break
 		}
 		info := *c.authInfo
 		info.Auth = auth
-		c.Pool.In <- info
+		c.Pool.Push(info)
 	}
 	//关闭信道
 	c.Pool.Stop()
