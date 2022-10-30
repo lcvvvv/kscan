@@ -124,9 +124,6 @@ func (c *Cracker) initJobFunc() bool {
 		c.Pool.Function = c.generateWorker(mssqlCracker)
 	case "oracle":
 		//若SID未知，则不进行后续暴力破解
-		if oracle.CheckProtocol(ip, port) == false {
-			return false
-		}
 		sid := oracle.GetSID(ip, port, oracle.ServiceName)
 		if sid == "" {
 			return false
