@@ -65,7 +65,7 @@ Kscan目前具备3种输入目标的方式
 IP地址：114.114.114.114
 IP地址段：114.114.114.114-115.115.115.115
 URL地址：https://www.baidu.com
-文件地址：file:/tmp/target.txt
+文件地址：/tmp/target.txt
 ```
 
 - --spy 可添加--scan参数可对存活C段进行端口扫描和指纹识别，否则将只检测存活的网段
@@ -135,25 +135,19 @@ fofa options:
 
 ### 6.1 端口扫描模式
 
-![WechatIMG986](assets/Kscan_v1.6/WechatIMG986.png)
+![WechatIMG986](assets/端口扫描演示.png)
 
 ### 6.2 存活网段探测
 
-![WechatIMG988](assets/Kscan_v1.6/WechatIMG988.png)
+![WechatIMG988](assets/存活网段检测演示.jpg)
 
 ### 6.3 Fofa结果检索
 
-![WechatIMG989](assets/Kscan_v1.6/WechatIMG989.png)
+![WechatIMG989](assets/Fofa结果检索演示.png)
 
 ### 6.3 暴力破解
 
-![WechatIMG996](assets/Kscan_v1.6/WechatIMG996.png)
-
-![WechatIMG996](assets/Kscan_v1.6/WechatIMG1018.png)
-
-### 6.4 CDN检测、归属地识别
-
-![iShot2022-04-24_18.23.41](assets/kscan_v1.7/iShot2022-04-24_18.23.41.png)
+![WechatIMG996](assets/Hydra功能演示.png)
 
 ## 7 特别感谢
 
