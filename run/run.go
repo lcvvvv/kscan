@@ -157,7 +157,7 @@ func stop() {
 			PortScanner.Stop()
 			slog.Println(slog.DEBUG, "检测到所有Port检测任务已完成，Port扫描引擎已停止")
 		}
-		if IPScanner.IsDone() == false {
+		if PortScanner.IsDone() == false {
 			continue
 		}
 		if URLScanner.RunningThreads() == 0 && URLScanner.IsDone() == false {
@@ -166,7 +166,7 @@ func stop() {
 		}
 		if HydraScanner.RunningThreads() == 0 && HydraScanner.IsDone() == false {
 			HydraScanner.Stop()
-			slog.Println(slog.DEBUG, "检测到所有暴力破解任务已完成，URL扫描引擎已停止")
+			slog.Println(slog.DEBUG, "检测到所有暴力破解任务已完成，暴力破解引擎已停止")
 		}
 	}
 }
