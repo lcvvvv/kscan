@@ -11,10 +11,9 @@ import (
 )
 
 type Cracker struct {
-	Pool         *pool.Pool
-	authList     *AuthList
-	authInfo     *AuthInfo
-	onlyPassword bool
+	Pool     *pool.Pool
+	authList *AuthList
+	authInfo *AuthInfo
 
 	SuccessCount int32
 	SuccessAuth  Auth
@@ -40,6 +39,15 @@ func InitDefaultAuthMap() {
 	DefaultAuthMap = m
 }
 
+type loginType string
+
+const (
+	ProtocolInvalid                 loginType = "ProtocolInvalid"
+	UsernameAndPassword                       = "UsernameAndPassword"
+	OnlyPassword                              = "OnlyPassword"
+	UnauthorizedAccessVulnerability           = "UnauthorizedAccessVulnerability"
+)
+
 var (
 	DefaultAuthMap map[string]*AuthList
 	CustomAuthMap  *AuthList
@@ -62,18 +70,10 @@ var (
 
 func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 	c := &Cracker{}
-	if info.Protocol == "redis" {
-		c.onlyPassword = true
-	} else {
-		c.onlyPassword = false
-	}
 	c.Pool = pool.New(threads)
 	c.authInfo = info
 	c.authList = func() *AuthList {
 		list := DefaultAuthMap[c.authInfo.Protocol]
-		if c.onlyPassword {
-			CustomAuthMap.Username = []string{}
-		}
 		if isAuthUpdate {
 			list.Merge(CustomAuthMap)
 			return list
@@ -94,12 +94,18 @@ func (c *Cracker) success(info Auth) {
 }
 
 func (c *Cracker) Run() (*Auth, error) {
-	if c.initJobFunc() == true {
-		go c.dispatcher()
-		//开始暴力破解
-		c.Pool.Run()
+	switch c.initJobFunc() {
+	case ProtocolInvalid:
+		return nil, ProtocolErr
+	case UsernameAndPassword:
+		go c.dispatcher(false)
+	case OnlyPassword:
+		go c.dispatcher(true)
+	case UnauthorizedAccessVulnerability:
+		return &UnauthorizedAccessVulnerabilityAuth, nil
 	}
-
+	//开始暴力破解
+	c.Pool.Run()
 	switch c.SuccessCount {
 	case 0:
 		return nil, LoginFailedErr
@@ -111,7 +117,7 @@ func (c *Cracker) Run() (*Auth, error) {
 
 }
 
-func (c *Cracker) initJobFunc() bool {
+func (c *Cracker) initJobFunc() loginType {
 	ip := c.authInfo.IPAddr
 	port := c.authInfo.Port
 	//选择暴力破解函数
@@ -126,7 +132,7 @@ func (c *Cracker) initJobFunc() bool {
 		//若SID未知，则不进行后续暴力破解
 		sid := oracle.GetSID(ip, port, oracle.ServiceName)
 		if sid == "" {
-			return false
+			return ProtocolInvalid
 		}
 		c.Pool.Function = c.generateWorker(oracleCracker(sid))
 	case "postgresql":
@@ -139,21 +145,25 @@ func (c *Cracker) initJobFunc() bool {
 			auth := NewAuth()
 			auth.Other["Status"] = "UnauthorizedAccess"
 			c.success(auth)
-			return false
+			return ProtocolInvalid
 		}
 		c.Pool.Function = c.generateWorker(telnetCracker(serverType))
+		if serverType == gotelnet.OnlyPassword {
+			return OnlyPassword
+		}
 	case "ftp":
 		c.Pool.Function = c.generateWorker(ftpCracker)
 	case "mongodb":
 		c.Pool.Function = c.generateWorker(mongodbCracker)
 	case "redis":
 		c.Pool.Function = c.generateWorker(redisCracker)
+		return OnlyPassword
 	case "smb":
 		c.Pool.Function = c.generateWorker(smbCracker)
 	default:
-		return false
+		return ProtocolInvalid
 	}
-	return true
+	return UsernameAndPassword
 }
 
 func (c *Cracker) generateWorker(f func(interface{}) *AuthInfo) func(interface{}) {
@@ -165,8 +175,8 @@ func (c *Cracker) generateWorker(f func(interface{}) *AuthInfo) func(interface{}
 }
 
 //分发器
-func (c *Cracker) dispatcher() {
-	for _, auth := range c.authList.Dict(c.onlyPassword) {
+func (c *Cracker) dispatcher(onlyPassword bool) {
+	for _, auth := range c.authList.Dict(onlyPassword) {
 		if c.SuccessCount > 0 {
 			break
 		}
