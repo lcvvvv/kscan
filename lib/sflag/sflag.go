@@ -93,7 +93,7 @@ func parseStringSpliceExpress(expr string) (splice []string) {
 	if regexp.MustCompile("^file:.+$").MatchString(expr) {
 		expr = strings.Replace(expr, "file:", "", 1)
 	}
-	if _, err := os.Lstat(expr); os.IsNotExist(err) == false {
+	if _, err := os.Lstat(expr); err == nil {
 		fs, err := os.Open(expr)
 		if err != nil {
 			panic(err)
