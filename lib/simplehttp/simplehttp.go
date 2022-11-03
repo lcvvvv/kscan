@@ -98,6 +98,10 @@ func NotRedirect(c *http.Client) {
 }
 
 func Do(c *http.Client, req *http.Request) (*Response, error) {
+	if req.URL.Path == "" {
+		req.URL.Path = "/"
+	}
+
 	response, err := c.Do(req)
 	if err != nil {
 		return nil, err
