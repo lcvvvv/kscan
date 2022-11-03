@@ -33,6 +33,8 @@ func GetBannerWithURL(URL *url.URL, req *http.Request, cli *http.Client) (*Banne
 		req, _ = simplehttp.NewRequest(http.MethodGet, URL.String(), nil)
 	}
 
+	req.Header.Set("User-Agent", simplehttp.RandomUserAgent())
+
 	if cli == nil {
 		cli = simplehttp.NewClient()
 	}
