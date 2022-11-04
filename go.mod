@@ -13,7 +13,7 @@ require (
 	github.com/lcvvvv/appfinger v0.0.0-00010101000000-000000000000
 
 	//gonmap
-	github.com/lcvvvv/gonmap v1.3.3
+	github.com/lcvvvv/gonmap v1.3.4
 	github.com/lcvvvv/pool v0.0.0-00010101000000-000000000000
 	github.com/lcvvvv/simplehttp v0.0.0-00010101000000-000000000000
 	github.com/lcvvvv/stdio v0.0.0-00010101000000-000000000000
