@@ -5,7 +5,7 @@ import (
 	"kscan/lib/grdp"
 )
 
-func Check(ip, domain, login, password string, port int, protocol string) (bool, error) {
+func Check(ip, domain, login, password string, port int, protocol string) error {
 	var err error
 	target := fmt.Sprintf("%s:%d", ip, port)
 	if protocol == grdp.PROTOCOL_SSL {
@@ -17,7 +17,7 @@ func Check(ip, domain, login, password string, port int, protocol string) (bool,
 	//slog.Println(slog.INFO, target, domain, login, password)
 	//slog.Println(slog.INFO, err)
 	if err != nil {
-		return false, err
+		return err
 	}
-	return true, err
+	return nil
 }

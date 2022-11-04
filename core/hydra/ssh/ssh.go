@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Check(Host, Username, Password string, Port int) (bool, error) {
+func Check(Host, Username, Password string, Port int) error {
 	var Auth = []ssh.AuthMethod{ssh.Password(Password)}
 	config := &ssh.ClientConfig{
 		User:    Username,
@@ -19,8 +19,8 @@ func Check(Host, Username, Password string, Port int) (bool, error) {
 	}
 	client, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", Host, Port), config)
 	if err != nil {
-		return false, err
+		return err
 	}
 	defer client.Close()
-	return true, nil
+	return nil
 }

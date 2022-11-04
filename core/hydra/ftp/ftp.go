@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-func Check(Host, Username, Password string, Port int) (bool, error) {
+func Check(Host, Username, Password string, Port int) error {
 	conn, err := ftp.DialTimeout(fmt.Sprintf("%s:%d", Host, Port), 5*time.Second)
 	if err != nil {
-		return false, err
+		return err
 	}
 	defer conn.Logout()
 	err = conn.Login(Username, Password)
 	if err != nil {
-		return false, err
+		return err
 	}
-	return true, nil
+	return nil
 }

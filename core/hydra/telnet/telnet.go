@@ -4,11 +4,11 @@ import (
 	"kscan/lib/gotelnet"
 )
 
-func Check(addr, username, password string, port, serverType int) (bool, error) {
+func Check(addr, username, password string, port, serverType int) error {
 	client := gotelnet.New(addr, port)
 	err := client.Connect()
 	if err != nil {
-		return false, err
+		return err
 	}
 	defer client.Close()
 	client.UserName = username
@@ -16,7 +16,7 @@ func Check(addr, username, password string, port, serverType int) (bool, error) 
 	client.ServerType = serverType
 	err = client.Login()
 	if err != nil {
-		return false, err
+		return err
 	}
-	return true, err
+	return nil
 }

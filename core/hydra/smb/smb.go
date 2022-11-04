@@ -7,7 +7,12 @@ import (
 	"time"
 )
 
-func Check(Host, Username, Domain, Password string, Port int) (bool, error) {
+var (
+	LoginFailedError  = errors.New("login failed")
+	LoginTimeoutError = errors.New("login timeout")
+)
+
+func Check(Host, Username, Domain, Password string, Port int) error {
 	status := make(chan error)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
@@ -28,7 +33,7 @@ func Check(Host, Username, Domain, Password string, Port int) (bool, error) {
 		}
 		defer session.Close()
 		if session.IsAuthenticated == false {
-			status <- err
+			status <- LoginFailedError
 			return
 		}
 		status <- nil
@@ -36,12 +41,9 @@ func Check(Host, Username, Domain, Password string, Port int) (bool, error) {
 
 	select {
 	case <-ctx.Done():
-		return false, errors.New("timeout")
+		return LoginTimeoutError
 	case err := <-status:
-		if status != nil {
-			return false, err
-		}
-		return true, nil
+		return err
 	}
 
 }

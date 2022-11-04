@@ -72,25 +72,25 @@ var ServiceName = []string{
 	"WINDOWS9021", "WINDOWS9022", "WINDOWS9023", "WINDOWS9024", "WINDOWS9025", "WINDOWS9026", "WINDOWS9027", "XEXDB", "XE_XPT", "HSAGENT",
 }
 
-func Check(Host, Username, Password string, Port int, SID string) (bool, error) {
+func Check(Host, Username, Password string, Port int, SID string) error {
 	var db *sql.DB
 	var err error
 	dataSourceName := fmt.Sprintf("oracle://%s:%s@%s:%d/%s", Username, Password, Host, Port, SID)
 	db, err = sql.Open("oracle", dataSourceName)
 	if err != nil {
-		return false, err
+		return err
 	}
 	defer db.Close()
 	db.SetConnMaxLifetime(5 * time.Second)
 	db.SetMaxIdleConns(0)
 	err = db.Ping()
 	if err == nil {
-		return true, nil
+		return nil
 	}
 	if strings.Contains(err.Error(), "ORA-28009") {
-		return true, nil
+		return nil
 	}
-	return false, err
+	return err
 }
 
 func GetSID(Host string, Port int, sids []string) string {

@@ -6,6 +6,7 @@ import (
 	"kscan/core/hydra/oracle"
 	"kscan/lib/gotelnet"
 	"kscan/lib/misc"
+	"strings"
 	"sync/atomic"
 	"time"
 )
@@ -14,6 +15,8 @@ type Cracker struct {
 	Pool     *pool.Pool
 	authList *AuthList
 	authInfo *AuthInfo
+
+	retries int
 
 	SuccessCount int32
 	SuccessAuth  Auth
@@ -70,6 +73,7 @@ var (
 
 func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 	c := &Cracker{}
+	c.retries = 3
 	c.Pool = pool.New(threads)
 	c.authInfo = info
 	c.authList = func() *AuthList {
@@ -86,6 +90,13 @@ func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 	}()
 	c.Pool.Interval = time.Second * 1
 	return c
+}
+
+func (c *Cracker) Retries(i int) {
+	if i <= 0 {
+		return
+	}
+	c.retries = i
 }
 
 func (c *Cracker) success(info Auth) {
@@ -166,10 +177,24 @@ func (c *Cracker) initJobFunc() loginType {
 	return UsernameAndPassword
 }
 
-func (c *Cracker) generateWorker(f func(interface{}) *AuthInfo) func(interface{}) {
-	return func(i interface{}) {
-		if info := f(i); info != nil {
-			c.success(info.Auth)
+func (c *Cracker) generateWorker(f func(interface{}) error) func(interface{}) {
+	return func(in interface{}) {
+		for j := 0; j < c.retries; j++ {
+			info := in.(AuthInfo)
+			info.Auth.MakePassword()
+			err := f(info)
+			if err == nil {
+				info.Status = true
+				c.success(info.Auth)
+				break
+			}
+			if strings.Contains(err.Error(), "timeout") == true {
+				continue
+			}
+			if strings.Contains(err.Error(), "EOF") == true {
+				continue
+			}
+			break
 		}
 	}
 }

@@ -10,19 +10,19 @@ import (
 	"time"
 )
 
-func Check(Host, Username, Password string, Port int) (bool, error) {
+func Check(Host, Username, Password string, Port int) error {
 	mssql.SetLogger(log.New(io.Discard, "", log.Ldate|log.Ltime))
 	dataSourceName := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%v;encrypt=disable;timeout=%v", Host, Username, Password, Port, 5*time.Second)
 	db, err := sql.Open("mssql", dataSourceName)
 	if err != nil {
-		return false, err
+		return err
 	}
 	db.SetConnMaxLifetime(5 * time.Second)
 	db.SetMaxIdleConns(0)
 	defer db.Close()
 	err = db.Ping()
 	if err != nil {
-		return false, err
+		return err
 	}
-	return true, nil
+	return nil
 }
