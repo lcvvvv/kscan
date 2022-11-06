@@ -2,26 +2,27 @@ package misc
 
 import (
 	"encoding/base64"
+	"fmt"
 	"math/rand"
 	"reflect"
 	"strconv"
 	"strings"
 )
 
-func IsInStrArr(slice []string, val string) bool {
+func IsDuplicate[T any](slice []T, val T) bool {
 	for _, item := range slice {
-		if item == val {
+		if fmt.Sprint(item) == fmt.Sprint(val) {
 			return true
 		}
 	}
 	return false
 }
 
-func RemoveDuplicateElement(splice []string, elems ...string) []string {
-	var result []string
-	splice = append(splice, elems...)
-	for _, val := range splice {
-		if IsInStrArr(result, val) == false {
+func RemoveDuplicateElement[T any](slice []T, elems ...T) []T {
+	var result []T
+	slice = append(slice, elems...)
+	for _, val := range slice {
+		if IsDuplicate(result, val) == false {
 			result = append(result, val)
 		}
 	}
@@ -151,7 +152,7 @@ func FixMap(m map[string]string) map[string]string {
 		if value == "" {
 			continue
 		}
-		if IsInStrArr(arr, value) {
+		if IsDuplicate(arr, value) {
 			if key != "Username" && key != "Password" {
 				continue
 			}
