@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"kscan/core/hydra"
 	"kscan/core/slog"
-	"kscan/lib/misc"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -123,7 +121,7 @@ func ConfigInit() {
 	Setting.HydraPass = args.HydraPass
 	Setting.loadHydraMod(args.HydraMod)
 	//fofa模块
-	Setting.Fofa = Setting.loadFofa(args.Fofa)
+	Setting.Fofa = args.Fofa
 	Setting.FofaSize = args.FofaSize
 	Setting.FofaFixKeyword = args.FofaFixKeyword
 	Setting.Scan = args.Scan
@@ -234,27 +232,6 @@ func (c *Config) loadHydraMod(splice []string) {
 		return
 	}
 	c.HydraMod = splice
-}
-
-func (c *Config) loadFofa(expr string) []string {
-	//判断对象是否为文件
-	if regexp.MustCompile("^file:.+$").MatchString(expr) {
-		path := strings.Replace(expr, "file:", "", 1)
-		return misc.ReadLineAll(path)
-	}
-	//判断对象是否为多个
-	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
-		var passArr []string
-		for _, str := range strings.Split(strArr, ",") {
-			passArr = append(passArr, strings.ReplaceAll(str, "[DouHao]", ","))
-		}
-		return passArr
-	}
-	//对象为单个且不为空时直接返回
-	if expr != "" {
-		return []string{expr}
-	}
-	return []string{}
 }
 
 func (c *Config) loadFofaField(expr string) []string {

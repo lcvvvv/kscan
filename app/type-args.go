@@ -21,9 +21,10 @@ type args struct {
 	Hydra, HydraUpdate             bool
 	HydraUser, HydraPass, HydraMod []string
 	//fofa模块
-	Fofa, FofaField, FofaFixKeyword string
-	FofaSize                        int
-	FofaSyntax                      bool
+	Fofa                      []string
+	FofaField, FofaFixKeyword string
+	FofaSize                  int
+	FofaSyntax                bool
 	//输出修饰
 	Match, NotMatch string
 }
@@ -57,8 +58,8 @@ func (o *args) define() {
 	sflag.StringSpliceVar(&o.HydraPass, "hydra-pass")
 	sflag.StringSpliceVar(&o.HydraMod, "hydra-mod")
 	//fofa模块
-	sflag.StringVar(&o.Fofa, "fofa", "")
-	sflag.StringVar(&o.Fofa, "f", "")
+	sflag.StringSpliceVar(&o.Fofa, "fofa")
+	sflag.StringSpliceVar(&o.Fofa, "f")
 	sflag.StringVar(&o.FofaField, "fofa-field", "")
 	sflag.StringVar(&o.FofaFixKeyword, "fofa-fix-keyword", "")
 	sflag.IntVar(&o.FofaSize, "fofa-size", 100)
@@ -112,12 +113,12 @@ func (o *args) SetHelp(help string) {
 //校验参数真实性
 func (o *args) CheckArgs() {
 	//判断必须的参数是否存在
-	if len(o.Target) == 0 && o.Fofa == "" && o.Spy == "None" && o.DownloadQQwry == false {
+	if len(o.Target) == 0 && len(o.Fofa) == 0 && o.Spy == "None" && o.DownloadQQwry == false {
 		fmt.Print("至少有--target、--fofa、--spy参数中的一个")
 		os.Exit(0)
 	}
 	//判断冲突参数
-	if len(o.Target) > 0 && o.Fofa != "" && o.Spy != "None" && o.Touch == "None" {
+	if len(o.Target) > 0 && len(o.Fofa) == 0 && o.Spy != "None" && o.Touch == "None" {
 		fmt.Print("--target、--fofa、--spy不能同时使用")
 		os.Exit(0)
 	}
