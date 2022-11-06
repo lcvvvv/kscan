@@ -146,7 +146,7 @@ func fixArgs() {
 	var newArgs []string
 	for index, value := range os.Args {
 		newArgs = append(newArgs, value)
-		if misc.IsInStrArr(autoStringSlice, value) {
+		if misc.IsDuplicate(autoStringSlice, value) {
 			if index+2 > len(os.Args) {
 				newArgs = append(newArgs, "")
 				break

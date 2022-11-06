@@ -220,7 +220,7 @@ func InitCustomAuthMap(user, pass []string) {
 }
 
 func Ok(protocol string) bool {
-	if misc.IsInStrArr(ProtocolList, protocol) {
+	if misc.IsDuplicate(ProtocolList, protocol) {
 		return true
 	}
 	return false
