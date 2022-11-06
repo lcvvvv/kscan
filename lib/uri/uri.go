@@ -44,7 +44,9 @@ func IsIP(str string) bool {
 var (
 	domainRoot = []string{
 		"com", "net", "org", "aero", "biz", "coop", "info", "museum", "name", "pro", "top", "xyz",
-		"loan", "wang", "ad", "ae", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "as", "at",
+		"loan", "wang", "vip", "eu", "edu", "tech", "cloud", "online", "nrw", "cyou", "dev",
+		//country
+		"ad", "ae", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "as", "at",
 		"au", "aw", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bm", "bn", "bo", "br",
 		"bs", "bt", "bv", "bw", "by", "bz", "ca", "cc", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn",
 		"co", "cq", "cr", "cu", "cv", "cx", "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee",
