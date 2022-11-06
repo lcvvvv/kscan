@@ -38,7 +38,7 @@ func Start() {
 		for i := 16; i <= 31; i++ {
 			slog.Printf(slog.INFO, "现在开始枚举常见网段172.%d.0.0", i)
 			gatewayArr = uri.GetGatewayList(fmt.Sprintf("172.%d.0.0", i), "b")
-			gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
+			gatewayArr = misc.RemoveDuplicateElement(gatewayArr, All...)
 			if len(gatewayArr) > 0 {
 				HostDiscoveryIcmpPool(gatewayArr)
 				All = append(All, gatewayArr...)
@@ -62,7 +62,7 @@ func Start() {
 		gatewayArr = makeInterfaceGatwayList()
 		gatewayArr = misc.RemoveDuplicateElement(gatewayArr)
 		//探测当前所在网段B段网关
-		gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
+		gatewayArr = misc.RemoveDuplicateElement(gatewayArr, All...)
 		if len(gatewayArr) > 0 {
 			HostDiscoveryIcmpPool(gatewayArr)
 			All = append(All, gatewayArr...)
@@ -82,7 +82,7 @@ func Start() {
 		//探测常见网段192段，B段存活网关
 		slog.Println(slog.INFO, "现在开始枚举常见网段192.168.0.0")
 		gatewayArr = uri.GetGatewayList("192.168.0.1", "b")
-		gatewayArr = misc.RemoveDuplicateElementForMultiple(gatewayArr, All)
+		gatewayArr = misc.RemoveDuplicateElement(gatewayArr, All...)
 		if len(gatewayArr) > 0 {
 			HostDiscoveryIcmpPool(gatewayArr)
 			All = append(All, gatewayArr...)
@@ -143,14 +143,16 @@ func getInterfaces() (up []string, down []string) {
 			if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 				if ipnet.IP.To4() != nil {
 					if (netInterfaces[i].Flags & net.FlagUp) != 0 {
-						up = misc.UniStrAppend(up, ipnet.IP.String())
+						up = append(up, ipnet.IP.String())
 					} else {
-						down = misc.UniStrAppend(down, ipnet.IP.String())
+						down = append(down, ipnet.IP.String())
 					}
 				}
 			}
 		}
 	}
+	up = misc.RemoveDuplicateElement(up)
+	down = misc.RemoveDuplicateElement(down)
 	return up, down
 }
 
