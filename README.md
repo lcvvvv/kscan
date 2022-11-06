@@ -149,6 +149,10 @@ fofa options:
 
 ![WechatIMG996](assets/Hydra功能演示.png)
 
+### 6.3 CDN识别
+
+![WechatIMG996](assets/CDN识别演示.jpg)
+
 ## 7 特别感谢
 
 - [EdgeSecurityTeam](https://github.com/EdgeSecurityTeam)
