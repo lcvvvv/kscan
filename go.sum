@@ -65,8 +65,14 @@ github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxv
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
+github.com/lcvvvv/appfinger v0.1.1 h1:EK45kHrVJ5Zu/mj8+HYibHjakLNo7jAcDK9GmT31P90=
+github.com/lcvvvv/appfinger v0.1.1/go.mod h1:dOXXroHZ7tAYvghqs19MICwzIL6YPpqlJVmL/RDR4Qo=
 github.com/lcvvvv/gonmap v1.3.4 h1:cNCYMw4Fp6wPbCQ0AqWeYzfPMKK4hKgGK4rUt5aHt04=
 github.com/lcvvvv/gonmap v1.3.4/go.mod h1:o6WN1/O/UXRiy+ss9Ijpt++wQG82xKFahirFCVIXJe8=
+github.com/lcvvvv/simplehttp v0.1.1 h1:B8hvtOrLiiCTbZbUT6x0J3W47/MYAYcWiRzU4n8bXno=
+github.com/lcvvvv/simplehttp v0.1.1/go.mod h1:PqcjqmzFHnhXhRf+Sc2JLdxBk4MIOeOWbpyRZ+dCBSE=
+github.com/lcvvvv/stdio v0.1.2 h1:TPqRRvQOWFCSNGFvWUaOPBUldP4vrN7hpeWI+3JLY04=
+github.com/lcvvvv/stdio v0.1.2/go.mod h1:iaPzDhiqbl49vO/+0LG8QRoEznn6r96uCEF0tKDuDNE=
 github.com/lib/pq v1.10.2 h1:AqzbZs4ZoCBp+GtejcpCpcxM3zlSMx29dXbUSeVtJb8=
 github.com/lib/pq v1.10.2/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
 github.com/lunixbochs/struc v0.0.0-20200707160740-784aaebc1d40 h1:EnfXoSqDfSNJv0VBNqY/88RNnhSGYkrHaO0mmFGbVsc=
