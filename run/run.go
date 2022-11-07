@@ -121,6 +121,43 @@ func pushTarget(expr string) {
 	slog.Println(slog.WARN, "无法识别的Target字符串:", expr)
 }
 
+func pushURLTarget(URL *url.URL, response *gonmap.Response) {
+	var cli *http.Client
+	//判断是否初始化client
+	if app.Setting.Proxy != "" || app.Setting.Timeout != 3*time.Second {
+		cli = simplehttp.NewClient()
+	}
+	//判断是否需要设置代理
+	if app.Setting.Proxy != "" {
+		simplehttp.SetProxy(cli, app.Setting.Proxy)
+	}
+	//判断是否需要设置超时参数
+	if app.Setting.Timeout != 3*time.Second {
+		simplehttp.SetTimeout(cli, app.Setting.Timeout)
+	}
+
+	//判断是否存在请求修饰性参数
+	if len(app.Setting.Host) == 0 && len(app.Setting.Path) == 0 {
+		URLScanner.Push(URL, response, nil, cli)
+		return
+	}
+
+	//如果存在，则逐一建立请求下发队列
+	var reqs []*http.Request
+	for _, host := range app.Setting.Host {
+		req, _ := simplehttp.NewRequest(http.MethodGet, URL.String(), nil)
+		req.Host = host
+		reqs = append(reqs, req)
+	}
+	for _, path := range app.Setting.Path {
+		req, _ := simplehttp.NewRequest(http.MethodGet, URL.String()+path, nil)
+		reqs = append(reqs, req)
+	}
+	for _, req := range reqs {
+		URLScanner.Push(req.URL, response, req, cli)
+	}
+}
+
 var (
 	DomainScanner *scanner.DomainClient
 	IPScanner     *scanner.IPClient
@@ -507,44 +544,6 @@ func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 			sourceMap[key] = chinese.ToUTF8(value)
 		}
 		cw.Push(sourceMap)
-	}
-}
-
-func pushURLTarget(URL *url.URL, response *gonmap.Response) {
-	var cli *http.Client
-	//判断是否初始化client
-	if app.Setting.Proxy != "" || app.Setting.Timeout != 3*time.Second {
-		cli = simplehttp.NewClient()
-	}
-	//判断是否需要设置代理
-	if app.Setting.Proxy != "" {
-		simplehttp.SetProxy(cli, app.Setting.Proxy)
-	}
-	//判断是否需要设置超时参数
-	if app.Setting.Timeout != 3*time.Second {
-		simplehttp.SetTimeout(cli, app.Setting.Timeout)
-	}
-
-	//判断是否存在请求修饰性参数
-	if len(app.Setting.Host) == 0 && len(app.Setting.Path) == 0 {
-		URLScanner.Push(URL, response, nil, cli)
-		return
-	}
-
-	//如果存在，则逐一建立请求下发队列
-	var reqs []*http.Request
-	for _, host := range app.Setting.Host {
-		URL.Host = host
-		req, _ := simplehttp.NewRequest(http.MethodGet, URL.String(), nil)
-		reqs = append(reqs, req)
-	}
-	for _, path := range app.Setting.Path {
-		URL.Path = path
-		req, _ := simplehttp.NewRequest(http.MethodGet, URL.String(), nil)
-		reqs = append(reqs, req)
-	}
-	for _, req := range reqs {
-		URLScanner.Push(req.URL, response, req, cli)
 	}
 }
 
