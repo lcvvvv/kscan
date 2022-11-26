@@ -66,8 +66,8 @@ func pushTarget(expr string) {
 	if uri.IsIP(expr) {
 		IPScanner.Push(net.ParseIP(expr))
 		if app.Setting.Check == true {
-			pushURLTarget(uri.URLParse("http://"+expr), nil)
-			pushURLTarget(uri.URLParse("https://"+expr), nil)
+			pushURLTarget(uri.URLParse("http://"+expr), "http://"+expr, nil)
+			pushURLTarget(uri.URLParse("https://"+expr), "https://"+expr, nil)
 		}
 		return
 	}
@@ -85,13 +85,13 @@ func pushTarget(expr string) {
 	}
 	if uri.IsDomain(expr) {
 		DomainScanner.Push(expr)
-		pushURLTarget(uri.URLParse("http://"+expr), nil)
-		pushURLTarget(uri.URLParse("https://"+expr), nil)
+		pushURLTarget(uri.URLParse("http://"+expr), "http://"+expr, nil)
+		pushURLTarget(uri.URLParse("https://"+expr), "https://"+expr, nil)
 		return
 	}
 	if uri.IsHostPath(expr) {
-		pushURLTarget(uri.URLParse("http://"+expr), nil)
-		pushURLTarget(uri.URLParse("https://"+expr), nil)
+		pushURLTarget(uri.URLParse("http://"+expr), "http://"+expr, nil)
+		pushURLTarget(uri.URLParse("https://"+expr), "https://"+expr, nil)
 		if app.Setting.Check == false {
 			pushTarget(uri.GetNetlocWithHostPath(expr))
 		}
@@ -103,8 +103,8 @@ func pushTarget(expr string) {
 			PortScanner.Push(net.ParseIP(netloc), port)
 		}
 		if uri.IsDomain(netloc) {
-			pushURLTarget(uri.URLParse("http://"+expr), nil)
-			pushURLTarget(uri.URLParse("https://"+expr), nil)
+			pushURLTarget(uri.URLParse("http://"+expr), "http://"+expr, nil)
+			pushURLTarget(uri.URLParse("https://"+expr), "https://"+expr, nil)
 		}
 		if app.Setting.Check == false {
 			pushTarget(netloc)
@@ -112,7 +112,7 @@ func pushTarget(expr string) {
 		return
 	}
 	if uri.IsURL(expr) {
-		pushURLTarget(uri.URLParse(expr), nil)
+		pushURLTarget(uri.URLParse(expr), expr, nil)
 		if app.Setting.Check == false {
 			pushTarget(uri.GetNetlocWithURL(expr))
 		}
@@ -121,7 +121,11 @@ func pushTarget(expr string) {
 	slog.Println(slog.WARN, "无法识别的Target字符串:", expr)
 }
 
-func pushURLTarget(URL *url.URL, response *gonmap.Response) {
+func pushURLTarget(URL *url.URL, expr string, response *gonmap.Response) {
+	if URL == nil {
+		slog.Println(slog.WARN, "无法识别的Target字符串:", expr)
+		return
+	}
 	var cli *http.Client
 	//判断是否初始化client
 	if app.Setting.Proxy != "" || app.Setting.Timeout != 3*time.Second {
@@ -286,7 +290,7 @@ func generatePortScanner(wg *sync.WaitGroup) *scanner.PortClient {
 		URLRaw := fmt.Sprintf("%s://%s:%d", response.FingerPrint.Service, addr.String(), port)
 		URL, _ := url.Parse(URLRaw)
 		if appfinger.SupportCheck(URL.Scheme) == true {
-			pushURLTarget(URL, response)
+			pushURLTarget(URL, URLRaw, response)
 			return
 		}
 		outputNmapFinger(URL, response)
