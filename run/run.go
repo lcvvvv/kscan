@@ -63,12 +63,16 @@ func pushTarget(expr string) {
 		}
 		return
 	}
-	if uri.IsIP(expr) {
+	if uri.IsIPv4(expr) {
 		IPScanner.Push(net.ParseIP(expr))
 		if app.Setting.Check == true {
 			pushURLTarget(uri.URLParse("http://"+expr), nil)
 			pushURLTarget(uri.URLParse("https://"+expr), nil)
 		}
+		return
+	}
+	if uri.IsIPv6(expr) {
+		slog.Println(slog.WARN, "暂时不支持IPv6的扫描对象：", expr)
 		return
 	}
 	if uri.IsCIDR(expr) {
@@ -99,7 +103,7 @@ func pushTarget(expr string) {
 	}
 	if uri.IsNetlocPort(expr) {
 		netloc, port := uri.SplitWithNetlocPort(expr)
-		if uri.IsIP(netloc) {
+		if uri.IsIPv4(netloc) {
 			PortScanner.Push(net.ParseIP(netloc), port)
 		}
 		if uri.IsDomain(netloc) {
@@ -388,7 +392,7 @@ func outputAppFinger(URL *url.URL, banner *appfinger.Banner, finger *appfinger.F
 	if m["Port"] == "" {
 		slog.Println(slog.WARN, "无法获取端口号：", URL)
 	}
-	if hostname := URL.Hostname(); uri.IsIP(hostname) {
+	if hostname := URL.Hostname(); uri.IsIPv4(hostname) {
 		m["IP"] = hostname
 	} else {
 		m["Domain"] = hostname
@@ -516,7 +520,7 @@ func outputHandler(URL *url.URL, keyword string, m map[string]string) {
 		delete(m, keyword)
 	}
 	for key, value := range m {
-		if key == "FingerPrint" || key == "FoundDomain" {
+		if key == "FingerPrint" {
 			continue
 		}
 		m[key] = misc.StrRandomCut(value, 24)

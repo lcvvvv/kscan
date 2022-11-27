@@ -24,7 +24,7 @@ func Start() {
 	_ = dnsTesting()
 	var gatewayArr, All []string
 	//若spy参数格式为IP地址，则将对指定的IP地址进行B段存活网关探测
-	if uri.IsIP(Keyword) {
+	if uri.IsIPv4(Keyword) {
 		slog.Printf(slog.INFO, "现在开始指定网段：%s，B段存活网关探测", Keyword)
 		gatewayArr = uri.GetGatewayList(Keyword, "b")
 		HostDiscoveryIcmpPool(gatewayArr)
