@@ -36,32 +36,49 @@ func ParseNetlocPort(str string) (string, int) {
 	return r[0], ParsePort(r[1])
 }
 
-// IsIP checks if a string is either IP version 4 Alias for `net.ParseIP`
-func IsIP(str string) bool {
-	return net.ParseIP(str) != nil
+// IsIPv4 IsIP checks if a string is either IP version 4 Alias for `net.ParseIP`
+func IsIPv4(str string) bool {
+	for i := 0; i < len(str); i++ {
+		if str[i] == '.' {
+			return net.ParseIP(str) != nil
+		}
+	}
+	return false
+}
+
+// IsIPv6 IsIP checks if a string is either IP version 4 Alias for `net.ParseIP`
+func IsIPv6(str string) bool {
+	for i := 0; i < len(str); i++ {
+		if str[i] == ':' {
+			return net.ParseIP(str) != nil
+		}
+	}
+	return false
 }
 
 var (
-	domainRoot = []string{
-		"com", "net", "org", "aero", "biz", "coop", "info", "museum", "name", "pro", "top", "xyz",
-		"loan", "wang", "vip", "eu", "edu", "tech", "cloud", "online", "nrw", "cyou", "dev", "app",
-		//country
-		"ad", "ae", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "as", "at",
-		"au", "aw", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bm", "bn", "bo", "br",
-		"bs", "bt", "bv", "bw", "by", "bz", "ca", "cc", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn",
-		"co", "cq", "cr", "cu", "cv", "cx", "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee",
-		"eg", "eh", "es", "et", "ev", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf",
-		"gh", "gi", "gl", "gm", "gn", "gp", "gr", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht",
-		"hu", "id", "ie", "il", "in", "io", "iq", "ir", "is", "it", "jm", "jo", "jp", "ke", "kg", "kh",
-		"ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt",
-		"lu", "lv", "ly", "ma", "mc", "me", "md", "mg", "mh", "ml", "mm", "mn", "mo", "mp", "mq", "mr",
-		"ms", "mt", "mv", "mw", "mx", "my", "mz", "na", "nc", "ne", "nf", "ng", "ni", "nl", "no", "np",
-		"nr", "nt", "nu", "nz", "om", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "pt",
-		"pw", "py", "qa", "re", "ro", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj",
-		"sk", "sl", "sm", "sn", "so", "sr", "st", "su", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj",
-		"tk", "tl", "tm", "tn", "to", "tp", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "us", "uy",
-		"uz", "va", "vc", "ve", "vg", "vn", "vu", "wf", "ws", "ye", "yu", "za", "zm", "zr", "zw"}
-	domainRootString = strings.Join(domainRoot, "|")
+	//domainRoot = []string{
+	//	"com", "net", "org", "aero", "biz", "coop", "info", "museum", "name", "pro", "top", "xyz",
+	//	"loan", "wang", "vip", "eu", "edu", "tech", "cloud", "online", "nrw", "cyou", "dev", "app",
+	//	"shop",
+	//	//country
+	//	"ad", "ae", "af", "ag", "ai", "al", "am", "an", "ao", "aq", "ar", "as", "at",
+	//	"au", "aw", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bm", "bn", "bo", "br",
+	//	"bs", "bt", "bv", "bw", "by", "bz", "ca", "cc", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn",
+	//	"co", "cq", "cr", "cu", "cv", "cx", "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee",
+	//	"eg", "eh", "es", "et", "ev", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "gd", "ge", "gf",
+	//	"gh", "gi", "gl", "gm", "gn", "gp", "gr", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht",
+	//	"hu", "id", "ie", "il", "in", "io", "iq", "ir", "is", "it", "jm", "jo", "jp", "ke", "kg", "kh",
+	//	"ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt",
+	//	"lu", "lv", "ly", "ma", "mc", "me", "md", "mg", "mh", "ml", "mm", "mn", "mo", "mp", "mq", "mr",
+	//	"ms", "mt", "mv", "mw", "mx", "my", "mz", "na", "nc", "ne", "nf", "ng", "ni", "nl", "no", "np",
+	//	"nr", "nt", "nu", "nz", "om", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "pt",
+	//	"pw", "py", "qa", "re", "ro", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj",
+	//	"sk", "sl", "sm", "sn", "so", "sr", "st", "su", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj",
+	//	"tk", "tl", "tm", "tn", "to", "tp", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "uk", "us", "uy",
+	//	"uz", "va", "vc", "ve", "vg", "vn", "vu", "wf", "ws", "ye", "yu", "za", "zm", "zr", "zw"}
+	//domainRootString = strings.Join(domainRoot, "|")
+	domainRootString = `[a-z]{2,5}`
 	domainRegx       = regexp.MustCompile(`^([a-zA-Z0-9][-a-zA-Z0-9]{0,62}(?:\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})*\.(?:` + domainRootString + `))$`)
 )
 
@@ -76,7 +93,7 @@ func IsDomain(str string) bool {
 }
 
 func IsNetloc(str string) bool {
-	return IsDomain(str) || IsIP(str)
+	return IsDomain(str) || IsIPv4(str)
 }
 
 // IsCIDR checks if the string is an valid CIDR notation (IPV4)
@@ -124,7 +141,7 @@ func IsIPPort(str string) bool {
 	}
 	ip := r[0]
 	port := r[1]
-	return IsIP(ip) && IsPort(port)
+	return IsIPv4(ip) && IsPort(port)
 }
 
 func IsProtocol(str string) bool {
@@ -132,7 +149,7 @@ func IsProtocol(str string) bool {
 	return ok
 }
 
-// IsURLHasProtocol checks if a string is :
+// IsURL checks if a string is :
 // protocol://netloc/path
 // protocol://netloc:port/path
 func IsURL(str string) bool {
