@@ -12,7 +12,7 @@ type args struct {
 	Help, Debug, ClosePing, Check, CloseColor, Scan bool
 	ScanVersion, DownloadQQwry, CloseCDN            bool
 	Output, Proxy, Encoding                         string
-	Port                                            []int
+	Port, ExcludedPort                              []int
 	Path, Host, Target                              []string
 	OutputJson, OutputCSV                           string
 	Spy, Touch                                      string
@@ -70,6 +70,7 @@ func (o *args) define() {
 	sflag.StringSpliceVar(&o.Target, "t")
 	sflag.IntSpliceVar(&o.Port, "port")
 	sflag.IntSpliceVar(&o.Port, "p")
+	sflag.IntSpliceVar(&o.ExcludedPort, "eP")
 	sflag.StringSpliceVar(&o.Path, "path")
 	sflag.StringSpliceVar(&o.Host, "host")
 	sflag.StringVar(&o.Proxy, "proxy", "")
