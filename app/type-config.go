@@ -48,13 +48,18 @@ func (jw *JSONWriter) Push(m map[string]string) {
 	if err != nil {
 		slog.Println(slog.ERROR, err)
 	}
-	jw.f.Seek(stat.Size()-1, 0)
-	jsonBuf, _ := json.Marshal(m)
-	jsonBuf = append(jsonBuf, []byte("]")...)
-	if stat.Size() != 2 {
-		jsonBuf = append([]byte(","), jsonBuf...)
+
+	jsonBuf, _ := json.MarshalIndent(m, "\t", "\t")
+	jsonBuf = append(jsonBuf, []byte("\n]\n")...)
+	if stat.Size() == 2 {
+		jw.f.Seek(stat.Size()-1, 0)
+		jsonBuf = append([]byte("\n\t"), jsonBuf...)
+		jw.f.Write(jsonBuf)
+	} else {
+		jw.f.Seek(stat.Size()-4, 0)
+		jsonBuf = append([]byte("},\n\t"), jsonBuf...)
+		jw.f.Write(jsonBuf)
 	}
-	jw.f.Write(jsonBuf)
 }
 
 type CSVWriter struct {
