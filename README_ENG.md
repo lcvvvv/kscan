@@ -130,21 +130,23 @@ The function is not complicated, the others are explored by themselves
 
 ### 6.1 Port Scan Mode
 
-![WechatIMG986](assets/Kscan_v1.6/WechatIMG986.png)
+![WechatIMG986](assets/端口扫描演示.png)
 
 ### 6.2 Survival network segment detection
 
-![WechatIMG988](assets/Kscan_v1.6/WechatIMG988.png)
+![WechatIMG988](assets/存活网段检测演示.jpg)
 
 ### 6.3 Fofa result retrieval
 
-![WechatIMG989](assets/Kscan_v1.6/WechatIMG989.png)
+![WechatIMG989](assets/Fofa结果检索演示.png)
 
-### 6.3 Brute-force cracking
+### 6.4 Brute-force cracking
 
-![WechatIMG996](assets/Kscan_v1.6/WechatIMG996.png)
+![WechatIMG996](assets/Hydra功能演示.png)
 
-![WechatIMG996](assets/Kscan_v1.6/WechatIMG1018.png)
+### 6.5 CDN identification
+
+![WechatIMG996](assets/CDN识别演示.jpg)
 
 ## 7 Special thanks
 

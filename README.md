@@ -145,11 +145,11 @@ fofa options:
 
 ![WechatIMG989](assets/Fofa结果检索演示.png)
 
-### 6.3 暴力破解
+### 6.4 暴力破解
 
 ![WechatIMG996](assets/Hydra功能演示.png)
 
-### 6.3 CDN识别
+### 6.5 CDN识别
 
 ![WechatIMG996](assets/CDN识别演示.jpg)
 
