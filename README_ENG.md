@@ -33,9 +33,9 @@ Unless you have fully read, fully understood and accepted all the terms of this 
 |#| \#\\#####/ \#####/#/     \#\#| \#|
 ```
 
-kscan is an asset mapping tool that can perform port scanning, TCP fingerprinting and banner capture for specified assets, and obtain as much port information as possible without sending more packets. It can perform automatic brute force cracking on scan results, and is the first open source RDP brute force cracking tool on the go platform.
+Kscan is an asset mapping tool that can perform port scanning, TCP fingerprinting and banner capture for specified assets, and obtain as much port information as possible without sending more packets. It can perform automatic brute force cracking on scan results, and is the first open source RDP brute force cracking tool on the go platform.
 
-## 2 is written in front
+## 2 Foreword
 
 At present, there are actually many tools for asset scanning, fingerprint identification, and vulnerability detection, and there are many great tools, but Kscan actually has many different ideas.
 
@@ -51,7 +51,7 @@ At present, there are actually many tools for asset scanning, fingerprint identi
 
 [Compiler Manual](https://github.com/lcvvvv/kscan/wiki/%E7%BC%96%E8%AF%91)
 
-## 4 Let's get started
+## 4 Get started
 
 Kscan currently has 3 ways to input targets
 
@@ -78,7 +78,7 @@ IP address: will detect the B segment where the specified IP address is located
 fofa search keywords: will directly return fofa search results
 ```
 
-## 5 How to use
+## 5 Instructions
 
 ```
 usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy) [-p,--port|--top] [-o,--output] [-oJ] [--proxy] [--threads] [--path] [--host] [--timeout] [-Pn] [-Cn] [-sV] [--check] [--encoding] [--hydra] [hydra options] [fofa options]
