@@ -3,10 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"github.com/lcvvvv/appfinger"
-	"github.com/lcvvvv/gonmap"
-	"github.com/lcvvvv/pool"
-	"github.com/lcvvvv/stdio"
 	"kscan/app"
 	"kscan/core/cdn"
 	"kscan/core/fofa"
@@ -21,6 +17,11 @@ import (
 	"os"
 	"runtime"
 	"time"
+
+	"github.com/lcvvvv/appfinger"
+	"github.com/lcvvvv/gonmap"
+	"github.com/lcvvvv/pool"
+	"github.com/lcvvvv/stdio"
 )
 
 //logo信息
@@ -54,6 +55,7 @@ options:
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
+  -ep             跳过扫描指定的端口，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
   -oJ             将扫描结果使用json格式保存到文件
   -oC             将扫描结果使用csv格式保存到文件
