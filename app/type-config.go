@@ -103,7 +103,7 @@ func ConfigInit() {
 		Setting.Target = args.Target
 	}
 	Setting.loadPort()
-	Setting.loadExcluedPort()
+	Setting.loadExcludedPort()
 	Setting.loadOutput()
 	Setting.loadScanPing()
 	Setting.Timeout = time.Duration(args.Timeout) * time.Second
@@ -206,24 +206,21 @@ func (c *Config) loadPort() {
 	}
 }
 
-func (c *Config) loadExcluedPort() {
-	if len(Args.ExcludedPort) > 0 {
-		availablePort := []int{}
-		for _, p := range c.Port {
-			existed := false
-			for _, ep := range Args.ExcludedPort {
-				if p == ep {
-					existed = true
-					break
-				}
-			}
-			if !existed {
-				availablePort = append([]int{p}, availablePort...)
+func (c *Config) loadExcludedPort() {
+	if len(Args.ExcludedPort) == 0 {
+		return
+	}
+	var availablePort = c.Port
+	for i, p := range c.Port {
+		for _, ep := range Args.ExcludedPort {
+			if p == ep {
+				availablePort = append(availablePort[:i], availablePort[i+1:]...)
+				break
 			}
 		}
-		c.Port = availablePort
-		slog.Println(slog.WARN, "本次扫描用户屏蔽了部分端口")
 	}
+	c.Port = availablePort
+	slog.Println(slog.WARN, "本次扫描用户屏蔽了部分端口:", Args.ExcludedPort)
 }
 
 func (c *Config) loadOutput() {

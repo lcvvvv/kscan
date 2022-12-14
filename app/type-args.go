@@ -31,7 +31,7 @@ type args struct {
 
 var Args = args{}
 
-//初始化参数
+// Parse 初始化参数
 func (o *args) Parse() {
 	//自定义Usage
 	sflag.SetUsage(o.LOGO)
@@ -71,6 +71,7 @@ func (o *args) define() {
 	sflag.IntSpliceVar(&o.Port, "port")
 	sflag.IntSpliceVar(&o.Port, "p")
 	sflag.IntSpliceVar(&o.ExcludedPort, "eP")
+	sflag.IntSpliceVar(&o.ExcludedPort, "excluded-port")
 	sflag.StringSpliceVar(&o.Path, "path")
 	sflag.StringSpliceVar(&o.Host, "host")
 	sflag.StringVar(&o.Proxy, "proxy", "")
@@ -111,7 +112,7 @@ func (o *args) SetHelp(help string) {
 	o.HELP = help
 }
 
-//校验参数真实性
+// CheckArgs 校验参数真实性
 func (o *args) CheckArgs() {
 	//判断必须的参数是否存在
 	if len(o.Target) == 0 && len(o.Fofa) == 0 && o.Spy == "None" && o.DownloadQQwry == false {
