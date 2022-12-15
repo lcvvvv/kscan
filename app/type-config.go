@@ -210,17 +210,24 @@ func (c *Config) loadExcludedPort() {
 	if len(Args.ExcludedPort) == 0 {
 		return
 	}
-	var availablePort = c.Port
+
+	availablePort := make([]int, len(c.Port))
+	copy(availablePort, c.Port)
+	var ignoredPort []int
+
 	for i, p := range c.Port {
 		for _, ep := range Args.ExcludedPort {
 			if p == ep {
-				availablePort = append(availablePort[:i], availablePort[i+1:]...)
+				var l int = len(ignoredPort)
+				availablePort = append(availablePort[:i-l], availablePort[i-l+1:]...)
+				ignoredPort = append(ignoredPort, p)
 				break
 			}
 		}
 	}
+
 	c.Port = availablePort
-	slog.Println(slog.WARN, "本次扫描用户屏蔽了部分端口:", Args.ExcludedPort)
+	slog.Println(slog.WARN, "本次扫描用户屏蔽的端口:", ignoredPort)
 }
 
 func (c *Config) loadOutput() {
