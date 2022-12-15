@@ -6,9 +6,9 @@
 ![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
 ![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
-[[中文 Readme]](https://github.com/lcvvvv/kscan/blob/master/README.md)
+[[中文 Readme]][url-doczh]
 |
-[[English Readme]](https://github.com/lcvvvv/kscan/blob/master/README_ENG.md)  
+[[English Readme]][url-docen]
 
 ## 0 免责声明（~~作者没有参加XX行动，别溯了~~）
 
@@ -103,9 +103,10 @@ optional arguments:
   --check         针对目标地址做指纹识别，仅不会进行端口探测
   --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
+  -eP, --excluded-port 跳过扫描指定的端口，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
   -oJ             将扫描结果使用json格式保存到文件
-  -Pn          	  使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
+  -Pn          	使用此参数后，将不会进行智能存活性探测，现在默认会开启智能存活性探测，提高效率
   -Cn             使用此参数后，控制台输出结果将不会带颜色
   -Dn             使用此参数后，将关闭CDN识别功能
   -sV             使用此参数后，将对所有端口进行全探针探测，此参数极度影响效率，慎用！
@@ -175,3 +176,6 @@ fofa options:
 ## 8 文末
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
+
+[url-doczh]: README.md
+[url-docen]: README_ENG.md
