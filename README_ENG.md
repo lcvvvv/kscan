@@ -6,6 +6,10 @@
 ![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
 ![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
+[[中文 Readme]][url-doczh]
+|
+[[English Readme]][url-docen]
+
 ## 0 Disclaimer (~~The author did not participate in the XX action, don't trace it~~)
 
 - This tool is only for legally authorized enterprise security construction behaviors and personal learning behaviors. If you need to test the usability of this tool, please build a target drone environment by yourself.
@@ -98,6 +102,7 @@ optional arguments:
   --check Fingerprinting the target address, only port detection will not be performed
   --scan will perform port scanning and fingerprinting on the target objects provided by --fofa and --spy
   -p , --port scan the specified port, TOP400 will be scanned by default, support: 80, 8080, 8088-8090
+  -eP, --excluded-port skip scanning specified ports，support：80,8080,8088-8090
   -o , --output save scan results to file
   -oJ save the scan results to a file in json format
   -Pn After using this parameter, intelligent survivability detection will not be performed. Now intelligent survivability detection is enabled by default to improve efficiency.
@@ -167,3 +172,6 @@ The function is not complicated, the others are explored by themselves
 ## 8 End of article
 
 Github project address (bugs, requirements, rules are welcome to submit): https://github.com/lcvvvv/kscan
+
+[url-doczh]: README.md
+[url-docen]: README_ENG.md
