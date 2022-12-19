@@ -212,3 +212,9 @@ func ToMap(param interface{}) map[string]string {
 type Stringer interface {
 	String() string
 }
+
+func CopySlice[T any](slice []T) []T {
+	v := make([]T, len(slice))
+	copy(v, slice)
+	return v
+}
