@@ -211,21 +211,19 @@ func (c *Config) loadExcludedPort() {
 		return
 	}
 
-	availablePort := make([]int, len(c.Port))
-	copy(availablePort, c.Port)
+	var availablePort = misc.CopySlice(c.Port)
 	var ignoredPort []int
 
 	for i, p := range c.Port {
 		for _, ep := range Args.ExcludedPort {
 			if p == ep {
-				var l int = len(ignoredPort)
+				var l = len(ignoredPort)
 				availablePort = append(availablePort[:i-l], availablePort[i-l+1:]...)
 				ignoredPort = append(ignoredPort, p)
 				break
 			}
 		}
 	}
-
 	c.Port = availablePort
 	slog.Println(slog.WARN, "本次扫描用户屏蔽的端口:", ignoredPort)
 }
