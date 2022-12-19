@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"kscan/core/hydra"
 	"kscan/core/slog"
+	"kscan/lib/misc"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -40,10 +42,13 @@ type Config struct {
 }
 
 type JSONWriter struct {
-	f *os.File
+	f     *os.File
+	mutex *sync.Mutex
 }
 
 func (jw *JSONWriter) Push(m map[string]string) {
+	jw.mutex.Lock()
+	defer jw.mutex.Unlock()
 	stat, err := jw.f.Stat()
 	if err != nil {
 		slog.Println(slog.ERROR, err)
@@ -153,13 +158,13 @@ func loadOutputJSON(path string) *JSONWriter {
 	if err != nil {
 		slog.Println(slog.ERROR, err)
 	}
-	jw := &JSONWriter{f}
+	jw := &JSONWriter{f, &sync.Mutex{}}
 	jw.f.Seek(0, 0)
 	_, err = jw.f.WriteString(`[]`)
 	if err != nil {
 		slog.Println(slog.ERROR, err)
 	}
-	return &JSONWriter{f}
+	return &JSONWriter{f, &sync.Mutex{}}
 }
 
 func loadOutputCSV(path string) *CSVWriter {
