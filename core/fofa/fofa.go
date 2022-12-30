@@ -54,13 +54,7 @@ func GetUrlTarget() []string {
 	var strSlice []string
 	for _, r := range results {
 		Fix(&r)
-		var host string
-		if r.Domain != "" {
-			host = r.Domain
-		} else {
-			host = r.Ip
-		}
-		strSlice = append(strSlice, fmt.Sprintf("%s:%s", host, r.Port))
+		strSlice = append(strSlice, r.Host)
 	}
 	strSlice = misc.RemoveDuplicateElement(strSlice)
 	return strSlice
