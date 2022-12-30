@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"kscan/core/hydra"
 	"kscan/core/slog"
 	"kscan/lib/misc"
@@ -39,64 +38,6 @@ type Config struct {
 	//输出修饰
 	Match    string
 	NotMatch string
-}
-
-type JSONWriter struct {
-	f     *os.File
-	mutex *sync.Mutex
-}
-
-func (jw *JSONWriter) Push(m map[string]string) {
-	jw.mutex.Lock()
-	defer jw.mutex.Unlock()
-	stat, err := jw.f.Stat()
-	if err != nil {
-		slog.Println(slog.ERROR, err)
-	}
-
-	jsonBuf, _ := json.MarshalIndent(m, "\t", "\t")
-	jsonBuf = append(jsonBuf, []byte("\n]\n")...)
-	if stat.Size() == 2 {
-		jw.f.Seek(stat.Size()-1, 0)
-		jsonBuf = append([]byte("\n\t"), jsonBuf...)
-		jw.f.Write(jsonBuf)
-	} else {
-		jw.f.Seek(stat.Size()-4, 0)
-		jsonBuf = append([]byte("},\n\t"), jsonBuf...)
-		jw.f.Write(jsonBuf)
-	}
-}
-
-type CSVWriter struct {
-	f     *csv.Writer
-	title []string
-}
-
-func (cw *CSVWriter) inTitle(title string) bool {
-	for _, value := range cw.title {
-		if value == title {
-			return true
-		}
-	}
-	return false
-}
-
-func (cw *CSVWriter) Push(m map[string]string) {
-	var cells []string
-	for _, key := range cw.title {
-		if value, ok := m[key]; ok {
-			cells = append(cells, value)
-			delete(m, key)
-		} else {
-			cells = append(cells, "")
-		}
-	}
-	for key, value := range m {
-		cells = append(cells, value)
-		cw.title = append(cw.title, key)
-	}
-	cw.f.Write(cells)
-	cw.f.Flush()
 }
 
 var Setting = New()
