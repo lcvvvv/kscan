@@ -10,7 +10,7 @@ import (
 )
 
 func Check(Host, Username, Password string, Port int) error {
-	dataSourceName := fmt.Sprintf("mongodb://%v:%v@%v:%v/ichunt?authMechanism=SCRAM-SHA-1", Username, Password, Host, Port)
+	dataSourceName := fmt.Sprintf("mongodb://%v:%v@%v:%v/?authMechanism=SCRAM-SHA-1", Username, Password, Host, Port)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	// 建立mongodb连接
