@@ -105,10 +105,10 @@ func (f *Client) makeResult(responseJson ResponseJson) (results []Result) {
 	for _, row := range responseJson.Results {
 		var result Result
 		m := reflect.ValueOf(&result).Elem()
-		for index, f := range f.fieldList {
+		for index, key := range f.fieldList {
 			//首字母大写
-			f = strings.ToUpper(f[:1]) + f[1:]
-			m.FieldByName(f).SetString(row[index])
+			key = strings.ToUpper(key[:1]) + key[1:]
+			m.FieldByName(key).SetString(row[index])
 		}
 		results = append(results, result)
 	}
