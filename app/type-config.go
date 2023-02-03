@@ -150,6 +150,18 @@ func (c *Config) loadPort() {
 	if len(c.Port) == 0 {
 		c.Port = TOP_1000[:400]
 	}
+
+	// port去重
+	avaliablePorts := []int{}
+	portsMap := map[int]byte{}
+	for _, p := range c.Port {
+		l := len(portsMap)
+		portsMap[p] = 0
+		if len(portsMap) != l {
+			avaliablePorts = append(avaliablePorts, p)
+		}
+	}
+	c.Port = avaliablePorts
 }
 
 func (c *Config) loadExcludedPort() {
