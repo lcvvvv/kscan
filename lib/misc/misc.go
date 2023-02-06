@@ -22,7 +22,7 @@ func RemoveDuplicateElement[T any](slice []T, elems ...T) []T {
 	var result []T
 	slice = append(slice, elems...)
 	for _, val := range slice {
-		if IsDuplicate(result, val) == false {
+		if !IsDuplicate(result, val) {
 			result = append(result, val)
 		}
 	}
