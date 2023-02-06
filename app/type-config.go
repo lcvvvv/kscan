@@ -150,6 +150,8 @@ func (c *Config) loadPort() {
 	if len(c.Port) == 0 {
 		c.Port = TOP_1000[:400]
 	}
+
+	c.Port = misc.RemoveDuplicateElement(c.Port)
 }
 
 func (c *Config) loadExcludedPort() {
