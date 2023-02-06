@@ -117,15 +117,14 @@ func (c *Cracker) Run() (*Auth, error) {
 	}
 	//开始暴力破解
 	c.Pool.Run()
-	switch c.SuccessCount {
-	case 0:
+	switch {
+	case c.SuccessCount == 0:
 		return nil, LoginFailedErr
-	case 1:
+	case c.SuccessCount <= 3:
 		return &c.SuccessAuth, nil
 	default:
 		return nil, ProtocolErr
 	}
-
 }
 
 func (c *Cracker) initJobFunc() loginType {
