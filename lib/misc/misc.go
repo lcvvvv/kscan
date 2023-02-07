@@ -19,14 +19,19 @@ func IsDuplicate[T any](slice []T, val T) bool {
 }
 
 func RemoveDuplicateElement[T any](slice []T, elems ...T) []T {
-	var result []T
 	slice = append(slice, elems...)
-	for _, val := range slice {
-		if !IsDuplicate(result, val) {
-			result = append(result, val)
+	set := make(map[string]struct{}, len(slice))
+	j := 0
+	for _, v := range slice {
+		_, ok := set[fmt.Sprint(v)]
+		if ok {
+			continue
 		}
+		set[fmt.Sprint(v)] = struct{}{}
+		slice[j] = v
+		j++
 	}
-	return result
+	return slice[:j]
 }
 
 func FixLine(line string) string {
