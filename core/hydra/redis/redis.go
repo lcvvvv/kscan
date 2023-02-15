@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"strings"
@@ -28,7 +29,7 @@ func Check(Host, Password string, Port int) error {
 		return err
 	}
 	if strings.Contains(reply, "+OK") == false {
-		return err
+		return errors.New("login failed")
 	}
 	return nil
 }
