@@ -161,7 +161,7 @@ func IsURL(str string) bool {
 		return false
 	}
 	protocol := str[:index]
-	if IsProtocol(protocol) == false {
+	if !IsProtocol(protocol) {
 		return false
 	}
 	str = str[index+3:]
@@ -255,7 +255,7 @@ func SameSegment(ips ...string) bool {
 	first := ips[0]
 	_, network, _ := net.ParseCIDR(first + "/24")
 	for _, ip := range ips[1:] {
-		if Contains(network, net.ParseIP(ip)) == false {
+		if !Contains(network, net.ParseIP(ip)) {
 			return false
 		}
 	}
