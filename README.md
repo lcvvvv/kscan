@@ -1,4 +1,4 @@
-# Kscan-简单的资产测绘工具
+# Kscan-轻量化全方位扫描器
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/golang-1.8+-9cf"></a>
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.86-ff69b4"></a>
 <a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/LICENSE-GPL-important"></a>
