@@ -177,5 +177,9 @@ fofa options:
 
 Github项目地址（BUG、需求、规则欢迎提交）: https://github.com/lcvvvv/kscan
 
+微信：
+
+![WechatIMG996](assets/image-20210220164117921.jpg)
+
 [url-doczh]: README.md
 [url-docen]: README_ENG.md
