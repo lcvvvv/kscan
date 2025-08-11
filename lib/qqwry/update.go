@@ -1,10 +1,7 @@
-//https://github.com/zu1k/nali
+// https://github.com/zu1k/nali
 package qqwry
 
 import (
-	"bytes"
-	"compress/zlib"
-	"encoding/binary"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -12,13 +9,10 @@ import (
 	"time"
 )
 
-const (
-	mirror = "https://qqwry.mirror.noc.one/qqwry.rar"
-	key    = "https://qqwry.mirror.noc.one/copywrite.rar"
-)
+const mirror = "https://qqwry-mirror.cdn.skk.moe/qqwry.dat"
 
 func Download(filePath string) error {
-	data, err := downloadAndDecrypt()
+	data, err := Get(mirror)
 	if err != nil {
 		return err
 	}
@@ -71,42 +65,4 @@ func SaveFile(path string, data []byte) (err error) {
 
 	// save file
 	return ioutil.WriteFile(path, data, 0644)
-}
-
-func downloadAndDecrypt() (data []byte, err error) {
-	data, err = Get(mirror)
-	if err != nil {
-		return nil, err
-	}
-	key, err := getCopyWriteKey()
-	if err != nil {
-		return nil, err
-	}
-
-	return unRar(data, key)
-}
-
-func unRar(data []byte, key uint32) ([]byte, error) {
-	for i := 0; i < 0x200; i++ {
-		key = key * 0x805
-		key++
-		key = key & 0xff
-
-		data[i] = byte(uint32(data[i]) ^ key)
-	}
-
-	reader, err := zlib.NewReader(bytes.NewReader(data))
-	if err != nil {
-		return nil, err
-	}
-
-	return ioutil.ReadAll(reader)
-}
-
-func getCopyWriteKey() (uint32, error) {
-	body, err := Get(key)
-	if err != nil {
-		return 0, err
-	}
-	return binary.LittleEndian.Uint32(body[5*4:]), nil
 }
